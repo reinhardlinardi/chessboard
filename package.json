@@ -1,4 +1,7 @@
 {
   "name": "chessboard",
-  "packageManager": "yarn@3.6.1"
+  "packageManager": "yarn@3.6.1",
+  "dependencies": {
+    "pug": "^3.0.2"
+  }
 }
