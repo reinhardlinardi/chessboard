@@ -7,6 +7,6 @@ clean:
 html:
 	yarn run pug src/layout -o public -P
 css:
-	yarn run sass src/style/style.sass public/style.css
+	yarn run sass --no-source-map src/style/style.sass public/style.css
 js:
 	yarn run tsc

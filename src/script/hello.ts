@@ -1,3 +1,3 @@
-export function hi() {
-    alert(1);
+export function test() : void {
+    console.log('Hello');
 }
