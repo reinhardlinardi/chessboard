@@ -1,4 +1,4 @@
 #!/bin/bash
 
-chmod +x gen clean run
+chmod +x run
 yarn install
