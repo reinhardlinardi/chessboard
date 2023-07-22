@@ -1,9 +1,11 @@
 @use 'template'
 
-$square-size: max(5vw, 10vh)
+$square-size: max(6vw, 10vh)
 
 $chess-light: #f9f6d6
 $chess-dark: #c88e3b
+
+$label-min-width: 768px
 
 
 @mixin square($color, $text-color)
@@ -13,6 +15,15 @@ $chess-dark: #c88e3b
     color: $text-color
     grid-template-columns: 10% 80% 10%
 
+@mixin board-label($align)
+    @extend %table-cell
+ 
+    vertical-align: $align
+    text-align: center
+    font-size: 12px
+
+    @media screen and (max-width: $label-min-width)
+        visibility: hidden   
 
 .board
     @extend %grid
@@ -22,11 +33,9 @@ $chess-dark: #c88e3b
 .light-square
     @include square($color: $chess-light, $text-color: $chess-dark)
     
-
 .dark-square
     @include square($color: $chess-dark, $text-color: $chess-light)
     
-
 .piece-container
     @extend %flex
     
@@ -40,9 +49,7 @@ $chess-dark: #c88e3b
     @extend %table
 
 .rank-label
-    @extend %table-cell
-    vertical-align: top
+    @include board-label($align: top)
 
 .file-label
-    @extend %table-cell
-    vertical-align: bottom
+    @include board-label($align: bottom)    
