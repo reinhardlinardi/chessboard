@@ -4,7 +4,7 @@
 
 case $1 in
     'html')
-        yarn run pug -w src/layout -o public -P ;;
+        yarn run pug -w src/layout/index.pug -o public -P ;;
     'css')
         yarn run sass --watch --no-source-map src/style/style.sass public/style.css ;;
     'js')
