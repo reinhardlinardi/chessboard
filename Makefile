@@ -2,7 +2,7 @@
 
 all: html css js
 clean:
-	rm -rf public/*
+	rm -rf public/*.html public/*.css public/*.js
 
 html:
 	yarn run pug src/layout/index.pug -o public -P
