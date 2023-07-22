@@ -1,3 +1,0 @@
-#!/bin/bash
-
-yarn run http-server -c-1 public
