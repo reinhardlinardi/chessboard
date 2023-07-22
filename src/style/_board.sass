@@ -1,0 +1,38 @@
+$chess-light: #f9f6d6
+$chess-dark: #c88e3b
+
+.board
+    display: grid
+    gap: 0 0
+    grid-template-columns: repeat(2, max(5vw, 10vh))
+    grid-template-rows: repeat(2, max(5vw, 10vh))
+
+.light-sq
+    background-color: $chess-light
+    color: $chess-dark
+
+    display: grid
+    gap: 0 0
+    grid-template-rows: 15% 70% 15%
+
+.dark-sq
+    background-color: $chess-dark
+    color: $chess-light
+
+    display: grid
+    gap: 0 0
+    grid-template-rows: 15% 70% 15%
+
+.piece-container
+    text-align: center
+
+.piece
+    height: 100%
+    object-fit: contain
+
+.rank-label
+    text-align: right
+
+.file-label
+    text-align: left
+    
