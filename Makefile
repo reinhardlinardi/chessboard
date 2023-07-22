@@ -1,9 +1,6 @@
-.PHONY: all clean html css js
+.PHONY: all html css js
 
 all: html css js
-clean:
-	rm -rf public/*.html public/*.css public/*.js
-
 html:
 	yarn run pug src/layout/index.pug -o public -P
 css:
