@@ -1,16 +1,10 @@
 import { createApp } from './lib/vue.esm-browser.js';
-
-// Vue app
-let rootComponent = {
-    data() {
-        return {
-            count: 0,
-        };
-    }
-}
+import Editor from './editor.vue.js';
 
 // Setup vue
-const app = createApp(rootComponent);
+const app = createApp({});
+app.component('Editor', Editor);
+
 app.config.errorHandler = (err) => {
     console.log(err);
 };

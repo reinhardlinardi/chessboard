@@ -170,5 +170,6 @@ dist
 public/*
 !public/lib
 !public/svg
+!public/*.html
 !public/favicon.ico
 !public/app.js

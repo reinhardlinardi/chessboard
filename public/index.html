@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Chessboard</title>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  
+  <body>
+    <div id="app">
+
+      <div class="board">
+        <div class="light-square">
+          <div></div>
+          <div class="piece-container"><img class="piece" src="svg/K.svg"></div>
+          <div></div>
+        </div>
+        <div class="dark-square">
+          <div></div>
+          <div class="piece-container"><img class="piece" src="svg/q.svg"></div>
+          <div class="label-container">
+            <div class="rank-label">2</div>
+          </div>
+        </div>
+        <div class="dark-square">
+          <div class="label-container">
+            <div class="file-label">a</div>
+          </div>
+          <div class="piece-container"><img class="piece" src="svg/N.svg"></div>
+          <div></div>
+        </div>
+        <div class="light-square">
+          <div class="label-container">
+            <div class="file-label">b</div>
+          </div>
+          <div class="piece-container"><img class="piece" src="svg/r.svg"></div>
+          <div class="label-container">
+            <div class="rank-label">1</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

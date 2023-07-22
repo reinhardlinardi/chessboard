@@ -1,8 +1,6 @@
-.PHONY: all html css js
+.PHONY: all css js
 
-all: html css js
-html:
-	yarn run pug src/layout/index.pug -o public -P
+all: css js
 css:
 	yarn run sass --no-source-map src/style/style.sass public/style.css
 js:
