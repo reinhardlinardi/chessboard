@@ -3,7 +3,7 @@
   "packageManager": "yarn@3.6.1",
   "scripts": {
     "server": "http-server -c-1 public",
-    "watch":"./watch"
+    "watch": "./watch"
   },
   "dependencies": {
     "http-server": "^14.1.1",
