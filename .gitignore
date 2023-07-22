@@ -167,4 +167,5 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node,yarn,sass
 
 # Generated static files
-public
+public/*
+!public/favicon.ico
