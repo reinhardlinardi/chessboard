@@ -1,12 +1,14 @@
 @use 'template'
 
-$square-size: max(6vw, 10vh)
+@font-face
+  font-family: 'Lato'
+  src: url('https://fonts.googleapis.com/css2?family=Lato&display=swap')
+
+
+$square-size: max(6vw, 12vh)
 
 $chess-light: #f9f6d6
 $chess-dark: #c88e3b
-
-$label-min-width: 768px
-
 
 @mixin square($color, $text-color)
     @extend %grid
@@ -18,12 +20,16 @@ $label-min-width: 768px
 @mixin board-label($align)
     @extend %table-cell
  
+    visibility: hidden
     vertical-align: $align
     text-align: center
-    font-size: 12px
+    font-family: 'Lato', sans-serif
 
-    @media screen and (max-width: $label-min-width)
-        visibility: hidden   
+    @media only screen and (min-width: 768px)
+        visibility: visible
+        font-size: 0.6rem
+    @media only screen and (min-width: 992px)
+        font-size: 0.7rem  
 
 .board
     @extend %grid
@@ -52,4 +58,4 @@ $label-min-width: 768px
     @include board-label($align: top)
 
 .file-label
-    @include board-label($align: bottom)    
+    @include board-label($align: bottom)
