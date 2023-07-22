@@ -1,45 +1,48 @@
+@use 'template'
+
+$square-size: max(5vw, 10vh)
+
 $chess-light: #f9f6d6
 $chess-dark: #c88e3b
 
+
+@mixin square($color, $text-color)
+    @extend %grid
+
+    background-color: $color
+    color: $text-color
+    grid-template-columns: 10% 80% 10%
+
+
 .board
-    display: grid
-    gap: 0 0
-    grid-template-columns: repeat(2, max(5vw, 10vh))
-    grid-template-rows: repeat(2, max(5vw, 10vh))
+    @extend %grid
+    grid-template-columns: repeat(2, $square-size)
+    grid-template-rows: repeat(2, $square-size)
 
 .light-square
-    background-color: $chess-light
-    color: $chess-dark
-
-    display: grid
-    gap: 0 0
-    grid-template-columns: 10% 80% 10%
+    @include square($color: $chess-light, $text-color: $chess-dark)
+    
 
 .dark-square
-    background-color: $chess-dark
-    color: $chess-light
-
-    display: grid
-    gap: 0 0
-    grid-template-columns: 10% 80% 10%
+    @include square($color: $chess-dark, $text-color: $chess-light)
+    
 
 .piece-container
-    display: flex
+    @extend %flex
     
 .piece
+    @extend %flex-item-center
+
     width: 100%
     object-fit: contain
-    justify-content: center
-    align-items: center
 
 .label-container
-    display: table
+    @extend %table
 
 .rank-label
-    display: table-cell
+    @extend %table-cell
     vertical-align: top
 
 .file-label
-    display: table-cell
+    @extend %table-cell
     vertical-align: bottom
-    
