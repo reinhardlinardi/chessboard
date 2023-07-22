@@ -169,3 +169,4 @@ dist
 # Generated static files
 public/*
 !public/favicon.ico
+!public/app.js
