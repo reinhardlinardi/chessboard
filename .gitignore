@@ -169,6 +169,5 @@ dist
 # Generated static files
 public/*
 !public/lib
-!public/svg
 !public/favicon.ico
 !public/app.js
