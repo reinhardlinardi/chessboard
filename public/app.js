@@ -1,13 +1,10 @@
 import { createApp } from './lib/vue.esm-browser.js';
 
-import Editor from './editor.vue.js';
-import Analysis from './analysis.vue.js';
+// Root component
+let component = {};
 
 // Setup vue
-const app = createApp({});
-app.component('Editor', Editor)
-   .component('Analysis', Analysis);
-
+const app = createApp(component);
 app.config.errorHandler = (err) => {
     console.log(err);
 };
