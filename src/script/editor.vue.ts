@@ -1,3 +1,3 @@
 export default {
-    template: `<p style='color:white'>Hello World</p>`
+    template: `<p style='color:white'>Editor</p>`
 }
