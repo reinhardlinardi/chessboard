@@ -21,11 +21,11 @@
             <template v-for="(piece, file) in row">
               
               <div class="dark-square" v-if="isDarkSquared(inverseRank, file)">
-                <img class="piece" src="svg/P.svg" draggable="true">
+                <img class="piece" v-if="isPiece(piece)" :src="`svg/${piece}.svg`" draggable="true">
               </div>
 
               <div class="light-square" v-else>
-                  <img class="piece" src="svg/p.svg" draggable="true">
+                  <img class="piece" v-if="isPiece(piece)" :src="`svg/${piece}.svg`" draggable="true">
               </div>
 
             </template>

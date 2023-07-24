@@ -19,5 +19,8 @@ export default {
             let rank = this.getRank(inverseRank);
             return (rank+file)%2 === 0? true : false;
         },
+        isPiece(piece) {
+            return piece !== ""
+        },
     },
 };

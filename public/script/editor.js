@@ -14,6 +14,7 @@ let component = {
         getRank: Common.methods.getRank,
         getFileLetter: Common.methods.getFileLetter,
         isDarkSquared: Common.methods.isDarkSquared,
+        isPiece: Common.methods.isPiece,
     }
 };
 
