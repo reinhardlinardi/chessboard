@@ -2,6 +2,6 @@
 
 all: css js
 css:
-	yarn run sass --no-source-map src/style/style.sass public/style.css
+	yarn run sass --no-source-map src/style:public/style
 js:
 	yarn run tsc

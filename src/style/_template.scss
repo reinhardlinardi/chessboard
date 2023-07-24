@@ -1,0 +1,21 @@
+%grid {
+    display: grid;
+    gap: 0 0;
+}
+
+%flex {
+    display: flex;
+}
+
+%flex-item-center {
+    justify-content: center;
+    align-items: center;
+}
+
+%table {
+    display: table;
+}
+
+%table-cell {
+    display: table-cell;
+}

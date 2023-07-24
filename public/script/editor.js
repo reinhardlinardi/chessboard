@@ -1,4 +1,4 @@
-import { createApp } from './lib/vue.esm-browser.js';
+import { createApp } from '../lib/vue.esm-browser.js';
 
 // Root component
 let component = {};

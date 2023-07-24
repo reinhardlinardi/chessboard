@@ -1,0 +1,76 @@
+@use 'template';
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./font/Lato.ttf') format('truetype');
+}
+
+$square-size: max(6vw, 10vh);
+
+$chess-light: #f9f6d6;
+$chess-dark: #c88e3b;
+
+@mixin square($color, $text-color) {
+    @extend %grid;
+
+    background-color: $color;
+    color: $text-color;
+    grid-template-columns: 10% 80% 10%;
+}
+
+@mixin board-label($align) {
+    @extend %table-cell;
+ 
+    visibility: hidden;
+    vertical-align: $align;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+
+    @media only screen and (min-width: 768px) {
+        visibility: visible;
+        font-size: 0.6rem;
+    }
+    @media only screen and (min-width: 992px) {
+        font-size: 0.7rem;
+    }
+}
+
+.board {
+    @extend %grid;
+    grid-template-columns: repeat(2, $square-size);
+    grid-template-rows: repeat(2, $square-size);
+}
+
+.light-square {
+    @include square($color: $chess-light, $text-color: $chess-dark);
+}
+    
+.dark-square {
+    @include square($color: $chess-dark, $text-color: $chess-light);
+} 
+
+.piece-container {
+    @extend %flex;
+}    
+
+.piece {
+    @extend %flex-item-center;
+
+    width: 100%;
+    object-fit: contain;
+}
+
+.label-container {
+    @extend %table;
+}
+
+.rank-label {
+    @include board-label($align: top);
+}
+
+.file-label {
+    @include board-label($align: bottom);
+}
