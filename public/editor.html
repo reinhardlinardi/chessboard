@@ -14,34 +14,37 @@
   <body>
     <div id="app">
       <div class="board">
-        <div class="light-square">
-            <div></div>
-            <div class="piece-container"><img class="piece" src="svg/P.svg"></div>
-            <div></div>
-        </div>
-        <div class="dark-square">
-            <div></div>
-            <div class="piece-container"><img class="piece" src="svg/p.svg"></div>
-            <div class="label-container">
-            <div class="rank-label">2</div>
+
+        <template v-for="(row, inverseRank) in getPosition()">
+          <template v-for="(square, file) in row">
+            
+            <div class="dark-square" v-if="isDarkSquared(inverseRank, file)">
+              <div class="label-container">
+                <div class="file-label">a</div>
+              </div>
+              <div class="piece-container">
+                <img class="piece" src="svg/p.svg" draggable="true">
+              </div>
+              <div class="label-container">
+                <div class="rank-label">1</div>
+              </div>
             </div>
-        </div>
-        <div class="dark-square">
-            <div class="label-container">
-            <div class="file-label">a</div>
+
+            <div class="light-square" v-else>
+              <div class="label-container">
+                <div class="file-label">a</div>
+              </div>
+              <div class="piece-container">
+                <img class="piece" src="svg/p.svg" draggable="true">
+              </div>
+              <div class="label-container">
+                <div class="rank-label">1</div>
+              </div>
             </div>
-            <div class="piece-container"><img class="piece" src="svg/P.svg"></div>
-            <div></div>
-        </div>
-        <div class="light-square">
-            <div class="label-container">
-            <div class="file-label">b</div>
-            </div>
-            <div class="piece-container"><img class="piece" src="svg/p.svg"></div>
-            <div class="label-container">
-            <div class="rank-label">1</div>
-            </div>
-        </div>
+
+          </template>
+        </template>
+        
       </div>
     </div>
     

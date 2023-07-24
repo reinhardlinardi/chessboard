@@ -5,10 +5,10 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('./font/Lato.ttf') format('truetype');
+  src: url('../font/Lato.ttf') format('truetype');
 }
 
-$square-size: max(6vw, 10vh);
+$square-size: min(9vw, 9vh);
 
 $chess-light: #f9f6d6;
 $chess-dark: #c88e3b;
@@ -29,19 +29,16 @@ $chess-dark: #c88e3b;
     text-align: center;
     font-family: 'Lato', sans-serif;
 
-    @media only screen and (min-width: 768px) {
+    @media only screen and (min-width: 1000px) {
         visibility: visible;
-        font-size: 0.6rem;
-    }
-    @media only screen and (min-width: 992px) {
-        font-size: 0.7rem;
+        font-size: 0.45rem;
     }
 }
 
 .board {
     @extend %grid;
-    grid-template-columns: repeat(2, $square-size);
-    grid-template-rows: repeat(2, $square-size);
+    grid-template-columns: repeat(8, $square-size);
+    grid-template-rows: repeat(8, $square-size);
 }
 
 .light-square {
