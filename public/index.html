@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title>Chessboard - Analysis</title>
+    <title>Chessboard - Editor</title>
     
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,36 +13,29 @@
   
   <body>
     <div id="app">
-      <div class="board">
-        <div class="light-square">
-          <div></div>
-          <div class="piece-container"><img class="piece" src="svg/K.svg"></div>
-          <div></div>
+
+      <div class="upper-section">
+
+        <div class="board">
+          <template v-for="(row, inverseRank) in getPosition()">
+            <template v-for="(piece, file) in row">
+              
+              <div class="dark-square" v-if="isDarkSquared(inverseRank, file)">
+                <img class="piece" v-if="isPiece(piece)" :src="`svg/${piece}.svg`"
+                  draggable="true">
+              </div>
+
+              <div class="light-square" v-else>
+                  <img class="piece" v-if="isPiece(piece)" :src="`svg/${piece}.svg`"
+                  draggable="true">
+              </div>
+
+            </template>
+          </template>
         </div>
-        <div class="dark-square">
-          <div></div>
-          <div class="piece-container"><img class="piece" src="svg/q.svg"></div>
-          <div class="label-container">
-            <div class="rank-label">2</div>
-          </div>
-        </div>
-        <div class="dark-square">
-          <div class="label-container">
-            <div class="file-label">a</div>
-          </div>
-          <div class="piece-container"><img class="piece" src="svg/N.svg"></div>
-          <div></div>
-        </div>
-        <div class="light-square">
-          <div class="label-container">
-            <div class="file-label">b</div>
-          </div>
-          <div class="piece-container"><img class="piece" src="svg/r.svg"></div>
-          <div class="label-container">
-            <div class="rank-label">1</div>
-          </div>
-        </div>
+
       </div>
+
     </div>
     
     <script type="module" src="script/index.js"></script>
