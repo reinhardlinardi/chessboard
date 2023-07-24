@@ -10,11 +10,10 @@ let component = {
         }
     },
     methods: {
-        getPosition: Common.methods.getPosition,
-        getRank: Common.methods.getRank,
-        getFileLetter: Common.methods.getFileLetter,
-        isDarkSquared: Common.methods.isDarkSquared,
+        toRank: Common.methods.toRank,
         isPiece: Common.methods.isPiece,
+        isDarkSquared: Common.methods.isDarkSquared,
+        getPosition: Common.methods.getPosition,
     }
 };
 

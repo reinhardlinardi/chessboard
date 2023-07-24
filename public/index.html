@@ -20,13 +20,19 @@
           <template v-for="(row, inverseRank) in getPosition()">
             <template v-for="(piece, file) in row">
               
-              <div class="dark-square" v-if="isDarkSquared(inverseRank, file)">
+              <div class="dark-square"
+                v-if="isDarkSquared(toRank(inverseRank), file)"
+                :id="`square-${toRank(inverseRank)}-${file}`"
+              >
                 <img class="piece" v-if="isPiece(piece)" :src="`svg/${piece}.svg`"
                   draggable="true">
               </div>
 
-              <div class="light-square" v-else>
-                  <img class="piece" v-if="isPiece(piece)" :src="`svg/${piece}.svg`"
+              <div class="light-square"
+                v-else
+                :id="`square-${toRank(inverseRank)}-${file}`"
+              >
+                <img class="piece" v-if="isPiece(piece)" :src="`svg/${piece}.svg`"
                   draggable="true">
               </div>
 

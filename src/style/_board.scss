@@ -2,8 +2,8 @@
 
 .board {
     @extend %grid;
-    grid-template-columns: repeat(8, min(9vw, 9vh));
-    grid-template-rows: repeat(8, min(9vw, 9vh));
+    grid-template-columns: repeat(8, min(8vw, 8vh));
+    grid-template-rows: repeat(8, min(8vw, 8vh));
 }
 
 .light-square {
