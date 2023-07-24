@@ -6,17 +6,30 @@ export default {
         size: Board.size,
     },
     methods: {
-        toRank(inverseRank) {
-            return this.size-inverseRank-1;
+        util: {
+            toRank(inverseRank) { return this.size-inverseRank-1; },
+            isPiece(piece) { return piece !== "" },
+            isDarkSquared(rank, file) {
+                return (rank+file)%2 === 0? true : false;
+            },
         },
-        isPiece(piece) {
-            return piece !== ""
+        board: {
+            getPosition() {
+                return this.board.getPosition().reverse();
+            },
         },
-        isDarkSquared(rank, file) {
-            return (rank+file)%2 === 0? true : false;
-        },
-        getPosition() {
-            return this.board.getPosition().reverse();
-        },
+        handler: {
+            onDragStart(ev) {
+                ev.dataTransfer.setData("text/plain", ev.target.id);
+                ev.dataTransfer.effectAllowed = "move";
+            },
+            onDragOver(ev) {
+                ev.dataTransfer.dropEffect = "move";
+            },
+            onDrop(ev) {
+                const id = ev.dataTransfer.getData("text/plain");
+                ev.target.appendChild(document.getElementById(id));
+            }
+        }  
     },
 };

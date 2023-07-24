@@ -14,7 +14,11 @@
   <body>
     <div id="app">
 
-      <div class="upper-section">
+      <div class="upper-section"
+        id="bin"
+        @dragover.prevent="onDragOver"
+        @drop.prevent="onDrop"
+      >
 
         <div class="board">
           <template v-for="(row, inverseRank) in getPosition()">
@@ -23,17 +27,31 @@
               <div class="dark-square"
                 v-if="isDarkSquared(toRank(inverseRank), file)"
                 :id="`square-${toRank(inverseRank)}-${file}`"
+                @dragover.prevent="onDragOver"
+                @drop.prevent="onDrop"
               >
-                <img class="piece" v-if="isPiece(piece)" :src="`svg/${piece}.svg`"
-                  draggable="true">
+                <img class="piece" 
+                  v-if="isPiece(piece)"
+                  :src="`svg/${piece}.svg`"
+                  :id="`${piece}-${toRank(inverseRank)}-${file}`"
+                  draggable="true"
+                  @dragstart="onDragStart"
+                >
               </div>
 
               <div class="light-square"
                 v-else
                 :id="`square-${toRank(inverseRank)}-${file}`"
+                @dragover.prevent="onDragOver"
+                @drop.prevent="onDrop"
               >
-                <img class="piece" v-if="isPiece(piece)" :src="`svg/${piece}.svg`"
-                  draggable="true">
+                <img class="piece"
+                  v-if="isPiece(piece)"
+                  :src="`svg/${piece}.svg`"
+                  :id="`${piece}-${toRank(inverseRank)}-${file}`"
+                  draggable="true"
+                  @dragstart="onDragStart"
+                >
               </div>
 
             </template>

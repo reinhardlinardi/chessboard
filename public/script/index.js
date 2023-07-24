@@ -10,10 +10,13 @@ let component = {
         }
     },
     methods: {
-        toRank: Common.methods.toRank,
-        isPiece: Common.methods.isPiece,
-        isDarkSquared: Common.methods.isDarkSquared,
-        getPosition: Common.methods.getPosition,
+        toRank: Common.methods.util.toRank,
+        isPiece: Common.methods.util.isPiece,
+        isDarkSquared: Common.methods.util.isDarkSquared,
+        getPosition: Common.methods.board.getPosition,
+        onDragStart: Common.methods.handler.onDragStart,
+        onDragOver: Common.methods.handler.onDragOver,
+        onDrop: Common.methods.handler.onDrop,
     }
 };
 
