@@ -13,23 +13,27 @@
   
   <body>
     <div id="app">
-      <div class="board">
 
-        <template v-for="(row, inverseRank) in getPosition()">
-          <template v-for="(square, file) in row">
-            
-            <div class="dark-square" v-if="isDarkSquared(inverseRank, file)">
-              <img class="piece" src="svg/P.svg" draggable="true">
-            </div>
+      <div class="upper-section">
 
-            <div class="light-square" v-else>
-                <img class="piece" src="svg/p.svg" draggable="true">
-            </div>
+        <div class="board">
+          <template v-for="(row, inverseRank) in getPosition()">
+            <template v-for="(piece, file) in row">
+              
+              <div class="dark-square" v-if="isDarkSquared(inverseRank, file)">
+                <img class="piece" src="svg/P.svg" draggable="true">
+              </div>
 
+              <div class="light-square" v-else>
+                  <img class="piece" src="svg/p.svg" draggable="true">
+              </div>
+
+            </template>
           </template>
-        </template>
-        
+        </div>
+
       </div>
+
     </div>
     
     <script type="module" src="script/editor.js"></script>
