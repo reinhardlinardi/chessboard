@@ -1,73 +1,19 @@
 @use 'template';
 
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('../font/Lato.ttf') format('truetype');
-}
-
-$square-size: min(9vw, 9vh);
-
-$chess-light: #f9f6d6;
-$chess-dark: #c88e3b;
-
-@mixin square($color, $text-color) {
-    @extend %grid;
-
-    background-color: $color;
-    color: $text-color;
-    grid-template-columns: 10% 80% 10%;
-}
-
-@mixin board-label($align) {
-    @extend %table-cell;
- 
-    visibility: hidden;
-    vertical-align: $align;
-    text-align: center;
-    font-family: 'Lato', sans-serif;
-
-    @media only screen and (min-width: 1000px) {
-        visibility: visible;
-        font-size: 0.45rem;
-    }
-}
-
 .board {
     @extend %grid;
-    grid-template-columns: repeat(8, $square-size);
-    grid-template-rows: repeat(8, $square-size);
+    grid-template-columns: repeat(8, min(9vw, 9vh));
+    grid-template-rows: repeat(8, min(9vw, 9vh));
 }
 
 .light-square {
-    @include square($color: $chess-light, $text-color: $chess-dark);
+    background-color: #f9f6d6;
 }
     
 .dark-square {
-    @include square($color: $chess-dark, $text-color: $chess-light);
+    background-color: #c88e3b;
 } 
 
-.piece-container {
-    @extend %flex;
-}    
-
 .piece {
-    @extend %flex-item-center;
-
-    width: 100%;
-    object-fit: contain;
-}
-
-.label-container {
-    @extend %table;
-}
-
-.rank-label {
-    @include board-label($align: top);
-}
-
-.file-label {
-    @include board-label($align: bottom);
+    height: 100%;
 }
