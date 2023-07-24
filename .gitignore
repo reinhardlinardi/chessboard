@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/node,yarn,sass
-# Edit at https://www.toptal.com/developers/gitignore?templates=node,yarn,sass
+# Created by https://www.toptal.com/developers/gitignore/api/vue,node,sass,yarn,vuejs
+# Edit at https://www.toptal.com/developers/gitignore?templates=vue,node,sass,yarn,vuejs
 
 ### Node ###
 # Logs
@@ -147,6 +147,24 @@ dist
 *.sass.map
 *.scss.map
 
+### Vue ###
+# gitignore template for Vue.js projects
+#
+# Recommended template: Node.gitignore
+
+# TODO: where does this rule come from?
+docs/_book
+
+# TODO: where does this rule come from?
+test/
+
+### Vuejs ###
+# Recommended template: Node.gitignore
+
+dist/
+npm-debug.log
+yarn-error.log
+
 ### yarn ###
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
 
@@ -159,12 +177,12 @@ dist
 
 # if you are NOT using Zero-installs, then:
 # comment the following lines
-#!.yarn/cache
+# !.yarn/cache
 
 # and uncomment the following lines
 .pnp.*
 
-# End of https://www.toptal.com/developers/gitignore/api/node,yarn,sass
+# End of https://www.toptal.com/developers/gitignore/api/vue,node,sass,yarn,vuejs
 
 # Generated static files
 public/*

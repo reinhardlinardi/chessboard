@@ -241,7 +241,7 @@ __metadata:
   resolution: "chessboard@workspace:."
   dependencies:
     http-server: ^14.1.1
-    sass: ^1.64.0
+    sass: ^1.64.1
     typescript: ^5.1.6
   languageName: unknown
   linkType: soft
@@ -1252,7 +1252,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.64.0":
+"sass@npm:^1.64.1":
   version: 1.64.1
   resolution: "sass@npm:1.64.1"
   dependencies:
