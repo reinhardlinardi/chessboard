@@ -6,17 +6,14 @@ let component = {
     data() {
         return {
             board: Common.data.board,
-            size: Common.data.size,
         }
     },
     methods: {
         toRank: Common.methods.util.toRank,
         isPiece: Common.methods.util.isPiece,
         isDarkSquared: Common.methods.util.isDarkSquared,
-        getPosition: Common.methods.board.getPosition,
         onDragStart: Common.methods.handler.onDragStart,
-        onDragOver: Common.methods.handler.onDragOver,
-        onDropReplace: Common.methods.handler.onDropReplace,
+        onDropReplaceOrCopy: Common.methods.handler.onDropReplaceOrCopy,
         onDropRemove: Common.methods.handler.onDropRemove,
     }
 };

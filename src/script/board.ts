@@ -1,5 +1,10 @@
 import { Setup } from './board-const.js';
 
+// TODO: Refactor
+// - Rename to chess
+// - Backend only, no concern about board/visual representation
+// - Use interfaces
+
 // 0-based rank, 0-based file chessboard
 export default class Board {
     

@@ -20,109 +20,103 @@
       <div>
 
         <div class="tray"
-          @dragover.prevent="onDragOver"
+          @dragover.prevent
           @drop.prevent="onDropRemove"
         >
-
+      
+          <div class="tray-item"></div>
           <div class="tray-item">
             <img class="piece"
               src="svg/p.svg"
-              id="p-tray"
+              id="piece-tray-1"
               draggable="true"
               @dragstart="onDragStart"
+              data-piece-type="p"
             >
           </div>
           <div class="tray-item">
             <img class="piece"
               src="svg/r.svg"
-              id="r-tray"
+              id="piece-tray-2"
               draggable="true"
               @dragstart="onDragStart"
+              data-piece-type="r"
             >
           </div>
           <div class="tray-item">
             <img class="piece"
               src="svg/n.svg"
-              id="n-tray"
+              id="piece-tray-3"
               draggable="true"
               @dragstart="onDragStart"
+              data-piece-type="n"
             >
           </div>
           <div class="tray-item">
             <img class="piece"
               src="svg/q.svg"
-              id="q-tray"
+              id="piece-tray-4"
               draggable="true"
               @dragstart="onDragStart"
+              data-piece-type="q"
             >
           </div>
 
           <div class="tray-item">
             <img class="piece"
               src="svg/k.svg"
-              id="k-tray"
+              id="piece-tray-5"
               draggable="true"
               @dragstart="onDragStart"
+              data-piece-type="k"
             >
           </div>
           <div class="tray-item">
             <img class="piece"
               src="svg/b.svg"
-              id="b-tray"
+              id="piece-tray-6"
               draggable="true"
               @dragstart="onDragStart"
+              data-piece-type="b"
             >
           </div>
-          <div class="tray-item">
-            <img class="piece"
-              src="svg/r.svg"
-              id="r-tray"
-              draggable="true"
-              @dragstart="onDragStart"
-            >
-          </div>
-          <div class="tray-item">
-            <img class="piece"
-              src="svg/p.svg"
-              id="p-tray"
-              draggable="true"
-              @dragstart="onDragStart"
-            >
-          </div>
-        
+          <div class="tray-item"></div>
+      
         </div>
 
         <div class="board">
-          <template v-for="(row, inverseRank) in getPosition()">
+          <template v-for="(row, inverseRank) in board">
             <template v-for="(piece, file) in row">
-              
+
               <div class="dark-square"
                 v-if="isDarkSquared(toRank(inverseRank), file)"
                 :id="`square-${toRank(inverseRank)}-${file}`"
-                @dragover.prevent="onDragOver"
-                @drop.prevent="onDropReplace"
+                @dragover.prevent
+                @drop.prevent="onDropReplaceOrCopy"
               >
                 <img class="piece" 
                   v-if="isPiece(piece)"
                   :src="`svg/${piece}.svg`"
-                  :id="`${piece}-${toRank(inverseRank)}-${file}`"
+                  :id="`piece-${toRank(inverseRank)}-${file}`"
                   draggable="true"
                   @dragstart="onDragStart"
+                  :data-piece-type="`${piece}`"
                 >
               </div>
 
               <div class="light-square"
                 v-else
                 :id="`square-${toRank(inverseRank)}-${file}`"
-                @dragover.prevent="onDragOver"
-                @drop.prevent="onDropReplace"
+                @dragover.prevent
+                @drop.prevent="onDropReplaceOrCopy"
               >
                 <img class="piece"
                   v-if="isPiece(piece)"
                   :src="`svg/${piece}.svg`"
-                  :id="`${piece}-${toRank(inverseRank)}-${file}`"
+                  :id="`piece-${toRank(inverseRank)}-${file}`"
                   draggable="true"
                   @dragstart="onDragStart"
+                  :data-piece-type="`${piece}`"
                 >
               </div>
 
@@ -131,75 +125,67 @@
         </div>
 
         <div class="tray"
-          @dragover.prevent="onDragOver"
+          @dragover.prevent
           @drop.prevent="onDropRemove"
         >
 
+          <div class="tray-item"></div>
           <div class="tray-item">
             <img class="piece"
               src="svg/P.svg"
-              id="P-tray"
+              id="piece-tray-7"
               draggable="true"
               @dragstart="onDragStart"
+              data-piece-type="P"
             >
           </div>
           <div class="tray-item">
             <img class="piece"
               src="svg/R.svg"
-              id="R-tray"
+              id="piece-tray-8"
               draggable="true"
               @dragstart="onDragStart"
+              data-piece-type="R"
             >
           </div>
           <div class="tray-item">
             <img class="piece"
               src="svg/N.svg"
-              id="N-tray"
+              id="piece-tray-9"
               draggable="true"
               @dragstart="onDragStart"
+              data-piece-type="N"
             >
           </div>
           <div class="tray-item">
             <img class="piece"
               src="svg/Q.svg"
-              id="Q-tray"
+              id="piece-tray-10"
               draggable="true"
               @dragstart="onDragStart"
+              data-piece-type="Q"
             >
           </div>
 
           <div class="tray-item">
             <img class="piece"
               src="svg/K.svg"
-              id="K-tray"
+              id="piece-tray-11"
               draggable="true"
               @dragstart="onDragStart"
+              data-piece-type="K"
             >
           </div>
           <div class="tray-item">
             <img class="piece"
               src="svg/B.svg"
-              id="B-tray"
+              id="piece-tray-12"
               draggable="true"
               @dragstart="onDragStart"
+              data-piece-type="B"
             >
           </div>
-          <div class="tray-item">
-            <img class="piece"
-              src="svg/R.svg"
-              id="R-tray"
-              draggable="true"
-              @dragstart="onDragStart"
-            >
-          </div>
-          <div class="tray-item">
-            <img class="piece"
-              src="svg/P.svg"
-              id="P-tray"
-              draggable="true"
-              @dragstart="onDragStart"
-            >
-          </div>
+          <div class="tray-item"></div>
 
         </div>
 
