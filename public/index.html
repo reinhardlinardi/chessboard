@@ -2,6 +2,7 @@
 
 <html>
   <head>
+
     <title>Chessboard - Editor</title>
     
     <meta charset="utf-8">
@@ -9,16 +10,28 @@
     
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="style/index.css">
+
   </head>
   
   <body>
-    <div id="app">
 
-      <div class="wrapper"
-        id="bin"
-        @dragover.prevent="onDragOver"
-        @drop.prevent="onDrop"
-      >
+    <div id="app" class="center">
+      
+      <div>
+
+        <div class="tray">
+
+          <div class="tray-item">a</div>
+          <div class="tray-item">b</div>
+          <div class="tray-item">c</div>
+          <div class="tray-item">d</div>
+
+          <div class="tray-item">e</div>
+          <div class="tray-item">f</div>
+          <div class="tray-item">g</div>
+          <div class="tray-item">h</div>
+        
+        </div>
 
         <div class="board">
           <template v-for="(row, inverseRank) in getPosition()">
@@ -27,8 +40,8 @@
               <div class="dark-square"
                 v-if="isDarkSquared(toRank(inverseRank), file)"
                 :id="`square-${toRank(inverseRank)}-${file}`"
-                @dragover.prevent="onDragOver"
-                @drop.prevent="onDrop"
+                @dragover.prevent="onDragOverMove"
+                @drop.prevent="onDropReplace"
               >
                 <img class="piece" 
                   v-if="isPiece(piece)"
@@ -42,8 +55,8 @@
               <div class="light-square"
                 v-else
                 :id="`square-${toRank(inverseRank)}-${file}`"
-                @dragover.prevent="onDragOver"
-                @drop.prevent="onDrop"
+                @dragover.prevent="onDragOverMove"
+                @drop.prevent="onDropReplace"
               >
                 <img class="piece"
                   v-if="isPiece(piece)"
@@ -58,10 +71,24 @@
           </template>
         </div>
 
+        <div class="tray">
+          <div class="tray-item">a</div>
+          <div class="tray-item">b</div>
+          <div class="tray-item">c</div>
+          <div class="tray-item">d</div>
+
+          <div class="tray-item">e</div>
+          <div class="tray-item">f</div>
+          <div class="tray-item">g</div>
+          <div class="tray-item">h</div>
+        </div>
+
       </div>
 
     </div>
     
     <script type="module" src="script/index.js"></script>
+
   </body>
+
 </html>

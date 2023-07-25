@@ -1,9 +1,11 @@
 @use 'common';
 
+$square-size: min(8vw, 8vh);
+
 .board {
     @extend %grid;
-    grid-template-columns: repeat(8, min(8vw, 8vh));
-    grid-template-rows: repeat(8, min(8vw, 8vh));
+    grid-template-columns: repeat(8, $square-size);
+    grid-template-rows: repeat(8, $square-size);
 }
 
 .light-square {
@@ -16,4 +18,14 @@
 
 .piece {
     height: 100%;
+}
+
+.tray {
+    @extend %grid;
+    grid-template-columns: repeat(8, $square-size);
+    grid-template-rows: $square-size;
+}
+
+.tray-item {
+    background-color: #d9d9d9;
 }
