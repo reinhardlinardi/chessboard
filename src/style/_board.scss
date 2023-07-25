@@ -24,8 +24,9 @@ $square-size: min(8vw, 8vh);
     @extend %grid;
     grid-template-columns: repeat(8, $square-size);
     grid-template-rows: $square-size;
+    padding: 8px 0 8px 0;
 }
 
 .tray-item {
-    background-color: #d9d9d9;
+    background-color: #595959;
 }

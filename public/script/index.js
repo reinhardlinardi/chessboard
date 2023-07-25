@@ -16,7 +16,8 @@ let component = {
         getPosition: Common.methods.board.getPosition,
         onDragStart: Common.methods.handler.onDragStart,
         onDragOver: Common.methods.handler.onDragOver,
-        onDrop: Common.methods.handler.onDrop,
+        onDropReplace: Common.methods.handler.onDropReplace,
+        onDropRemove: Common.methods.handler.onDropRemove,
     }
 };
 

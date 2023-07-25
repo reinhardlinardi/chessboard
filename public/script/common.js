@@ -27,18 +27,24 @@ export default {
             onDragOver(ev) {
                 ev.dataTransfer.dropEffect = "move";
             },
-            onDrop(ev) {
+            onDropReplace(ev) {
                 // Get dragged item id
                 const id = ev.dataTransfer.getData("text/plain");
                 let el = document.getElementById(id);
-                
-                // If drop zone id not "bin" move item and update image src, else remove
-                if(ev.target.id !== "bin") {
-                    ev.target.appendChild(document.getElementById(id));
-                    ev.target.src = el.src;
-                } else {
-                    el.parentNode.removeChild(el);
-                }
+
+                // Move item and update target image src
+                ev.target.appendChild(el);
+                ev.target.src = el.src;
+                // TODO: Update data's board
+            },
+            onDropRemove(ev) {
+                // Get dragged item id
+                const id = ev.dataTransfer.getData("text/plain");
+                let el = document.getElementById(id);
+
+                // Remove item
+                el.parentNode.removeChild(el);
+                // TODO: Update data's board
             }
         }
     },

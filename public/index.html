@@ -19,17 +19,76 @@
       
       <div>
 
-        <div class="tray">
+        <div class="tray"
+          @dragover.prevent="onDragOver"
+          @drop.prevent="onDropRemove"
+        >
 
-          <div class="tray-item">a</div>
-          <div class="tray-item">b</div>
-          <div class="tray-item">c</div>
-          <div class="tray-item">d</div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/p.svg"
+              id="p-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/r.svg"
+              id="r-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/n.svg"
+              id="n-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/q.svg"
+              id="q-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
 
-          <div class="tray-item">e</div>
-          <div class="tray-item">f</div>
-          <div class="tray-item">g</div>
-          <div class="tray-item">h</div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/k.svg"
+              id="k-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/b.svg"
+              id="b-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/r.svg"
+              id="r-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/p.svg"
+              id="p-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
         
         </div>
 
@@ -40,7 +99,7 @@
               <div class="dark-square"
                 v-if="isDarkSquared(toRank(inverseRank), file)"
                 :id="`square-${toRank(inverseRank)}-${file}`"
-                @dragover.prevent="onDragOverMove"
+                @dragover.prevent="onDragOver"
                 @drop.prevent="onDropReplace"
               >
                 <img class="piece" 
@@ -55,7 +114,7 @@
               <div class="light-square"
                 v-else
                 :id="`square-${toRank(inverseRank)}-${file}`"
-                @dragover.prevent="onDragOverMove"
+                @dragover.prevent="onDragOver"
                 @drop.prevent="onDropReplace"
               >
                 <img class="piece"
@@ -71,16 +130,77 @@
           </template>
         </div>
 
-        <div class="tray">
-          <div class="tray-item">a</div>
-          <div class="tray-item">b</div>
-          <div class="tray-item">c</div>
-          <div class="tray-item">d</div>
+        <div class="tray"
+          @dragover.prevent="onDragOver"
+          @drop.prevent="onDropRemove"
+        >
 
-          <div class="tray-item">e</div>
-          <div class="tray-item">f</div>
-          <div class="tray-item">g</div>
-          <div class="tray-item">h</div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/P.svg"
+              id="P-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/R.svg"
+              id="R-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/N.svg"
+              id="N-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/Q.svg"
+              id="Q-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/K.svg"
+              id="K-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/B.svg"
+              id="B-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/R.svg"
+              id="R-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/P.svg"
+              id="P-tray"
+              draggable="true"
+              @dragstart="onDragStart"
+            >
+          </div>
+
         </div>
 
       </div>
