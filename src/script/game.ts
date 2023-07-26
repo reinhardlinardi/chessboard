@@ -2,7 +2,7 @@ import * as Position from './position.js';
 
 // 0-based rank, 0-based file chess backend
 export class Game {
-    private position: string[];
+    private position: string[][];
     private started: boolean;
 
     public constructor() {
@@ -10,7 +10,7 @@ export class Game {
         this.started = false;
     }
 
-    public getPosition(): string[] {
+    public getPosition(): string[][] {
         return Position.copy(this.position);
     }
 
