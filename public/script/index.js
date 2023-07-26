@@ -2,16 +2,17 @@ import { createApp } from '../lib/vue.esm-browser.js';
 import Common from './common.js';
 
 // Root component
-let component = {
+const component = {
     data() {
         return {
             board: Common.data.board,
         }
     },
     methods: {
-        toRank: Common.methods.util.toRank,
-        isPiece: Common.methods.util.isPiece,
-        isDarkSquared: Common.methods.util.isDarkSquared,
+        isDarkSquare: Common.methods.util.isDarkSquare,
+        getPiece: Common.methods.util.getPiece,
+        isEmpty: Common.methods.util.isEmpty,
+        fromTray: Common.methods.util.fromTray,
         onDragStart: Common.methods.handler.onDragStart,
         onDropReplaceOrCopy: Common.methods.handler.onDropReplaceOrCopy,
         onDropRemove: Common.methods.handler.onDropRemove,

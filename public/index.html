@@ -85,38 +85,44 @@
         </div>
 
         <div class="board">
-          <template v-for="(row, inverseRank) in board">
-            <template v-for="(piece, file) in row">
+          <template v-for="(row, rank) in board">
+            <template v-for="(_, file) in row">
 
               <div class="dark-square"
-                v-if="isDarkSquared(toRank(inverseRank), file)"
-                :id="`square-${toRank(inverseRank)}-${file}`"
+                v-if="isDarkSquare(rank, file)"
+                :id="`square-${rank}-${file}`"
                 @dragover.prevent
                 @drop.prevent="onDropReplaceOrCopy"
+                :data-rank="`${rank}`"
+                :data-file="`${file}`"
               >
                 <img class="piece" 
-                  v-if="isPiece(piece)"
-                  :src="`svg/${piece}.svg`"
-                  :id="`piece-${toRank(inverseRank)}-${file}`"
+                  v-if="!isEmpty(rank, file)"
+                  :src="`svg/${getPiece(rank, file)}.svg`"
+                  :id="`piece-${rank}-${file}`"
                   draggable="true"
                   @dragstart="onDragStart"
-                  :data-piece-type="`${piece}`"
+                  :data-rank="`${rank}`"
+                  :data-file="`${file}`"
                 >
               </div>
 
               <div class="light-square"
                 v-else
-                :id="`square-${toRank(inverseRank)}-${file}`"
+                :id="`square-${rank}-${file}`"
                 @dragover.prevent
                 @drop.prevent="onDropReplaceOrCopy"
+                :data-rank="`${rank}`"
+                :data-file="`${file}`"
               >
-                <img class="piece"
-                  v-if="isPiece(piece)"
-                  :src="`svg/${piece}.svg`"
-                  :id="`piece-${toRank(inverseRank)}-${file}`"
+                <img class="piece" 
+                  v-if="!isEmpty(rank, file)"
+                  :src="`svg/${getPiece(rank, file)}.svg`"
+                  :id="`piece-${rank}-${file}`"
                   draggable="true"
                   @dragstart="onDragStart"
-                  :data-piece-type="`${piece}`"
+                  :data-rank="`${rank}`"
+                  :data-file="`${file}`"
                 >
               </div>
 
