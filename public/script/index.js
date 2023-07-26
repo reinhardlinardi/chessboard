@@ -1,4 +1,4 @@
-import { createApp } from '../lib/vue.esm-browser.js';
+import { createApp, createHydrationRenderer } from '../lib/vue.esm-browser.js';
 import Common from './common.js';
 
 // Root component
@@ -13,10 +13,12 @@ const component = {
         getPiece: Common.methods.util.getPiece,
         isEmpty: Common.methods.util.isEmpty,
         fromTray: Common.methods.util.fromTray,
+        updatePosition: Common.methods.game.updatePosition,
         onDragStart: Common.methods.handler.onDragStart,
         onDropReplaceOrCopy: Common.methods.handler.onDropReplaceOrCopy,
         onDropRemove: Common.methods.handler.onDropRemove,
-    }
+    },
+    created: Common.methods.lifecycle.created,
 };
 
 // Setup vue

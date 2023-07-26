@@ -67,13 +67,13 @@ export const BlackPawn: Piece = {
 export const WhiteKnight: Piece = {
     ...Knight,
     color: Color.White,
-    letter: 'K',
+    letter: 'N',
 };
 
 export const BlackKnight: Piece = {
     ...Knight,
     color: Color.Black,
-    letter: 'k',
+    letter: 'n',
 };
 
 export const WhiteBishop: Piece = {

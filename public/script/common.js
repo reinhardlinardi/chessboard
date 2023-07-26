@@ -1,35 +1,38 @@
-import * as Game from '../module/game.js';
+import * as Chess from '../module/game.js';
+
+const game = new Chess.Game();
+game.setDefaultPosition();
+
+const emptySquare = ".";
 
 export default {
     data: {
-        // TODO: Do not hardcode
-        board: [
-            "rnbqkbnr".split(""),
-            "pppppppp".split(""),
-            "........".split(""),
-            "........".split(""),
-            "........".split(""),
-            "........".split(""),
-            "PPPPPPPP".split(""),
-            "RNBQKBNR".split(""),
-        ],
+        board: [],
     },
     methods: {
         util: {
+            /* Rendering */
             isLightSquare(rank, file) {
                 return (rank + file) % 2 === 0? true : false;
+            },
+            isEmpty(rank, file) {
+                return this.getPiece(rank, file) == emptySquare
             },
             getPiece(rank, file) {
                 return this.board[rank][file];
             },
-            isEmpty(rank, file) {
-                return this.getPiece(rank, file) == ".";
-            },
+            /* Drag and drop */
             fromTray(id) {
                 return id.includes("tray");
-            }
+            },
+        },
+        game: {
+            updatePosition() {
+                this.board = game.getPosition().reverse();
+            },
         },
         handler: {
+            /* Drag and drop */
             onDragStart(ev) {
                 // Save dragged item id
                 ev.dataTransfer.setData("text/plain", ev.target.id);
@@ -68,6 +71,11 @@ export default {
                 if(fromTray) return;
                 
                 this.board[srcData.rank][srcData.file] = ".";
+            },
+        },
+        lifecycle: {
+            created() {
+                this.updatePosition();
             },
         },
     },
