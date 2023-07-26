@@ -1,3 +1,5 @@
+import * as Game from '../module/game.js';
+
 export default {
     data: {
         // TODO: Do not hardcode
@@ -40,9 +42,7 @@ export default {
                 const destId = ev.target.id;
 
                 // Prevent drag and drop to self to supress errors
-                if(srcId === destId) {
-                    return;
-                }
+                if(srcId === destId) return;
                 
                 // Get piece type from data-* attribute
                 const srcData = document.getElementById(srcId).dataset;
@@ -65,9 +65,9 @@ export default {
                 const fromTray = this.fromTray(srcId);
 
                 // Remove item only if src is not tray
-                if(!fromTray) {
-                    this.board[srcData.rank][srcData.file] = ".";
-                }
+                if(fromTray) return;
+                
+                this.board[srcData.rank][srcData.file] = ".";
             },
         },
     },
