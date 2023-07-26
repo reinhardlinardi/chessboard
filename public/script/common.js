@@ -14,7 +14,7 @@ export default {
     },
     methods: {
         util: {
-            isDarkSquare(rank, file) {
+            isLightSquare(rank, file) {
                 return (rank + file) % 2 === 0? true : false;
             },
             getPiece(rank, file) {

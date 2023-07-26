@@ -9,7 +9,7 @@ const component = {
         }
     },
     methods: {
-        isDarkSquare: Common.methods.util.isDarkSquare,
+        isLightSquare: Common.methods.util.isLightSquare,
         getPiece: Common.methods.util.getPiece,
         isEmpty: Common.methods.util.isEmpty,
         fromTray: Common.methods.util.fromTray,

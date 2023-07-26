@@ -27,45 +27,8 @@
           <div class="tray-item"></div>
           <div class="tray-item">
             <img class="piece"
-              src="svg/p.svg"
-              id="piece-tray-1"
-              draggable="true"
-              @dragstart="onDragStart"
-              data-piece-type="p"
-            >
-          </div>
-          <div class="tray-item">
-            <img class="piece"
-              src="svg/r.svg"
-              id="piece-tray-2"
-              draggable="true"
-              @dragstart="onDragStart"
-              data-piece-type="r"
-            >
-          </div>
-          <div class="tray-item">
-            <img class="piece"
-              src="svg/n.svg"
-              id="piece-tray-3"
-              draggable="true"
-              @dragstart="onDragStart"
-              data-piece-type="n"
-            >
-          </div>
-          <div class="tray-item">
-            <img class="piece"
-              src="svg/q.svg"
-              id="piece-tray-4"
-              draggable="true"
-              @dragstart="onDragStart"
-              data-piece-type="q"
-            >
-          </div>
-
-          <div class="tray-item">
-            <img class="piece"
               src="svg/k.svg"
-              id="piece-tray-5"
+              id="piece-tray-k"
               draggable="true"
               @dragstart="onDragStart"
               data-piece-type="k"
@@ -73,11 +36,47 @@
           </div>
           <div class="tray-item">
             <img class="piece"
+              src="svg/q.svg"
+              id="piece-tray-q"
+              draggable="true"
+              @dragstart="onDragStart"
+              data-piece-type="q"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/r.svg"
+              id="piece-tray-r"
+              draggable="true"
+              @dragstart="onDragStart"
+              data-piece-type="r"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
               src="svg/b.svg"
-              id="piece-tray-6"
+              id="piece-tray-b"
               draggable="true"
               @dragstart="onDragStart"
               data-piece-type="b"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/n.svg"
+              id="piece-tray-n"
+              draggable="true"
+              @dragstart="onDragStart"
+              data-piece-type="n"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/p.svg"
+              id="piece-tray-p"
+              draggable="true"
+              @dragstart="onDragStart"
+              data-piece-type="p"
             >
           </div>
           <div class="tray-item"></div>
@@ -88,8 +87,8 @@
           <template v-for="(row, rank) in board">
             <template v-for="(_, file) in row">
 
-              <div class="dark-square"
-                v-if="isDarkSquare(rank, file)"
+              <div class="light-square"
+                v-if="isLightSquare(rank, file)"
                 :id="`square-${rank}-${file}`"
                 @dragover.prevent
                 @drop.prevent="onDropReplaceOrCopy"
@@ -107,7 +106,7 @@
                 >
               </div>
 
-              <div class="light-square"
+              <div class="dark-square"
                 v-else
                 :id="`square-${rank}-${file}`"
                 @dragover.prevent
@@ -138,45 +137,8 @@
           <div class="tray-item"></div>
           <div class="tray-item">
             <img class="piece"
-              src="svg/P.svg"
-              id="piece-tray-7"
-              draggable="true"
-              @dragstart="onDragStart"
-              data-piece-type="P"
-            >
-          </div>
-          <div class="tray-item">
-            <img class="piece"
-              src="svg/R.svg"
-              id="piece-tray-8"
-              draggable="true"
-              @dragstart="onDragStart"
-              data-piece-type="R"
-            >
-          </div>
-          <div class="tray-item">
-            <img class="piece"
-              src="svg/N.svg"
-              id="piece-tray-9"
-              draggable="true"
-              @dragstart="onDragStart"
-              data-piece-type="N"
-            >
-          </div>
-          <div class="tray-item">
-            <img class="piece"
-              src="svg/Q.svg"
-              id="piece-tray-10"
-              draggable="true"
-              @dragstart="onDragStart"
-              data-piece-type="Q"
-            >
-          </div>
-
-          <div class="tray-item">
-            <img class="piece"
               src="svg/K.svg"
-              id="piece-tray-11"
+              id="piece-tray-K"
               draggable="true"
               @dragstart="onDragStart"
               data-piece-type="K"
@@ -184,11 +146,47 @@
           </div>
           <div class="tray-item">
             <img class="piece"
+              src="svg/Q.svg"
+              id="piece-tray-Q"
+              draggable="true"
+              @dragstart="onDragStart"
+              data-piece-type="Q"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/R.svg"
+              id="piece-tray-R"
+              draggable="true"
+              @dragstart="onDragStart"
+              data-piece-type="R"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
               src="svg/B.svg"
-              id="piece-tray-12"
+              id="piece-tray-B"
               draggable="true"
               @dragstart="onDragStart"
               data-piece-type="B"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/N.svg"
+              id="piece-tray-N"
+              draggable="true"
+              @dragstart="onDragStart"
+              data-piece-type="N"
+            >
+          </div>
+          <div class="tray-item">
+            <img class="piece"
+              src="svg/P.svg"
+              id="piece-tray-P"
+              draggable="true"
+              @dragstart="onDragStart"
+              data-piece-type="P"
             >
           </div>
           <div class="tray-item"></div>
