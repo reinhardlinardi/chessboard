@@ -1,3 +1,6 @@
+export const None: string = ".";
+
+
 export const enum Type {
     Pawn,
     Knight,
@@ -7,12 +10,11 @@ export const enum Type {
     King,
 };
 
-export const None: string = ".";
-
 export const enum Color {
     White,
     Black
 };
+
 
 export interface Piece {
     type: Type,
@@ -130,6 +132,7 @@ export const BlackKing: Piece = {
     color: Color.Black,
     letter: 'k',
 };
+
 
 const map: {[key: string]: Piece} = {
     'P': WhitePawn,

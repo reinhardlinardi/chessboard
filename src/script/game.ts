@@ -1,13 +1,18 @@
+import * as Setup from './setup.js';
 import * as Position from './position.js';
 
-// 0-based rank, 0-based file chess backend
+// 0-based rank, 0-based file chess game
 export class Game {
     private position: string[][];
+
     private started: boolean;
+    private ended: boolean;
+
 
     public constructor() {
-        this.position = Position.copy(Position.Empty);
+        this.position = Setup.get(Setup.Setup.Empty);
         this.started = false;
+        this.ended = false;
     }
 
     public getPosition(): string[][] {
@@ -15,7 +20,9 @@ export class Game {
     }
 
     public setDefaultPosition() {
-        if(this.started) return;
-        this.position = Position.copy(Position.Default);
+        if(this.started || this.ended) return;
+        this.position = Setup.get(Setup.Setup.Default);
     }
+
+    // TODO: When attempting to start game, validate position first
 }
