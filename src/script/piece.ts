@@ -19,37 +19,44 @@ export interface Piece {
     value: number,
     color: Color,
     letter: string,
+    figurine: string,
     // TODO: movetype
 };
 
 export const Pawn = {
     type: Type.Pawn,
     value: 1,
+    figurine: "♙",
 };
 
 export const Knight = {
     type: Type.Knight,
     value: 3,
+    figurine: "♘",
 };
 
 export const Bishop = {
     type: Type.Bishop,
     value: 3,
+    figurine: "♗",
 };
 
 export const Rook = {
     type: Type.Rook,
     value: 5,
+    figurine: "♖",
 };
 
 export const Queen = {
     type: Type.Queen,
     value: 9,
+    figurine: "♕",
 };
 
 export const King = {
     type: Type.King,
     value: 1000,
+    figurine: "♔",
 };
 
 export const WhitePawn: Piece = {
