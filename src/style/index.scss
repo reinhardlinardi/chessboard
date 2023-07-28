@@ -1,1 +1,31 @@
+@use 'global';
 @use 'board';
+@use 'button';
+
+%tray {
+    @extend %grid;
+    grid-template-columns: repeat(8, board.$square-size);
+    grid-template-rows: board.$square-size;
+
+    background-color: #4d4d4d;
+}
+
+.top-tray {
+    @extend %tray;
+    margin: 0 0 8px 0;
+}
+
+.bottom-tray {
+    @extend %tray;
+    margin: 8px 0 0 0;
+}
+
+.button-form-container {
+    margin: 0 0 0 20px;
+}
+
+.board-control-label {
+    font-family: 'Roboto', sans-serif;
+    font-size: button.$font-size;
+    color: white;
+}

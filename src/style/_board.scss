@@ -1,4 +1,4 @@
-@use 'common';
+@use 'layout';
 
 $square-size: min(8vw, 8vh);
 
@@ -18,24 +18,4 @@ $square-size: min(8vw, 8vh);
 
 .piece {
     height: 100%;
-}
-
-%tray {
-    @extend %grid;
-    grid-template-columns: repeat(8, $square-size);
-    grid-template-rows: $square-size;
-}
-
-.top-tray {
-    @extend %tray;
-    padding: 0 0 8px 0;
-}
-
-.bottom-tray {
-    @extend %tray;
-    padding: 8px 0 0 0;
-}
-
-.tray-item {
-    background-color: #595959;
 }

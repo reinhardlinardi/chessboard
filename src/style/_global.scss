@@ -1,0 +1,9 @@
+@use 'layout';
+
+body {
+    background-color: black;
+}
+
+.center {
+    @extend %flex-center;
+}
