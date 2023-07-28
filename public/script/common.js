@@ -1,7 +1,7 @@
 import * as Chess from '../module/game.js';
 
 const game = new Chess.Game();
-const emptySquare = ".";
+const none = ".";
 
 export default {
     data: {
@@ -14,7 +14,7 @@ export default {
                 return (rank + file) % 2 === 0? true : false;
             },
             isEmpty(rank, file) {
-                return this.getPiece(rank, file) === emptySquare
+                return this.getPiece(rank, file) === none
             },
             getPiece(rank, file) {
                 return this.board[rank][file];
@@ -24,9 +24,21 @@ export default {
                 return id.includes("tray");
             },
         },
-        game: {
-            updatePosition() {
+        board: {
+            updateBoard() {
                 this.board = game.getPosition().reverse();
+            },
+            /* Board controls */
+            clearBoard() {
+                for(let rank = 0; rank < 8; rank++) {
+                    for(let file = 0; file < 8; file++) {
+                        this.board[rank][file] = none;
+                    }
+                }
+            },
+            resetBoard() {
+                game.resetPosition();
+                this.updateBoard();
             },
         },
         handler: {
@@ -56,7 +68,7 @@ export default {
                 this.board[destData.rank][destData.file] = piece;
                 // If not from tray, delete piece from src
                 if(!fromTray) {
-                    this.board[srcData.rank][srcData.file] = ".";
+                    this.board[srcData.rank][srcData.file] = none;
                 }
             },
             onDropRemove(ev) {
@@ -68,12 +80,12 @@ export default {
                 // Remove item only if src is not tray
                 if(fromTray) return;
                 
-                this.board[srcData.rank][srcData.file] = ".";
+                this.board[srcData.rank][srcData.file] = none;
             },
         },
         lifecycle: {
             created() {
-                this.updatePosition();
+                this.updateBoard();
             },
         },
     },
