@@ -1,4 +1,4 @@
-import { createApp, createHydrationRenderer } from '../lib/vue.esm-browser.js';
+import { createApp } from '../lib/vue.esm-browser.js';
 import Common from './common.js';
 
 // Root component
