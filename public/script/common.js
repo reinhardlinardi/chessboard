@@ -6,43 +6,53 @@ const none = ".";
 export default {
     data: {
         board: [],
+        flipped: false,
     },
     methods: {
-        util: {
-            /* Rendering */
-            isLightSquare(rank, file) {
-                return (rank + file) % 2 === 0? true : false;
+        render: {
+            toRank(y) {
+                return this.flipped? y: 7-y;
+            },
+            toFile(x) {
+                return this.flipped? 7-x: x;
             },
             isEmpty(rank, file) {
                 return this.getPiece(rank, file) === none
             },
-            getPiece(rank, file) {
-                return this.board[rank][file];
-            },
-            /* Drag and drop */
-            fromTray(id) {
-                return id.includes("tray");
+            isDarkSquare(rank, file) {
+                return (rank + file) % 2 === 0? true : false;
             },
         },
         board: {
-            updateBoard() {
-                this.board = game.getPosition().reverse();
+            getPiece(rank, file) {
+                return this.board[rank][file];
             },
-            /* Board controls */
+            setPiece(rank, file, piece) {
+                this.board[rank][file] = piece;
+            },
             clearBoard() {
                 for(let rank = 0; rank < 8; rank++) {
                     for(let file = 0; file < 8; file++) {
-                        this.board[rank][file] = none;
+                        this.setPiece(rank, file, none);
                     }
                 }
             },
+            flipBoard() {
+                this.flipped = !this.flipped;
+            },
             resetBoard() {
                 game.resetPosition();
-                this.updateBoard();
+                this.reloadBoard();
+            },
+            reloadBoard() {
+                this.board = game.getPosition();
             },
         },
-        handler: {
-            /* Drag and drop */
+        /* Drag and drop */
+        dnd: {
+            fromTray(id) {
+                return id.includes("tray");
+            },
             onDragStart(ev) {
                 // Save dragged item id
                 ev.dataTransfer.setData("text/plain", ev.target.id);
@@ -62,13 +72,13 @@ export default {
                 const destData = document.getElementById(destId).dataset;
 
                 const fromTray = this.fromTray(srcId);
-                const piece = (fromTray)? srcData.pieceType : this.board[srcData.rank][srcData.file];
+                const piece = (fromTray)? srcData.pieceType : this.getPiece(srcData.rank, srcData.file);
 
                 // Replace piece in dest
-                this.board[destData.rank][destData.file] = piece;
+                this.setPiece(destData.rank, destData.file, piece);
                 // If not from tray, delete piece from src
                 if(!fromTray) {
-                    this.board[srcData.rank][srcData.file] = none;
+                    this.setPiece(srcData.rank, srcData.file, none);
                 }
             },
             onDropRemove(ev) {
@@ -78,14 +88,14 @@ export default {
                 const fromTray = this.fromTray(srcId);
 
                 // Remove item only if src is not tray
-                if(fromTray) return;
-                
-                this.board[srcData.rank][srcData.file] = none;
+                if(!fromTray) {
+                    this.setPiece(srcData.rank, srcData.file, none);
+                }
             },
         },
         lifecycle: {
             created() {
-                this.updateBoard();
+                this.reloadBoard();
             },
         },
     },

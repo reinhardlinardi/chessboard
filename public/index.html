@@ -84,44 +84,44 @@
         </div>
 
         <div class="board">
-          <template v-for="(row, rank) in board">
-            <template v-for="(_, file) in row">
+          <template v-for="(row, y) in board">
+            <template v-for="(_, x) in row">
 
-              <div class="light-square"
-                v-if="isLightSquare(rank, file)"
-                :id="`square-${rank}-${file}`"
+              <div class="dark-square"
+                v-if="isDarkSquare(toRank(y), toFile(x))"
+                :id="`square-y${y}-x${x}`"
                 @dragover.prevent
                 @drop.prevent="onDropReplaceOrCopy"
-                :data-rank="`${rank}`"
-                :data-file="`${file}`"
+                :data-rank="toRank(y)"
+                :data-file="toFile(x)"
               >
                 <img class="piece" 
-                  v-if="!isEmpty(rank, file)"
-                  :src="`svg/${getPiece(rank, file)}.svg`"
-                  :id="`piece-${rank}-${file}`"
+                  v-if="!isEmpty(toRank(y), toFile(x))"
+                  :src="`svg/${getPiece(toRank(y), toFile(x))}.svg`"
+                  :id="`piece-y${y}-x${x}`"
                   draggable="true"
                   @dragstart="onDragStart"
-                  :data-rank="`${rank}`"
-                  :data-file="`${file}`"
+                  :data-rank="toRank(y)"
+                  :data-file="toFile(x)"
                 >
               </div>
 
-              <div class="dark-square"
+              <div class="light-square"
                 v-else
-                :id="`square-${rank}-${file}`"
+                :id="`square-y${y}-x${x}`"
                 @dragover.prevent
                 @drop.prevent="onDropReplaceOrCopy"
-                :data-rank="`${rank}`"
-                :data-file="`${file}`"
+                :data-rank="toRank(y)"
+                :data-file="toFile(x)"
               >
                 <img class="piece" 
-                  v-if="!isEmpty(rank, file)"
-                  :src="`svg/${getPiece(rank, file)}.svg`"
-                  :id="`piece-${rank}-${file}`"
+                  v-if="!isEmpty(toRank(y), toFile(x))"
+                  :src="`svg/${getPiece(toRank(y), toFile(x))}.svg`"
+                  :id="`piece-y${y}-x${x}`"
                   draggable="true"
                   @dragstart="onDragStart"
-                  :data-rank="`${rank}`"
-                  :data-file="`${file}`"
+                  :data-rank="toRank(y)"
+                  :data-file="toFile(x)"
                 >
               </div>
 
@@ -198,7 +198,7 @@
       <div class="button-form-container">
         <div>
           <p class="board-control-label">Board Controls</p>
-          <button class="button">Flip</button>
+          <button class="button" @click="flipBoard">Flip</button>
           <button class="button" @click="clearBoard">Clear</button>
           <button class="button" @click="resetBoard">Reset</button>
         </div>
