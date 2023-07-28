@@ -1,8 +1,6 @@
 import * as Chess from '../module/game.js';
 
 const game = new Chess.Game();
-game.setDefaultPosition();
-
 const emptySquare = ".";
 
 export default {
@@ -16,7 +14,7 @@ export default {
                 return (rank + file) % 2 === 0? true : false;
             },
             isEmpty(rank, file) {
-                return this.getPiece(rank, file) == emptySquare
+                return this.getPiece(rank, file) === emptySquare
             },
             getPiece(rank, file) {
                 return this.board[rank][file];

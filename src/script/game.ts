@@ -10,7 +10,7 @@ export class Game {
 
 
     public constructor() {
-        this.position = Setup.get(Setup.Setup.Empty);
+        this.position = Setup.getDefaultSetup();
         this.started = false;
         this.ended = false;
     }
@@ -19,9 +19,9 @@ export class Game {
         return Position.copy(this.position);
     }
 
-    public setDefaultPosition() {
+    public resetPosition() {
         if(this.started || this.ended) return;
-        this.position = Setup.get(Setup.Setup.Default);
+        this.position = Setup.getDefaultSetup();
     }
 
     // TODO: When attempting to start game, validate position first

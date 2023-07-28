@@ -15,23 +15,6 @@ const bq: string = Piece.BlackQueen.letter;
 const wk: string = Piece.WhiteKing.letter;
 const bk: string = Piece.BlackKing.letter;
 
-
-export const enum Setup {
-    Empty = "empty",
-    Default = "default",
-};
-
-const emptySetup: string[][] = [
-    [na, na, na, na, na, na, na, na],
-    [na, na, na, na, na, na, na, na],
-    [na, na, na, na, na, na, na, na],
-    [na, na, na, na, na, na, na, na],
-    [na, na, na, na, na, na, na, na],
-    [na, na, na, na, na, na, na, na],
-    [na, na, na, na, na, na, na, na],
-    [na, na, na, na, na, na, na, na],
-];
-
 const defaultSetup: string[][] = [
     [wr, wn, wb, wq, wk, wb, wn, wr],
     [wp, wp, wp, wp, wp, wp, wp, wp],
@@ -44,11 +27,6 @@ const defaultSetup: string[][] = [
 ]
 
 
-const map: {[key: string]: string[][]} = {
-    "empty": emptySetup,
-    "default": defaultSetup,
-}
-
-export function get(name: string): string[][] {
-    return Position.copy(map[name]);
+export function getDefaultSetup(): string[][] {
+    return Position.copy(defaultSetup);
 }
