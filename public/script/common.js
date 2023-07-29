@@ -1,13 +1,11 @@
-import * as Chess from '../module/game.js';
-
-export const game = new Chess.Game();
-export const none = ".";
+import * as Setup from '../module/setup.js';
+import * as Piece from '../module/piece.js';
 
 const mime = "text/plain";
 
 export const vue = {
     data: {
-        board: game.getPosition(),
+        board: Setup.getDefaultSetup(),
         flipped: false,
     },
     methods: {
@@ -19,7 +17,7 @@ export const vue = {
                 return this.flipped? 7-x: x;
             },
             isEmpty(rank, file) {
-                return this.getPiece(rank, file) === none
+                return this.getPiece(rank, file) === Piece.None;
             },
         },
         board: {
@@ -72,7 +70,7 @@ export const vue = {
             },
             removePiece(id) {
                 let data = this.getElementData(id);
-                this.setPiece(data.rank, data.file, none);
+                this.setPiece(data.rank, data.file, Piece.None);
             },
         },
     },

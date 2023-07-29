@@ -1,5 +1,8 @@
 import { createApp } from '../lib/vue.esm-browser.js';
+
 import * as Common from './common.js';
+import * as Setup from '../module/setup.js';
+import * as Piece from '../module/piece.js';
 
 // Root component
 const component = {
@@ -29,11 +32,10 @@ const component = {
         replacePiece: Common.vue.methods.dnd.replacePiece,
         removePiece: Common.vue.methods.dnd.removePiece,
         clearBoard() {
-            this.board = Array(8).fill(Array(8).fill(Common.none));
+            this.board = Array(8).fill(Array(8).fill(Piece.None));
         },
         resetBoard() {
-            Common.game.resetPosition();
-            this.board = Common.game.getPosition();
+            this.board = Setup.getDefaultSetup();
             this.flipped = false;
         },
         onDragStart(ev) {
@@ -60,6 +62,16 @@ const component = {
             // Remove piece if src is not tray
             if(!this.fromTray(srcId))  this.removePiece(srcId);
         },
+        // getCastlingOptions() {
+        //     return 
+        // }
+        // isCastlingPossible(val) {
+        //     switch(val) {
+        //         case "K":
+        //             return this.getPiece(0, 4) == "K" && this.getPiece(0, 7) == "R"
+        //     }
+        //     return false;
+        // }
     },
 };
 
