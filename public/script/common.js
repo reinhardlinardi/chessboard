@@ -1,11 +1,13 @@
 import * as Chess from '../module/game.js';
 
-const game = new Chess.Game();
-const none = ".";
+export const none = ".";
+const mime = "text/plain";
 
-export default {
+const game = new Chess.Game();
+
+export const vue = {
     data: {
-        board: [],
+        board: game.getPosition(),
         flipped: false,
     },
     methods: {
@@ -27,22 +29,25 @@ export default {
             setPiece(rank, file, piece) {
                 this.board[rank][file] = piece;
             },
-            clearBoard() {
-                for(let rank = 0; rank < 8; rank++) {
-                    for(let file = 0; file < 8; file++) {
-                        this.setPiece(rank, file, none);
-                    }
-                }
-            },
             flipBoard() {
                 this.flipped = !this.flipped;
             },
+            clearBoard() {
+                this.board = Array(8).fill(Array(8).fill(none));
+            },
             resetBoard() {
                 game.resetPosition();
-                this.reloadBoard();
-            },
-            reloadBoard() {
                 this.board = game.getPosition();
+                this.flipped = false;
+            },
+        },
+        dom: {
+            getElement(id) {
+                return document.getElementById(id);
+            },
+            getElementData(id) {
+                // Return data from data-* attribute
+                return this.getElement(id).dataset;
             },
         },
         /* Drag and drop */
@@ -50,52 +55,32 @@ export default {
             fromTray(id) {
                 return id.includes("tray");
             },
-            onDragStart(ev) {
+            dragSetId(ev, id) {
+                let dnd = ev.dataTransfer;
+
                 // Save dragged piece id
-                ev.dataTransfer.setData("text/plain", ev.target.id);
-                // Allow copy or move data
-                ev.dataTransfer.effectAllowed = "copyMove";
+                dnd.setData(mime, id);
+                // Allow copy or move piece
+                dnd.effectAllowed = "copyMove";
             },
-            onDropReplaceOrCopy(ev) {
+            dropGetId(ev) {
+                let dnd = ev.dataTransfer;
+
                 // Get dragged piece id
-                // Trim id because JS gives "\r\n" srcId when we drag empty square
-                const srcId = ev.dataTransfer.getData("text/plain").trim();
-                if(srcId === "") return;
-
-                const destId = ev.target.id;
-
-                // Prevent drag and drop to self to supress errors
-                if(srcId === destId) return;
-                
-                // Get piece type from data-* attribute
-                const srcData = document.getElementById(srcId).dataset;
-                const destData = document.getElementById(destId).dataset;
-
-                const fromTray = this.fromTray(srcId);
-                const piece = (fromTray)? srcData.pieceType : this.getPiece(srcData.rank, srcData.file);
-
-                // Replace piece in dest
-                this.setPiece(destData.rank, destData.file, piece);
-                // If not from tray, delete piece from src
-                if(!fromTray) {
-                    this.setPiece(srcData.rank, srcData.file, none);
-                }
+                // JS gives "\r\n" id when we drag from empty square, so we trim id to get "" for invalid id
+                return dnd.getData(mime).trim();
             },
-            onDropRemove(ev) {
-                // Get dragged piece id
-                const srcId = ev.dataTransfer.getData("text/plain");
-                const srcData = document.getElementById(srcId).dataset;
-                const fromTray = this.fromTray(srcId);
-
-                // Remove piece only if src is not tray
-                if(!fromTray) {
-                    this.setPiece(srcData.rank, srcData.file, none);
-                }
+            getDraggedPiece(id) {
+                let data = this.getElementData(id);
+                return this.fromTray(id)? data.pieceType: this.getPiece(data.rank, data.file);
             },
-        },
-        lifecycle: {
-            created() {
-                this.reloadBoard();
+            replacePiece(id, piece) {
+                let data = this.getElementData(id);
+                this.setPiece(data.rank, data.file, piece);
+            },
+            removePiece(id) {
+                let data = this.getElementData(id);
+                this.setPiece(data.rank, data.file, none);
             },
         },
     },

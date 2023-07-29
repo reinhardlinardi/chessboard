@@ -1,30 +1,58 @@
 import { createApp } from '../lib/vue.esm-browser.js';
-import Common from './common.js';
+import * as Common from './common.js';
+
+const _ = Common.none;
 
 // Root component
 const component = {
     data() {
         return {
-            board: Common.data.board,
-            flipped: Common.data.flipped,
+            board: Common.vue.data.board,
+            flipped: Common.vue.data.flipped,
         }
     },
     methods: {
-        toRank: Common.methods.render.toRank,
-        toFile: Common.methods.render.toFile,
-        isEmpty: Common.methods.render.isEmpty,
-        getPiece: Common.methods.board.getPiece,
-        setPiece: Common.methods.board.setPiece,
-        clearBoard: Common.methods.board.clearBoard,
-        flipBoard: Common.methods.board.flipBoard,
-        resetBoard: Common.methods.board.resetBoard,
-        reloadBoard: Common.methods.board.reloadBoard,
-        fromTray: Common.methods.dnd.fromTray,
-        onDragStart: Common.methods.dnd.onDragStart,
-        onDropReplaceOrCopy: Common.methods.dnd.onDropReplaceOrCopy,
-        onDropRemove: Common.methods.dnd.onDropRemove,
+        toRank: Common.vue.methods.render.toRank,
+        toFile: Common.vue.methods.render.toFile,
+        isEmpty: Common.vue.methods.render.isEmpty,
+        getPiece: Common.vue.methods.board.getPiece,
+        setPiece: Common.vue.methods.board.setPiece,
+        flipBoard: Common.vue.methods.board.flipBoard,
+        clearBoard: Common.vue.methods.board.clearBoard,
+        resetBoard: Common.vue.methods.board.resetBoard,
+        getElement: Common.vue.methods.dom.getElement,
+        getElementData: Common.vue.methods.dom.getElementData,
+        fromTray: Common.vue.methods.dnd.fromTray,
+        dragSetId: Common.vue.methods.dnd.dragSetId,
+        dropGetId: Common.vue.methods.dnd.dropGetId,
+        getDraggedPiece: Common.vue.methods.dnd.getDraggedPiece,
+        replacePiece: Common.vue.methods.dnd.replacePiece,
+        removePiece: Common.vue.methods.dnd.removePiece,
+        onDragStart(ev) {
+            this.dragSetId(ev, ev.target.id);
+        },
+        onDropReplaceOrCopy(ev) {
+            const srcId = this.dropGetId(ev);
+            const destId = ev.target.id;
+
+            // Return if src not valid or dnd to self
+            if(srcId === "" || srcId === destId) return;
+            
+            // Replace piece in dest
+            const piece = this.getDraggedPiece(srcId);
+            this.replacePiece(destId, piece);
+
+            // Remove piece in src if not tray
+            if(!this.fromTray(srcId)) this.removePiece(srcId);
+        },
+        onDropRemove(ev) {
+            // Get dragged piece id
+            const srcId = this.dropGetId(ev);
+
+            // Remove piece if src is not tray
+            if(!this.fromTray(srcId))  this.removePiece(srcId);
+        },
     },
-    created: Common.methods.lifecycle.created,
 };
 
 // Setup vue
