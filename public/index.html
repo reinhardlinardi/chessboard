@@ -25,60 +25,17 @@
         >
       
           <div></div>
-          <div>
-            <img class="piece"
-              :src="`svg/${flipped?'K':'k'}.svg`"
-              id="piece-top-tray-1"
-              draggable="true"
-              @dragstart="onDragStart"
-              :data-piece-type="`${flipped?'K':'k'}`"
-            >
-          </div>
-          <div>
-            <img class="piece"
-              :src="`svg/${flipped?'Q':'q'}.svg`"
-              id="piece-top-tray-2"
-              draggable="true"
-              @dragstart="onDragStart"
-              :data-piece-type="`${flipped?'Q':'q'}`"
-            >
-          </div>
-          <div>
-            <img class="piece"
-              :src="`svg/${flipped?'R':'r'}.svg`"
-              id="piece-top-tray-3"
-              draggable="true"
-              @dragstart="onDragStart"
-              :data-piece-type="`${flipped?'R':'r'}`"
-            >
-          </div>
-          <div>
-            <img class="piece"
-              :src="`svg/${flipped?'B':'b'}.svg`"
-              id="piece-top-tray-4"
-              draggable="true"
-              @dragstart="onDragStart"
-              :data-piece-type="`${flipped?'B':'b'}`"
-            >
-          </div>
-          <div>
-            <img class="piece"
-              :src="`svg/${flipped?'N':'n'}.svg`"
-              id="piece-top-tray-5"
-              draggable="true"
-              @dragstart="onDragStart"
-              :data-piece-type="`${flipped?'N':'n'}`"
-            >
-          </div>
-          <div>
-            <img class="piece"
-              :src="`svg/${flipped?'P':'p'}.svg`"
-              id="piece-top-tray-6"
-              draggable="true"
-              @dragstart="onDragStart"
-              :data-piece-type="`${flipped?'P':'p'}`"
-            >
-          </div>
+          <template v-for="(pieceType, idx) in ['k', 'q', 'r', 'b', 'n', 'p']">
+            <div>
+                <img class="piece"
+                  :src="`svg/${flipped? pieceType.toUpperCase():pieceType}.svg`"
+                  :id="`piece-top-tray-${idx}`"
+                  draggable="true"
+                  @dragstart="onDragStart"
+                  :data-piece-type="`${flipped? pieceType.toUpperCase():pieceType}`"
+                >
+            </div>
+          </template>
           <div></div>
       
         </div>
@@ -115,60 +72,17 @@
         >
 
           <div></div>
-          <div>
-            <img class="piece"
-              :src="`svg/${flipped?'k':'K'}.svg`"
-              id="piece-bottom-tray-1"
-              draggable="true"
-              @dragstart="onDragStart"
-              :data-piece-type="`${flipped?'k':'K'}`"
-            >
-          </div>
-          <div>
-            <img class="piece"
-              :src="`svg/${flipped?'q':'Q'}.svg`"
-              id="piece-bottom-tray-2"
-              draggable="true"
-              @dragstart="onDragStart"
-              :data-piece-type="`${flipped?'q':'Q'}`"
-            >
-          </div>
-          <div>
-            <img class="piece"
-              :src="`svg/${flipped?'r':'R'}.svg`"
-              id="piece-bottom-tray-3"
-              draggable="true"
-              @dragstart="onDragStart"
-              :data-piece-type="`${flipped?'r':'R'}`"
-            >
-          </div>
-          <div>
-            <img class="piece"
-              :src="`svg/${flipped?'b':'B'}.svg`"
-              id="piece-bottom-tray-4"
-              draggable="true"
-              @dragstart="onDragStart"
-              :data-piece-type="`${flipped?'b':'B'}`"
-            >
-          </div>
-          <div>
-            <img class="piece"
-              :src="`svg/${flipped?'n':'N'}.svg`"
-              id="piece-bottom-tray-5"
-              draggable="true"
-              @dragstart="onDragStart"
-              :data-piece-type="`${flipped?'n':'N'}`"
-            >
-          </div>
-          <div>
-            <img class="piece"
-              :src="`svg/${flipped?'p':'P'}.svg`"
-              id="piece-bottom-tray-6"
-              draggable="true"
-              @dragstart="onDragStart"
-              :data-piece-type="`${flipped?'p':'P'}`"
-            >
-          </div>
+          <template v-for="(pieceType, idx) in ['K', 'Q', 'R', 'B', 'N', 'P']">
+            <div>
+                <img class="piece"
+                  :src="`svg/${flipped? pieceType.toLowerCase():pieceType}.svg`"
+                  :id="`piece-bottom-tray-${idx}`"
+                  draggable="true"
+                  @dragstart="onDragStart"
+                  :data-piece-type="`${flipped? pieceType.toLowerCase():pieceType}`"
+                >
+            </div>
+          </template>
           <div></div>
 
         </div>
