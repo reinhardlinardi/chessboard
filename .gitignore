@@ -187,3 +187,6 @@ yarn-error.log
 # Generated static files
 public/style/*
 public/module/*
+
+# Unit tests
+!src/test
