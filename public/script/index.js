@@ -1,8 +1,6 @@
 import { createApp } from '../lib/vue.esm-browser.js';
 import * as Common from './common.js';
 
-const _ = Common.none;
-
 // Root component
 const component = {
     data() {

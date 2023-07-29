@@ -1,29 +1,29 @@
 import * as Piece from './piece.js';
 import * as Position from './position.js';
 
-const na: string = Piece.None;
-const wp: string = Piece.WhitePawn.letter;
-const bp: string = Piece.BlackPawn.letter;
-const wn: string = Piece.WhiteKnight.letter;
-const bn: string = Piece.BlackKnight.letter;
-const wb: string = Piece.WhiteBishop.letter;
-const bb: string = Piece.BlackBishop.letter;
-const wr: string = Piece.WhiteRook.letter;
-const br: string = Piece.BlackRook.letter;
-const wq: string = Piece.WhiteQueen.letter;
-const bq: string = Piece.BlackQueen.letter;
-const wk: string = Piece.WhiteKing.letter;
-const bk: string = Piece.BlackKing.letter;
+const _: string = Piece.None;
+const P: string = Piece.WhitePawn.letter;
+const p: string = Piece.BlackPawn.letter;
+const N: string = Piece.WhiteKnight.letter;
+const n: string = Piece.BlackKnight.letter;
+const B: string = Piece.WhiteBishop.letter;
+const b: string = Piece.BlackBishop.letter;
+const R: string = Piece.WhiteRook.letter;
+const r: string = Piece.BlackRook.letter;
+const Q: string = Piece.WhiteQueen.letter;
+const q: string = Piece.BlackQueen.letter;
+const K: string = Piece.WhiteKing.letter;
+const k: string = Piece.BlackKing.letter;
 
 const defaultSetup: string[][] = [
-    [wr, wn, wb, wq, wk, wb, wn, wr],
-    [wp, wp, wp, wp, wp, wp, wp, wp],
-    [na, na, na, na, na, na, na, na],
-    [na, na, na, na, na, na, na, na],
-    [na, na, na, na, na, na, na, na],
-    [na, na, na, na, na, na, na, na],
-    [bp, bp, bp, bp, bp, bp, bp, bp],
-    [br, bn, bb, bq, bk, bb, bn, br]
+    [R, N, B, Q, K, B, N, R],
+    [P, P, P, P, P, P, P, P],
+    [_, _, _, _, _, _, _, _],
+    [_, _, _, _, _, _, _, _],
+    [_, _, _, _, _, _, _, _],
+    [_, _, _, _, _, _, _, _],
+    [p, p, p, p, p, p, p, p],
+    [r, n, b, q, k, b, n, r]
 ]
 
 
