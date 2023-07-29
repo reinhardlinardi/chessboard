@@ -87,27 +87,7 @@
           <template v-for="(row, y) in board">
             <template v-for="(_, x) in row">
 
-              <div class="dark-square"
-                v-if="isDarkSquare(toRank(y), toFile(x))"
-                :id="`square-y${y}-x${x}`"
-                @dragover.prevent
-                @drop.prevent="onDropReplaceOrCopy"
-                :data-rank="toRank(y)"
-                :data-file="toFile(x)"
-              >
-                <img class="piece" 
-                  v-if="!isEmpty(toRank(y), toFile(x))"
-                  :src="`svg/${getPiece(toRank(y), toFile(x))}.svg`"
-                  :id="`piece-y${y}-x${x}`"
-                  draggable="true"
-                  @dragstart="onDragStart"
-                  :data-rank="toRank(y)"
-                  :data-file="toFile(x)"
-                >
-              </div>
-
-              <div class="light-square"
-                v-else
+              <div :class="(y+x)%2 === 0? 'light-square':'dark-square'"
                 :id="`square-y${y}-x${x}`"
                 @dragover.prevent
                 @drop.prevent="onDropReplaceOrCopy"

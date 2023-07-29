@@ -13,7 +13,6 @@ const component = {
         toRank: Common.methods.render.toRank,
         toFile: Common.methods.render.toFile,
         isEmpty: Common.methods.render.isEmpty,
-        isDarkSquare: Common.methods.render.isDarkSquare,
         getPiece: Common.methods.board.getPiece,
         setPiece: Common.methods.board.setPiece,
         clearBoard: Common.methods.board.clearBoard,

@@ -19,9 +19,6 @@ export default {
             isEmpty(rank, file) {
                 return this.getPiece(rank, file) === none
             },
-            isDarkSquare(rank, file) {
-                return (rank + file) % 2 === 0? true : false;
-            },
         },
         board: {
             getPiece(rank, file) {
