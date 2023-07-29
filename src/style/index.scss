@@ -7,7 +7,10 @@
     grid-template-columns: repeat(8, board.$square-size);
     grid-template-rows: board.$square-size;
 
-    background-color: #b0a9a9;
+    border: 1px solid transparent;
+    border-radius: 4px;
+
+    background-color: #484848;
 }
 
 .top-tray {
@@ -20,12 +23,36 @@
     margin: 8px 0 0 0;
 }
 
-.button-form-container {
-    margin: 0 0 0 20px;
+.right-container {
+    @extend %side-container;
 }
 
-.board-control-label {
+%sub-container {
+    padding: 1px 0 10px 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background-color: #b8b8b8;
+}
+
+.control-container {
+    @extend %sub-container;
+    margin: 0 0 15px 0;
+}
+
+.option-container {
+    @extend %sub-container;
+    margin: 15px 0 0px 0;
+}
+
+.label {
     font-family: 'Roboto', sans-serif;
     font-size: button.$font-size;
-    color: white;
+}
+
+.checkbox-container {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+
+    margin: 5px 0 5px 0;
 }

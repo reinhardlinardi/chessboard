@@ -1,9 +1,9 @@
 import * as Chess from '../module/game.js';
 
+export const game = new Chess.Game();
 export const none = ".";
-const mime = "text/plain";
 
-const game = new Chess.Game();
+const mime = "text/plain";
 
 export const vue = {
     data: {
@@ -31,14 +31,6 @@ export const vue = {
             },
             flipBoard() {
                 this.flipped = !this.flipped;
-            },
-            clearBoard() {
-                this.board = Array(8).fill(Array(8).fill(none));
-            },
-            resetBoard() {
-                game.resetPosition();
-                this.board = game.getPosition();
-                this.flipped = false;
             },
         },
         dom: {

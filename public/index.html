@@ -89,14 +89,32 @@
 
       </div>
 
-      <div class="button-form-container">
-        <div>
-          <p class="board-control-label">Board Controls</p>
+      <div class="right-container">
+
+        <div class="control-container">
+          <p class="label">Board</p>
           <button class="button" @click="flipBoard">Flip</button>
           <button class="button" @click="clearBoard">Clear</button>
           <button class="button" @click="resetBoard">Reset</button>
         </div>
-        <!-- <div>Options</div> -->
+        
+        <div class="option-container">
+          <p class="label">Options</p>
+            
+          <template v-for="(opt) in [
+            {val: 'K', text: 'White O-O'},
+            {val: 'Q', text: 'White O-O-O'},
+            {val: 'k', text: 'Black O-O'},
+            {val: 'q', text: 'Black O-O-O'}]"
+          >
+            <div class="checkbox-container">
+              <input type="checkbox" :value="`${opt.val}`" v-model="form.castling" :id="`checkbox-${opt.val}`" />
+              <label class="label" :for="`checkbox-${opt.val}`">{{ opt.text }}</label>
+            </div>
+          </template>
+          
+        </div>
+      
       </div>
 
     </div>

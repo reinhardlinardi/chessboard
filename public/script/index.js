@@ -7,6 +7,9 @@ const component = {
         return {
             board: Common.vue.data.board,
             flipped: Common.vue.data.flipped,
+            form: {
+                castling: [],
+            },
         }
     },
     methods: {
@@ -16,8 +19,6 @@ const component = {
         getPiece: Common.vue.methods.board.getPiece,
         setPiece: Common.vue.methods.board.setPiece,
         flipBoard: Common.vue.methods.board.flipBoard,
-        clearBoard: Common.vue.methods.board.clearBoard,
-        resetBoard: Common.vue.methods.board.resetBoard,
         getElement: Common.vue.methods.dom.getElement,
         getElementData: Common.vue.methods.dom.getElementData,
         fromTray: Common.vue.methods.dnd.fromTray,
@@ -26,6 +27,14 @@ const component = {
         getDraggedPiece: Common.vue.methods.dnd.getDraggedPiece,
         replacePiece: Common.vue.methods.dnd.replacePiece,
         removePiece: Common.vue.methods.dnd.removePiece,
+        clearBoard() {
+            this.board = Array(8).fill(Array(8).fill(Common.none));
+        },
+        resetBoard() {
+            Common.game.resetPosition();
+            this.board = Common.game.getPosition();
+            this.flipped = false;
+        },
         onDragStart(ev) {
             this.dragSetId(ev, ev.target.id);
         },
