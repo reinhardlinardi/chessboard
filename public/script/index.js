@@ -8,6 +8,7 @@ const component = {
             board: Common.vue.data.board,
             flipped: Common.vue.data.flipped,
             form: {
+                whiteToMove: true,
                 castling: [],
             },
         }

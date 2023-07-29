@@ -44,12 +44,32 @@
     margin: 15px 0 0px 0;
 }
 
-.label {
+.subsection {
+    padding: 10px 0 10px 0;
+}
+
+.section-label {
     font-family: 'Roboto', sans-serif;
-    font-size: button.$font-size;
+    font-size: min(2.5vw, 2.5vh);
+}
+
+%section-text {
+    font-family: 'Roboto', sans-serif;
+    font-size: min(2.4vw, 2.4vh);
+}
+
+.section-text {
+    @extend %section-text;
+}
+
+.form-select {
+    @extend %section-text;
+    margin: 0 10px 0 10px;
 }
 
 .checkbox-container {
+    @extend %section-text;
+
     display: flex;
     justify-content: left;
     align-items: center;
