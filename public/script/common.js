@@ -51,14 +51,17 @@ export default {
                 return id.includes("tray");
             },
             onDragStart(ev) {
-                // Save dragged item id
+                // Save dragged piece id
                 ev.dataTransfer.setData("text/plain", ev.target.id);
                 // Allow copy or move data
                 ev.dataTransfer.effectAllowed = "copyMove";
             },
             onDropReplaceOrCopy(ev) {
-                // Get dragged item id
-                const srcId = ev.dataTransfer.getData("text/plain");
+                // Get dragged piece id
+                // Trim id because JS gives "\r\n" srcId when we drag empty square
+                const srcId = ev.dataTransfer.getData("text/plain").trim();
+                if(srcId === "") return;
+
                 const destId = ev.target.id;
 
                 // Prevent drag and drop to self to supress errors
@@ -79,12 +82,12 @@ export default {
                 }
             },
             onDropRemove(ev) {
-                // Get dragged item id
+                // Get dragged piece id
                 const srcId = ev.dataTransfer.getData("text/plain");
                 const srcData = document.getElementById(srcId).dataset;
                 const fromTray = this.fromTray(srcId);
 
-                // Remove item only if src is not tray
+                // Remove piece only if src is not tray
                 if(!fromTray) {
                     this.setPiece(srcData.rank, srcData.file, none);
                 }
