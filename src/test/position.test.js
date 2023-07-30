@@ -16,7 +16,7 @@ const K = Piece.WhiteKing.letter;
 const k = Piece.BlackKing.letter;
 
 
-test("copy position", () => {
+test("copy", () => {
     const pos = [
         [_, _, _, _, _, _, _, _],
         [_, _, _, _, _, _, _, _],
