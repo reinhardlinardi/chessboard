@@ -29,10 +29,11 @@ test("copy", () => {
     
     ].reverse();
 
-    const rank = Math.round(Math.random() * 7);
-    const file = Math.round(Math.random() * 7);
+    const rank = Math.round(Math.random() * 7) + 1;
+    const file = Math.round(Math.random() * 7) + 1;
 
     const copy = Position.copy(pos);
-    copy[rank][file] = K;
-    expect(pos[rank][file]).toBe(_);
+    copy[rank-1][file-1] = K;
+
+    expect(pos[rank-1][file-1]).toBe(_);
 });
