@@ -124,26 +124,26 @@ export const BlackKing: Piece = {
 };
 
 
-const wp: Piece = WhitePawn;
-const bp: Piece = BlackPawn;
-const wn: Piece = WhiteKnight;
-const bn: Piece = BlackKnight;
-const wb: Piece = WhiteBishop;
-const bb: Piece = BlackBishop;
-const wr: Piece = WhiteRook;
-const br: Piece = BlackRook;
-const wq: Piece = WhiteQueen;
-const bq: Piece = BlackQueen;
-const wk: Piece = WhiteKing;
-const bk: Piece = BlackKing;
+const wp = WhitePawn;
+const bp = BlackPawn;
+const wn = WhiteKnight;
+const bn = BlackKnight;
+const wb = WhiteBishop;
+const bb = BlackBishop;
+const wr = WhiteRook;
+const br = BlackRook;
+const wq = WhiteQueen;
+const bq = BlackQueen;
+const wk = WhiteKing;
+const bk = BlackKing;
 
-const w: string = Color.White;
-const b: string = Color.Black;
+const w = Color.White;
+const b = Color.Black;
 
 
 const list: {[key: string]: Piece[]} = {
-    [Color.White]: [wp, wn, wb, wr, wq ,wk],
-    [Color.Black]: [bp, bn, bb, br, bq, bk],
+    [w]: [wp, wn, wb, wr, wq ,wk],
+    [b]: [bp, bn, bb, br, bq, bk],
 };
 
 const map: {[key: string]: Piece} = [...list[w], ...list[b]].reduce(

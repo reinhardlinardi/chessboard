@@ -1,19 +1,19 @@
 import * as Piece from './piece.js';
 import * as Position from './position.js';
 
-const _: string = Piece.None;
-const P: string = Piece.WhitePawn.letter;
-const p: string = Piece.BlackPawn.letter;
-const N: string = Piece.WhiteKnight.letter;
-const n: string = Piece.BlackKnight.letter;
-const B: string = Piece.WhiteBishop.letter;
-const b: string = Piece.BlackBishop.letter;
-const R: string = Piece.WhiteRook.letter;
-const r: string = Piece.BlackRook.letter;
-const Q: string = Piece.WhiteQueen.letter;
-const q: string = Piece.BlackQueen.letter;
-const K: string = Piece.WhiteKing.letter;
-const k: string = Piece.BlackKing.letter;
+const _ = Piece.None;
+const P = Piece.WhitePawn.letter;
+const p = Piece.BlackPawn.letter;
+const N = Piece.WhiteKnight.letter;
+const n = Piece.BlackKnight.letter;
+const B = Piece.WhiteBishop.letter;
+const b = Piece.BlackBishop.letter;
+const R = Piece.WhiteRook.letter;
+const r = Piece.BlackRook.letter;
+const Q = Piece.WhiteQueen.letter;
+const q = Piece.BlackQueen.letter;
+const K = Piece.WhiteKing.letter;
+const k = Piece.BlackKing.letter;
 
 
 const defaultSetup: string[][] = [

@@ -5,9 +5,6 @@ export interface Square {
     file: number,
 };
 
-
-
-// export function fromName(name: string): Square {
-//     let rank = parseInt()
-//     return {rank: rank, file: fileOf(label)};
-// };
+export function of(label: string, rank: number): Square {
+    return {rank: rank, file: File.fileOf(label)};
+};
