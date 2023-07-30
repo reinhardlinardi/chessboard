@@ -1,6 +1,6 @@
 import * as Color from './color.js';
 
-export const None: string = ".";
+export const None: string = " ";
 
 export const TypePawn: number = 0;
 export const TypeKnight: number = 1;
