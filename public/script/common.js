@@ -15,11 +15,14 @@ export const vue = {
             },
         },
         render: {
-            toRank(y) {
-                return this.flipped? y: 7-y;
+            rankOf(y) {
+                return this.flipped? y+1: 8-y;
             },
-            toFile(x) {
-                return this.flipped? 7-x: x;
+            fileOf(x) {
+                return this.flipped? 8-x: x+1;
+            },
+            labelOf(x) {
+                return String.fromCodePoint("a".codePointAt(0) + this.fileOf(x)-1);
             },
             isEmpty(rank, file) {
                 return this.getPiece(rank, file) === Piece.None;
@@ -27,10 +30,10 @@ export const vue = {
         },
         board: {
             getPiece(rank, file) {
-                return this.board[rank][file];
+                return this.board[rank-1][file-1];
             },
             setPiece(rank, file, piece) {
-                this.board[rank][file] = piece;
+                this.board[rank-1][file-1] = piece;
             },
             flipBoard() {
                 this.flipped = !this.flipped;

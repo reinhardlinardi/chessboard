@@ -21,8 +21,9 @@ const component = {
     },
     methods: {
         range: Common.vue.methods.util.range,
-        toRank: Common.vue.methods.render.toRank,
-        toFile: Common.vue.methods.render.toFile,
+        rankOf: Common.vue.methods.render.rankOf,
+        fileOf: Common.vue.methods.render.fileOf,
+        labelOf: Common.vue.methods.render.labelOf,
         isEmpty: Common.vue.methods.render.isEmpty,
         getPiece: Common.vue.methods.board.getPiece,
         setPiece: Common.vue.methods.board.setPiece,

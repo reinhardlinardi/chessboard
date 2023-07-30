@@ -48,17 +48,18 @@
                 :id="`square-y${y}-x${x}`"
                 @dragover.prevent
                 @drop.prevent="onDropReplaceOrCopy"
-                :data-rank="toRank(y)"
-                :data-file="toFile(x)"
+                :data-square="`${labelOf(x)}${rankOf(y)}`"
+                :data-rank="rankOf(y)"
+                :data-file="fileOf(x)"
               >
                 <img class="piece" 
-                  v-if="!isEmpty(toRank(y), toFile(x))"
-                  :src="`svg/${getPiece(toRank(y), toFile(x))}.svg`"
+                  v-if="!isEmpty(rankOf(y), fileOf(x))"
+                  :src="`svg/${getPiece(rankOf(y), fileOf(x))}.svg`"
                   :id="`piece-y${y}-x${x}`"
                   draggable="true"
                   @dragstart="onDragStart"
-                  :data-rank="toRank(y)"
-                  :data-file="toFile(x)"
+                  :data-rank="rankOf(y)"
+                  :data-file="fileOf(x)"
                 >
               </div>
 
