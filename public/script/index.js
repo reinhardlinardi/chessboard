@@ -4,6 +4,7 @@ import * as Common from './common.js';
 import * as Color from '../module/color.js';
 import * as Piece from '../module/piece.js';
 import * as Setup from '../module/setup.js';
+import * as Castle from '../module/castle.js';
 
 // Root component
 const component = {
@@ -73,16 +74,12 @@ const component = {
         getBottomTrayPiece(idx) {
             return this.flipped? this.topTray[idx]: this.bottomTray[idx];
         },
-        // getCastlingOptions() {
-        //     return 
-        // }
-        // isCastlingPossible(val) {
-        //     switch(val) {
-        //         case "K":
-        //             return this.getPiece(0, 4) == "K" && this.getPiece(0, 7) == "R"
-        //     }
-        //     return false;
-        // }
+        getWhiteCastlingOptions() {
+            return Castle.getTypes(Color.White);
+        },
+        getBlackCastlingOptions() {
+            return Castle.getTypes(Color.Black);
+        },
     },
 };
 

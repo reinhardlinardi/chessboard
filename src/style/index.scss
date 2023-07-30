@@ -67,12 +67,14 @@
     margin: 0 10px 0 10px;
 }
 
+.castle-container {
+    display: inline-block;
+    margin: 0 10px 0 0px;
+}
+
 .checkbox-container {
     @extend %section-text;
 
     display: flex;
-    justify-content: left;
     align-items: center;
-
-    margin: 5px 0 5px 0;
 }

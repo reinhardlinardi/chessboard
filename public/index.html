@@ -113,22 +113,36 @@
           </div>
 
           <div class="subsection">
-            <label class="section-text">Castling</label>
-            <template v-for="(opt) in [
-              {val: 'K', text: 'White O-O'},
-              {val: 'Q', text: 'White O-O-O'},
-              {val: 'k', text: 'Black O-O'},
-              {val: 'q', text: 'Black O-O-O'}]"
-            >
-              <div class="checkbox-container">
-                <input type="checkbox"
-                  :value="`${opt.val}`"
-                  v-model="form.castling"
-                  :id="`checkbox-${opt.val}`"
-                />
-                <label class="label" :for="`checkbox-${opt.val}`">{{ opt.text }}</label>
-              </div>
-            </template>
+            <div class="castle-container">
+              <label class="section-text">White</label>
+
+              <template v-for="opt in getWhiteCastlingOptions()">
+                <div class="checkbox-container"></div>
+                  <input type="checkbox"
+                    :value="`${opt.letter}`"
+                    v-model="form.castling"
+                    :id="`checkbox-${opt.letter}`"
+                  />
+                  <label class="section-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
+                </div>
+              </template>
+            </div>
+
+            <div class="castle-container">
+              <label class="section-text">Black</label>
+              
+              <template v-for="opt in getBlackCastlingOptions()">
+                <div class="checkbox-container"></div>
+                  <input type="checkbox"
+                    :value="`${opt.letter}`"
+                    v-model="form.castling"
+                    :id="`checkbox-${opt.letter}`"
+                  />
+                  <label class="section-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
+                </div>
+              </template>
+            </div>
+
           </div>
           
           <div class="subsection">
