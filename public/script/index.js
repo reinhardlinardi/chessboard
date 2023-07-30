@@ -14,9 +14,12 @@ const component = {
                 whiteToMove: true,
                 castling: [],
             },
+            topTray: Piece.getTypes(Piece.ColorBlack).map(piece => piece.letter),
+            bottomTray: Piece.getTypes(Piece.ColorWhite).map(piece => piece.letter),
         }
     },
     methods: {
+        range: Common.vue.methods.util.range,
         toRank: Common.vue.methods.render.toRank,
         toFile: Common.vue.methods.render.toFile,
         isEmpty: Common.vue.methods.render.isEmpty,
@@ -62,22 +65,11 @@ const component = {
             // Remove piece if src is not tray
             if(!this.fromTray(srcId))  this.removePiece(srcId);
         },
-        getTrayPieceTypes(primary, inverse) {
-            const colorList = Piece.getTypes(primary);
-            const inverseList = Piece.getTypes(inverse);
-
-            let list = new Array(6);
-            
-            for(let idx = 0; idx < 6; idx++) {
-                list[idx] = {"primary": colorList[idx].letter, "inverse": inverseList[idx].letter};
-            }
-            return list;
+        getTopTrayPiece(idx) {
+            return this.flipped? this.bottomTray[idx]: this.topTray[idx];  
         },
-        getTopTrayPieceTypes() {
-            return this.getTrayPieceTypes(Piece.ColorWhite, Piece.ColorBlack); 
-        },
-        getBottomTrayPieceTypes() {
-            return this.getTrayPieceTypes(Piece.ColorBlack, Piece.ColorWhite);
+        getBottomTrayPiece(idx) {
+            return this.flipped? this.topTray[idx]: this.bottomTray[idx];
         },
         // getCastlingOptions() {
         //     return 

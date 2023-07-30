@@ -9,6 +9,11 @@ export const vue = {
         flipped: false,
     },
     methods: {
+        util: {
+            range(x) {
+                return [...Array(x).keys()];
+            },
+        },
         render: {
             toRank(y) {
                 return this.flipped? y: 7-y;

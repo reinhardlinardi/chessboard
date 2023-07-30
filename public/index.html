@@ -25,14 +25,14 @@
         >
       
           <div></div>
-          <template v-for="(pieceType, idx) in getTopTrayPieceTypes()">
+          <template v-for="(idx) in range(6)">
             <div>
                 <img class="piece"
-                  :src="`svg/${flipped? pieceType['primary']:pieceType['inverse']}.svg`"
+                  :src="`svg/${getTopTrayPiece(idx)}.svg`"
                   :id="`piece-top-tray-${idx}`"
                   draggable="true"
                   @dragstart="onDragStart"
-                  :data-piece-type="`${flipped? pieceType['primary']:pieceType['inverse']}`"
+                  :data-piece-type="`${getTopTrayPiece(idx)}`"
                 >
             </div>
           </template>
@@ -44,7 +44,7 @@
           <template v-for="(row, y) in board">
             <template v-for="(_, x) in row">
 
-              <div :class="(y+x)%2 === 0? 'light-square':'dark-square'"
+              <div :class="(y+x) % 2 === 0? 'light-square':'dark-square'"
                 :id="`square-y${y}-x${x}`"
                 @dragover.prevent
                 @drop.prevent="onDropReplaceOrCopy"
@@ -72,14 +72,14 @@
         >
 
           <div></div>
-          <template v-for="(pieceType, idx) in getBottomTrayPieceTypes()">
+          <template v-for="(idx) in range(6)">
             <div>
                 <img class="piece"
-                  :src="`svg/${flipped? pieceType['primary']:pieceType['inverse']}.svg`"
+                  :src="`svg/${getBottomTrayPiece(idx)}.svg`"
                   :id="`piece-bottom-tray-${idx}`"
                   draggable="true"
                   @dragstart="onDragStart"
-                  :data-piece-type="`${flipped? pieceType['primary']:pieceType['inverse']}`"
+                  :data-piece-type="`${getBottomTrayPiece(idx)}`"
                 >
             </div>
           </template>
