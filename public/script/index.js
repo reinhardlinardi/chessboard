@@ -62,6 +62,23 @@ const component = {
             // Remove piece if src is not tray
             if(!this.fromTray(srcId))  this.removePiece(srcId);
         },
+        getTrayPieceTypes(primary, inverse) {
+            const colorList = Piece.getTypes(primary);
+            const inverseList = Piece.getTypes(inverse);
+
+            let list = new Array(6);
+            
+            for(let idx = 0; idx < 6; idx++) {
+                list[idx] = {"primary": colorList[idx].letter, "inverse": inverseList[idx].letter};
+            }
+            return list;
+        },
+        getTopTrayPieceTypes() {
+            return this.getTrayPieceTypes(Piece.ColorWhite, Piece.ColorBlack); 
+        },
+        getBottomTrayPieceTypes() {
+            return this.getTrayPieceTypes(Piece.ColorBlack, Piece.ColorWhite);
+        },
         // getCastlingOptions() {
         //     return 
         // }
