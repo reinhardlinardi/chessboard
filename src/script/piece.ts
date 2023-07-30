@@ -19,7 +19,6 @@ export interface AbstractPiece {
 export interface Piece extends AbstractPiece {
     color: string,
     letter: string,
-    figurine: string,
 };
 
 export const Pawn: AbstractPiece = {
@@ -56,84 +55,72 @@ export const WhitePawn: Piece = {
     ...Pawn,
     color: Color.White,
     letter: "P",
-    figurine: "♙",
 };
 
 export const BlackPawn: Piece = {
     ...Pawn,
     color: Color.Black,
     letter: "p",
-    figurine: "♟︎",
 };
 
 export const WhiteKnight: Piece = {
     ...Knight,
     color: Color.White,
     letter: "N",
-    figurine: "♘",
 };
 
 export const BlackKnight: Piece = {
     ...Knight,
     color: Color.Black,
     letter: "n",
-    figurine: "♞",
 };
 
 export const WhiteBishop: Piece = {
     ...Bishop,
     color: Color.White,
     letter: "B",
-    figurine: "♗",
 };
 
 export const BlackBishop: Piece = {
     ...Bishop,
     color: Color.Black,
     letter: "b",
-    figurine: "♝",
 };
 
 export const WhiteRook: Piece = {
     ...Rook,
     color: Color.White,
     letter: "R",
-    figurine: "♖",
 };
 
 export const BlackRook: Piece = {
     ...Rook,
     color: Color.Black,
     letter: "r",
-    figurine: "♜",
 };
 
 export const WhiteQueen: Piece = {
     ...Queen,
     color: Color.White,
     letter: "Q",
-    figurine: "♕",
 };
 
 export const BlackQueen: Piece = {
     ...Queen,
     color: Color.Black,
     letter: "q",
-    figurine: "♛",
 };
 
 export const WhiteKing: Piece = {
     ...King,
     color: Color.White,
     letter: "K",
-    figurine: "♔",
 };
 
 export const BlackKing: Piece = {
     ...King,
     color: Color.Black,
     letter: "k",
-    figurine: "♚",
 };
 
 
