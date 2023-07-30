@@ -14,7 +14,7 @@ export interface AbstractPiece {
     type: number,
     value: number,
     // TODO: move
-}
+};
 
 export interface Piece extends AbstractPiece {
     color: string,
@@ -124,24 +124,37 @@ export const BlackKing: Piece = {
 };
 
 
+const wp: Piece = WhitePawn;
+const bp: Piece = BlackPawn;
+const wn: Piece = WhiteKnight;
+const bn: Piece = BlackKnight;
+const wb: Piece = WhiteBishop;
+const bb: Piece = BlackBishop;
+const wr: Piece = WhiteRook;
+const br: Piece = BlackRook;
+const wq: Piece = WhiteQueen;
+const bq: Piece = BlackQueen;
+const wk: Piece = WhiteKing;
+const bk: Piece = BlackKing;
+
+const w: string = Color.White;
+const b: string = Color.Black;
+
+
 const list: {[key: string]: Piece[]} = {
-    [Color.White]: [WhitePawn, WhiteKnight, WhiteBishop, WhiteRook, WhiteQueen, WhiteKing],
-    [Color.Black]: [BlackPawn, BlackKnight, BlackBishop, BlackRook, BlackQueen, BlackKing],
+    [Color.White]: [wp, wn, wb, wr, wq ,wk],
+    [Color.Black]: [bp, bn, bb, br, bq, bk],
 };
 
-const map: {[key: string]: Piece} = [...list[Color.White], ...list[Color.Black]].reduce(
-    (res, val) => ({...res, [val.letter]: val}),
+const map: {[key: string]: Piece} = [...list[w], ...list[b]].reduce(
+    (map, piece) => ({...map, [piece.letter]: piece}),
     {},
 );
 
 export function getTypes(color: string): Piece[] {
     return list[color];
-}
+};
 
 export function get(letter: string): Piece {
     return map[letter];
-}
-
-
-
-
+};

@@ -1,6 +1,6 @@
 import * as Setup from '../module/setup.js';
 import * as Piece from '../module/piece.js';
-import * as Square from '../module/square.js';
+import * as File from '../module/file.js';
 
 const mime = "text/plain";
 
@@ -23,7 +23,7 @@ export const vue = {
                 return this.flipped? 8-x: x+1;
             },
             labelOf(x) {
-                return Square.labelOf(this.fileOf(x));
+                return File.labelOf(this.fileOf(x));
             },
             isEmpty(rank, file) {
                 return this.getPiece(rank, file) === Piece.None;
