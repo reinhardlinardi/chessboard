@@ -5,6 +5,5 @@ export function copy(position: string[][]): string[][] {
     for(let rank = 0; rank < 8; rank++) {
         copy[rank] = [...position[rank]];
     }
-    
     return copy;
 }

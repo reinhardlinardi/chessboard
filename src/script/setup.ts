@@ -15,17 +15,18 @@ const q: string = Piece.BlackQueen.letter;
 const K: string = Piece.WhiteKing.letter;
 const k: string = Piece.BlackKing.letter;
 
-const defaultSetup: string[][] = [
-    [R, N, B, Q, K, B, N, R],
-    [P, P, P, P, P, P, P, P],
-    [_, _, _, _, _, _, _, _],
-    [_, _, _, _, _, _, _, _],
-    [_, _, _, _, _, _, _, _],
-    [_, _, _, _, _, _, _, _],
-    [p, p, p, p, p, p, p, p],
-    [r, n, b, q, k, b, n, r]
-]
 
+const defaultSetup: string[][] = [
+    [r, n, b, q, k, b, n, r],
+    [p, p, p, p, p, p, p, p],
+    [_, _, _, _, _, _, _, _],
+    [_, _, _, _, _, _, _, _],
+    [_, _, _, _, _, _, _, _],
+    [_, _, _, _, _, _, _, _],
+    [P, P, P, P, P, P, P, P],
+    [R, N, B, Q, K, B, N, R],
+
+].reverse();
 
 export function getDefaultSetup(): string[][] {
     return Position.copy(defaultSetup);
