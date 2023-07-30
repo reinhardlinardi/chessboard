@@ -1,3 +1,5 @@
+import * as Color from './color.js';
+
 export const None: string = ".";
 
 export const TypePawn: number = 0;
@@ -6,9 +8,6 @@ export const TypeBishop: number = 2;
 export const TypeRook: number = 3;
 export const TypeQueen: number = 4;
 export const TypeKing: number = 5;
-
-export const ColorWhite: string = "w";
-export const ColorBlack: string = "b";
 
 
 export interface AbstractPiece {
@@ -55,95 +54,95 @@ export const King: AbstractPiece = {
 
 export const WhitePawn: Piece = {
     ...Pawn,
-    color: ColorWhite,
+    color: Color.White,
     letter: "P",
     figurine: "♙",
 };
 
 export const BlackPawn: Piece = {
     ...Pawn,
-    color: ColorBlack,
+    color: Color.Black,
     letter: "p",
     figurine: "♟︎",
 };
 
 export const WhiteKnight: Piece = {
     ...Knight,
-    color: ColorWhite,
+    color: Color.White,
     letter: "N",
     figurine: "♘",
 };
 
 export const BlackKnight: Piece = {
     ...Knight,
-    color: ColorBlack,
+    color: Color.Black,
     letter: "n",
     figurine: "♞",
 };
 
 export const WhiteBishop: Piece = {
     ...Bishop,
-    color: ColorWhite,
+    color: Color.White,
     letter: "B",
     figurine: "♗",
 };
 
 export const BlackBishop: Piece = {
     ...Bishop,
-    color: ColorBlack,
+    color: Color.Black,
     letter: "b",
     figurine: "♝",
 };
 
 export const WhiteRook: Piece = {
     ...Rook,
-    color: ColorWhite,
+    color: Color.White,
     letter: "R",
     figurine: "♖",
 };
 
 export const BlackRook: Piece = {
     ...Rook,
-    color: ColorBlack,
+    color: Color.Black,
     letter: "r",
     figurine: "♜",
 };
 
 export const WhiteQueen: Piece = {
     ...Queen,
-    color: ColorWhite,
+    color: Color.White,
     letter: "Q",
     figurine: "♕",
 };
 
 export const BlackQueen: Piece = {
     ...Queen,
-    color: ColorBlack,
+    color: Color.Black,
     letter: "q",
     figurine: "♛",
 };
 
 export const WhiteKing: Piece = {
     ...King,
-    color: ColorWhite,
+    color: Color.White,
     letter: "K",
     figurine: "♔",
 };
 
 export const BlackKing: Piece = {
     ...King,
-    color: ColorBlack,
+    color: Color.Black,
     letter: "k",
     figurine: "♚",
 };
 
 
 const list: {[key: string]: Piece[]} = {
-    [ColorWhite]: [WhitePawn, WhiteKnight, WhiteBishop, WhiteRook, WhiteQueen, WhiteKing],
-    [ColorBlack]: [BlackPawn, BlackKnight, BlackBishop, BlackRook, BlackQueen, BlackKing],
+    [Color.White]: [WhitePawn, WhiteKnight, WhiteBishop, WhiteRook, WhiteQueen, WhiteKing],
+    [Color.Black]: [BlackPawn, BlackKnight, BlackBishop, BlackRook, BlackQueen, BlackKing],
 };
 
-const map: {[key: string]: Piece} = [...list[ColorWhite], ...list[ColorBlack]].reduce(
+const map: {[key: string]: Piece} = [...list[Color.White], ...list[Color.Black]].reduce(
     (res, val) => ({...res, [val.letter]: val}),
     {},
 );

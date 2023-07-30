@@ -1,8 +1,9 @@
 import { createApp } from '../lib/vue.esm-browser.js';
 
 import * as Common from './common.js';
-import * as Setup from '../module/setup.js';
+import * as Color from '../module/color.js';
 import * as Piece from '../module/piece.js';
+import * as Setup from '../module/setup.js';
 
 // Root component
 const component = {
@@ -14,8 +15,8 @@ const component = {
                 whiteToMove: true,
                 castling: [],
             },
-            topTray: Piece.getTypes(Piece.ColorBlack).map(piece => piece.letter),
-            bottomTray: Piece.getTypes(Piece.ColorWhite).map(piece => piece.letter),
+            topTray: Piece.getTypes(Color.Black).map(piece => piece.letter),
+            bottomTray: Piece.getTypes(Color.White).map(piece => piece.letter),
         }
     },
     methods: {
