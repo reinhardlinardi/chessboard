@@ -116,11 +116,11 @@
             <div class="castle-container">
               <label class="section-text">White</label>
 
-              <template v-for="opt in getWhiteCastlingOptions()">
+              <template v-for="opt in getWhiteCastleOptions()">
                 <div class="checkbox-container"></div>
                   <input type="checkbox"
                     :value="`${opt.letter}`"
-                    v-model="form.castling"
+                    v-model="form.castle"
                     :id="`checkbox-${opt.letter}`"
                   />
                   <label class="section-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
@@ -131,11 +131,11 @@
             <div class="castle-container">
               <label class="section-text">Black</label>
               
-              <template v-for="opt in getBlackCastlingOptions()">
+              <template v-for="opt in getBlackCastleOptions()">
                 <div class="checkbox-container"></div>
                   <input type="checkbox"
                     :value="`${opt.letter}`"
-                    v-model="form.castling"
+                    v-model="form.castle"
                     :id="`checkbox-${opt.letter}`"
                   />
                   <label class="section-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>

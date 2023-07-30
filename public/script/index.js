@@ -14,7 +14,7 @@ const component = {
             flipped: Common.vue.data.flipped,
             form: {
                 whiteToMove: true,
-                castling: [],
+                castle: [],
             },
             topTray: Piece.getTypes(Color.Black).map(piece => piece.letter),
             bottomTray: Piece.getTypes(Color.White).map(piece => piece.letter),
@@ -74,10 +74,10 @@ const component = {
         getBottomTrayPiece(idx) {
             return this.flipped? this.topTray[idx]: this.bottomTray[idx];
         },
-        getWhiteCastlingOptions() {
+        getWhiteCastleOptions() {
             return Castle.getTypes(Color.White);
         },
-        getBlackCastlingOptions() {
+        getBlackCastleOptions() {
             return Castle.getTypes(Color.Black);
         },
     },
