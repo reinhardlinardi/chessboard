@@ -45,7 +45,7 @@
             <template v-for="(_, x) in row">
 
               <div :class="(y+x) % 2 === 0? 'light-square':'dark-square'"
-                :id="`square-y${y}-x${x}`"
+                :id="`board-y${y}-x${x}`"
                 @dragover.prevent
                 @drop.prevent="onDropReplaceOrCopy"
                 :data-square="`${labelOf(x)}${rankOf(y)}`"
