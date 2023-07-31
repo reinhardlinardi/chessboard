@@ -1,10 +1,17 @@
 import * as Piece from '../module/piece.js';
 import * as Color from '../module/color.js';
-import * as Setup from '../module/setup.js';
 import * as Castle from '../module/castle.js';
+
+import * as Editor from '../module/editor.js';
+
+
+export const editor = new Editor.Editor();
+editor.setDefaultSetup();
+
 
 export const topTray = Piece.getTypes(Color.Black).map(piece => piece.letter);
 export const bottomTray = Piece.getTypes(Color.White).map(piece => piece.letter);
+
 
 export const render = {
     getTrayPieceIdx() {
@@ -25,14 +32,14 @@ export const render = {
 };
 
 export const board = {
-    clearBoard() {
-        this.board = Array(8).fill(
-            Array(8).fill(Piece.None)
-        );
-    },
     resetBoard() {
-        this.board = Setup.getDefaultSetup();
+        editor.setDefaultSetup();
+        this.setBoard(editor.getPosition());
         this.flipped = false;
+    },
+    clearBoard() {
+        editor.clear();
+        this.setBoard(editor.getPosition());
     },
 };
 

@@ -1,81 +1,77 @@
-import * as Setup from '../module/setup.js';
 import * as Piece from '../module/piece.js';
 import * as File from '../module/file.js';
 
 const mime = "text/plain";
 
 export default {
-    data: {
-        board: Setup.getDefaultSetup(),
-        flipped: false,
+    dom: {
+        getElement(id) {
+            return document.getElementById(id);
+        },
+        getElementData(id) {
+            // Return data from data-* attribute
+            return this.getElement(id).dataset;
+        },
     },
-    methods: {
-        dom: {
-            getElement(id) {
-                return document.getElementById(id);
-            },
-            getElementData(id) {
-                // Return data from data-* attribute
-                return this.getElement(id).dataset;
-            },
+    render: {
+        rankOf(y) {
+            return this.flipped? y+1: 8-y;
         },
-        render: {
-            rankOf(y) {
-                return this.flipped? y+1: 8-y;
-            },
-            fileOf(x) {
-                return this.flipped? 8-x: x+1;
-            },
-            labelOf(x) {
-                return File.labelOf(this.fileOf(x));
-            },
-            isEmpty(rank, file) {
-                return this.getPiece(rank, file) === Piece.None;
-            },
+        fileOf(x) {
+            return this.flipped? 8-x: x+1;
         },
-        board: {
-            getPiece(rank, file) {
-                return this.board[rank-1][file-1];
-            },
-            setPiece(rank, file, piece) {
-                this.board[rank-1][file-1] = piece;
-            },
-            flipBoard() {
-                this.flipped = !this.flipped;
-            },
+        labelOf(x) {
+            return File.labelOf(this.fileOf(x));
         },
-        /* Drag and drop */
-        dnd: {
-            fromTray(id) {
-                return id.includes("tray");
-            },
-            dragSetId(ev, id) {
-                let dnd = ev.dataTransfer;
+        isEmpty(rank, file) {
+            return this.getPiece(rank, file) === Piece.None;
+        },
+    },
+    board: {
+        getPiece(rank, file) {
+            return this.board[rank-1][file-1];
+        },
+        setPiece(rank, file, piece) {
+            this.board[rank-1][file-1] = piece;
+        },
+        setBoard(position) {
+            this.board = position;
+        },
+        flipBoard() {
+            this.flipped = !this.flipped;
+        },
+    },
+    /* Drag and drop */
+    dnd: {
+        fromTray(id) {
+            return id.includes("tray");
+        },
+        dragSetId(ev, id) {
+            let dnd = ev.dataTransfer;
 
-                // Save dragged piece id
-                dnd.setData(mime, id);
-                // Allow copy or move piece
-                dnd.effectAllowed = "copyMove";
-            },
-            dropGetId(ev) {
-                let dnd = ev.dataTransfer;
+            // Save dragged piece id
+            dnd.setData(mime, id);
+            // Allow copy or move piece
+            dnd.effectAllowed = "copyMove";
+        },
+        dropGetId(ev) {
+            let dnd = ev.dataTransfer;
 
-                // Get dragged piece id
-                // JS gives "\r\n" id when we drag from empty square, so we use trim to get "" for invalid id
-                return dnd.getData(mime).trim();
-            },
-            getDraggedPiece(id) {
-                let data = this.getElementData(id);
-                return this.fromTray(id)? data.pieceType: this.getPiece(data.rank, data.file);
-            },
-            replacePiece(id, piece) {
-                let data = this.getElementData(id);
-                this.setPiece(data.rank, data.file, piece);
-            },
-            removePiece(id) {
-                let data = this.getElementData(id);
-                this.setPiece(data.rank, data.file, Piece.None);
-            },
+            // Get dragged piece id
+            // JS gives "\r\n" id when we drag from empty square, so we use trim to get "" for invalid id
+            return dnd.getData(mime).trim();
+        },
+        getDraggedPiece(id) {
+            let data = this.getElementData(id);
+            return this.fromTray(id)? data.pieceType: this.getPiece(data.rank, data.file);
+        },
+        replacePiece(id, piece) {
+            let data = this.getElementData(id);
+            this.setPiece(data.rank, data.file, piece);
+        },
+        removePiece(id) {
+            let data = this.getElementData(id);
+            this.setPiece(data.rank, data.file, Piece.None);
         },
     },
 };
