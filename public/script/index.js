@@ -1,13 +1,7 @@
+import * as Setup from '../module/setup.js';
 import * as Piece from '../module/piece.js';
 import * as Color from '../module/color.js';
 import * as Castle from '../module/castle.js';
-
-import * as Editor from '../module/editor.js';
-
-
-export const editor = new Editor.Editor();
-editor.setDefaultSetup();
-
 
 export const topTray = Piece.getTypes(Color.Black).map(piece => piece.letter);
 export const bottomTray = Piece.getTypes(Color.White).map(piece => piece.letter);
@@ -33,13 +27,13 @@ export const render = {
 
 export const board = {
     resetBoard() {
-        editor.setDefaultSetup();
-        this.setBoard(editor.getPosition());
+        this.setBoard(Setup.getDefaultSetup());
         this.flipped = false;
     },
     clearBoard() {
-        editor.clear();
-        this.setBoard(editor.getPosition());
+        this.setBoard(Array(8).fill(
+            Array(8).fill(Piece.None)
+        ));
     },
 };
 
@@ -47,12 +41,10 @@ export const board = {
 export const dnd = {
     replacePiece(id, piece) {
         let data = this.getElementData(id);
-        editor.setPiece(data.rank, data.file, piece);
         this.setPiece(data.rank, data.file, piece);
     },
     removePiece(id) {
         let data = this.getElementData(id);
-        editor.setPiece(data.rank, data.file, Piece.None);
         this.setPiece(data.rank, data.file, Piece.None);
     },
     onDragStart(ev) {

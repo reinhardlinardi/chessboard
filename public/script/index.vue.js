@@ -1,5 +1,7 @@
 import { createApp } from '../lib/vue.esm-browser.js';
 
+import * as Setup from '../module/setup.js';
+
 import common from './common.vue.js';
 import * as page from './index.js';
 
@@ -7,7 +9,7 @@ import * as page from './index.js';
 const component = {
     data() {
         return {
-            board: page.editor.getPosition(),
+            board: Setup.getDefaultSetup(),
             flipped: false,
             form: {
                 whiteToMove: true,
