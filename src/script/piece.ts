@@ -21,107 +21,107 @@ export interface Piece extends AbstractPiece {
     letter: string,
 };
 
-export const Pawn: AbstractPiece = {
+export const Pawn: AbstractPiece = Object.freeze({
     type: TypePawn,
     value: 1,
-};
+});
 
-export const Knight: AbstractPiece = {
+export const Knight: AbstractPiece = Object.freeze({
     type: TypeKnight,
     value: 3,
-};
+});
 
-export const Bishop: AbstractPiece = {
+export const Bishop: AbstractPiece = Object.freeze({
     type: TypeBishop,
     value: 3,
-};
+});
 
-export const Rook: AbstractPiece = {
+export const Rook: AbstractPiece = Object.freeze({
     type: TypeRook,
     value: 5,
-};
+});
 
-export const Queen: AbstractPiece = {
+export const Queen: AbstractPiece = Object.freeze({
     type: TypeQueen,
     value: 9,
-};
+});
 
-export const King: AbstractPiece = {
+export const King: AbstractPiece = Object.freeze({
     type: TypeKing,
     value: 1000,
-};
+});
 
-export const WhitePawn: Piece = {
+export const WhitePawn: Piece = Object.freeze({
     ...Pawn,
     color: Color.White,
     letter: "P",
-};
+});
 
-export const BlackPawn: Piece = {
+export const BlackPawn: Piece = Object.freeze({
     ...Pawn,
     color: Color.Black,
     letter: "p",
-};
+});
 
-export const WhiteKnight: Piece = {
+export const WhiteKnight: Piece = Object.freeze({
     ...Knight,
     color: Color.White,
     letter: "N",
-};
+});
 
-export const BlackKnight: Piece = {
+export const BlackKnight: Piece = Object.freeze({
     ...Knight,
     color: Color.Black,
     letter: "n",
-};
+});
 
-export const WhiteBishop: Piece = {
+export const WhiteBishop: Piece = Object.freeze({
     ...Bishop,
     color: Color.White,
     letter: "B",
-};
+});
 
-export const BlackBishop: Piece = {
+export const BlackBishop: Piece = Object.freeze({
     ...Bishop,
     color: Color.Black,
     letter: "b",
-};
+});
 
-export const WhiteRook: Piece = {
+export const WhiteRook: Piece = Object.freeze({
     ...Rook,
     color: Color.White,
     letter: "R",
-};
+});
 
-export const BlackRook: Piece = {
+export const BlackRook: Piece = Object.freeze({
     ...Rook,
     color: Color.Black,
     letter: "r",
-};
+});
 
-export const WhiteQueen: Piece = {
+export const WhiteQueen: Piece = Object.freeze({
     ...Queen,
     color: Color.White,
     letter: "Q",
-};
+});
 
-export const BlackQueen: Piece = {
+export const BlackQueen: Piece = Object.freeze({
     ...Queen,
     color: Color.Black,
     letter: "q",
-};
+});
 
-export const WhiteKing: Piece = {
+export const WhiteKing: Piece = Object.freeze({
     ...King,
     color: Color.White,
     letter: "K",
-};
+});
 
-export const BlackKing: Piece = {
+export const BlackKing: Piece = Object.freeze({
     ...King,
     color: Color.Black,
     letter: "k",
-};
+});
 
 
 const wp = WhitePawn;

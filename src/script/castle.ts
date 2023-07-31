@@ -34,7 +34,7 @@ const whiteKingSetup: Setup = {piece: K, square: Square.of(File.e, 1)};
 const blackKingSetup: Setup = {piece: k, square: Square.of(File.e, 8)};
 
 
-export const WhiteShort: Castle = {
+export const WhiteShort: Castle = Object.freeze({
     type: TypeShort,
     color: Color.White,
     letter: K,
@@ -43,9 +43,9 @@ export const WhiteShort: Castle = {
         piece: R,
         square: Square.of(File.h, 1),
     },
-};
+});
 
-export const BlackShort: Castle = {
+export const BlackShort: Castle = Object.freeze({
     type: TypeShort,
     color: Color.Black,
     letter: k,
@@ -54,9 +54,9 @@ export const BlackShort: Castle = {
         piece: r,
         square: Square.of(File.h, 8),
     },
-};
+});
 
-export const WhiteLong: Castle = {
+export const WhiteLong: Castle = Object.freeze({
     type: TypeLong,
     color: Color.White,
     letter: Q,
@@ -65,9 +65,9 @@ export const WhiteLong: Castle = {
         piece: R,
         square: Square.of(File.a, 1),
     },
-};
+});
 
-export const BlackLong: Castle = {
+export const BlackLong: Castle = Object.freeze({
     type: TypeLong,
     color: Color.Black,
     letter: q,
@@ -76,7 +76,7 @@ export const BlackLong: Castle = {
         piece: r,
         square: Square.of(File.a, 8),
     },
-};
+});
 
 
 const ws = WhiteShort;
