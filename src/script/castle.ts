@@ -9,44 +9,73 @@ export const TypeShort: string = "O-O";
 export const TypeLong: string = "O-O-O";
 
 
+export interface Setup {
+    piece: string,
+    square: Square.Square,
+};
+
 export interface Castle {
     type: string,
     color: string,
     letter: string,
-    king: Square.Square,
-    rook: Square.Square,
+    king: Setup,
+    rook: Setup,
 };
+
+
+const R = Piece.WhiteRook.letter;
+const r = Piece.BlackRook.letter;
+const Q = Piece.WhiteQueen.letter;
+const q = Piece.BlackQueen.letter;
+const K = Piece.WhiteKing.letter;
+const k = Piece.BlackKing.letter;
+
+const whiteKingSetup: Setup = {piece: K, square: Square.of(File.e, 1)};
+const blackKingSetup: Setup = {piece: k, square: Square.of(File.e, 8)};
+
 
 export const WhiteShort: Castle = {
     type: TypeShort,
     color: Color.White,
-    letter: Piece.WhiteKing.letter,
-    king: Square.of(File.e, 1),
-    rook: Square.of(File.h, 1),
+    letter: K,
+    king: whiteKingSetup,
+    rook: {
+        piece: R,
+        square: Square.of(File.h, 1),
+    },
 };
 
 export const BlackShort: Castle = {
     type: TypeShort,
     color: Color.Black,
-    letter: Piece.BlackKing.letter,
-    king: Square.of(File.e, 8),
-    rook: Square.of(File.h, 8),
+    letter: k,
+    king: blackKingSetup,
+    rook: {
+        piece: r,
+        square: Square.of(File.h, 8),
+    },
 };
 
 export const WhiteLong: Castle = {
     type: TypeLong,
     color: Color.White,
-    letter: Piece.WhiteQueen.letter,
-    king: Square.of(File.e, 1),
-    rook: Square.of(File.a, 1),
+    letter: Q,
+    king: whiteKingSetup,
+    rook: {
+        piece: R,
+        square: Square.of(File.a, 1),
+    },
 };
 
 export const BlackLong: Castle = {
     type: TypeLong,
     color: Color.Black,
-    letter: Piece.BlackQueen.letter,
-    king: Square.of(File.e, 8),
-    rook: Square.of(File.a, 8),
+    letter: q,
+    king: blackKingSetup,
+    rook: {
+        piece: r,
+        square: Square.of(File.a, 8),
+    },
 };
 
 
