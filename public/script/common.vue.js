@@ -65,5 +65,13 @@ export default {
             let data = this.getElementData(id);
             return this.fromTray(id)? data.pieceType: this.getPiece(data.rank, data.file);
         },
+        replacePiece(id, piece) {
+            let data = this.getElementData(id);
+            this.setPiece(data.rank, data.file, piece);
+        },
+        removePiece(id) {
+            let data = this.getElementData(id);
+            this.setPiece(data.rank, data.file, Piece.None);
+        },
     },
 };

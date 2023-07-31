@@ -12,8 +12,8 @@ const component = {
             board: Setup.getDefaultSetup(),
             flipped: false,
             form: {
-                whiteToMove: true,
-                castle: [],
+                whiteMove: true,
+                castle: {},
             },
         }
     },
@@ -31,7 +31,8 @@ const component = {
         getWhiteCastleOptions: page.render.getWhiteCastleOptions,
         getBlackCastleOptions: page.render.getBlackCastleOptions,
 
-        isCastleDisabled: page.option.isCastleDisabled,
+        // isCastleDisabled: page.option.isCastleDisabled,
+        // checkboxClick: page.option.checkboxClick,
 
         getPiece: common.board.getPiece,
         setPiece: common.board.setPiece,
@@ -44,8 +45,8 @@ const component = {
         dragSetId: common.dnd.dragSetId,
         dropGetId: common.dnd.dropGetId,
         getDraggedPiece: common.dnd.getDraggedPiece,
-        replacePiece: page.dnd.replacePiece,
-        removePiece: page.dnd.removePiece,
+        replacePiece: common.dnd.replacePiece,
+        removePiece: common.dnd.removePiece,
         onDragStart: page.dnd.onDragStart,
         onDropReplaceOrCopy: page.dnd.onDropReplaceOrCopy,
         onDropRemove: page.dnd.onDropRemove,

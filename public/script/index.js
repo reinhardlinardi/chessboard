@@ -4,8 +4,20 @@ import * as Color from '../module/color.js';
 import * as Castle from '../module/castle.js';
 import * as Editor from '../module/editor.js';
 
-export const topTray = Piece.getTypes(Color.Black).map(piece => piece.letter);
-export const bottomTray = Piece.getTypes(Color.White).map(piece => piece.letter);
+
+function pieceTypes(color) {
+    return Piece.getTypes(color).map(piece => piece.letter);
+}
+
+function castleTypes(color) {
+    return Castle.getTypes(color).map(castle => castle.letter);
+}
+
+export const topTray = pieceTypes(Color.Black);
+export const bottomTray = pieceTypes(Color.White);
+
+export const whiteCastle = castleTypes(Color.White);
+export const blackCastle = castleTypes(Color.Black);
 
 
 export const render = {
@@ -26,11 +38,15 @@ export const render = {
     },
 };
 
-export const option = {
-    isCastleDisabled(type) {
-        return Editor.hasCastlePosition(this.board, type)? null: true;
-    },
-}
+// export const option = {
+//     checkboxClick(ev) {
+//         console.log(ev.target.id);
+//     },
+//     isCastleDisabled(type) {
+//         let disabled = !Editor.hasCastlePosition(this.board, type);
+//         return disabled? true: null;
+//     },
+// }
 
 export const board = {
     resetBoard() {
@@ -44,14 +60,7 @@ export const board = {
 
 /* Drag and drop */
 export const dnd = {
-    replacePiece(id, piece) {
-        let data = this.getElementData(id);
-        this.setPiece(data.rank, data.file, piece);
-    },
-    removePiece(id) {
-        let data = this.getElementData(id);
-        this.setPiece(data.rank, data.file, Piece.None);
-    },
+    
     onDragStart(ev) {
         this.dragSetId(ev, ev.target.id);
     },
