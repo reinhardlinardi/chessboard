@@ -1,7 +1,7 @@
 // import * as Setup from './setup.js';
 // import * as Position from './position.js';
 
-// export class GameAnalysis {
+// export class Analysis {
 //     private position: string[][];
 
 //     // private started: boolean;
