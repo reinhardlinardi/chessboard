@@ -16,24 +16,18 @@ const K = Piece.WhiteKing.letter;
 const k = Piece.BlackKing.letter;
 
 
-test("copy", () => {
-    const pos = [
-        [_, _, _, _, _, _, _, _],
-        [_, _, _, _, _, _, _, _],
-        [_, _, _, _, _, _, _, _],
-        [_, _, _, _, _, _, _, _],
-        [_, _, _, _, _, _, _, _],
-        [_, _, _, _, _, _, _, _],
-        [_, _, _, _, _, _, _, _],
-        [_, _, _, _, _, _, _, _],
-    
-    ].reverse();
+test("position-copy", () => {
+    const ori = Array(8).fill(
+        Array(8).fill(_)
+    );
+
+    const copy = Position.copy(ori);
 
     const rank = Math.round(Math.random() * 7) + 1;
     const file = Math.round(Math.random() * 7) + 1;
-
-    const copy = Position.copy(pos);
+    
+    const src = ori[rank-1][file-1];
     copy[rank-1][file-1] = K;
 
-    expect(pos[rank-1][file-1]).toBe(_);
+    expect(ori[rank-1][file-1]).toBe(src);
 });
