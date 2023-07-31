@@ -2,6 +2,7 @@ import * as Setup from '../module/setup.js';
 import * as Piece from '../module/piece.js';
 import * as Color from '../module/color.js';
 import * as Castle from '../module/castle.js';
+import * as Editor from '../module/editor.js';
 
 export const topTray = Piece.getTypes(Color.Black).map(piece => piece.letter);
 export const bottomTray = Piece.getTypes(Color.White).map(piece => piece.letter);
@@ -25,15 +26,19 @@ export const render = {
     },
 };
 
+export const option = {
+    isCastleDisabled(type) {
+        return Editor.hasCastlePosition(this.board, type)? null: true;
+    },
+}
+
 export const board = {
     resetBoard() {
         this.setBoard(Setup.getDefaultSetup());
         this.flipped = false;
     },
     clearBoard() {
-        this.setBoard(Array(8).fill(
-            Array(8).fill(Piece.None)
-        ));
+        this.setBoard(Setup.getEmptySetup());
     },
 };
 

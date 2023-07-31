@@ -31,6 +31,8 @@ const component = {
         getWhiteCastleOptions: page.render.getWhiteCastleOptions,
         getBlackCastleOptions: page.render.getBlackCastleOptions,
 
+        isCastleDisabled: page.option.isCastleDisabled,
+
         getPiece: common.board.getPiece,
         setPiece: common.board.setPiece,
         setBoard: common.board.setBoard,

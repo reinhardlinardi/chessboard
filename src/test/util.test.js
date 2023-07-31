@@ -1,5 +1,6 @@
 import * as Piece from '../../public/module/piece.js';
-import {copyPosition} from '../../public/module/util.js';
+import * as Setup from '../../public/module/setup.js';
+import { copyPosition } from '../../public/module/util.js';
 
 const _ = Piece.None;
 const P = Piece.WhitePawn.letter;
@@ -17,10 +18,7 @@ const k = Piece.BlackKing.letter;
 
 
 test("util-copyPosition", () => {
-    const ori = Array(8).fill(
-        Array(8).fill(_)
-    );
-
+    const ori = Setup.getEmptySetup();
     const copy = copyPosition(ori);
 
     const src = ori[4][4];
