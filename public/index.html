@@ -25,7 +25,7 @@
         >
       
           <div></div>
-          <template v-for="idx in range(6)">
+          <template v-for="idx in getTrayPieceIdx()">
             <div>
                 <img class="piece"
                   :src="`svg/${getTopTrayPiece(idx)}.svg`"
@@ -73,7 +73,7 @@
         >
 
           <div></div>
-          <template v-for="idx in range(6)">
+          <template v-for="idx in getTrayPieceIdx()">
             <div>
                 <img class="piece"
                   :src="`svg/${getBottomTrayPiece(idx)}.svg`"

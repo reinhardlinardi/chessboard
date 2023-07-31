@@ -4,15 +4,19 @@ import * as File from '../module/file.js';
 
 const mime = "text/plain";
 
-export const vue = {
+export default {
     data: {
         board: Setup.getDefaultSetup(),
         flipped: false,
     },
     methods: {
-        util: {
-            range(x) {
-                return [...Array(x).keys()];
+        dom: {
+            getElement(id) {
+                return document.getElementById(id);
+            },
+            getElementData(id) {
+                // Return data from data-* attribute
+                return this.getElement(id).dataset;
             },
         },
         render: {
@@ -40,15 +44,6 @@ export const vue = {
                 this.flipped = !this.flipped;
             },
         },
-        dom: {
-            getElement(id) {
-                return document.getElementById(id);
-            },
-            getElementData(id) {
-                // Return data from data-* attribute
-                return this.getElement(id).dataset;
-            },
-        },
         /* Drag and drop */
         dnd: {
             fromTray(id) {
@@ -66,7 +61,7 @@ export const vue = {
                 let dnd = ev.dataTransfer;
 
                 // Get dragged piece id
-                // JS gives "\r\n" id when we drag from empty square, so we trim id to get "" for invalid id
+                // JS gives "\r\n" id when we drag from empty square, so we use trim to get "" for invalid id
                 return dnd.getData(mime).trim();
             },
             getDraggedPiece(id) {

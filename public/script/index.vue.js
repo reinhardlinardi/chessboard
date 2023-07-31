@@ -1,19 +1,14 @@
 import { createApp } from '../lib/vue.esm-browser.js';
 
-import * as Common from './common.js';
-import * as Color from '../module/color.js';
-import * as Piece from '../module/piece.js';
-import * as Setup from '../module/setup.js';
-import * as Castle from '../module/castle.js';
-
-import * as c from './index-const.js';
+import common from './common.vue.js';
+import * as page from './index.js';
 
 // Root component
 const component = {
     data() {
         return {
-            board: Common.vue.data.board,
-            flipped: Common.vue.data.flipped,
+            board: common.data.board,
+            flipped: common.data.flipped,
             form: {
                 whiteToMove: true,
                 castle: [],
@@ -21,70 +16,34 @@ const component = {
         }
     },
     methods: {
-        range: Common.vue.methods.util.range,
-        rankOf: Common.vue.methods.render.rankOf,
-        fileOf: Common.vue.methods.render.fileOf,
-        labelOf: Common.vue.methods.render.labelOf,
-        isEmpty: Common.vue.methods.render.isEmpty,
-        getPiece: Common.vue.methods.board.getPiece,
-        setPiece: Common.vue.methods.board.setPiece,
-        flipBoard: Common.vue.methods.board.flipBoard,
-        getElement: Common.vue.methods.dom.getElement,
-        getElementData: Common.vue.methods.dom.getElementData,
-        fromTray: Common.vue.methods.dnd.fromTray,
-        dragSetId: Common.vue.methods.dnd.dragSetId,
-        dropGetId: Common.vue.methods.dnd.dropGetId,
-        getDraggedPiece: Common.vue.methods.dnd.getDraggedPiece,
-        replacePiece: Common.vue.methods.dnd.replacePiece,
-        removePiece: Common.vue.methods.dnd.removePiece,
-        
-        clearBoard() {
-            this.board = Array(8).fill(Array(8).fill(Piece.None));
-        },
-        resetBoard() {
-            this.board = Setup.getDefaultSetup();
-            this.flipped = false;
-        },
-        onDragStart(ev) {
-            this.dragSetId(ev, ev.target.id);
-        },
-        onDropReplaceOrCopy(ev) {
-            const srcId = this.dropGetId(ev);
-            const destId = ev.target.id;
+        getElement: common.methods.dom.getElement,
+        getElementData: common.methods.dom.getElementData,
 
-            // Return if src not valid or dnd to self
-            if(srcId === "" || srcId === destId) return;
-            
-            // Replace piece in dest
-            const piece = this.getDraggedPiece(srcId);
-            this.replacePiece(destId, piece);
+        rankOf: common.methods.render.rankOf,
+        fileOf: common.methods.render.fileOf,
+        labelOf: common.methods.render.labelOf,
+        isEmpty: common.methods.render.isEmpty,
+        getTrayPieceIdx: page.render.getTrayPieceIdx,
+        getTopTrayPiece: page.render.getTopTrayPiece,
+        getBottomTrayPiece: page.render.getBottomTrayPiece,
+        getWhiteCastleOptions: page.render.getWhiteCastleOptions,
+        getBlackCastleOptions: page.render.getBlackCastleOptions,
 
-            // Remove piece in src if not tray
-            if(!this.fromTray(srcId)) this.removePiece(srcId);
-        },
-        onDropRemove(ev) {
-            // Get dragged piece id
-            const srcId = this.dropGetId(ev);
+        getPiece: common.methods.board.getPiece,
+        setPiece: common.methods.board.setPiece,
+        flipBoard: common.methods.board.flipBoard,
+        clearBoard: page.board.clearBoard,
+        resetBoard: page.board.resetBoard,
 
-            // Remove piece if src is not tray
-            if(!this.fromTray(srcId))  this.removePiece(srcId);
-        },
-        getTopTrayPiece(idx) {
-            return this.flipped? c.bottomTray[idx]: c.topTray[idx];  
-        },
-        getBottomTrayPiece(idx) {
-            return this.flipped? c.topTray[idx]: c.bottomTray[idx];
-        },
-        getWhiteCastleOptions() {
-            return Castle.getTypes(Color.White);
-        },
-        getBlackCastleOptions() {
-            return Castle.getTypes(Color.Black);
-        },
-        satisfyCastlePosition(type) {
-            // TODO: Disabled if more than one king
-            // Search king and rook position
-        },
+        fromTray: common.methods.dnd.fromTray,
+        dragSetId: common.methods.dnd.dragSetId,
+        dropGetId: common.methods.dnd.dropGetId,
+        getDraggedPiece: common.methods.dnd.getDraggedPiece,
+        replacePiece: common.methods.dnd.replacePiece,
+        removePiece: common.methods.dnd.removePiece,
+        onDragStart: page.dnd.onDragStart,
+        onDropReplaceOrCopy: page.dnd.onDropReplaceOrCopy,
+        onDropRemove: page.dnd.onDropRemove,
     },
 };
 
