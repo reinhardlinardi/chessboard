@@ -47,3 +47,15 @@ test("editor-clear", ()=> {
     const get = editor.getPosition();
     expect(get).toEqual(want);
 });
+
+test("editor-setPiece", () => {
+    const editor = new Editor.Editor();
+    editor.clear();
+
+    editor.setPiece(1, 1, K);
+    editor.setPiece(8, 8, k);
+
+    const get = editor.getPosition();
+    expect(get[0][0]).toEqual(K);
+    expect(get[7][7]).toEqual(k);
+});

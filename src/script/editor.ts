@@ -22,4 +22,8 @@ export class Editor {
             Array(8).fill(Piece.None)
         )
     }
+
+    public setPiece(rank: number, file: number, piece: string) {
+        this.position[rank-1][file-1] = piece;
+    }
 }

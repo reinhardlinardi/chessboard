@@ -23,11 +23,8 @@ test("util-copyPosition", () => {
 
     const copy = copyPosition(ori);
 
-    const rank = Math.round(Math.random() * 7) + 1;
-    const file = Math.round(Math.random() * 7) + 1;
-    
-    const src = ori[rank-1][file-1];
-    copy[rank-1][file-1] = K;
+    const src = ori[4][4];
+    copy[4][4] = K;
 
-    expect(ori[rank-1][file-1]).toEqual(src);
+    expect(ori[4][4]).toEqual(src);
 });

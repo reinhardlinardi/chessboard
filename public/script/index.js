@@ -45,6 +45,16 @@ export const board = {
 
 /* Drag and drop */
 export const dnd = {
+    replacePiece(id, piece) {
+        let data = this.getElementData(id);
+        editor.setPiece(data.rank, data.file, piece);
+        this.setPiece(data.rank, data.file, piece);
+    },
+    removePiece(id) {
+        let data = this.getElementData(id);
+        editor.setPiece(data.rank, data.file, Piece.None);
+        this.setPiece(data.rank, data.file, Piece.None);
+    },
     onDragStart(ev) {
         this.dragSetId(ev, ev.target.id);
     },
