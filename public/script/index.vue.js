@@ -6,6 +6,8 @@ import * as Piece from '../module/piece.js';
 import * as Setup from '../module/setup.js';
 import * as Castle from '../module/castle.js';
 
+import * as c from './index-const.js';
+
 // Root component
 const component = {
     data() {
@@ -16,8 +18,6 @@ const component = {
                 whiteToMove: true,
                 castle: [],
             },
-            topTray: Piece.getTypes(Color.Black).map(piece => piece.letter),
-            bottomTray: Piece.getTypes(Color.White).map(piece => piece.letter),
         }
     },
     methods: {
@@ -37,6 +37,7 @@ const component = {
         getDraggedPiece: Common.vue.methods.dnd.getDraggedPiece,
         replacePiece: Common.vue.methods.dnd.replacePiece,
         removePiece: Common.vue.methods.dnd.removePiece,
+        
         clearBoard() {
             this.board = Array(8).fill(Array(8).fill(Piece.None));
         },
@@ -69,16 +70,20 @@ const component = {
             if(!this.fromTray(srcId))  this.removePiece(srcId);
         },
         getTopTrayPiece(idx) {
-            return this.flipped? this.bottomTray[idx]: this.topTray[idx];  
+            return this.flipped? c.bottomTray[idx]: c.topTray[idx];  
         },
         getBottomTrayPiece(idx) {
-            return this.flipped? this.topTray[idx]: this.bottomTray[idx];
+            return this.flipped? c.topTray[idx]: c.bottomTray[idx];
         },
         getWhiteCastleOptions() {
             return Castle.getTypes(Color.White);
         },
         getBlackCastleOptions() {
             return Castle.getTypes(Color.Black);
+        },
+        satisfyCastlePosition(type) {
+            // TODO: Disabled if more than one king
+            // Search king and rook position
         },
     },
 };
