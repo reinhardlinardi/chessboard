@@ -29,5 +29,5 @@ test("position-copy", () => {
     const src = ori[rank-1][file-1];
     copy[rank-1][file-1] = K;
 
-    expect(ori[rank-1][file-1]).toBe(src);
+    expect(ori[rank-1][file-1]).toEqual(src);
 });
