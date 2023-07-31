@@ -1,5 +1,5 @@
 import * as Piece from '../../public/module/piece.js';
-import * as Position from '../../public/module/position.js';
+import {copyPosition} from '../../public/module/util.js';
 
 const _ = Piece.None;
 const P = Piece.WhitePawn.letter;
@@ -16,12 +16,12 @@ const K = Piece.WhiteKing.letter;
 const k = Piece.BlackKing.letter;
 
 
-test("position-copy", () => {
+test("util-copyPosition", () => {
     const ori = Array(8).fill(
         Array(8).fill(_)
     );
 
-    const copy = Position.copy(ori);
+    const copy = copyPosition(ori);
 
     const rank = Math.round(Math.random() * 7) + 1;
     const file = Math.round(Math.random() * 7) + 1;

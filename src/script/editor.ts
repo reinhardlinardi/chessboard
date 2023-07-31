@@ -1,6 +1,6 @@
-import * as Position from './position.js';
 import * as Setup from './setup.js';
 import * as Piece from './piece.js';
+import { copyPosition } from './util.js';
 
 export class Editor {
     private position: string[][];
@@ -10,7 +10,7 @@ export class Editor {
     }
 
     public getPosition(): string[][] {
-        return Position.copy(this.position);
+        return copyPosition(this.position);
     }
 
     public setDefaultSetup() {

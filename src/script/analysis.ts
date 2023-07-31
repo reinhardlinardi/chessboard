@@ -7,16 +7,5 @@
 //     // private started: boolean;
 //     // private ended: boolean;
 
-
-//     public constructor() {
-//         this.position = Setup.getDefaultSetup();
-//         // this.started = false;
-//         // this.ended = false;
-//     }
-
-//     // public getPosition(): string[][] {
-//     //     return Position.copy(this.position);
-//     // }
-
 //     // TODO: When attempting to start game, validate position first
 // }

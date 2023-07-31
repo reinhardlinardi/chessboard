@@ -1,5 +1,5 @@
 import * as Piece from './piece.js';
-import * as Position from './position.js';
+import { copyPosition } from './util.js';
 
 const _ = Piece.None;
 const P = Piece.WhitePawn.letter;
@@ -29,5 +29,5 @@ const defaultSetup: string[][] = [
 ].reverse();
 
 export function getDefaultSetup(): string[][] {
-    return Position.copy(defaultSetup);
+    return copyPosition(defaultSetup);
 }
