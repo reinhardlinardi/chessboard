@@ -2,7 +2,7 @@ import { createApp } from '../lib/vue.esm-browser.js';
 
 import * as Setup from '../module/setup.js';
 
-import common from './common.vue.js';
+import common from './common.js';
 import * as page from './index.js';
 
 // Root component
@@ -28,11 +28,11 @@ const component = {
         getTrayPieceIdx: page.render.getTrayPieceIdx,
         getTopTrayPiece: page.render.getTopTrayPiece,
         getBottomTrayPiece: page.render.getBottomTrayPiece,
-        getWhiteCastleOptions: page.render.getWhiteCastleOptions,
-        getBlackCastleOptions: page.render.getBlackCastleOptions,
+        getWhiteCastleTypes: page.render.getWhiteCastleTypes,
+        getBlackCastleTypes: page.render.getBlackCastleTypes,
 
-        // isCastleDisabled: page.option.isCastleDisabled,
-        // checkboxClick: page.option.checkboxClick,
+        setCastle: page.option.setCastle,
+        disableCastle: page.option.disableCastle,
 
         getPiece: common.board.getPiece,
         setPiece: common.board.setPiece,

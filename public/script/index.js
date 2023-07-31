@@ -4,20 +4,10 @@ import * as Color from '../module/color.js';
 import * as Castle from '../module/castle.js';
 import * as Editor from '../module/editor.js';
 
+import common from './common.js';
 
-function pieceTypes(color) {
-    return Piece.getTypes(color).map(piece => piece.letter);
-}
-
-function castleTypes(color) {
-    return Castle.getTypes(color).map(castle => castle.letter);
-}
-
-export const topTray = pieceTypes(Color.Black);
-export const bottomTray = pieceTypes(Color.White);
-
-export const whiteCastle = castleTypes(Color.White);
-export const blackCastle = castleTypes(Color.Black);
+export const topTray = Piece.getTypes(Color.Black).map(piece => piece.letter);
+export const bottomTray = Piece.getTypes(Color.White).map(piece => piece.letter);
 
 
 export const render = {
@@ -30,23 +20,29 @@ export const render = {
     getBottomTrayPiece(idx) {
         return this.flipped? topTray[idx]: bottomTray[idx];
     },
-    getWhiteCastleOptions() {
+    getWhiteCastleTypes() {
         return Castle.getTypes(Color.White);
     },
-    getBlackCastleOptions() {
+    getBlackCastleTypes() {
         return Castle.getTypes(Color.Black);
     },
 };
 
-// export const option = {
-//     checkboxClick(ev) {
-//         console.log(ev.target.id);
-//     },
-//     isCastleDisabled(type) {
-//         let disabled = !Editor.hasCastlePosition(this.board, type);
-//         return disabled? true: null;
-//     },
-// }
+export const option = {
+    setCastle(ev) {
+        const data = common.dom.getElementData(ev.target.id);
+        const type = data.castleType;
+        const value = ev.target.checked;
+
+        this.form.castle[type] = value;
+    },
+    disableCastle(type) {
+        const enabled = Editor.hasCastlePosition(this.board, type);
+        this.form.castle[type] = enabled;
+
+        return !enabled;
+    },
+}
 
 export const board = {
     resetBoard() {
@@ -60,7 +56,6 @@ export const board = {
 
 /* Drag and drop */
 export const dnd = {
-    
     onDragStart(ev) {
         this.dragSetId(ev, ev.target.id);
     },

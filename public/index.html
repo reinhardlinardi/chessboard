@@ -116,11 +116,14 @@
             <div class="castle-container">
               <label class="section-text">White</label>
 
-              <template v-for="opt in getWhiteCastleOptions()">
+              <template v-for="opt in getWhiteCastleTypes()">
                 <div class="checkbox-container"></div>
                   <input type="checkbox"
-                    :value="`${opt.letter}`"
                     :id="`checkbox-${opt.letter}`"
+                    @click="setCastle"
+                    :disabled="disableCastle(opt.letter)"
+                    :checked="this.form.castle[opt.letter]"
+                    :data-castle-type="`${opt.letter}`"
                   />
                   <label class="section-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
                 </div>
@@ -130,11 +133,14 @@
             <div class="castle-container">
               <label class="section-text">Black</label>
               
-              <template v-for="opt in getBlackCastleOptions()">
+              <template v-for="opt in getBlackCastleTypes()">
                 <div class="checkbox-container"></div>
                   <input type="checkbox"
-                    :value="`${opt.letter}`"
                     :id="`checkbox-${opt.letter}`"
+                    @click="setCastle"
+                    :disabled="disableCastle(opt.letter)"
+                    :checked="this.form.castle[opt.letter]"
+                    :data-castle-type="`${opt.letter}`"
                   />
                   <label class="section-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
                 </div>
