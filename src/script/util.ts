@@ -1,4 +1,4 @@
-import { Board } from './type.js';
+import { Board } from './board.js';
 
 // Deep copy
 export function copyPosition(position: Board): Board {

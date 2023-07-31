@@ -1,5 +1,5 @@
 import * as Piece from './piece.js';
-import { Board } from './type.js';
+import { Board } from './board.js';
 import { copyPosition } from './util.js';
 
 const _ = Piece.None;

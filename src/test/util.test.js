@@ -1,6 +1,8 @@
 import * as Piece from '../../public/module/piece.js';
 import * as Setup from '../../public/module/setup.js';
+import { getPiece, setPiece } from '../../public/module/board.js';
 import { copyPosition } from '../../public/module/util.js';
+
 
 const _ = Piece.None;
 const P = Piece.WhitePawn.letter;
@@ -16,13 +18,15 @@ const q = Piece.BlackQueen.letter;
 const K = Piece.WhiteKing.letter;
 const k = Piece.BlackKing.letter;
 
-
 test("util-copyPosition", () => {
     const ori = Setup.getEmptySetup();
     const copy = copyPosition(ori);
 
-    const src = ori[4][4];
-    copy[4][4] = K;
+    const rank = 4;
+    const file = 4;
 
-    expect(ori[4][4]).toEqual(src);
+    const src = getPiece(ori, rank, file);
+    setPiece(copy, rank, file, K);
+
+    expect(getPiece(ori, rank, file)).toEqual(src);
 });
