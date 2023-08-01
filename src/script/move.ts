@@ -1,53 +1,72 @@
-export type Flag = number;
+// We define direction as change in square code:
+// direction = destSquareCode - srcSquareCode
+// 
+// Therefore horizontal, vertical, diagonal and knight* moves can be represented as follows:
+// *knight moves are denoted by square brackets
+//
+//  +18 [+19]  +20 [+21] +22
+//  [+8]  +9   +10  +11 [+12] 
+//   -2   -1  piece  +1   +2
+// [-12] -11   -10   -9  [-8]
+//  -22 [-21]  -20 [-19] -18
+//
+// Horizontal, vertical, and diagonal moves direction can be generalized by factoring out range.
+// farAwayDirection = adjacentDirectionInLine * range
+//
+//  2*+9  [+19] 2*+10 [+21] 2*+11 
+//  [+8]  1*+9  1*+10 1*+11 [+12] 
+//  2*-1  1*-1  piece 1*+1  2*+1
+//  [-12] 1*-11 1*-10 1*-9  [-8]
+//  2*-11 [-21] 2*-10 [-19] 2*-9
+//
 
-export const move: Flag = 1 << 0;
-export const capture: Flag = 1 << 1;
+export type Direction = number;
 
-// Regular move (exclude special moves)
+// Regular move (exclude conditional moves)
 export interface Move {
-     move: number[],
-     range: number,
-     flag: number,
+     directions: Direction[],
+     move: boolean,
+     capture: boolean,
 }
 
 export const PawnMove: Move = Object.freeze({
-     move: [10],
-     range: 1,
-     flag: move,
+     directions: [10],
+     move: true,
+     capture: false,
 });
 
 export const PawnCapture: Move = Object.freeze({
-     move: [9, 11],
-     range: 1,
-     flag: capture,
+     directions: [9, 11],
+     move: false,
+     capture: true,
 });
 
 export const Knight: Move = Object.freeze({
-     move: [19, 21, 12, -8, -19, -21, -12, 8],
-     range: 1,
-     flag: move | capture,  
+     directions: [19, 21, 12, -8, -19, -21, -12, 8],
+     move: true,
+     capture: true,
 });
 
 export const Bishop: Move = Object.freeze({
-     move: [9, 11, -9, -11],
-     range: 10,
-     flag: move | capture,  
+     directions: [9, 11, -9, -11],
+     move: true,
+     capture: true,  
 });
 
 export const Rook: Move = Object.freeze({
-     move: [10, 1, -10, -1],
-     range: 10,
-     flag: move | capture,  
+     directions: [10, 1, -10, -1],
+     move: true,
+     capture: true, 
 });
 
 export const Queen: Move = Object.freeze({
-     move: [10, 11, 1, -9, -10, -11, -1, 9],
-     range: 10,
-     flag: move | capture,  
+     directions: [10, 11, 1, -9, -10, -11, -1, 9],
+     move: true,
+     capture: true,
 });
 
 export const King: Move = Object.freeze({
-     move: [10, 11, 1, -9, -10, -11, -1, 9],
-     range: 1,
-     flag: move | capture,  
+     directions: [10, 11, 1, -9, -10, -11, -1, 9],
+     move: true,
+     capture: true,
 });

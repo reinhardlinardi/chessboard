@@ -1,4 +1,5 @@
 import * as Color from './color.js';
+import * as Move from './move.js';
 
 export const None: string = " ";
 
@@ -13,8 +14,9 @@ export const TypeKing: number = 5;
 export interface AbstractPiece {
     type: number,
     value: number,
-    jump: boolean,
-    // TODO: move
+    range: boolean,
+    jump: boolean
+    moves: Move.Move[],
 };
 
 export interface Piece extends AbstractPiece {
@@ -25,37 +27,49 @@ export interface Piece extends AbstractPiece {
 export const Pawn: AbstractPiece = Object.freeze({
     type: TypePawn,
     value: 1,
+    range: false,
     jump: false,
+    moves: [Move.PawnMove, Move.PawnCapture],
 });
 
 export const Knight: AbstractPiece = Object.freeze({
     type: TypeKnight,
     value: 3,
+    range: false,
     jump: true,
+    moves: [Move.Knight],
 });
 
 export const Bishop: AbstractPiece = Object.freeze({
     type: TypeBishop,
     value: 3,
+    range: true,
     jump: false,
+    moves: [Move.Bishop],
 });
 
 export const Rook: AbstractPiece = Object.freeze({
     type: TypeRook,
     value: 5,
+    range: true,
     jump: false,
+    moves: [Move.Rook],
 });
 
 export const Queen: AbstractPiece = Object.freeze({
     type: TypeQueen,
     value: 9,
+    range: true,
     jump: false,
+    moves: [Move.Queen],
 });
 
 export const King: AbstractPiece = Object.freeze({
     type: TypeKing,
     value: 1000,
+    range: false,
     jump: false,
+    moves: [Move.King],
 });
 
 export const WhitePawn: Piece = Object.freeze({
