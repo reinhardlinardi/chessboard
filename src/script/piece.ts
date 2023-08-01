@@ -15,7 +15,7 @@ export interface AbstractPiece {
     type: number,
     value: number,
     range: boolean,
-    jump: boolean
+    jump: boolean,
     moves: Move.Move[],
 };
 
