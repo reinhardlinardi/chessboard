@@ -4,7 +4,7 @@ import * as Color from './color.js';
 import * as Square from './square.js';
 import { Position, get, set } from './position.js';
 import { nthRank } from './rank.js';
-
+ 
 
 const P = Piece.WhitePawn.letter;
 const p = Piece.BlackPawn.letter;
@@ -14,11 +14,14 @@ const w = Color.White;
 
 export function hasCastlePosition(type: string, pos: Position) {
     const castle = Castle.get(type);
+    
     const king = castle.king;
     const rook = castle.rook;
+    const kingSquare = king.from;
+    const rookSquare = rook.from;
 
-    return get(pos, king.square.rank, king.square.file) === king.piece &&
-        get(pos, rook.square.rank, rook.square.file) === rook.piece;
+    return get(pos, kingSquare.rank, kingSquare.file) === king.piece &&
+        get(pos, rookSquare.rank, rookSquare.file) === rook.piece;
 }
 
 export function getEnPassantTargets(color: string, pos: Position): Square.Square[] {

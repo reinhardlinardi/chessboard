@@ -2,6 +2,8 @@ import * as Color from './color.js';
 import * as Piece from './piece.js';
 import * as Square from './square.js';
 import * as File from './file.js';
+import { Direction } from './move.js';
+
 
 export const None: string = "";
 
@@ -9,17 +11,18 @@ export const TypeShort: string = "O-O";
 export const TypeLong: string = "O-O-O";
 
 
-export interface Setup {
+export interface Move {
     piece: string,
-    square: Square.Square,
-};
+    direction: Direction,
+    from: Square.Square,
+}
 
 export interface Castle {
     type: string,
     color: string,
     letter: string,
-    king: Setup,
-    rook: Setup,
+    king: Move,
+    rook: Move,
 };
 
 
@@ -30,18 +33,20 @@ const q = Piece.BlackQueen.letter;
 const K = Piece.WhiteKing.letter;
 const k = Piece.BlackKing.letter;
 
-const whiteKingSetup: Setup = {piece: K, square: Square.of(File.e, 1)};
-const blackKingSetup: Setup = {piece: k, square: Square.of(File.e, 8)};
-
 
 export const WhiteShort: Castle = Object.freeze({
     type: TypeShort,
     color: Color.White,
     letter: K,
-    king: whiteKingSetup,
+    king: {
+        piece: K,
+        direction: 2,
+        from: Square.of(File.e, 1),
+    },
     rook: {
         piece: R,
-        square: Square.of(File.h, 1),
+        direction: -2,
+        from: Square.of(File.h, 1),
     },
 });
 
@@ -49,10 +54,15 @@ export const BlackShort: Castle = Object.freeze({
     type: TypeShort,
     color: Color.Black,
     letter: k,
-    king: blackKingSetup,
+    king: {
+        piece: k,
+        direction: 2,
+        from: Square.of(File.e, 8),
+    },
     rook: {
         piece: r,
-        square: Square.of(File.h, 8),
+        direction: -2,
+        from: Square.of(File.h, 8),
     },
 });
 
@@ -60,10 +70,15 @@ export const WhiteLong: Castle = Object.freeze({
     type: TypeLong,
     color: Color.White,
     letter: Q,
-    king: whiteKingSetup,
+    king: {
+        piece: K,
+        direction: -2,
+        from: Square.of(File.e, 1),
+    },
     rook: {
         piece: R,
-        square: Square.of(File.a, 1),
+        direction: 3,
+        from: Square.of(File.a, 1),
     },
 });
 
@@ -71,10 +86,15 @@ export const BlackLong: Castle = Object.freeze({
     type: TypeLong,
     color: Color.Black,
     letter: q,
-    king: blackKingSetup,
+    king: {
+        piece: k,
+        direction: -2,
+        from: Square.of(File.e, 8),
+    },
     rook: {
         piece: r,
-        square: Square.of(File.a, 8),
+        direction: 3,
+        from: Square.of(File.a, 8),
     },
 });
 
