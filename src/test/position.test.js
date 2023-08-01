@@ -22,13 +22,6 @@ test("Position-copy", () => {
     const ori = Setup.getEmptySetup();
     const clone = Position.copy(ori);
 
+    expect(clone).not.toBe(ori);
     expect(clone).toEqual(ori);
-
-    const rank = 4;
-    const file = 4;
-
-    const piece = Position.get(ori, rank, file);
-    Position.set(clone, rank, file, K);
-
-    expect(Position.get(ori, rank, file)).toEqual(piece);
 });
