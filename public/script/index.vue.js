@@ -14,7 +14,8 @@ const component = {
             flipped: false,
             form: {
                 move: Color.White,
-                castle: {},
+                castle: page.castleOptions,
+                // enPassant: "",
             },
         }
     },
@@ -36,6 +37,7 @@ const component = {
         blackColor: page.option.blackColor,
         setCastle: page.option.setCastle,
         disableCastle: page.option.disableCastle,
+        // getEnPassantTargets: page.option.getEnPassantTargets,
 
         getPiece: common.board.getPiece,
         setPiece: common.board.setPiece,

@@ -4,11 +4,12 @@ import * as Color from '../module/color.js';
 import * as Castle from '../module/castle.js';
 import * as Editor from '../module/editor.js';
 
-import common from './common.js';
+const w = Color.White;
+const b = Color.Black;
 
-export const topTray = Piece.getTypes(Color.Black).map(piece => piece.letter);
-export const bottomTray = Piece.getTypes(Color.White).map(piece => piece.letter);
 
+export const topTray = Piece.getTypes(b).map(piece => piece.letter);
+export const bottomTray = Piece.getTypes(w).map(piece => piece.letter);
 
 export const render = {
     getTrayPieceIdx() {
@@ -21,22 +22,26 @@ export const render = {
         return this.flipped? topTray[idx]: bottomTray[idx];
     },
     getWhiteCastleTypes() {
-        return Castle.getTypes(Color.White);
+        return Castle.getTypes(w);
     },
     getBlackCastleTypes() {
-        return Castle.getTypes(Color.Black);
+        return Castle.getTypes(b);
     },
 };
 
+export const castleOptions = [...Castle.getTypes(w), ...Castle.getTypes(b)]
+    .map(castle => castle.letter)
+    .reduce((opt, type) => ({...opt, [type]: true}), {});
+
 export const option = {
     whiteColor() {
-        return Color.White;
+        return w;
     },
     blackColor() {
-        return Color.Black;
+        return b;
     },
     setCastle(ev) {
-        const data = common.dom.getElementData(ev.target.id);
+        const data = this.getElementData(ev.target.id);
         const type = data.castleType;
         const value = ev.target.checked;
 
@@ -44,10 +49,14 @@ export const option = {
     },
     disableCastle(type) {
         const enabled = Editor.hasCastlePosition(this.board, type);
-        this.form.castle[type] = enabled;
+        if(!enabled) this.form.castle[type] = false;
 
         return !enabled;
     },
+    // getEnPassantTargets() {
+    //     const targets = Editor.getEnPassantTargets(this.board, this.form.move);
+    //     const names = targets.map(square => `${}`)
+    // },
 }
 
 export const board = {

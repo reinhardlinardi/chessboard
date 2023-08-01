@@ -2,6 +2,7 @@ import * as Piece from '../module/piece.js';
 import * as File from '../module/file.js';
 import * as Position from '../module/position.js';
 
+const _ = Piece.None;
 const mime = "text/plain";
 
 export default {
@@ -25,7 +26,7 @@ export default {
             return File.labelOf(this.fileOf(x));
         },
         isEmpty(rank, file) {
-            return this.getPiece(rank, file) === Piece.None;
+            return this.getPiece(rank, file) === _;
         },
     },
     board: {
@@ -69,7 +70,7 @@ export default {
         },
         removePiece(id) {
             let data = this.getElementData(id);
-            this.setPiece(data.rank, data.file, Piece.None);
+            this.setPiece(data.rank, data.file, _);
         },
     },
 };
