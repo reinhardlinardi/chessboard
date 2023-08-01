@@ -3,6 +3,7 @@ import * as Piece from '../module/piece.js';
 import * as Color from '../module/color.js';
 import * as Castle from '../module/castle.js';
 import * as Editor from '../module/editor.js';
+import * as File from '../module/file.js';
 
 const w = Color.White;
 const b = Color.Black;
@@ -31,7 +32,7 @@ export const render = {
 
 export const castleOptions = [...Castle.getTypes(w), ...Castle.getTypes(b)]
     .map(castle => castle.letter)
-    .reduce((opt, type) => ({...opt, [type]: true}), {});
+    .reduce((opt, type) => ({...opt, [type]: false}), {});
 
 export const option = {
     whiteColor() {
@@ -53,10 +54,12 @@ export const option = {
 
         return !enabled;
     },
-    // getEnPassantTargets() {
-    //     const targets = Editor.getEnPassantTargets(this.board, this.form.move);
-    //     const names = targets.map(square => `${}`)
-    // },
+    getEnPassantTargets() {
+        const targets = Editor.getEnPassantTargets(this.board, this.form.move);
+        if(targets.length == 0) this.form.enPassant = "";
+
+        return targets.map(square => `${File.labelOf(square.file)}${square.rank}`);
+    },
 }
 
 export const board = {

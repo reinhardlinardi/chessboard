@@ -105,7 +105,7 @@
           <div class="subsection">
             <label class="section-text">Move</label>
             <select class="form-select" v-model="form.move">
-              <option :value="whiteColor()" selected>White to move</option>
+              <option :value="whiteColor()">White to move</option>
               <option :value="blackColor()">Black to move</option>
             </select>
           </div>
@@ -149,12 +149,13 @@
           
           <div class="subsection">
             <label class="section-text"><i>En passant</i></label>
-            <!-- <select class="form-select" v-model="form.enPassant">
+            <select class="form-select" v-model="form.enPassant">
+              <option :value="``">None</option>
+              
               <template v-for="target in getEnPassantTargets()">
-                <option :value="`${}`">White to move</option>
-                <option :value="false">Black to move</option>
+                <option :value="target">{{ target }}</option>
               </template>
-            </select> -->
+            </select>
           </div>
           
         </div>
