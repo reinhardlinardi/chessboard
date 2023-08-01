@@ -13,6 +13,7 @@ export const TypeKing: number = 5;
 export interface AbstractPiece {
     type: number,
     value: number,
+    jump: boolean,
     // TODO: move
 };
 
@@ -24,31 +25,37 @@ export interface Piece extends AbstractPiece {
 export const Pawn: AbstractPiece = Object.freeze({
     type: TypePawn,
     value: 1,
+    jump: false,
 });
 
 export const Knight: AbstractPiece = Object.freeze({
     type: TypeKnight,
     value: 3,
+    jump: true,
 });
 
 export const Bishop: AbstractPiece = Object.freeze({
     type: TypeBishop,
     value: 3,
+    jump: false,
 });
 
 export const Rook: AbstractPiece = Object.freeze({
     type: TypeRook,
     value: 5,
+    jump: false,
 });
 
 export const Queen: AbstractPiece = Object.freeze({
     type: TypeQueen,
     value: 9,
+    jump: false,
 });
 
 export const King: AbstractPiece = Object.freeze({
     type: TypeKing,
     value: 1000,
+    jump: false,
 });
 
 export const WhitePawn: Piece = Object.freeze({

@@ -47,7 +47,7 @@ export function getEnPassantTargets(pos: Position, color: string): Square.Square
 
         if(hasLeft || hasRight) {
             targets.push({rank: Rank.nthRank(color, n+1), file: file});
-        };
+        }
     }
 
     return targets;
