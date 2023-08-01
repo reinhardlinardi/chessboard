@@ -1,5 +1,6 @@
 import { createApp } from '../lib/vue.esm-browser.js';
 
+import * as Color from '../module/color.js';
 import * as Setup from '../module/setup.js';
 
 import common from './common.js';
@@ -12,7 +13,7 @@ const component = {
             board: Setup.getDefaultSetup(),
             flipped: false,
             form: {
-                whiteMove: true,
+                move: Color.White,
                 castle: {},
             },
         }
@@ -31,6 +32,8 @@ const component = {
         getWhiteCastleTypes: page.render.getWhiteCastleTypes,
         getBlackCastleTypes: page.render.getBlackCastleTypes,
 
+        whiteColor: page.option.whiteColor,
+        blackColor: page.option.blackColor,
         setCastle: page.option.setCastle,
         disableCastle: page.option.disableCastle,
 

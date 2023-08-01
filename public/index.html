@@ -105,10 +105,10 @@
           <div class="subsection">
             <label class="section-text">Move</label>
             <select class="form-select"
-              v-model="form.whiteMove"
+              v-model="form.move"
             >
-              <option :value="true" selected>White to move</option>
-              <option :value="false">Black to move</option>
+              <option :value="whiteColor()" selected>White to move</option>
+              <option :value="blackColor()">Black to move</option>
             </select>
           </div>
 

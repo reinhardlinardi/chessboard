@@ -29,6 +29,12 @@ export const render = {
 };
 
 export const option = {
+    whiteColor() {
+        return Color.White;
+    },
+    blackColor() {
+        return Color.Black;
+    },
     setCastle(ev) {
         const data = common.dom.getElementData(ev.target.id);
         const type = data.castleType;
