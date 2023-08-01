@@ -58,11 +58,8 @@ export const option = {
         const targets = Editor.getEnPassantTargets(this.form.move, this.board);
         const squares = targets.map(square => `${File.labelOf(square.file)}${square.rank}`);
 
-        const current = this.form.enPassant;
-        if(current !== "") {
-            const idx = squares.findIndex(val => val === current);
-            if(idx === -1) this.form.enPassant = (targets.length === 0)? "" : squares[0];
-        }
+        const idx = squares.findIndex(val => val === this.form.enPassant);
+        if(idx === -1) this.form.enPassant = "";
 
         return squares;
     },
