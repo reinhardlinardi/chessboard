@@ -7,3 +7,7 @@ body {
 .center {
     @extend %flex-center;
 }
+
+select:focus {
+    outline: none;
+}
