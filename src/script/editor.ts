@@ -12,7 +12,7 @@ const p = Piece.BlackPawn.letter;
 const w = Color.White;
 
 
-export function hasCastlePosition(type: string, pos: Position) {
+export function hasCastlePosition(type: string, pos: Position): boolean {
     const castle = Castle.get(type);
     
     const king = castle.king;

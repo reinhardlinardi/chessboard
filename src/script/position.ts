@@ -1,6 +1,6 @@
 export type Position = string[][];
 
-export function get(pos: Position, rank: number, file: number) {
+export function get(pos: Position, rank: number, file: number): string {
     return pos[rank-1][file-1];
 }
 
