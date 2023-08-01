@@ -46,11 +46,11 @@ export const option = {
 
 export const board = {
     resetBoard() {
-        this.setBoard(Setup.getDefaultSetup());
+        this.board = Setup.getDefaultSetup();
         this.flipped = false;
     },
     clearBoard() {
-        this.setBoard(Setup.getEmptySetup());
+        this.board = Setup.getEmptySetup();
     },
 };
 

@@ -1,6 +1,6 @@
 import * as Piece from '../module/piece.js';
 import * as File from '../module/file.js';
-import * as Board from '../module/board.js';
+import * as Position from '../module/position.js';
 
 const mime = "text/plain";
 
@@ -30,13 +30,10 @@ export default {
     },
     board: {
         getPiece(rank, file) {
-            return Board.getPiece(this.board, rank, file);
+            return Position.get(this.board, rank, file);
         },
         setPiece(rank, file, piece) {
-            Board.setPiece(this.board, rank, file, piece);
-        },
-        setBoard(position) {
-            this.board = position;
+            Position.set(this.board, rank, file, piece);
         },
         flipBoard() {
             this.flipped = !this.flipped;

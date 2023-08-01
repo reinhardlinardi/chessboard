@@ -36,7 +36,6 @@ const component = {
 
         getPiece: common.board.getPiece,
         setPiece: common.board.setPiece,
-        setBoard: common.board.setBoard,
         flipBoard: common.board.flipBoard,
         resetBoard: page.board.resetBoard,
         clearBoard: page.board.clearBoard,

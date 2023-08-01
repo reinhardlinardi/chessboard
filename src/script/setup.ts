@@ -1,6 +1,5 @@
 import * as Piece from './piece.js';
-import { Board } from './board.js';
-import { copyPosition } from './util.js';
+import { Position, copy } from './position.js';
 
 const _ = Piece.None;
 const P = Piece.WhitePawn.letter;
@@ -17,7 +16,7 @@ const K = Piece.WhiteKing.letter;
 const k = Piece.BlackKing.letter;
 
 
-const emptySetup: Board = [
+const emptySetup: Position = [
     [_, _, _, _, _, _, _, _],
     [_, _, _, _, _, _, _, _],
     [_, _, _, _, _, _, _, _],
@@ -28,7 +27,7 @@ const emptySetup: Board = [
     [_, _, _, _, _, _, _, _],
 ]
 
-const defaultSetup: Board = [
+const defaultSetup: Position = [
     [r, n, b, q, k, b, n, r],
     [p, p, p, p, p, p, p, p],
     [_, _, _, _, _, _, _, _],
@@ -40,10 +39,10 @@ const defaultSetup: Board = [
 
 ].reverse();
 
-export function getEmptySetup(): Board {
-    return copyPosition(emptySetup);
+export function getEmptySetup(): Position {
+    return copy(emptySetup);
 }
 
-export function getDefaultSetup(): Board {
-    return copyPosition(defaultSetup);
+export function getDefaultSetup(): Position {
+    return copy(defaultSetup);
 }
