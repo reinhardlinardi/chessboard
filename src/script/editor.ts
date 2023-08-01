@@ -26,13 +26,13 @@ export function hasCastlePosition(type: string, pos: Position) {
 
 export function getEnPassantTargets(color: string, pos: Position): Square.Square[] {
     const n: number = 5;
-    const rank: number = nthRank(n, color);
+    const rank = nthRank(n, color);
 
     const type = Piece.TypePawn;
     const opposite = Color.opposite(color);
         
-    const playerPawn: string = Piece.getByType(type, color).letter;
-    const opponentPawn: string = Piece.getByType(type, opposite).letter;
+    const playerPawn = Piece.getByType(type, color).letter;
+    const opponentPawn = Piece.getByType(type, opposite).letter;
 
     let candidates: number[] = [];
     let targets: Square.Square[] = [];
