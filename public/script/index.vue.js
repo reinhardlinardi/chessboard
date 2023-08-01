@@ -10,7 +10,7 @@ import * as page from './index.js';
 const component = {
     data() {
         return {
-            board: Setup.getDefaultSetup(),
+            board: Setup.defaultSetup(),
             flipped: false,
             form: {
                 move: Color.White,

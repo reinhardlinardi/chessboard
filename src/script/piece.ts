@@ -172,10 +172,17 @@ const map: {[key: string]: Piece} = [...list[w], ...list[b]].reduce(
     {},
 );
 
-export function getTypes(color: string): Piece[] {
+export function getByColor(color: string): Piece[] {
     return list[color];
-};
+}
 
 export function get(letter: string): Piece {
     return map[letter];
-};
+}
+
+// export function getByColor(letter: string, color: string): string {
+//     const oppColor = Color.opposite(color);
+//     const idx = getTypes(color).findIndex(piece => piece.letter === letter);
+
+//     return list[oppColor][idx].letter;
+// }

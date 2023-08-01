@@ -4,7 +4,7 @@ export function get(pos: Position, rank: number, file: number) {
     return pos[rank-1][file-1];
 }
 
-export function set(pos: Position, rank: number, file: number, piece: string) {
+export function set(piece: string, pos: Position, rank: number, file: number) {
     pos[rank-1][file-1] = piece;
 }
 

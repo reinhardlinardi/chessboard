@@ -16,7 +16,7 @@ const K = Piece.WhiteKing.letter;
 const k = Piece.BlackKing.letter;
 
 
-const emptySetup: Position = [
+const boardEmpty: Position = [
     [_, _, _, _, _, _, _, _],
     [_, _, _, _, _, _, _, _],
     [_, _, _, _, _, _, _, _],
@@ -27,7 +27,7 @@ const emptySetup: Position = [
     [_, _, _, _, _, _, _, _],
 ]
 
-const defaultSetup: Position = [
+const boardDefault: Position = [
     [r, n, b, q, k, b, n, r],
     [p, p, p, p, p, p, p, p],
     [_, _, _, _, _, _, _, _],
@@ -39,10 +39,10 @@ const defaultSetup: Position = [
 
 ].reverse();
 
-export function getEmptySetup(): Position {
-    return copy(emptySetup);
+export function emptySetup(): Position {
+    return copy(boardEmpty);
 }
 
-export function getDefaultSetup(): Position {
-    return copy(defaultSetup);
+export function defaultSetup(): Position {
+    return copy(boardDefault);
 }

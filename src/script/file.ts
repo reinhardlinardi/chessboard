@@ -18,8 +18,8 @@ const map: {[key: string]: number} = label.reduce(
 
 export function labelOf(file: number): string {
     return label[file-1];
-};
+}
 
 export function fileOf(label: string): number {
     return map[label];
-};
+}

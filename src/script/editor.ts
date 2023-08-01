@@ -1,9 +1,9 @@
 import * as Castle from './castle.js';
 import * as Piece from './piece.js';
 import * as Color from './color.js';
-import * as Rank from './rank.js';
 import * as Square from './square.js';
 import { Position, get, set } from './position.js';
+import { nthRank } from './rank.js';
 
 
 const P = Piece.WhitePawn.letter;
@@ -12,7 +12,7 @@ const p = Piece.BlackPawn.letter;
 const w = Color.White;
 
 
-export function hasCastlePosition(pos: Position, type: string) {
+export function hasCastlePosition(type: string, pos: Position) {
     const castle = Castle.get(type);
     const king = castle.king;
     const rook = castle.rook;
@@ -21,23 +21,23 @@ export function hasCastlePosition(pos: Position, type: string) {
         get(pos, rook.square.rank, rook.square.file) === rook.piece;
 }
 
-export function getEnPassantTargets(pos: Position, color: string): Square.Square[] {
+export function getEnPassantTargets(color: string, pos: Position): Square.Square[] {
     const n: number = 5;
     
-    const rank: number = Rank.nthRank(color, n);
+    const rank: number = nthRank(n, color);
     const playerPawn: string = (color == w)? P : p;
     const oppPawn: string = (color == w)? p : P;
 
     let candidates: number[] = [];
     let targets: Square.Square[] = [];
 
-    // For each file, check in this rank if there is opponent pawn
+    // For each file in rank, push file as candidate if there is opponent pawn
     for(let file = 1; file <= 8; file++) {
         if(get(pos, rank, file) === oppPawn) candidates.push(file);
     }
 
-   // For each candidate file in this rank, check adjacent files
-   // If in either adjacent files our pawn is present, then we can confirm en passant target on candidate file
+   // For each candidate file in rank, check adjacent files
+   // If in either adjacent files player pawn is present, then pawn is en passant target
     for(const file of candidates) {
         const left = file-1;
         const right = file+1;
@@ -46,7 +46,7 @@ export function getEnPassantTargets(pos: Position, color: string): Square.Square
         const hasRight = (right <= 8 && get(pos, rank, right) == playerPawn);
 
         if(hasLeft || hasRight) {
-            targets.push({rank: Rank.nthRank(color, n+1), file: file});
+            targets.push({rank: nthRank(n+1, color), file: file});
         }
     }
 

@@ -33,8 +33,8 @@ export default {
         getPiece(rank, file) {
             return Position.get(this.board, rank, file);
         },
-        setPiece(rank, file, piece) {
-            Position.set(this.board, rank, file, piece);
+        setPiece(piece, rank, file) {
+            Position.set(piece, this.board, rank, file);
         },
         flipBoard() {
             this.flipped = !this.flipped;
@@ -64,13 +64,13 @@ export default {
             let data = this.getElementData(id);
             return this.fromTray(id)? data.pieceType: this.getPiece(data.rank, data.file);
         },
-        replacePiece(id, piece) {
+        replacePiece(piece, id) {
             let data = this.getElementData(id);
-            this.setPiece(data.rank, data.file, piece);
+            this.setPiece(piece, data.rank, data.file);
         },
         removePiece(id) {
             let data = this.getElementData(id);
-            this.setPiece(data.rank, data.file, _);
+            this.setPiece(_, data.rank, data.file);
         },
     },
 };

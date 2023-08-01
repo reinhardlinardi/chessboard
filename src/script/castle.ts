@@ -98,10 +98,10 @@ const map: {[key: string]: Castle} = [...list[w], ...list[b]].reduce(
     {},
 );
 
-export function getTypes(color: string): Castle[] {
+export function getByColor(color: string): Castle[] {
     return list[color];
-};
+}
 
 export function get(letter: string): Castle {
     return map[letter];
-};
+}

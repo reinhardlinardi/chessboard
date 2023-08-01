@@ -5,12 +5,12 @@ import * as Castle from '../module/castle.js';
 import * as Editor from '../module/editor.js';
 import * as File from '../module/file.js';
 
+
 const w = Color.White;
 const b = Color.Black;
 
-
-export const topTray = Piece.getTypes(b).map(piece => piece.letter);
-export const bottomTray = Piece.getTypes(w).map(piece => piece.letter);
+export const topTray = Piece.getByColor(b).map(piece => piece.letter);
+export const bottomTray = Piece.getByColor(w).map(piece => piece.letter);
 
 export const render = {
     getTrayPieceIdx() {
@@ -23,14 +23,14 @@ export const render = {
         return this.flipped? topTray[idx]: bottomTray[idx];
     },
     getWhiteCastleTypes() {
-        return Castle.getTypes(w);
+        return Castle.getByColor(w);
     },
     getBlackCastleTypes() {
-        return Castle.getTypes(b);
+        return Castle.getByColor(b);
     },
 };
 
-export const castleOptions = [...Castle.getTypes(w), ...Castle.getTypes(b)]
+export const castleOptions = [...Castle.getByColor(w), ...Castle.getByColor(b)]
     .map(castle => castle.letter)
     .reduce((opt, type) => ({...opt, [type]: false}), {});
 
@@ -49,13 +49,13 @@ export const option = {
         this.form.castle[type] = value;
     },
     disableCastle(type) {
-        const enabled = Editor.hasCastlePosition(this.board, type);
+        const enabled = Editor.hasCastlePosition(type, this.board);
         if(!enabled) this.form.castle[type] = false;
 
         return !enabled;
     },
     getEnPassantTargets() {
-        const targets = Editor.getEnPassantTargets(this.board, this.form.move);
+        const targets = Editor.getEnPassantTargets(this.form.move, this.board);
         if(targets.length == 0) this.form.enPassant = "";
 
         return targets.map(square => `${File.labelOf(square.file)}${square.rank}`);
@@ -64,11 +64,11 @@ export const option = {
 
 export const board = {
     resetBoard() {
-        this.board = Setup.getDefaultSetup();
+        this.board = Setup.defaultSetup();
         this.flipped = false;
     },
     clearBoard() {
-        this.board = Setup.getEmptySetup();
+        this.board = Setup.emptySetup();
     },
 };
 
@@ -86,7 +86,7 @@ export const dnd = {
         
         // Replace piece in dest
         const piece = this.getDraggedPiece(srcId);
-        this.replacePiece(destId, piece);
+        this.replacePiece(piece, destId);
 
         // Remove piece in src if not tray
         if(!this.fromTray(srcId)) this.removePiece(srcId);
