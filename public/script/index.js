@@ -56,9 +56,15 @@ export const option = {
     },
     getEnPassantTargets() {
         const targets = Editor.getEnPassantTargets(this.form.move, this.board);
-        if(targets.length == 0) this.form.enPassant = "";
+        const squares = targets.map(square => `${File.labelOf(square.file)}${square.rank}`);
 
-        return targets.map(square => `${File.labelOf(square.file)}${square.rank}`);
+        const current = this.form.enPassant;
+        if(current !== "") {
+            const idx = squares.findIndex(val => val === current);
+            if(idx === -1) this.form.enPassant = (targets.length === 0)? "" : squares[0];
+        }
+
+        return squares;
     },
 }
 
