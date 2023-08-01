@@ -176,13 +176,11 @@ export function getByColor(color: string): Piece[] {
     return list[color];
 }
 
+export function getByType(type: number, color: string): Piece {
+    let idx = list[color].findIndex(piece => piece.type === type);
+    return list[color][idx];
+}
+
 export function get(letter: string): Piece {
     return map[letter];
 }
-
-// export function getByColor(letter: string, color: string): string {
-//     const oppColor = Color.opposite(color);
-//     const idx = getTypes(color).findIndex(piece => piece.letter === letter);
-
-//     return list[oppColor][idx].letter;
-// }

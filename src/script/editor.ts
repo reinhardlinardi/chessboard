@@ -26,17 +26,20 @@ export function hasCastlePosition(type: string, pos: Position) {
 
 export function getEnPassantTargets(color: string, pos: Position): Square.Square[] {
     const n: number = 5;
-    
     const rank: number = nthRank(n, color);
-    const playerPawn: string = (color == w)? P : p;
-    const oppPawn: string = (color == w)? p : P;
+
+    const type = Piece.TypePawn;
+    const opposite = Color.opposite(color);
+        
+    const playerPawn: string = Piece.getByType(type, color).letter;
+    const opponentPawn: string = Piece.getByType(type, opposite).letter;
 
     let candidates: number[] = [];
     let targets: Square.Square[] = [];
 
     // For each file in rank, push file as candidate if there is opponent pawn
     for(let file = 1; file <= 8; file++) {
-        if(get(pos, rank, file) === oppPawn) candidates.push(file);
+        if(get(pos, rank, file) === opponentPawn) candidates.push(file);
     }
 
    // For each candidate file in rank, check adjacent files
