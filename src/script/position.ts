@@ -12,8 +12,8 @@ export function set(pos: Position, rank: number, file: number, piece: string) {
 export function copy(pos: Position): Position {
     let copy: Position = new Array(8);
 
-    for(let rank = 0; rank < 8; rank++) {
-        copy[rank] = [...pos[rank]];
+    for(let rank = 1; rank <= 8; rank++) {
+        copy[rank-1] = [...pos[rank-1]];
     }
     return copy;
 }
