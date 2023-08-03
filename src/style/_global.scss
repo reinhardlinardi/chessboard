@@ -17,6 +17,10 @@ input:focus {
     @extend %justify-center;
 }
 
+.align-center {
+    @extend %align-center;
+}
+
 .perfect-center {
     @extend %perfect-center;
 }

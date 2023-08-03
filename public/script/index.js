@@ -68,7 +68,7 @@ export const option = {
 
 export const fen = {
     generateFEN() {
-        const castle = Object.keys(this.castle).filter(type => this.form.castle[type]);
+        const castle = Object.keys(this.form.castle).filter(type => this.form.castle[type]);
         console.log(castle);
 
         return FEN.Generate(this.board, this.form.move, castle, this.form.enPassant);

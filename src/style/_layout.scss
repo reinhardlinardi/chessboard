@@ -5,8 +5,6 @@
 
 %flex {
     display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 %justify-center {
@@ -14,8 +12,14 @@
     justify-content: center;
 }
 
+%align-center {
+    @extend %flex;
+    align-items: center;
+}
+
 %perfect-center {
-    @extend %justify-center;
+    @extend %flex;
+    justify-content: center;
     align-items: center;
 }
 
