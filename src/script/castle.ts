@@ -99,13 +99,13 @@ export const BlackLong: Castle = Object.freeze({
 });
 
 
+const w = Color.White;
+const b = Color.Black;
+
 const ws = WhiteShort;
 const bs = BlackShort;
 const wl = WhiteLong;
 const bl = BlackLong;
-
-const w = Color.White;
-const b = Color.Black;
 
 
 const list: {[key: string]: Castle[]} = {

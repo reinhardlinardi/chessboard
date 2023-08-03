@@ -4,12 +4,6 @@ import * as Color from './color.js';
 import * as Square from './square.js';
 import { Position, get, set } from './position.js';
 import { nthRank } from './rank.js';
- 
-
-const P = Piece.WhitePawn.letter;
-const p = Piece.BlackPawn.letter;
-
-const w = Color.White;
 
 
 export function hasCastlePosition(type: string, pos: Position): boolean {
