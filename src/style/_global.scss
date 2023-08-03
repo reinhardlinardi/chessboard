@@ -4,10 +4,19 @@ body {
     background-color: #181818;
 }
 
-.center {
-    @extend %flex-center;
-}
-
 select:focus {
     outline: none;
+}
+
+input:focus {
+    outline: none;
+    border-color: #0396ff;
+}
+
+.justify-center {
+    @extend %justify-center;
+}
+
+.perfect-center {
+    @extend %perfect-center;
 }

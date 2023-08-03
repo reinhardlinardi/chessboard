@@ -15,8 +15,8 @@
   
   <body>
 
-    <div id="app" class="center">
-      
+    <div id="app" class="perfect-center">
+
       <div>
 
         <div class="top-tray"
@@ -88,6 +88,16 @@
 
         </div>
 
+        <div class="fen-container">
+          <label class="fen-label">FEN</label>
+          <input type="text"
+            class="fen-input"
+            id="fen"
+            :value="this.fen"
+            @change="loadFEN"
+          >
+        </div>
+
       </div>
 
       <div class="right-container">
@@ -115,7 +125,7 @@
               <label class="section-text">White</label>
 
               <template v-for="opt in getWhiteCastleTypes()">
-                <div class="checkbox-container"></div>
+                <div class="checkbox-container">
                   <input type="checkbox"
                     :id="`checkbox-${opt.letter}`"
                     @click="setCastle"
@@ -132,14 +142,14 @@
               <label class="section-text">Black</label>
               
               <template v-for="opt in getBlackCastleTypes()">
-                <div class="checkbox-container"></div>
+                <div class="checkbox-container">
                   <input type="checkbox"
                     :id="`checkbox-${opt.letter}`"
                     @click="setCastle"
                     :disabled="disableCastle(opt.letter)"
                     :checked="this.form.castle[opt.letter]"
                     :data-castle-type="`${opt.letter}`"
-                  />
+                  >
                   <label class="section-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
                 </div>
               </template>

@@ -1,6 +1,6 @@
 @use 'layout';
 
-$square-size: min(8vw, 8vh);
+$square-size: min(7.5vw, 7.5vh);
 
 .board {
     @extend %grid;

@@ -3,9 +3,19 @@
     gap: 0 0;
 }
 
-%flex-center {
+%flex {
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+%justify-center {
+    @extend %flex;
+    justify-content: center;
+}
+
+%perfect-center {
+    @extend %justify-center;
     align-items: center;
 }
 

@@ -4,6 +4,7 @@ import * as Color from '../module/color.js';
 import * as Castle from '../module/castle.js';
 import * as Editor from '../module/editor.js';
 import * as File from '../module/file.js';
+import * as FEN from '../module/fen.js';
 
 
 const w = Color.White;
@@ -63,7 +64,19 @@ export const option = {
 
         return squares;
     },
-}
+};
+
+export const fen = {
+    generateFEN() {
+        const castle = Object.keys(this.castle).filter(type => this.form.castle[type]);
+        console.log(castle);
+
+        return FEN.Generate(this.board, this.form.move, castle, this.form.enPassant);
+    },
+    loadFEN(ev) {
+        console.log("Load FEN", ev.target.value);
+    },
+};
 
 export const board = {
     resetBoard() {

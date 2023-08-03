@@ -31,7 +31,7 @@
     padding: 1px 0 10px 10px;
     border: 1px solid transparent;
     border-radius: 4px;
-    background-color: #b8b8b8;
+    background-color: #c8c8c8;
 }
 
 .control-container {
@@ -48,13 +48,17 @@
     padding: 10px 0 10px 0;
 }
 
-.section-label {
-    font-family: 'Roboto', sans-serif;
+%section-label {
+    @extend %font-roboto;
     font-size: min(2.5vw, 2.5vh);
 }
 
+.section-label {
+    @extend %section-label;
+}
+
 %section-text {
-    font-family: 'Roboto', sans-serif;
+    @extend %font-roboto;
     font-size: min(2.4vw, 2.4vh);
 }
 
@@ -77,4 +81,29 @@
 
     display: flex;
     align-items: center;
+}
+
+.fen-container {
+    @extend %justify-center;
+
+    margin: 20px 0 0 0;
+    padding: 10px 0 10px 0;
+}
+
+.fen-label {
+    @extend %section-label;
+    margin: 0 15px 0 0;
+
+    color: white;
+}
+
+.fen-input {
+    @extend %section-text;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 4px;
+
+    width: 100%;
+    
+    background-color: #e8e8e8;
 }

@@ -19,6 +19,9 @@ const component = {
             },
         }
     },
+    computed: {
+        fen: page.fen.generateFEN,
+    },
     methods: {
         getElement: common.dom.getElement,
         getElementData: common.dom.getElementData,
@@ -38,6 +41,8 @@ const component = {
         setCastle: page.option.setCastle,
         disableCastle: page.option.disableCastle,
         getEnPassantTargets: page.option.getEnPassantTargets,
+
+        loadFEN: page.fen.loadFEN,
 
         getPiece: common.board.getPiece,
         setPiece: common.board.setPiece,
