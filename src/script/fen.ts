@@ -25,10 +25,10 @@ export function Generate(pos: Position, move: string, castle: string[], enPassan
 
     const fen = [rows.join("/"), move, castle.join(""), enPassant, "0", "1"];
     
-    // For castle rights and en passant, if not available replace "" with "-"
+    // For castle rights and en passant, if not available use "-"
     for(let idx of [2, 3]) {
         if(fen[idx] === "") fen[idx] = "-";
     }
-
+    
     return fen.join(" ");
 }
