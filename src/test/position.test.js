@@ -19,7 +19,7 @@ const k = Piece.BlackKing.letter;
 
 
 test("Position-copy", () => {
-    const ori = Setup.getEmptySetup();
+    const ori = Setup.emptySetup();
     const clone = Position.copy(ori);
 
     expect(clone).not.toBe(ori);
