@@ -1,9 +1,10 @@
 import { Position, get, set } from './position.js';
 import * as Piece from './piece.js';
 
-export function Generate(pos: Position, move: string, castleTypes: string[], enPassant: string): string {
+export function Generate(pos: Position, move: string, castle: string[], enPassant: string): string {
     let rows: string[] = new Array(8);
 
+    // Piece placement
     for(let rank = 8; rank >= 1; rank--) {
         let row: string = "";
         let cnt: number = 0;
@@ -22,7 +23,12 @@ export function Generate(pos: Position, move: string, castleTypes: string[], enP
         rows[8-rank] = row;
     }
 
-    return rows.join("/");
-    // move, castling, en passant, halfmove, fullmove
-    // castling if "" return "-"
+    const fen = [rows.join("/"), move, castle.join(""), enPassant, "0", "1"];
+    
+    // For castle rights and en passant, if not available replace "" with "-"
+    for(let idx of [2, 3]) {
+        if(fen[idx] === "") fen[idx] = "-";
+    }
+
+    return fen.join(" ");
 }
