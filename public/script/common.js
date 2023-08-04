@@ -57,7 +57,7 @@ export default {
             let dnd = ev.dataTransfer;
 
             // Get dragged piece id
-            // JS gives "\r\n" id when we drag from empty square, so we use trim to get "" for invalid id
+            // JS gives "\r\n" id when we drag from empty square, so trim is used to transform invalid id to ""
             return dnd.getData(mime).trim();
         },
         getDraggedPiece(id) {
