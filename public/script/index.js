@@ -69,7 +69,7 @@ export const option = {
 export const fen = {
     generateFEN() {
         const castle = Object.keys(this.form.castle).filter(type => this.form.castle[type]);
-        return FEN.Generate(this.board, this.form.move, castle, this.form.enPassant);
+        return FEN.Generate(this.board, this.form.move, castle, this.form.enPassant, this.clock);
     },
     loadFEN(ev) {
         // console.log("Load FEN", ev.target.value);
