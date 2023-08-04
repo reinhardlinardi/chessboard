@@ -9,14 +9,14 @@ export function of(label: string, rank: number): Square {
     return {rank: rank, file: File.fileOf(label)};
 }
 
-// Code is each square unique number identifier
-export type Code = number;
+// Location = square unique number
+export type Location = number;
 
-export function codeOf(square: Square): Code {
+export function toLocation(square: Square): Location {
     return 10*square.rank + square.file;
 }
 
-export function squareOf(code: Code): Square {
-    let rank = Math.trunc(code/10);
-    return {rank: rank, file: code - 10*rank};
+export function toSquare(location: Location): Square {
+    let rank = Math.trunc(location/10);
+    return {rank: rank, file: location - 10*rank};
 }

@@ -16,12 +16,12 @@ export interface AbstractPiece {
     value: number,
     range: boolean,
     jump: boolean,
-    moves: Move.Move[],
 };
 
 export interface Piece extends AbstractPiece {
     color: string,
     letter: string,
+    moves: Move.Move[],
 };
 
 export const Pawn: AbstractPiece = Object.freeze({
@@ -29,7 +29,6 @@ export const Pawn: AbstractPiece = Object.freeze({
     value: 1,
     range: false,
     jump: false,
-    moves: [Move.PawnMove, Move.PawnCapture],
 });
 
 export const Knight: AbstractPiece = Object.freeze({
@@ -37,7 +36,6 @@ export const Knight: AbstractPiece = Object.freeze({
     value: 3,
     range: false,
     jump: true,
-    moves: [Move.Knight],
 });
 
 export const Bishop: AbstractPiece = Object.freeze({
@@ -45,7 +43,6 @@ export const Bishop: AbstractPiece = Object.freeze({
     value: 3,
     range: true,
     jump: false,
-    moves: [Move.Bishop],
 });
 
 export const Rook: AbstractPiece = Object.freeze({
@@ -53,7 +50,6 @@ export const Rook: AbstractPiece = Object.freeze({
     value: 5,
     range: true,
     jump: false,
-    moves: [Move.Rook],
 });
 
 export const Queen: AbstractPiece = Object.freeze({
@@ -61,7 +57,6 @@ export const Queen: AbstractPiece = Object.freeze({
     value: 9,
     range: true,
     jump: false,
-    moves: [Move.Queen],
 });
 
 export const King: AbstractPiece = Object.freeze({
@@ -69,79 +64,90 @@ export const King: AbstractPiece = Object.freeze({
     value: 1000,
     range: false,
     jump: false,
-    moves: [Move.King],
 });
 
 export const WhitePawn: Piece = Object.freeze({
     ...Pawn,
     color: Color.White,
     letter: "P",
+    moves: [Move.WhitePawnAdvance, Move.WhitePawnCapture],
 });
 
 export const BlackPawn: Piece = Object.freeze({
     ...Pawn,
     color: Color.Black,
     letter: "p",
+    moves: [Move.BlackPawnAdvance, Move.BlackPawnCapture],
 });
 
 export const WhiteKnight: Piece = Object.freeze({
     ...Knight,
     color: Color.White,
     letter: "N",
+    moves: [Move.Knight],
 });
 
 export const BlackKnight: Piece = Object.freeze({
     ...Knight,
     color: Color.Black,
     letter: "n",
+    moves: [Move.Knight],
 });
 
 export const WhiteBishop: Piece = Object.freeze({
     ...Bishop,
     color: Color.White,
     letter: "B",
+    moves: [Move.Bishop],
 });
 
 export const BlackBishop: Piece = Object.freeze({
     ...Bishop,
     color: Color.Black,
     letter: "b",
+    moves: [Move.Bishop],
 });
 
 export const WhiteRook: Piece = Object.freeze({
     ...Rook,
     color: Color.White,
     letter: "R",
+    moves: [Move.Rook],
 });
 
 export const BlackRook: Piece = Object.freeze({
     ...Rook,
     color: Color.Black,
     letter: "r",
+    moves: [Move.Rook],
 });
 
 export const WhiteQueen: Piece = Object.freeze({
     ...Queen,
     color: Color.White,
     letter: "Q",
+    moves: [Move.Queen],
 });
 
 export const BlackQueen: Piece = Object.freeze({
     ...Queen,
     color: Color.Black,
     letter: "q",
+    moves: [Move.Queen],
 });
 
 export const WhiteKing: Piece = Object.freeze({
     ...King,
     color: Color.White,
     letter: "K",
+    moves: [Move.King],
 });
 
 export const BlackKing: Piece = Object.freeze({
     ...King,
     color: Color.Black,
     letter: "k",
+    moves: [Move.King],
 });
 
 
