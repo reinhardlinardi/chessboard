@@ -1,7 +1,9 @@
 import { Position, get, set } from './position.js';
+import { Clock } from './clock.js';
 import * as Piece from './piece.js';
 
-export function Generate(pos: Position, move: string, castle: string[], enPassant: string): string {
+
+export function Generate(pos: Position, move: string, castle: string[], enPassant: string, clock: Clock): string {
     let rows: string[] = new Array(8);
 
     // Piece placement
@@ -23,9 +25,9 @@ export function Generate(pos: Position, move: string, castle: string[], enPassan
         rows[8-rank] = row;
     }
 
-    const fen = [rows.join("/"), move, castle.join(""), enPassant, "0", "1"];
+    const fen = [rows.join("/"), move, castle.join(""), enPassant, clock.halfmove, clock.fullmove];
     
-    // For castle rights and en passant, if not available use "-"
+    // For castle rights and en passant, value is "-" if not available
     for(let idx of [2, 3]) {
         if(fen[idx] === "") fen[idx] = "-";
     }

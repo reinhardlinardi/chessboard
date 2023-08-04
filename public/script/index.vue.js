@@ -2,6 +2,7 @@ import { createApp } from '../lib/vue.esm-browser.js';
 
 import * as Color from '../module/color.js';
 import * as Setup from '../module/setup.js';
+import * as Clock from '../module/clock.js';
 
 import common from './common.js';
 import * as page from './index.js';
@@ -17,6 +18,7 @@ const component = {
                 castle: page.castleOptions,
                 enPassant: "",
             },
+            clock: Clock.New(),
         }
     },
     computed: {
