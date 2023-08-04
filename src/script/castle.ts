@@ -2,7 +2,7 @@ import * as Color from './color.js';
 import * as Piece from './piece.js';
 import * as Square from './square.js';
 import * as File from './file.js';
-import { Direction } from './move.js';
+import { Direction } from './direction.js';
 
 
 export const None: string = "";
