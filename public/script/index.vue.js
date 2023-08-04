@@ -28,6 +28,9 @@ const component = {
         getElement: common.dom.getElement,
         getElementData: common.dom.getElementData,
 
+        getQueryString: common.url.getQueryString,
+        setQueryString: common.url.setQueryString,
+
         rankOf: common.render.rankOf,
         fileOf: common.render.fileOf,
         labelOf: common.render.labelOf,
@@ -62,6 +65,7 @@ const component = {
         onDropReplaceOrCopy: page.dnd.onDropReplaceOrCopy,
         onDropRemove: page.dnd.onDropRemove,
     },
+    mounted: page.lifecycle.mounted,
 };
 
 // Setup vue

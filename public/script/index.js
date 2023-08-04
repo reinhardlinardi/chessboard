@@ -10,8 +10,16 @@ import * as FEN from '../module/fen.js';
 const w = Color.White;
 const b = Color.Black;
 
+const fenParam = "fen";
+
+
 export const topTray = Piece.getByColor(b).map(piece => piece.letter);
 export const bottomTray = Piece.getByColor(w).map(piece => piece.letter);
+
+export const castleOptions = [...Castle.getByColor(w), ...Castle.getByColor(b)]
+    .map(castle => castle.letter)
+    .reduce((opt, type) => ({...opt, [type]: false}), {});
+
 
 export const render = {
     getTrayPieceIdx() {
@@ -30,10 +38,6 @@ export const render = {
         return Castle.getByColor(b);
     },
 };
-
-export const castleOptions = [...Castle.getByColor(w), ...Castle.getByColor(b)]
-    .map(castle => castle.letter)
-    .reduce((opt, type) => ({...opt, [type]: false}), {});
 
 export const option = {
     whiteColor() {
@@ -69,7 +73,11 @@ export const option = {
 export const fen = {
     generateFEN() {
         const castle = Object.keys(this.form.castle).filter(type => this.form.castle[type]);
-        return FEN.Generate(this.board, this.form.move, castle, this.form.enPassant, this.clock);
+        
+        const fen = FEN.Generate(this.board, this.form.move, castle, this.form.enPassant, this.clock);
+        this.setQueryString(fenParam, fen);
+
+        return fen;
     },
     loadFEN(ev) {
         // console.log("Load FEN", ev.target.value);
@@ -111,5 +119,11 @@ export const dnd = {
 
         // Remove piece if src is not tray
         if(!this.fromTray(srcId))  this.removePiece(srcId);
+    },
+};
+
+export const lifecycle = {
+    mounted() {
+        this.setQueryString(fenParam, this.fen);
     },
 };

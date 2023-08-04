@@ -2,6 +2,7 @@ import * as Piece from '../module/piece.js';
 import * as File from '../module/file.js';
 import * as Position from '../module/position.js';
 
+
 const _ = Piece.None;
 const mime = "text/plain";
 
@@ -13,6 +14,17 @@ export default {
         getElementData(id) {
             // Return data from data-* attribute
             return this.getElement(id).dataset;
+        },  
+    },
+    url: {
+        getQueryString(name) {
+            const q = new URLSearchParams(window.location.search);
+            return q.get(name);
+        },
+        setQueryString(name, value) {
+            const q = new URLSearchParams(window.location.search);
+            q.set(name, value);
+            window.history.replaceState({}, "", `?${q.toString()}`);
         },
     },
     render: {
@@ -54,22 +66,22 @@ export default {
             dnd.effectAllowed = "copyMove";
         },
         dropGetId(ev) {
-            let dnd = ev.dataTransfer;
+            const dnd = ev.dataTransfer;
 
             // Get dragged piece id
             // JS gives "\r\n" id when we drag from empty square, so trim is used to transform invalid id to ""
             return dnd.getData(mime).trim();
         },
         getDraggedPiece(id) {
-            let data = this.getElementData(id);
+            const data = this.getElementData(id);
             return this.fromTray(id)? data.pieceType: this.getPiece(data.rank, data.file);
         },
         replacePiece(piece, id) {
-            let data = this.getElementData(id);
+            const data = this.getElementData(id);
             this.setPiece(piece, data.rank, data.file);
         },
         removePiece(id) {
-            let data = this.getElementData(id);
+            const data = this.getElementData(id);
             this.setPiece(_, data.rank, data.file);
         },
     },
