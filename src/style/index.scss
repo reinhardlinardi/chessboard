@@ -10,7 +10,7 @@
     border: 1px solid transparent;
     border-radius: 4px;
 
-    background-color: #484848;
+    background-color: #505050;
 }
 
 .top-tray {
@@ -94,7 +94,7 @@
     @extend %section-label;
     margin: 0 15px 0 0;
 
-    color: white;
+    color: #f0f0f0;
 }
 
 .fen-input {
@@ -103,7 +103,8 @@
     border-radius: 4px;
     padding: 4px;
 
+    background-color: #303030;
+    color: #f0f0f0;
+
     width: 100%;
-    
-    background-color: #e8e8e8;
 }
