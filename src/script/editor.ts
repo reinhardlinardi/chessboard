@@ -11,11 +11,9 @@ export function hasCastlePosition(type: string, pos: Position): boolean {
     
     const king = castle.king;
     const rook = castle.rook;
-    const kingSquare = king.from;
-    const rookSquare = rook.from;
 
-    return get(pos, kingSquare.rank, kingSquare.file) === king.piece &&
-        get(pos, rookSquare.rank, rookSquare.file) === rook.piece;
+    return get(pos, king.from.rank, king.from.file) === king.piece &&
+        get(pos, rook.from.rank, rook.from.file) === rook.piece;
 }
 
 export function getEnPassantTargets(color: string, pos: Position): Square.Square[] {

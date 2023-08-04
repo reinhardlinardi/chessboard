@@ -9,7 +9,6 @@ export function of(label: string, rank: number): Square {
     return {rank: rank, file: File.fileOf(label)};
 }
 
-// Location = square unique number
 export type Location = number;
 
 export function toLocation(square: Square): Location {
