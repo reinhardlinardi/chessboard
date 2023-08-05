@@ -10,7 +10,7 @@ import * as FEN from '../module/fen.js';
 const w = Color.White;
 const b = Color.Black;
 
-const fenParam = "fen";
+const fenParamName = "fen";
 
 
 export const topTray = Piece.getByColor(b).map(piece => piece.letter);
@@ -75,12 +75,12 @@ export const fen = {
         const castle = Object.keys(this.form.castle).filter(type => this.form.castle[type]);
         
         const fen = FEN.Generate(this.board, this.form.move, castle, this.form.enPassant, this.clock);
-        this.setQueryString(fenParam, fen);
+        this.setQueryParam(fenParamName, fen);
 
         return fen;
     },
     loadFEN(ev) {
-        // console.log("Load FEN", ev.target.value);
+        console.log("Load FEN", ev.target.value);
     },
 };
 
@@ -124,6 +124,6 @@ export const dnd = {
 
 export const lifecycle = {
     mounted() {
-        this.setQueryString(fenParam, this.fen);
+        this.setQueryParam(fenParamName, this.fen);
     },
 };

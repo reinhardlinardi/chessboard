@@ -6,7 +6,21 @@ import * as Position from '../module/position.js';
 const _ = Piece.None;
 const mime = "text/plain";
 
+const q = new URLSearchParams(window.location.search);
+
 export default {
+    url: {
+        hasQueryParam(name) {
+            return q.has(name);
+        },
+        getQueryParam(name) {
+            return q.get(name);
+        },
+        setQueryParam(name, value) {
+            q.set(name, value);
+            window.history.replaceState({}, "", `?${q.toString()}`);
+        },
+    },
     dom: {
         getElement(id) {
             return document.getElementById(id);
@@ -15,17 +29,6 @@ export default {
             // Return data from data-* attribute
             return this.getElement(id).dataset;
         },  
-    },
-    url: {
-        getQueryString(name) {
-            const q = new URLSearchParams(window.location.search);
-            return q.get(name);
-        },
-        setQueryString(name, value) {
-            const q = new URLSearchParams(window.location.search);
-            q.set(name, value);
-            window.history.replaceState({}, "", `?${q.toString()}`);
-        },
     },
     render: {
         rankOf(y) {
@@ -69,7 +72,7 @@ export default {
             const dnd = ev.dataTransfer;
 
             // Get dragged piece id
-            // JS gives "\r\n" id when we drag from empty square, so trim is used to transform invalid id to ""
+            // Id is "\r\n" when we drag from empty square, so trim is used to transform invalid id to ""
             return dnd.getData(mime).trim();
         },
         getDraggedPiece(id) {

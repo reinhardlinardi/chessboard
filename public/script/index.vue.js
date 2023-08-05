@@ -25,11 +25,12 @@ const component = {
         fen: page.fen.generateFEN,
     },
     methods: {
+        hasQueryParam: common.url.hasQueryParam,
+        getQueryParam: common.url.getQueryParam,
+        setQueryParam: common.url.setQueryParam,
+        
         getElement: common.dom.getElement,
         getElementData: common.dom.getElementData,
-
-        getQueryString: common.url.getQueryString,
-        setQueryString: common.url.setQueryString,
 
         rankOf: common.render.rankOf,
         fileOf: common.render.fileOf,
