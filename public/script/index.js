@@ -5,6 +5,7 @@ import * as Castle from '../module/castle.js';
 import * as Editor from '../module/editor.js';
 import * as File from '../module/file.js';
 import * as FEN from '../module/fen.js';
+import { getHash } from '../module/hash.js';
 
 
 const w = Color.White;
@@ -76,6 +77,7 @@ export const fen = {
         
         const fen = FEN.Generate(this.board, this.form.move, castle, this.form.enPassant, this.clock);
         this.setQueryParam(fenParamName, fen);
+        console.log(getHash(""));
 
         return fen;
     },
