@@ -2,7 +2,7 @@ import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 
 import * as Color from '../module/color.js';
 import * as Setup from '../module/setup.js';
-import * as Clock from '../module/clock.js';
+
 
 import common from './common.js';
 import * as page from './index.js';
@@ -11,14 +11,14 @@ import * as page from './index.js';
 const component = {
     data() {
         return {
-            board: Setup.defaultSetup(),
+            board: [],
             flipped: false,
             form: {
-                move: Color.White,
-                castle: page.castleOptions,
+                move: "",
+                castle: {},
                 enPassant: "",
             },
-            clock: Clock.New(),
+            clock: {},
         }
     },
     computed: {
@@ -66,6 +66,7 @@ const component = {
         onDropReplaceOrCopy: page.dnd.onDropReplaceOrCopy,
         onDropRemove: page.dnd.onDropRemove,
     },
+    created: page.lifecycle.created,
     mounted: page.lifecycle.mounted,
 };
 

@@ -1,10 +1,11 @@
 import * as Setup from '../module/setup.js';
-import * as Piece from '../module/piece.js';
 import * as Color from '../module/color.js';
+import * as Clock from '../module/clock.js';
+import * as Piece from '../module/piece.js';
 import * as Castle from '../module/castle.js';
-import * as Editor from '../module/editor.js';
 import * as File from '../module/file.js';
 import * as FEN from '../module/fen.js';
+import * as Editor from '../module/editor.js';
 
 
 const w = Color.White;
@@ -15,10 +16,6 @@ const fenParamName = "fen";
 
 export const topTray = Piece.getByColor(b).map(piece => piece.letter);
 export const bottomTray = Piece.getByColor(w).map(piece => piece.letter);
-
-export const castleOptions = [...Castle.getByColor(w), ...Castle.getByColor(b)]
-    .map(castle => castle.letter)
-    .reduce((opt, type) => ({...opt, [type]: false}), {});
 
 
 export const render = {
@@ -123,6 +120,15 @@ export const dnd = {
 };
 
 export const lifecycle = {
+    created() {
+        this.board = Setup.defaultSetup();
+        this.form.move = w;
+        this.clock = Clock.New();
+
+        this.form.castle = [...Castle.getByColor(w), ...Castle.getByColor(b)]
+            .map(castle => castle.letter)
+            .reduce((opt, type) => ({...opt, [type]: false}), {});
+    },
     mounted() {
         this.setQueryParam(fenParamName, this.fen);
     },
