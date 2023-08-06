@@ -1,4 +1,4 @@
-// Direction = change in square location = dest location - src location
+// Direction = change in location = dest location - src location
 export type Direction = number;
 
 // Map of common directions:
