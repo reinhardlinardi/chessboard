@@ -41,7 +41,7 @@
         </div>
 
         <div class="board">
-          <template v-for="(row, y) in board">
+          <template v-for="(row, y) in state.pos">
             <template v-for="(_, x) in row">
 
               <div :class="(y+x) % 2 === 0? 'light-square':'dark-square'"
@@ -93,7 +93,6 @@
           <input type="text"
             class="fen-input"
             :value="this.fen"
-            @change="loadFEN"
             spellcheck="false"
           >
         </div>
@@ -114,7 +113,7 @@
 
           <div class="subsection">
             <label class="section-text">Move</label>
-            <select class="form-select" v-model="form.move">
+            <select class="form-select" v-model="state.move">
               <option :value="whiteColor()">White to move</option>
               <option :value="blackColor()">Black to move</option>
             </select>
@@ -130,7 +129,7 @@
                     :id="`checkbox-${opt.letter}`"
                     @click="setCastle"
                     :disabled="disableCastle(opt.letter)"
-                    :checked="this.form.castle[opt.letter]"
+                    :checked="this.state.castle[opt.letter]"
                     :data-castle-type="`${opt.letter}`"
                   />
                   <label class="section-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
@@ -147,7 +146,7 @@
                     :id="`checkbox-${opt.letter}`"
                     @click="setCastle"
                     :disabled="disableCastle(opt.letter)"
-                    :checked="this.form.castle[opt.letter]"
+                    :checked="this.state.castle[opt.letter]"
                     :data-castle-type="`${opt.letter}`"
                   >
                   <label class="section-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
@@ -159,7 +158,7 @@
           
           <div class="subsection">
             <label class="section-text"><i>En passant</i></label>
-            <select class="form-select" v-model="form.enPassant">
+            <select class="form-select" v-model="state.enPassant">
               <option :value="``">None</option>
               
               <template v-for="target in getEnPassantTargets()">

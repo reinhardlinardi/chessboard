@@ -2,7 +2,7 @@ import * as Castle from './castle.js';
 import * as Piece from './piece.js';
 import * as Color from './color.js';
 import * as Square from './square.js';
-import { Position, get, set } from './position.js';
+import { Position, get } from './position.js';
 import { nthRank } from './rank.js';
 
 

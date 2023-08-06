@@ -1,160 +1,174 @@
+import * as Common from './common.js';
+import * as Editor from '../module/editor.js';
+import * as State from '../module/state.js';
 import * as Setup from '../module/setup.js';
 import * as Color from '../module/color.js';
-import * as Clock from '../module/clock.js';
 import * as Piece from '../module/piece.js';
 import * as Castle from '../module/castle.js';
 import * as File from '../module/file.js';
-import * as FEN from '../module/fen.js';
-import * as Hex from '../module/hex.js';
-import * as Editor from '../module/editor.js';
+
 
 
 const w = Color.White;
 const b = Color.Black;
 
-const fenParamName = "fen";
+const fenParam = "fen";
 
 
+/* Rendering */
 export const topTray = Piece.getByColor(b).map(piece => piece.letter);
 export const bottomTray = Piece.getByColor(w).map(piece => piece.letter);
 
+export function rankOf(y) {
+    return Common.rankOf(y, this.flip);
+}
 
-export const render = {
-    getTrayPieceIdx() {
-        return [...Array(6).keys()];
-    },
-    getTopTrayPiece(idx) {
-        return this.flipped? bottomTray[idx]: topTray[idx];  
-    },
-    getBottomTrayPiece(idx) {
-        return this.flipped? topTray[idx]: bottomTray[idx];
-    },
-    getWhiteCastleTypes() {
-        return Castle.getByColor(w);
-    },
-    getBlackCastleTypes() {
-        return Castle.getByColor(b);
-    },
-};
+export function fileOf(x) {
+    return Common.fileOf(x, this.flip);
+}
 
-export const option = {
-    whiteColor() {
-        return w;
-    },
-    blackColor() {
-        return b;
-    },
-    setCastle(ev) {
-        const data = this.getElementData(ev.target.id);
-        const type = data.castleType;
-        const value = ev.target.checked;
+export function labelOf(x) {
+    return Common.labelOf(x, this.flip);
+}
 
-        this.form.castle[type] = value;
-    },
-    disableCastle(type) {
-        const enabled = Editor.hasCastlePosition(type, this.board);
-        if(!enabled) this.form.castle[type] = false;
+export function isEmpty(rank, file) {
+    return Common.isEmpty(this.state.pos, rank, file);
+}
 
-        return !enabled;
-    },
-    getEnPassantTargets() {
-        const targets = Editor.getEnPassantTargets(this.form.move, this.board);
-        const squares = targets.map(square => `${File.labelOf(square.file)}${square.rank}`);
+export function getPiece(rank, file) {
+    return Common.getPiece(this.state.pos, rank, file);
+}
 
-        const idx = squares.findIndex(val => val === this.form.enPassant);
-        if(idx === -1) this.form.enPassant = "";
+export function getTrayPieceIdx() {
+    return [...Array(6).keys()];
+}
 
-        return squares;
-    },
-};
+export function getTopTrayPiece(idx) {
+    return this.flip? bottomTray[idx]: topTray[idx];  
+}
 
-export const fen = {
-    generateFEN() {
-        const form = this.form;
-        const castle = Object.keys(form.castle).filter(type => form.castle[type]);
-        
-        const fen = FEN.Generate(this.board, form.move, castle, form.enPassant, this.clock);
-        const hex = Hex.from(fen);
-        this.hex = hex;
-        
-        if(this.isInitial()) this.deleteQueryParam(fenParamName);
-        else this.setQueryParam(fenParamName, fen);
+export function getBottomTrayPiece(idx) {
+    return this.flip? topTray[idx]: bottomTray[idx];
+}
 
-        return fen;
-    },
-    loadFEN(ev) {
-        console.log("Load FEN", ev.target.value);
-    },
-};
+export function getWhiteCastleTypes() {
+    return Castle.getByColor(w);
+}
 
-export const state = {
-    isInitial() {
-        const initial = this.initial;
+export function getBlackCastleTypes() {
+    return Castle.getByColor(b);
+}
 
-        return this.hex === initial.hex && this.clock.halfmove === initial.clock.halfmove &&
-            this.clock.fullmove === initial.clock.fullmove;
-    },
-};
 
-export const board = {
-    resetBoard() {
-        this.board = Setup.defaultSetup();
-        this.flipped = false;
-    },
-    clearBoard() {
-        this.board = Setup.emptySetup();
-    },
-};
+/* Form */
+export function whiteColor() {
+    return w;
+}
+
+export function blackColor() {
+    return b;
+}
+
+export function setCastle(ev) {
+    const data = Common.getElementData(ev.target.id);
+    const type = data.castleType;
+    const value = ev.target.checked;
+
+    this.state.castle[type] = value;
+}
+
+export function disableCastle(type) {
+    const enabled = Editor.hasCastlePosition(type, this.state.pos);
+    if(!enabled) this.state.castle[type] = false;
+
+    return !enabled;
+}
+
+export function getEnPassantTargets() {
+    const targets = Editor.getEnPassantTargets(this.state.move, this.state.pos);
+    const squares = targets.map(square => `${File.labelOf(square.file)}${square.rank}`);
+
+    const idx = squares.findIndex(val => val === this.state.enPassant);
+    if(idx === -1) this.state.enPassant = "";
+
+    return squares;
+}
+
+/* State */
+export function isSameState(ref, state) {
+    return state.id === ref.id && state.clock.halfmove === ref.clock.halfmove &&
+        state.clock.fullmove === ref.clock.fullmove;
+}
+
+
+/* FEN */
+export function generateFEN() {
+    const fen = Common.generateFEN(this.state);
+    const id = Common.getStateId(fen);
+    this.state.id = id;
+    
+    if(isSameState(this.initial, this.state)) Common.deleteQueryParam(fenParam);
+    else Common.setQueryParam(fenParam, fen);
+
+    return fen;
+}
+
+
+/* Board */
+export function flipBoard() {
+    this.flip = !this.flip;
+}
+
+export function clearBoard() {
+    this.state.pos = Setup.emptySetup();
+}
+
+export function resetBoard() {
+    this.state.pos = Setup.defaultSetup();
+    this.flip = false;
+}
+
 
 /* Drag and drop */
-export const dnd = {
-    onDragStart(ev) {
-        this.dragSetId(ev, ev.target.id);
-    },
-    onDropReplaceOrCopy(ev) {
-        const srcId = this.dropGetId(ev);
-        const destId = ev.target.id;
+export function onDragStart(ev) {
+    Common.dragSetId(ev, ev.target.id);
+}
 
-        // Return if src not valid or dnd to self
-        if(srcId === "" || srcId === destId) return;
-        
-        // Replace piece in dest
-        const piece = this.getDraggedPiece(srcId);
-        this.replacePiece(piece, destId);
+export function onDropReplaceOrCopy(ev) {
+    const srcId = Common.dropGetId(ev);
+    const destId = ev.target.id;
 
-        // Remove piece in src if not tray
-        if(!this.fromTray(srcId)) this.removePiece(srcId);
-    },
-    onDropRemove(ev) {
-        // Get dragged piece id
-        const srcId = this.dropGetId(ev);
+    // Return if src not valid or dnd to self
+    if(srcId === "" || srcId === destId) return;
+    
+    // Replace piece in dest
+    const piece = Common.getDraggedPiece(srcId, this.state.pos);
+    Common.replacePiece(destId, piece, this.state.pos);
 
-        // Remove piece if src is not tray
-        if(!this.fromTray(srcId))  this.removePiece(srcId);
-    },
-};
+    // Remove piece in src if not tray
+    if(!Common.fromTray(srcId)) Common.removePiece(srcId, this.state.pos);
+}
 
-export const lifecycle = {
-    created() {
-        const form = this.form;
+export function onDropRemove(ev) {
+    // Get dragged piece id
+    const srcId = Common.dropGetId(ev);
 
-        this.board = Setup.defaultSetup();
-        form.move = w;
-        
-        this.clock = Clock.New();
-        this.initial.clock = Clock.New();
+    // Remove piece if src is not tray
+    if(!Common.fromTray(srcId)) Common.removePiece(srcId, this.state.pos);
+}
 
-        form.castle = [...Castle.getByColor(w), ...Castle.getByColor(b)]
-            .map(castle => castle.letter)
-            .reduce((opt, type) => ({...opt, [type]: false}), {});
 
-        const castle = Object.keys(form.castle).filter(type => form.castle[type]);
-        const hex = Hex.from(FEN.Generate(this.board, form.move, castle, form.enPassant, this.clock));
-        
-        this.hex = hex;
-        this.initial.hex = hex;
-    },
-    mounted() {
-        // Load FEN if has query param
-    },
-};
+/* Lifecycle */
+export function created() {
+    this.state = State.New();
+    this.state.id = Common.getStateId(Common.generateFEN(this.state));
+
+    this.initial = {
+        clock: {...this.state.clock},
+        id: this.state.id,
+    };
+}
+
+export function mounted() {
+    // Load FEN if has query param
+}
