@@ -1,9 +1,5 @@
 import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 
-import * as Color from '../module/color.js';
-import * as Setup from '../module/setup.js';
-
-
 import common from './common.js';
 import * as page from './index.js';
 
