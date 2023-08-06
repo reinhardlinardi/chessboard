@@ -5,6 +5,7 @@ import * as Piece from '../module/piece.js';
 import * as Castle from '../module/castle.js';
 import * as File from '../module/file.js';
 import * as FEN from '../module/fen.js';
+import * as Hex from '../module/hex.js';
 import * as Editor from '../module/editor.js';
 
 
@@ -69,15 +70,29 @@ export const option = {
 
 export const fen = {
     generateFEN() {
-        const castle = Object.keys(this.form.castle).filter(type => this.form.castle[type]);
+        const form = this.form;
+        const castle = Object.keys(form.castle).filter(type => form.castle[type]);
         
-        const fen = FEN.Generate(this.board, this.form.move, castle, this.form.enPassant, this.clock);
-        this.setQueryParam(fenParamName, fen);
+        const fen = FEN.Generate(this.board, form.move, castle, form.enPassant, this.clock);
+        const hex = Hex.from(fen);
+        this.hex = hex;
+        
+        if(this.isInitial()) this.deleteQueryParam(fenParamName);
+        else this.setQueryParam(fenParamName, fen);
 
         return fen;
     },
     loadFEN(ev) {
         console.log("Load FEN", ev.target.value);
+    },
+};
+
+export const state = {
+    isInitial() {
+        const initial = this.initial;
+
+        return this.hex === initial.hex && this.clock.halfmove === initial.clock.halfmove &&
+            this.clock.fullmove === initial.clock.fullmove;
     },
 };
 
@@ -121,15 +136,25 @@ export const dnd = {
 
 export const lifecycle = {
     created() {
-        this.board = Setup.defaultSetup();
-        this.form.move = w;
-        this.clock = Clock.New();
+        const form = this.form;
 
-        this.form.castle = [...Castle.getByColor(w), ...Castle.getByColor(b)]
+        this.board = Setup.defaultSetup();
+        form.move = w;
+        
+        this.clock = Clock.New();
+        this.initial.clock = Clock.New();
+
+        form.castle = [...Castle.getByColor(w), ...Castle.getByColor(b)]
             .map(castle => castle.letter)
             .reduce((opt, type) => ({...opt, [type]: false}), {});
+
+        const castle = Object.keys(form.castle).filter(type => form.castle[type]);
+        const hex = Hex.from(FEN.Generate(this.board, form.move, castle, form.enPassant, this.clock));
+        
+        this.hex = hex;
+        this.initial.hex = hex;
     },
     mounted() {
-        this.setQueryParam(fenParamName, this.fen);
+        // Load FEN if has query param
     },
 };

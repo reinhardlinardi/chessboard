@@ -9,16 +9,26 @@ const mime = "text/plain";
 const q = new URLSearchParams(window.location.search);
 
 export default {
-    url: {
-        hasQueryParam(name) {
+    history: {
+        replace() {
+            const url = (q.size === 0)? "/" : `?${q.toString()}`; 
+            window.history.replaceState({}, "", url);
+        },
+    },
+    queryParam: {
+        has(name) {
             return q.has(name);
         },
-        getQueryParam(name) {
+        get(name) {
             return q.get(name);
         },
-        setQueryParam(name, value) {
+        set(name, value) {
             q.set(name, value);
-            window.history.replaceState({}, "", `?${q.toString()}`);
+            this.replaceHistory();
+        },
+        delete(name) {
+            q.delete(name);
+            this.replaceHistory();
         },
     },
     dom: {

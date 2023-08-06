@@ -15,15 +15,23 @@ const component = {
                 enPassant: "",
             },
             clock: {},
+            hex: "",
+            initial: {
+                clock: {},
+                hex: "",
+            },
         }
     },
     computed: {
         fen: page.fen.generateFEN,
     },
     methods: {
-        hasQueryParam: common.url.hasQueryParam,
-        getQueryParam: common.url.getQueryParam,
-        setQueryParam: common.url.setQueryParam,
+        replaceHistory: common.history.replace,
+
+        hasQueryParam: common.queryParam.has,
+        getQueryParam: common.queryParam.get,
+        setQueryParam: common.queryParam.set,
+        deleteQueryParam: common.queryParam.delete,
         
         getElement: common.dom.getElement,
         getElementData: common.dom.getElementData,
@@ -45,6 +53,8 @@ const component = {
         getEnPassantTargets: page.option.getEnPassantTargets,
 
         loadFEN: page.fen.loadFEN,
+
+        isInitial: page.state.isInitial,
 
         getPiece: common.board.getPiece,
         setPiece: common.board.setPiece,
