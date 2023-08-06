@@ -4,7 +4,7 @@ import { Square } from './square.js';
 export type Location = number;
 
 // Map of location*:
-// *[] = dark squares
+// *[] = dark square
 //
 // +----+----+----+----+----+----+----+----+
 // | 81 |[82]| 83 |[84]| 85 |[86]| 87 |[88]| 8 
