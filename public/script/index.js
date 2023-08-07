@@ -15,10 +15,24 @@ const b = Color.Black;
 const fenParam = "fen";
 
 
-/* Rendering */
+/* Tray */
 export const topTray = Piece.getByColor(b).map(piece => piece.letter);
 export const bottomTray = Piece.getByColor(w).map(piece => piece.letter);
 
+export function getTrayPieceIdx() {
+    return [...Array(6).keys()];
+}
+
+export function getTopTrayPiece(idx) {
+    return this.flip? bottomTray[idx]: topTray[idx];  
+}
+
+export function getBottomTrayPiece(idx) {
+    return this.flip? topTray[idx]: bottomTray[idx];
+}
+
+
+/* Board */
 export function rankOf(y) {
     return Common.rankOf(y, this.flip);
 }
@@ -39,24 +53,17 @@ export function getPiece(rank, file) {
     return Common.getPiece(this.state.pos, rank, file);
 }
 
-export function getTrayPieceIdx() {
-    return [...Array(6).keys()];
+export function flipBoard() {
+    this.flip = !this.flip;
 }
 
-export function getTopTrayPiece(idx) {
-    return this.flip? bottomTray[idx]: topTray[idx];  
+export function clearBoard() {
+    this.state.pos = Setup.emptySetup();
 }
 
-export function getBottomTrayPiece(idx) {
-    return this.flip? topTray[idx]: bottomTray[idx];
-}
-
-export function getWhiteCastleTypes() {
-    return Castle.getByColor(w);
-}
-
-export function getBlackCastleTypes() {
-    return Castle.getByColor(b);
+export function resetBoard() {
+    this.state = State.New();
+    this.flip = false;
 }
 
 
@@ -67,6 +74,14 @@ export function whiteColor() {
 
 export function blackColor() {
     return b;
+}
+
+export function getWhiteCastleTypes() {
+    return Castle.getByColor(w);
+}
+
+export function getBlackCastleTypes() {
+    return Castle.getByColor(b);
 }
 
 export function setCastle(ev) {
@@ -94,8 +109,12 @@ export function getEnPassantTargets() {
     return squares;
 }
 
+
 /* State */
-export function isSameState(ref, state) {
+export function isSameState() {
+    const ref = this.initial;
+    const state = this.state;
+
     return state.id === ref.id && state.clock.halfmove === ref.clock.halfmove &&
         state.clock.fullmove === ref.clock.fullmove;
 }
@@ -107,25 +126,20 @@ export function generateFEN() {
     const id = Common.getStateId(fen);
     this.state.id = id;
     
-    if(isSameState(this.initial, this.state)) Common.deleteQueryParam(fenParam);
+    if(this.isSameState()) Common.deleteQueryParam(fenParam);
     else Common.setQueryParam(fenParam, fen);
 
     return fen;
 }
 
-
-/* Board */
-export function flipBoard() {
-    this.flip = !this.flip;
+export function loadFEN(str) {
+    console.log(str);
 }
 
-export function clearBoard() {
-    this.state.pos = Setup.emptySetup();
-}
 
-export function resetBoard() {
-    this.state = State.New();
-    this.flip = false;
+/* Event listener */
+export function onChangeFEN(ev) {
+    this.loadFEN(ev.target.value);
 }
 
 
@@ -169,6 +183,5 @@ export function created() {
     };
 }
 
-export function mounted() {
-    // Load FEN if has query param
-}
+// TODO: If url has FEN query param, load FEN
+// Maybe need to put in created?

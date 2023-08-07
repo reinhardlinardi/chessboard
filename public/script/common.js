@@ -60,6 +60,10 @@ export function generateFEN(state) {
     return FEN.generate(state);
 }
 
+export function loadFEN(str) {
+    return FEN.load(str);
+}
+
 
 /* State */
 export function getStateId(fen) {
