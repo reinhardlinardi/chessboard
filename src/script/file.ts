@@ -8,11 +8,12 @@ export const g: string = "g";
 export const h: string = "h";
 
 
-const label: string[] = [a, b, c, d, e, f, g, h];
+const label: readonly string[] = Object.freeze([a, b, c, d, e, f, g, h]);
 
-const map: {[key: string]: number} = label.reduce(
-    (map, label, idx) => ({...map, [label]: idx+1}),
-    {},
+
+// {"a": 1, "b": 2, ...}
+const map: {[file: string]: number} = Object.freeze(
+    label.reduce((map, label, idx) => ({...map, [label]: idx+1}), {})
 );
 
 

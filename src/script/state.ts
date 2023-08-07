@@ -1,7 +1,7 @@
 import * as Clock from './clock.js';
 import * as Setup from './setup.js';
-import * as Color from './color.js';
 import * as Castle from './castle.js';
+import { White } from './color.js';
 import { Position } from './position.js';
 
 
@@ -16,18 +16,15 @@ export interface State {
 };
 
 
-const w = Color.White;
-const b = Color.Black;
-
 export function New(): State {
-    const castleDefault = [...Castle.getByColor(w), ...Castle.getByColor(b)]
-        .map(castle => castle.letter)
+    // {'K': true, 'Q': true, 'k': true, 'q': true}
+    const castleDefault = Castle.getList().map(castle => castle.letter)
         .reduce((opt, type) => ({...opt, [type]: true}), {});
 
     return {
         pos: Setup.defaultSetup(),
-        move: w,
-        castle: castleDefault, // {'K': true, 'Q': true, 'k': true, 'q': true}
+        move: White,
+        castle: castleDefault,
         enPassant: "",
         clock: Clock.New(),
         id: "",

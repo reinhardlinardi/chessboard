@@ -61,7 +61,7 @@ export function generateFEN(state) {
 }
 
 export function loadFEN(str) {
-    return FEN.load(str);
+    // return FEN.load(str);
 }
 
 
@@ -74,12 +74,13 @@ export function getStateId(fen) {
 /* Rendering */
 const _ = Piece.None;
 
+
 export function rankOf(y, flip) {
-    return flip? y+1: 8-y;
+    return flip? y+1 : 8-y;
 }
 
 export function fileOf(x, flip) {
-    return flip? 8-x: x+1;
+    return flip? 8-x : x+1;
 }
 
 export function labelOf(x, flip) {
@@ -93,6 +94,7 @@ export function isEmpty(board, rank, file) {
 
 /* Drag and drop */
 const mime = "text/plain";
+
 
 export function fromTray(id) {
     return id.includes("tray");
@@ -117,7 +119,7 @@ export function dropGetId(ev) {
 
 export function getDraggedPiece(id, board) {
     const data = getElementData(id);
-    return fromTray(id)? data.pieceType: getPiece(board, data.rank, data.file);
+    return fromTray(id)? data.pieceType : getPiece(board, data.rank, data.file);
 }
 
 export function replacePiece(id, piece, board) {

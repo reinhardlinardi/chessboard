@@ -4,7 +4,6 @@ import { Square } from './square.js';
 export type Location = number;
 
 // Map of location*:
-// *[] = dark square
 //
 // +----+----+----+----+----+----+----+----+
 // | 81 |[82]| 83 |[84]| 85 |[86]| 87 |[88]| 8 
@@ -23,7 +22,10 @@ export type Location = number;
 // +----+----+----+----+----+----+----+----+
 // |[11]| 12 |[13]| 14 |[15]| 16 |[17]| 18 | 1
 // +----+----+----+----+----+----+----+----+
-//     a    b    c    d    e    f    g    h     
+//     a    b    c    d    e    f    g    h
+//
+// *[] = dark square
+//
 
 export function of(square: Square): Location {
     return 10*square.rank + square.file;

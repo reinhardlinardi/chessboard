@@ -1,12 +1,12 @@
 import * as Castle from './castle.js';
 import * as Piece from './piece.js';
-import * as Color from './color.js';
-import * as Square from './square.js';
 import { Position, get } from './position.js';
+import { Color, opponentOf } from './color.js';
 import { nthRank } from './rank.js';
+import { Square } from './square.js';
 
 
-export function hasCastlePosition(type: string, pos: Position): boolean {
+export function hasCastlePosition(type: Castle.Type, pos: Position): boolean {
     const castle = Castle.get(type);
     
     const king = castle.king;
@@ -16,18 +16,22 @@ export function hasCastlePosition(type: string, pos: Position): boolean {
         get(pos, rook.from.rank, rook.from.file) === rook.piece;
 }
 
-export function getEnPassantTargets(color: string, pos: Position): Square.Square[] {
+
+function pawnFilter(color: Color): Piece.Filter[] {
+    return [Piece.typeFilter(Piece.TypePawn), Piece.colorFilter(color)];
+}
+
+export function getEnPassantTargets(color: Color, pos: Position): Square[] {
     const n: number = 5;
     const rank = nthRank(n, color);
 
-    const type = Piece.TypePawn;
-    const opposite = Color.opposite(color);
-        
-    const playerPawn = Piece.getByType(type, color).letter;
-    const opponentPawn = Piece.getByType(type, opposite).letter;
+    const opponent = opponentOf(color);
+
+    const playerPawn = Piece.filterBy(...pawnFilter(color))[0].letter;
+    const opponentPawn = Piece.filterBy(...pawnFilter(opponent))[0].letter;
 
     let candidates: number[] = [];
-    let targets: Square.Square[] = [];
+    let targets: Square[] = [];
 
     // For each file in rank, push file as candidate if there is opponent pawn
     for(let file = 1; file <= 8; file++) {

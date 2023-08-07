@@ -1,6 +1,8 @@
-export const White: string = "w";
-export const Black: string = "b";
+export type Color = string;
 
-export function opposite(color: string): string {
+export const White: Color = "w";
+export const Black: Color = "b";
+
+export function opponentOf(color: Color): Color {
     return color === White? Black : White;
 }

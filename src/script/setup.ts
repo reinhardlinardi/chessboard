@@ -1,6 +1,7 @@
 import * as Piece from './piece.js';
 import { Position, copy } from './position.js';
 
+
 const _ = Piece.None;
 const P = Piece.WhitePawn.letter;
 const p = Piece.BlackPawn.letter;

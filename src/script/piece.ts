@@ -1,25 +1,28 @@
-import * as Color from './color.js';
 import * as Move from './move.js';
+import { Color, Black, White } from './color.js';
+
 
 export const None: string = " ";
 
-export const TypePawn: number = 0;
-export const TypeKnight: number = 1;
-export const TypeBishop: number = 2;
-export const TypeRook: number = 3;
-export const TypeQueen: number = 4;
-export const TypeKing: number = 5;
+export type Type = number;
+
+export const TypePawn: Type = 0;
+export const TypeKnight: Type = 1;
+export const TypeBishop: Type = 2;
+export const TypeRook: Type = 3;
+export const TypeQueen: Type = 4;
+export const TypeKing: Type = 5;
 
 
 export interface AbstractPiece {
-    type: number,
+    type: Type,
     value: number,
     range: boolean,
     jump: boolean,
 };
 
 export interface Piece extends AbstractPiece {
-    color: string,
+    color: Color,
     letter: string,
     moves: Move.Move[],
 };
@@ -68,124 +71,135 @@ export const King: AbstractPiece = Object.freeze({
 
 export const WhitePawn: Piece = Object.freeze({
     ...Pawn,
-    color: Color.White,
+    color: White,
     letter: "P",
     moves: [Move.WhitePawnAdvance, Move.WhitePawnCapture],
 });
 
 export const BlackPawn: Piece = Object.freeze({
     ...Pawn,
-    color: Color.Black,
+    color: Black,
     letter: "p",
     moves: [Move.BlackPawnAdvance, Move.BlackPawnCapture],
 });
 
 export const WhiteKnight: Piece = Object.freeze({
     ...Knight,
-    color: Color.White,
+    color: White,
     letter: "N",
     moves: [Move.Knight],
 });
 
 export const BlackKnight: Piece = Object.freeze({
     ...Knight,
-    color: Color.Black,
+    color: Black,
     letter: "n",
     moves: [Move.Knight],
 });
 
 export const WhiteBishop: Piece = Object.freeze({
     ...Bishop,
-    color: Color.White,
+    color: White,
     letter: "B",
     moves: [Move.Bishop],
 });
 
 export const BlackBishop: Piece = Object.freeze({
     ...Bishop,
-    color: Color.Black,
+    color: Black,
     letter: "b",
     moves: [Move.Bishop],
 });
 
 export const WhiteRook: Piece = Object.freeze({
     ...Rook,
-    color: Color.White,
+    color: White,
     letter: "R",
     moves: [Move.Rook],
 });
 
 export const BlackRook: Piece = Object.freeze({
     ...Rook,
-    color: Color.Black,
+    color: Black,
     letter: "r",
     moves: [Move.Rook],
 });
 
 export const WhiteQueen: Piece = Object.freeze({
     ...Queen,
-    color: Color.White,
+    color: White,
     letter: "Q",
     moves: [Move.Queen],
 });
 
 export const BlackQueen: Piece = Object.freeze({
     ...Queen,
-    color: Color.Black,
+    color: Black,
     letter: "q",
     moves: [Move.Queen],
 });
 
 export const WhiteKing: Piece = Object.freeze({
     ...King,
-    color: Color.White,
+    color: White,
     letter: "K",
     moves: [Move.King],
 });
 
 export const BlackKing: Piece = Object.freeze({
     ...King,
-    color: Color.Black,
+    color: Black,
     letter: "k",
     moves: [Move.King],
 });
 
 
-const wp = WhitePawn;
-const bp = BlackPawn;
-const wn = WhiteKnight;
-const bn = BlackKnight;
-const wb = WhiteBishop;
-const bb = BlackBishop;
-const wr = WhiteRook;
-const br = BlackRook;
-const wq = WhiteQueen;
-const bq = BlackQueen;
-const wk = WhiteKing;
-const bk = BlackKing;
-
-const w = Color.White;
-const b = Color.Black;
+const P = WhitePawn;
+const p = BlackPawn;
+const N = WhiteKnight;
+const n = BlackKnight;
+const B = WhiteBishop;
+const b = BlackBishop;
+const R = WhiteRook;
+const r = BlackRook;
+const Q = WhiteQueen;
+const q = BlackQueen;
+const K = WhiteKing;
+const k = BlackKing;
 
 
-const list: {[key: string]: Piece[]} = {
-    [w]: [wp, wn, wb, wr, wq ,wk],
-    [b]: [bp, bn, bb, br, bq, bk],
-};
+// [WhitePawn, WhiteKnight, ..., BlackPawn, BlackKnight, ...]
+const list: readonly Piece[] = Object.freeze([P, N, B, R, Q, K, p, n, b, r, q, k]);
 
-const map: {[key: string]: Piece} = [...list[w], ...list[b]].reduce(
-    (map, piece) => ({...map, [piece.letter]: piece}),
-    {},
+export function getList(): Piece[] {
+    return [...list];
+}
+
+
+export type Filter = (piece: Piece) => boolean;
+
+export function colorFilter(color: Color): Filter {
+    return piece => piece.color === color;
+}
+
+export function typeFilter(type: Type): Filter {
+    return piece => piece.type === type;
+}
+
+
+export function filterBy(...filters: Filter[]): Piece[] {
+    let res = getList();
+    for(const f of filters) {
+        res = res.filter(f);
+    }
+    return res;
+}
+
+
+// {"P": WhitePawn, "p": BlackPawn, ...}
+const map: {[letter: string]: Piece} = Object.freeze(
+    list.reduce((map, piece) => ({...map, [piece.letter]: piece}), {})
 );
-
-export function getByColor(color: string): Piece[] {
-    return list[color];
-}
-
-export function getByType(type: number, color: string): Piece {
-    let idx = list[color].findIndex(piece => piece.type === type);
-    return list[color][idx];
-}
 
 export function get(letter: string): Piece {
     return map[letter];

@@ -2,33 +2,27 @@ import * as Common from './common.js';
 import * as Editor from '../module/editor.js';
 import * as State from '../module/state.js';
 import * as Setup from '../module/setup.js';
-import * as Color from '../module/color.js';
 import * as Piece from '../module/piece.js';
 import * as Castle from '../module/castle.js';
 import * as File from '../module/file.js';
-
-
-
-const w = Color.White;
-const b = Color.Black;
-
-const fenParam = "fen";
+import { White, Black } from '../module/color.js';
 
 
 /* Tray */
-export const topTray = Piece.getByColor(b).map(piece => piece.letter);
-export const bottomTray = Piece.getByColor(w).map(piece => piece.letter);
+export const topTray = Piece.filterBy(Piece.colorFilter(Black)).map(piece => piece.letter);
+export const bottomTray = Piece.filterBy(Piece.colorFilter(White)).map(piece => piece.letter);
+
 
 export function getTrayPieceIdx() {
     return [...Array(6).keys()];
 }
 
 export function getTopTrayPiece(idx) {
-    return this.flip? bottomTray[idx]: topTray[idx];  
+    return this.flip? bottomTray[idx] : topTray[idx];  
 }
 
 export function getBottomTrayPiece(idx) {
-    return this.flip? topTray[idx]: bottomTray[idx];
+    return this.flip? topTray[idx] : bottomTray[idx];
 }
 
 
@@ -69,19 +63,19 @@ export function resetBoard() {
 
 /* Form */
 export function whiteColor() {
-    return w;
+    return White;
 }
 
 export function blackColor() {
-    return b;
+    return Black;
 }
 
 export function getWhiteCastleTypes() {
-    return Castle.getByColor(w);
+    return Castle.filterBy(Castle.colorFilter(White));
 }
 
 export function getBlackCastleTypes() {
-    return Castle.getByColor(b);
+    return Castle.filterBy(Castle.colorFilter(Black));
 }
 
 export function setCastle(ev) {
@@ -121,6 +115,9 @@ export function isSameState() {
 
 
 /* FEN */
+const fenParam = "fen";
+
+
 export function generateFEN() {
     const fen = Common.generateFEN(this.state);
     const id = Common.getStateId(fen);
@@ -184,4 +181,4 @@ export function created() {
 }
 
 // TODO: If url has FEN query param, load FEN
-// Maybe need to put in created?
+// Maybe put in created()?

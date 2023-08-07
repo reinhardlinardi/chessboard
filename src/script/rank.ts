@@ -1,6 +1,6 @@
-import * as Color from './color.js';
+import { Color, White } from './color.js';
 
 // Return absolute rank from relative rank
-export function nthRank(n: number, color: string): number {
-    return color == Color.White? n : 9-n; 
+export function nthRank(n: number, color: Color): number {
+    return color === White? n : 9-n; 
 }
