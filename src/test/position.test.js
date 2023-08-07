@@ -24,4 +24,4 @@ test("Position-copy", () => {
 
     expect(clone).not.toBe(ori);
     expect(clone).toEqual(ori);
-});
+})

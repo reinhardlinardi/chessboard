@@ -28,19 +28,19 @@ test("Editor-hasCastlePosition", () => {
             name: "empty",
             types: all,
             want: [false, false, false, false],
-            board: Setup.emptySetup(),
+            pos: Setup.emptySetup(),
         },
         {
             name: "default",
             types: all,
             want: [true, true, true, true],
-            board: Setup.defaultSetup(),
+            pos: Setup.defaultSetup(),
         },
         {
             name: "king out of place",
             types: all,
             want: [false, false, false, false],
-            board: [
+            pos: [
                 [r, n, b, q, K, _, _, r],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -56,7 +56,7 @@ test("Editor-hasCastlePosition", () => {
             name: "1 rook out of place",
             types: [K, Q],
             want: [true, false],
-            board: [
+            pos: [
                 [r, n, b, q, k, _, _, r],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -72,7 +72,7 @@ test("Editor-hasCastlePosition", () => {
             name: "both rooks out of place",
             types: [k, q],
             want: [false, false],
-            board: [
+            pos: [
                 [R, r, b, q, k, _, _, R],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -88,11 +88,11 @@ test("Editor-hasCastlePosition", () => {
 
     for(const tc of tcs) {
         for(let idx = 0; idx < tc.types.length; idx++) {
-            const get = Editor.hasCastlePosition(tc.types[idx], tc.board);
+            const get = Editor.hasCastlePosition(tc.types[idx], tc.pos);
             expect(get).toEqual(tc.want[idx]);
         }
     }
-});
+})
 
 
 const wh = Color.White;
@@ -104,13 +104,13 @@ test("Editor-genEnPassantTargets",() => {
             name: "default",
             color: wh,
             want: [],
-            board: Setup.defaultSetup(),
+            pos: Setup.defaultSetup(),
         },
         {
             name: "no option",
             color: wh,
             want: [],
-            board: [
+            pos: [
                 [_, _, _, _, k, _, _, _],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -126,7 +126,7 @@ test("Editor-genEnPassantTargets",() => {
             name: "wrong rank",
             color: wh,
             want: [],
-            board: [
+            pos: [
                 [_, _, _, _, k, _, _, _],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, p, P, _, _, _],
@@ -142,7 +142,7 @@ test("Editor-genEnPassantTargets",() => {
             name: "not adjacent",
             color: wh,
             want: [],
-            board: [
+            pos: [
                 [_, _, _, _, k, _, _, _],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -158,7 +158,7 @@ test("Editor-genEnPassantTargets",() => {
             name: "single target, player pawn on left",
             color: wh,
             want: [Square.of(File.d, 6)],
-            board: [
+            pos: [
                 [_, _, _, _, k, _, _, _],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -174,7 +174,7 @@ test("Editor-genEnPassantTargets",() => {
             name: "single target, player pawn on right",
             color: wh,
             want: [Square.of(File.b, 6)],
-            board: [
+            pos: [
                 [_, _, _, _, k, _, _, _],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -190,7 +190,7 @@ test("Editor-genEnPassantTargets",() => {
             name: "single target, player pawn on edge",
             color: wh,
             want: [Square.of(File.a, 6)],
-            board: [
+            pos: [
                 [_, _, _, _, k, _, _, _],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -206,7 +206,7 @@ test("Editor-genEnPassantTargets",() => {
             name: "both player pawn",
             color: bk,
             want: [],
-            board: [
+            pos: [
                 [_, _, _, _, k, _, _, _],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -222,7 +222,7 @@ test("Editor-genEnPassantTargets",() => {
             name: "both opponent pawn",
             color: bk,
             want: [],
-            board: [
+            pos: [
                 [_, _, _, _, k, _, _, _],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -241,7 +241,7 @@ test("Editor-genEnPassantTargets",() => {
                 Square.of(File.c, 3), 
                 Square.of(File.e, 3),
             ],
-            board: [
+            pos: [
                 [_, _, _, _, k, _, _, _],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -257,7 +257,7 @@ test("Editor-genEnPassantTargets",() => {
             name: "multiple player pawns, one opponent pawn",
             color: bk,
             want: [Square.of(File.d, 3)],
-            board: [
+            pos: [
                 [_, _, _, _, k, _, _, _],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -278,7 +278,7 @@ test("Editor-genEnPassantTargets",() => {
                 Square.of(File.f, 3),
                 Square.of(File.g, 3),
             ],
-            board: [
+            pos: [
                 [_, _, _, _, k, _, _, _],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -294,7 +294,7 @@ test("Editor-genEnPassantTargets",() => {
             name: "opponent move next",
             color: wh,
             want: [],
-            board: [
+            pos: [
                 [_, _, _, _, k, _, _, _],
                 [_, _, _, _, _, _, _, _],
                 [_, _, _, _, _, _, _, _],
@@ -309,7 +309,7 @@ test("Editor-genEnPassantTargets",() => {
     ];
 
     for(const tc of tcs) {
-        const get = Editor.getEnPassantTargets(tc.color, tc.board);
+        const get = Editor.getEnPassantTargets(tc.color, tc.pos);
         expect(get).toEqual(tc.want);
     }
-});
+})
