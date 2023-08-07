@@ -5,7 +5,7 @@ import * as FEN from '../module/fen.js';
 import * as ID from '../module/id.js';
 
 
-/* History API */
+/* History */
 const q = new URLSearchParams(window.location.search);
 
 export function replaceHistory() {
@@ -63,7 +63,7 @@ export function generateFEN(state) {
 
 /* State */
 export function getStateId(fen) {
-    return ID.getStateId(fen);
+    return ID.generateFromFEN(fen);
 }
 
 
