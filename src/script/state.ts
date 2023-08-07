@@ -22,12 +22,12 @@ const b = Color.Black;
 export function New(): State {
     const castleDefault = [...Castle.getByColor(w), ...Castle.getByColor(b)]
         .map(castle => castle.letter)
-        .reduce((opt, type) => ({...opt, [type]: false}), {});
+        .reduce((opt, type) => ({...opt, [type]: true}), {});
 
     return {
         pos: Setup.defaultSetup(),
         move: w,
-        castle: castleDefault, // {'K': false, 'Q': false, 'k': false, 'q': false}
+        castle: castleDefault, // {'K': true, 'Q': true, 'k': true, 'q': true}
         enPassant: "",
         clock: Clock.New(),
         id: "",

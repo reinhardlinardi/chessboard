@@ -78,10 +78,10 @@ export function setCastle(ev) {
 }
 
 export function disableCastle(type) {
-    const enabled = Editor.hasCastlePosition(type, this.state.pos);
-    if(!enabled) this.state.castle[type] = false;
+    const hasPosition = Editor.hasCastlePosition(type, this.state.pos);
+    if(!hasPosition) this.state.castle[type] = false;
 
-    return !enabled;
+    return !hasPosition;
 }
 
 export function getEnPassantTargets() {
@@ -124,7 +124,7 @@ export function clearBoard() {
 }
 
 export function resetBoard() {
-    this.state.pos = Setup.defaultSetup();
+    this.state = State.New();
     this.flip = false;
 }
 
