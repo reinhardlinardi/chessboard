@@ -57,7 +57,7 @@ export function setPiece(piece, board, rank, file) {
 
 /* FEN */
 export function generateFEN(state) {
-    return FEN.Generate(state);
+    return FEN.generate(state);
 }
 
 

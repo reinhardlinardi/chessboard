@@ -3,7 +3,7 @@ import { State } from './state.js';
 import { get } from './position.js';
 
 
-export function Generate(s: State): string {
+export function generate(s: State): string {
     // Piece placement
     let rows: string[] = new Array(8);
     
