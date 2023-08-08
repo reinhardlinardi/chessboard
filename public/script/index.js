@@ -14,7 +14,7 @@ export const bottomTray = Piece.filterBy(Piece.colorFilter(White)).map(piece => 
 
 
 export function getTrayPieceIdx() {
-    return [...Array(6).keys()];
+    return [...Array(topTray.length).keys()];
 }
 
 export function getTopTrayPiece(idx) {
@@ -130,7 +130,7 @@ export function generateFEN() {
 }
 
 export function loadFEN(str) {
-    console.log(str);
+    Common.loadFEN(str);
 }
 
 

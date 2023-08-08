@@ -1,3 +1,5 @@
+import { Size as size } from './size.js';
+
 export type Position = string[][];
 
 export function get(pos: Position, rank: number, file: number): string {
@@ -10,9 +12,9 @@ export function set(piece: string, pos: Position, rank: number, file: number) {
 
 // Deep copy
 export function copy(pos: Position): Position {
-    let copy: Position = new Array(8);
+    let copy: Position = new Array(size);
 
-    for(let rank = 1; rank <= 8; rank++) {
+    for(let rank = 1; rank <= size; rank++) {
         copy[rank-1] = [...pos[rank-1]];
     }
     return copy;

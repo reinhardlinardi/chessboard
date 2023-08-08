@@ -4,6 +4,7 @@ import { Position, get } from './position.js';
 import { Color, opponentOf } from './color.js';
 import { nthRank } from './rank.js';
 import { Square } from './square.js';
+import { Size as size } from './size.js';
 
 
 export function hasCastlePosition(type: Castle.Type, pos: Position): boolean {
@@ -29,7 +30,7 @@ export function getEnPassantTargets(color: Color, pos: Position): Square[] {
     let targets: Square[] = [];
 
     // For each file in rank, push file as candidate if there is opponent pawn
-    for(let file = 1; file <= 8; file++) {
+    for(let file = 1; file <= size; file++) {
         if(get(pos, rank, file) === opponentPawn) candidates.push(file);
     }
 
@@ -40,7 +41,7 @@ export function getEnPassantTargets(color: Color, pos: Position): Square[] {
         const right = file+1;
 
         const hasLeft = (left >= 1 && get(pos, rank, left) == playerPawn);
-        const hasRight = (right <= 8 && get(pos, rank, right) == playerPawn);
+        const hasRight = (right <= size && get(pos, rank, right) == playerPawn);
 
         if(hasLeft || hasRight) {
             targets.push({rank: nthRank(n+1, color), file: file});

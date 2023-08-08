@@ -3,6 +3,7 @@ import * as File from '../module/file.js';
 import * as Position from '../module/position.js';
 import * as FEN from '../module/fen.js';
 import * as ID from '../module/id.js';
+import { Size as size } from '../module/size.js';
 
 
 /* History */
@@ -61,7 +62,7 @@ export function generateFEN(state) {
 }
 
 export function loadFEN(str) {
-    // return FEN.load(str);
+    return FEN.load(str);
 }
 
 
@@ -76,11 +77,11 @@ const _ = Piece.None;
 
 
 export function rankOf(y, flip) {
-    return flip? y+1 : 8-y;
+    return flip? y+1 : size-y;
 }
 
 export function fileOf(x, flip) {
-    return flip? 8-x : x+1;
+    return flip? size-x : x+1;
 }
 
 export function labelOf(x, flip) {
