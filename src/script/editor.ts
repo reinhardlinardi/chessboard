@@ -16,11 +16,6 @@ export function hasCastlePosition(type: Castle.Type, pos: Position): boolean {
         get(pos, rook.from.rank, rook.from.file) === rook.piece;
 }
 
-
-function pawnFilter(color: Color): Piece.Filter[] {
-    return [Piece.typeFilter(Piece.TypePawn), Piece.colorFilter(color)];
-}
-
 export function getEnPassantTargets(color: Color, pos: Position): Square[] {
     const n: number = 5;
     const rank = nthRank(n, color);
@@ -53,4 +48,9 @@ export function getEnPassantTargets(color: Color, pos: Position): Square[] {
     }
 
     return targets;
+}
+
+
+function pawnFilter(color: Color): Piece.Filter[] {
+    return [Piece.typeFilter(Piece.TypePawn), Piece.colorFilter(color)];
 }

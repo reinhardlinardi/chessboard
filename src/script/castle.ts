@@ -26,29 +26,6 @@ export interface Castle {
 };
 
 
-export function getPieceFile(piece: string, type: Type): string {
-    const pieceType = Piece.get(piece).type;
-
-    if(pieceType === Piece.TypeKing) return File.e;
-    else return (type === TypeLong)? File.a : File.h;
-}
-
-export function getPieceDirection(piece: string, type: Type): Direction {
-    const pieceType = Piece.get(piece).type;
-    
-    if(pieceType === Piece.TypeKing) return (type === TypeLong)? -2 : 2;
-    else return (type === TypeLong)? 3 : -2;
-}
-
-export function getPieceMove(piece: string, type: Type, color: Color): Move {
-    const direction = getPieceDirection(piece, type);
-    const rank = nthRank(1, color);
-    const file = getPieceFile(piece, type);
-
-    return {piece: piece, direction: direction, from: Square.of(file, rank)};
-}
-
-
 const R = Piece.WhiteRook.letter;
 const r = Piece.BlackRook.letter;
 const Q = Piece.WhiteQueen.letter;
@@ -124,4 +101,27 @@ const map: {[letter: string]: Castle} = Object.freeze(
 
 export function get(letter: string): Castle {
     return map[letter];
+}
+
+
+export function getPieceFile(piece: string, type: Type): string {
+    const pieceType = Piece.get(piece).type;
+
+    if(pieceType === Piece.TypeKing) return File.e;
+    else return (type === TypeLong)? File.a : File.h;
+}
+
+export function getPieceDirection(piece: string, type: Type): Direction {
+    const pieceType = Piece.get(piece).type;
+    
+    if(pieceType === Piece.TypeKing) return (type === TypeLong)? -2 : 2;
+    else return (type === TypeLong)? 3 : -2;
+}
+
+export function getPieceMove(piece: string, type: Type, color: Color): Move {
+    const direction = getPieceDirection(piece, type);
+    const rank = nthRank(1, color);
+    const file = getPieceFile(piece, type);
+
+    return {piece: piece, direction: direction, from: Square.of(file, rank)};
 }
