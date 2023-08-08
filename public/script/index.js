@@ -6,6 +6,7 @@ import * as Piece from '../module/piece.js';
 import * as Castle from '../module/castle.js';
 import * as File from '../module/file.js';
 import { White, Black } from '../module/color.js';
+import * as Err from '../module/error.js';
 
 
 /* Tray */
@@ -130,7 +131,12 @@ export function generateFEN() {
 }
 
 export function loadFEN(str) {
-    Common.loadFEN(str);
+    try {
+        Common.loadFEN(str);
+    }
+    catch(err) {
+        console.log(Err.str(err));
+    }
 }
 
 
