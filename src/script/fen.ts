@@ -67,7 +67,7 @@ export function load(str: string): State {
         }
     }
 
-    // 3. Assign to variable
+    // 3. Load
     const move = parts[1];
     const clock: Clock = {halfmove: parseInt(parts[4]), fullmove: parseInt(parts[5])};
 
@@ -84,9 +84,6 @@ export function load(str: string): State {
     }
 
     const pos: Position = loadPosition(parts[0]);
-
-    // 4. Validate position
-    validatePosition(pos);
 
     const state = {
         pos: pos,
@@ -123,17 +120,10 @@ function loadPosition(str: string): Position {
         
         // Number of empty + occupied squares in rank must be equal to 8
         if(cnt !== size) throw Err.New(Err.InvalidRowNumSquares, `invalid num of squares for rank ${rank}`);
-        else pos[rank] = squares.split("");
+        else pos[rank-1] = squares.split("");
     }
 
     return pos;
-}
-
-function validatePosition(pos: Position) {
-    // 1. Count and locate both kings, each side should have exactly 1 king
-    // 2. No pawn in 1st and 8th rank
-    // 3. Side to move is not checking opponent king
-    // 4. If side to play is in check, there should be at most 2 attackers
 }
 
 

@@ -133,7 +133,6 @@ export function generateFEN() {
 export function loadFEN(str) {
     try {
         Common.loadFEN(str);
-        // TODO: Replace castle, en passant, and clock invalid values
     }
     catch(err) {
         console.log(Err.str(err));
@@ -189,3 +188,10 @@ export function created() {
 
 // TODO: If url has FEN query param, load FEN
 // Maybe put in created()?
+
+// TODO: To make position eligible for analysis
+// 1. Count and locate both kings, each side should have exactly 1 king
+// 2. No pawn in 1st and 8th rank
+// 3. Side to move is not checking opponent king
+// 4. If side to play is in check, there should be at most 2 attackers
+// 5. (Optional) Replace castle, en passant, and clock invalid values
