@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Usage ./test [debug] ...
+
+node_args=''
+jest_args=''
+
+if [[ $1 == 'debug' ]]
+then
+    node_args='--inspect-brk'
+    jest_args='--runInBand'
+fi
+
+yarn node $node_args --experimental-vm-modules $(yarn bin jest) $jest_args
