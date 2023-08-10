@@ -9,6 +9,10 @@ if [[ $1 == 'debug' ]]
 then
     node_args='--inspect-brk'
     jest_args='--runInBand'
+
+    # Remove first argument
+    shift
 fi
 
-yarn node $node_args --experimental-vm-modules $(yarn bin jest) $jest_args
+# Pass remaining arguments to end of command
+yarn node $node_args --experimental-vm-modules $(yarn bin jest) $jest_args $@
