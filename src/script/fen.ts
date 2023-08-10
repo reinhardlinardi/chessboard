@@ -3,10 +3,15 @@ import * as Color from './color.js';
 import * as Castle from './castle.js';
 import * as File from './file.js';
 import { State } from './state.js';
-import { get } from './position.js';
+import { Position, get } from './position.js';
 import { Size as size } from './size.js';
-import { HalfmoveStart, FullmoveStart, MaxHalfmove } from './clock.js';
+import { Clock } from './clock.js';
+import { isNumeric } from './string-util.js';
 import * as Err from './fen-error.js';
+
+
+export const NA = "-"; // not available
+export const RowDelimiter = "/";
 
 
 export function generate(s: State): string {
@@ -31,13 +36,15 @@ export function generate(s: State): string {
     }
 
     // Piece placement, e.g. "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
-    const placement: string = rows.join("/"); 
+    const placement: string = rows.join(RowDelimiter); 
 
     // Available castle types, e.g. "KQkq"
     let castle: string = Object.keys(s.castle).filter(type => s.castle[type]).join("");
-    if(castle === "") castle = "-";
+    if(castle === "") castle = NA;
 
-    const enPassant: string = (s.enPassant === "")? "-" : s.enPassant;
+    let enPassant: string = s.enPassant;
+    if(enPassant === "") enPassant = NA;
+    
     const halfmove = s.clock.halfmove.toString();
     const fullmove = s.clock.fullmove.toString();
     
@@ -51,84 +58,106 @@ export function load(str: string): State {
 
     // 1. Trim and split string into parts
     let parts = str.trim().split(/\s+/);
-    if(parts.length != length) throw Err.New(Err.InvalidFmt, "invalid format");
+    if(parts.length != length) throw Err.New(Err.InvalidNumFields, "invalid num of fields");
 
-    // 2. Validate syntax with regex
+    // 2. Validate syntax
     for(let idx = 0; idx < length; idx++) {
         if(parts[idx].match(regex[idx]) === null) {
-            throw Err.New(Err.RegexNotMatch, `regex ${idx} not match`);
+            throw Err.New(Err.InvalidSyntax, `invalid syntax for field ${idx+1}`);
         }
     }
 
-    // 3. Validate semantic and overwrite invalid values
-    let move = parts[1];
+    // 3. Assign to variable
+    const move = parts[1];
+    const clock: Clock = {halfmove: parseInt(parts[4]), fullmove: parseInt(parts[5])};
 
-    // 3.1 Overwrite clock values
-    let halfmove: number = parseInt(parts[4]);
-    if(halfmove > MaxHalfmove) halfmove = HalfmoveStart;
+    let enPassant = parts[3];
+    if(enPassant === NA) enPassant = "";
 
-    let fullmove: number = parseInt(parts[5]);
-    if(fullmove < FullmoveStart) fullmove = FullmoveStart;
+    // {'K': false, 'Q': false, 'k': false, 'q': false}
+    let castle: {[type: string]: boolean} = Castle.getList().map(castle => castle.letter)
+        .reduce((map, type) => ({...map, [type]: false}), {});
 
-    // 3.2 Validate row size and row square count
-    
-    // let pos: Position;
-    // let castle: {[c: string]: boolean};
+    const castleValues = parts[2];
+    if(castleValues !== NA) {
+        for(const type of castleValues) castle[type] = true;
+    }
 
-    // let move, enPassant: string;
-    
+    const pos: Position = loadPosition(parts[0]);
 
+    // 4. Validate position
+    validatePosition(pos);
 
-    // pos = [];
-    // castle = {};
-
-    // enPassant = parts[3];
-
-    
-
-    // // 4. Validate position
-
-    // // 4.1. Count and locate both kings, each side should have exactly 1 king
-    // // 4.2. No pawn in 1st and 8th rank
-    // // 4.3. Side to move is not checking opponent king
-    // // 4.4. If side to play is in check, there should be at most 2 attackers
-
-    // Load
     const state = {
-        pos: [],
+        pos: pos,
         move: move,
-        castle: {},
-        enPassant: "",
-        clock: {
-            halfmove: halfmove,
-            fullmove: fullmove,
-        },
+        castle: castle,
+        enPassant: enPassant,
+        clock: clock,
         id: "",
     };
 
     return state;
 }
 
+function loadPosition(str: string): Position {
+    let pos: Position = [];
+    const rows = str.split(RowDelimiter);
+    
+    for(let rank = size; rank >= 1; rank--) {
+        const row = rows[size-rank];
+        let cnt: number = 0;
+        let squares: string = "";
 
-export const regex = regexPattern();
+        for(let idx = 0; idx < row.length; idx++) {
+            let square = row[idx];
+            let repeat = 1;
 
-function regexPattern(): string[] {
+            if(isNumeric(row[idx])) {
+                square = Piece.None;
+                repeat = parseInt(row[idx]);
+            }
+            cnt += repeat;
+            squares += square.repeat(repeat);
+        }
+        
+        // Number of empty + occupied squares in rank must be equal to 8
+        if(cnt !== size) throw Err.New(Err.InvalidRowNumSquares, `invalid num of squares for rank ${rank}`);
+        else pos[rank] = squares.split("");
+    }
+
+    return pos;
+}
+
+function validatePosition(pos: Position) {
+    // 1. Count and locate both kings, each side should have exactly 1 king
+    // 2. No pawn in 1st and 8th rank
+    // 3. Side to move is not checking opponent king
+    // 4. If side to play is in check, there should be at most 2 attackers
+}
+
+
+const regex: readonly string[] = Object.freeze(regexPatterns());
+
+function regexPatterns(): string[] {
     const num = [...Array(size).keys()].map(n => (n+1).toString()).join("");
     
     const pieces = Piece.getList().map(piece => piece.letter).join("");
     const squareRegex = `[${pieces}${num}]{1,${size}}`; // [PNBRQKpnbrqk12345678]{1,8}
-    const placementRegex = `^${squareRegex}(?:/${squareRegex}){${size-1}}$`; // ^[PNBRQKpnbrqk12345678]{1,8}(?:/[PNBRQKpnbrqk12345678]{1,8}){7}$
+    
+    // ^[PNBRQKpnbrqk12345678]{1,8}(?:/[PNBRQKpnbrqk12345678]{1,8}){7}$
+    const placementRegex = `^${squareRegex}(?:${RowDelimiter}${squareRegex}){${size-1}}$`;
 
     const colors = Color.getList();
     const moveRegex = `^[${colors}]$`; // ^[w,b]$
 
     const castles = Castle.getList().map(castle => castle.letter).join("");
-    const castleRegex = `^-|[${castles}]{1,${castles.length}}$`; // ^-|[KQkq]{1,4}$
+    const castleRegex = `^${NA}|[${castles}]{1,${castles.length}}$`; // ^-|[KQkq]{1,4}$
 
     const files = File.getLabels().join("");
-    const enPassantRegex = `^-|[${files}][${num}]$`; // ^-|[abcdefgh][12345678]$
+    const enPassantRegex = `^${NA}|[${files}][${num}]$`; // ^-|[abcdefgh][12345678]$
 
-    const clockRegex = `^\\d+$`;
+    const clockRegex = `^\\d+$`; // ^\d+$
 
     return [placementRegex, moveRegex, castleRegex, enPassantRegex, clockRegex, clockRegex];
 }

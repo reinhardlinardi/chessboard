@@ -5,5 +5,6 @@ export function New(code: string, msg: string): Error {
 }
 
 
-export const InvalidFmt: string = "INVALID";
-export const RegexNotMatch: string = "REGEX_NOT_MATCH";
+export const InvalidNumFields: string = "INVALID_NUM_FIELDS";
+export const InvalidSyntax: string = "INVALID_SYNTAX";
+export const InvalidRowNumSquares: string = "INVALID_ROW_NUM_SQUARES";

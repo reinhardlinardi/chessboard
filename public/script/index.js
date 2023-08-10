@@ -133,6 +133,7 @@ export function generateFEN() {
 export function loadFEN(str) {
     try {
         Common.loadFEN(str);
+        // TODO: Replace castle, en passant, and clock invalid values
     }
     catch(err) {
         console.log(Err.str(err));

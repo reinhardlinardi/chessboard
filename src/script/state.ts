@@ -19,7 +19,7 @@ export interface State {
 export function New(): State {
     // {'K': true, 'Q': true, 'k': true, 'q': true}
     const castleDefault = Castle.getList().map(castle => castle.letter)
-        .reduce((opt, type) => ({...opt, [type]: true}), {});
+        .reduce((map, type) => ({...map, [type]: true}), {});
 
     return {
         pos: Setup.defaultSetup(),

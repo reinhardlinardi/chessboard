@@ -1,9 +1,9 @@
 import * as Piece from '../../public/module/piece.js';
 import * as Editor from '../../public/module/editor.js';
 import * as Setup from '../../public/module/setup.js';
-import * as Color from '../../public/module/color.js';
 import * as Square from '../../public/module/square.js';
 import * as File from '../../public/module/file.js';
+import { White, Black } from '../../public/module/color.js';
 
 
 const _ = Piece.None;
@@ -94,21 +94,17 @@ test("Editor-hasCastlePosition", () => {
     }
 })
 
-
-const wh = Color.White;
-const bk = Color.Black;
-
 test("Editor-genEnPassantTargets",() => {
     const tcs = [
         {
             name: "default",
-            color: wh,
+            color: White,
             want: [],
             pos: Setup.defaultSetup(),
         },
         {
             name: "no option",
-            color: wh,
+            color: White,
             want: [],
             pos: [
                 [_, _, _, _, k, _, _, _],
@@ -124,7 +120,7 @@ test("Editor-genEnPassantTargets",() => {
         },
         {
             name: "wrong rank",
-            color: wh,
+            color: White,
             want: [],
             pos: [
                 [_, _, _, _, k, _, _, _],
@@ -140,7 +136,7 @@ test("Editor-genEnPassantTargets",() => {
         },
         {
             name: "not adjacent",
-            color: wh,
+            color: White,
             want: [],
             pos: [
                 [_, _, _, _, k, _, _, _],
@@ -156,7 +152,7 @@ test("Editor-genEnPassantTargets",() => {
         },
         {
             name: "single target, player pawn on left",
-            color: wh,
+            color: White,
             want: [Square.of(File.d, 6)],
             pos: [
                 [_, _, _, _, k, _, _, _],
@@ -172,7 +168,7 @@ test("Editor-genEnPassantTargets",() => {
         },
         {
             name: "single target, player pawn on right",
-            color: wh,
+            color: White,
             want: [Square.of(File.b, 6)],
             pos: [
                 [_, _, _, _, k, _, _, _],
@@ -188,7 +184,7 @@ test("Editor-genEnPassantTargets",() => {
         },
         {
             name: "single target, player pawn on edge",
-            color: wh,
+            color: White,
             want: [Square.of(File.a, 6)],
             pos: [
                 [_, _, _, _, k, _, _, _],
@@ -204,7 +200,7 @@ test("Editor-genEnPassantTargets",() => {
         },
         {
             name: "both player pawn",
-            color: bk,
+            color: Black,
             want: [],
             pos: [
                 [_, _, _, _, k, _, _, _],
@@ -220,7 +216,7 @@ test("Editor-genEnPassantTargets",() => {
         },
         {
             name: "both opponent pawn",
-            color: bk,
+            color: Black,
             want: [],
             pos: [
                 [_, _, _, _, k, _, _, _],
@@ -236,7 +232,7 @@ test("Editor-genEnPassantTargets",() => {
         },
         {
             name: "one player pawn, multiple opponent pawns",
-            color: bk,
+            color: Black,
             want: [
                 Square.of(File.c, 3), 
                 Square.of(File.e, 3),
@@ -255,7 +251,7 @@ test("Editor-genEnPassantTargets",() => {
         },
         {
             name: "multiple player pawns, one opponent pawn",
-            color: bk,
+            color: Black,
             want: [Square.of(File.d, 3)],
             pos: [
                 [_, _, _, _, k, _, _, _],
@@ -271,7 +267,7 @@ test("Editor-genEnPassantTargets",() => {
         },
         {
             name: "interleaving",
-            color: bk,
+            color: Black,
             want: [
                 Square.of(File.a, 3),
                 Square.of(File.d, 3),
@@ -292,7 +288,7 @@ test("Editor-genEnPassantTargets",() => {
         },
         {
             name: "opponent move next",
-            color: wh,
+            color: White,
             want: [],
             pos: [
                 [_, _, _, _, k, _, _, _],
