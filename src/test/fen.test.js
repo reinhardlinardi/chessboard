@@ -46,7 +46,7 @@ test("FEN-generate", () => {
             want: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
         },
         {
-            name: "all other cases",
+            name: "random",
             state: {
                 move: Black,
                 clock: {
@@ -111,13 +111,13 @@ test("FEN-load", () => {
         },
         {
             name: "wrong delimiter",
-            str: "rnbqkbnr,pppppppp,8,8,8,PPPPPPPP,RNBQKBNR w KQkq - 0 1",
+            str: "rnbqkbnr,pppppppp,8,8,8,8,PPPPPPPP,RNBQKBNR w KQkq - 0 1",
             err: Err.InvalidSyntax,
             want: {},
         },
         {
-            name: "invalid piece code",
-            str: "rnbqkbnr/pppZpppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            name: "invalid piece 'z'",
+            str: "rnbqkbnr/pppzpppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
             err: Err.InvalidSyntax,
             want: {},
         },
@@ -129,13 +129,7 @@ test("FEN-load", () => {
         },
         {
             name: "9 empty squares",
-            str: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBN9 w KQkq - 0 1",
-            err: Err.InvalidSyntax,
-            want: {},
-        },
-        {
-            name: "10 empty squares",
-            str: "rnbqkbnr/pppppppp/8/8/8/10/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            str: "rnbqkbnr/pppppppp/8/8/8/9/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
             err: Err.InvalidSyntax,
             want: {},
         },
@@ -153,21 +147,69 @@ test("FEN-load", () => {
         },
         {
             name: "invalid en passant",
-            str: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - x4 0 1",
+            str: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq a0 0 1",
             err: Err.InvalidSyntax,
             want: {},
         },
         {
             name: "negative clock",
-            str: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - -0 -1",
+            str: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - -0 1",
             err: Err.InvalidSyntax,
             want: {},
         },
         {
-            name: "invalid row square count",
+            name: "invalid row square count 2nd rank",
             str: "rnbqkbnr/pppppppp/8/8/8/8/PPPP2PPP/RNBQKBNR w KQkq - 0 1",
             err: Err.InvalidRowNumSquares,
             want: {},
+        },
+        {
+            name: "empty, black move",
+            str: "8/8/8/8/8/8/8/8 b - - 0 1",
+            err: null,
+            want: {
+                move: Black,
+                castle: {[K]: false, [Q]: false, [k]: false, [q]: false},
+                enPassant: "",
+                clock: {halfmove: 0, fullmove: 1},
+                id: "",
+                pos: Setup.emptySetup(),
+            }
+        },
+        {
+            name: "default",
+            str: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            err: null,
+            want: {
+                move: White,
+                castle: {[K]: true, [Q]: true, [k]: true, [q]: true},
+                enPassant: "",
+                clock: {halfmove: 0, fullmove: 1},
+                id: "",
+                pos: Setup.defaultSetup(),
+            }
+        },
+        {
+            name: "random",
+            str: "r3k3/bR1p1b1q/P1r1p2p/1pPPNpp1/Pn1p1nPP/1N3P2/3BB3/1Q2K2R b kQk e8 101 0",
+            want: {
+                move: Black,
+                castle: {[K]: false, [Q]: true, [k]: true, [q]: false},
+                enPassant: "e8",
+                clock: {halfmove: 101, fullmove: 0},
+                id: "",
+                pos: [
+                    [r, _, _, _, k, _, _, _],
+                    [b, R, _, p, _, b, _, q],
+                    [P, _, r, _, p, _, _, p],
+                    [_, p, P, P, N, p, p, _],
+                    [P, n, _, p, _, n, P, P],
+                    [_, N, _, _, _, P, _, _],
+                    [_, _, _, B, B, _, _, _],
+                    [_, Q, _, _, K, _, _, R],
+                
+                ].reverse(),
+            }
         },
     ];
 
@@ -177,7 +219,6 @@ test("FEN-load", () => {
             expect(get).toEqual(tc.want);
         }
         catch(err) {
-            // console.log(err.msg);
             expect(err.code).toEqual(tc.err);
         }
     }
