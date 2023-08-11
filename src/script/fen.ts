@@ -3,7 +3,7 @@ import * as Color from './color.js';
 import * as Castle from './castle.js';
 import * as File from './file.js';
 import { State } from './state.js';
-import { Position, get } from './position.js';
+import { Position, New, get, setRow } from './position.js';
 import { Size as size } from './size.js';
 import { Clock } from './clock.js';
 import { isNumeric } from './string-util.js';
@@ -98,7 +98,7 @@ export function load(str: string): State {
 }
 
 function loadPosition(str: string): Position {
-    let pos: Position = [];
+    let pos: Position = New();
     const rows = str.split(RowDelimiter);
     
     for(let rank = size; rank >= 1; rank--) {
@@ -120,7 +120,7 @@ function loadPosition(str: string): Position {
         
         // Number of empty + occupied squares in rank must be equal to 8
         if(cnt !== size) throw Err.New(Err.InvalidRowNumSquares, `invalid num of squares for rank ${rank}`);
-        else pos[rank-1] = squares.split("");
+        else setRow(squares.split(""), pos, rank);
     }
 
     return pos;
