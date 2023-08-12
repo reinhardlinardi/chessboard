@@ -1,29 +1,28 @@
 import * as Common from './common.js';
-import * as Editor from '../module/editor.js';
 import * as State from '../module/state.js';
 import * as Setup from '../module/setup.js';
 import * as Piece from '../module/piece.js';
 import * as Castle from '../module/castle.js';
-import * as File from '../module/file.js';
+import * as Filter from '../module/filter.js';
 import { White, Black } from '../module/color.js';
 import * as Err from '../module/error.js';
 
 
 /* Tray */
-export const topTray = Piece.filterBy(Piece.colorFilter(Black)).map(piece => piece.letter);
-export const bottomTray = Piece.filterBy(Piece.colorFilter(White)).map(piece => piece.letter);
+export const whitePieces = Filter.New(Piece.byColor(White))().map(piece => piece.letter);
+export const blackPieces = Filter.New(Piece.byColor(Black))().map(piece => piece.letter);
 
 
 export function getTrayPieceIdx() {
-    return [...Array(topTray.length).keys()];
+    return [...Array(whitePieces.length).keys()];
 }
 
 export function getTopTrayPiece(idx) {
-    return this.flip? bottomTray[idx] : topTray[idx];  
+    return this.flip? whitePieces[idx] : blackPieces[idx];  
 }
 
 export function getBottomTrayPiece(idx) {
-    return this.flip? topTray[idx] : bottomTray[idx];
+    return this.flip? blackPieces[idx] : whitePieces[idx];
 }
 
 
@@ -72,11 +71,11 @@ export function blackColor() {
 }
 
 export function getWhiteCastleTypes() {
-    return Castle.filterBy(Castle.colorFilter(White));
+    Filter.New(Castle.getList(), Castle.byColor(White))();
 }
 
 export function getBlackCastleTypes() {
-    return Castle.filterBy(Castle.colorFilter(Black));
+    Filter.New(Castle.getList(), Castle.byColor(Black))();
 }
 
 export function setCastle(ev) {
@@ -88,20 +87,11 @@ export function setCastle(ev) {
 }
 
 export function disableCastle(type) {
-    const hasPosition = Editor.hasCastlePosition(type, this.state.pos);
-    if(!hasPosition) this.state.castle[type] = false;
+    // const hasPosition = Editor.hasCastlePosition(type, this.state.pos);
+    // if(!hasPosition) this.state.castle[type] = false;
 
-    return !hasPosition;
-}
-
-export function getEnPassantTargets() {
-    const targets = Editor.getEnPassantTargets(this.state.move, this.state.pos);
-    const squares = targets.map(square => `${File.labelOf(square.file)}${square.rank}`);
-
-    const idx = squares.findIndex(val => val === this.state.enPassant);
-    if(idx === -1) this.state.enPassant = "";
-
-    return squares;
+    // return !hasPosition;
+    return false;
 }
 
 
@@ -188,10 +178,3 @@ export function created() {
 
 // TODO: If url has FEN query param, load FEN
 // Maybe put in created()?
-
-// TODO: To make position eligible for analysis
-// 1. Count and locate both kings, each side should have exactly 1 king
-// 2. No pawn in 1st and 8th rank
-// 3. Side to move is not checking opponent king
-// 4. If side to play is in check, there should be at most 2 attackers
-// 5. (Optional) Replace castle, en passant, and clock invalid values

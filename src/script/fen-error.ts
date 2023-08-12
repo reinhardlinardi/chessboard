@@ -1,5 +1,6 @@
 import { Error } from './error.js';
 
+
 export function New(code: string, msg: string): Error {
     return { module: "FEN", code: code, msg: msg };
 }

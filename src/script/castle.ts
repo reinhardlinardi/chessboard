@@ -1,9 +1,10 @@
 import * as Piece from './piece.js';
 import * as File from './file.js';
-import * as Square from './square.js';
-import { Color, White, Black } from './color.js';
+import * as Location from './location.js';
 import { nthRank } from './rank.js';
-import { Direction } from './direction.js';
+import { Filter } from './filter.js';
+import { Color, White, Black } from './color.js';
+import { Direction, Kingside, Queenside } from './direction.js';
 
 
 export type Type = string;
@@ -11,10 +12,14 @@ export type Type = string;
 export const TypeShort: Type = "O-O";
 export const TypeLong: Type = "O-O-O";
 
+
+export type Rights = {[type: Type]: boolean};
+
+
 export interface Move {
     piece: string,
     direction: Direction,
-    from: Square.Square,
+    from: Location.Location,
 };
 
 export interface Castle {
@@ -33,37 +38,41 @@ const q = Piece.BlackQueen.letter;
 const K = Piece.WhiteKing.letter;
 const k = Piece.BlackKing.letter;
 
+const short = TypeShort;
+const long = TypeLong;
+const king = Piece.TypeKing;
+
 
 export const WhiteShort: Castle = Object.freeze({
-    type: TypeShort,
+    type: short,
     color: White,
     letter: K,
-    king: getPieceMove(K, TypeShort, White), 
-    rook: getPieceMove(R, TypeShort, White),
+    king: getPieceMove(K, short, White), 
+    rook: getPieceMove(R, short, White),
 });
 
 export const BlackShort: Castle = Object.freeze({
-    type: TypeShort,
+    type: short,
     color: Black,
     letter: k,
-    king: getPieceMove(k, TypeShort, Black), 
-    rook: getPieceMove(r, TypeShort, Black),
+    king: getPieceMove(k, short, Black), 
+    rook: getPieceMove(r, short, Black),
 });
 
 export const WhiteLong: Castle = Object.freeze({
-    type: TypeLong,
+    type: long,
     color: White,
     letter: Q,
-    king: getPieceMove(K, TypeLong, White), 
-    rook: getPieceMove(R, TypeLong, White),
+    king: getPieceMove(K, long, White), 
+    rook: getPieceMove(R, long, White),
 });
 
 export const BlackLong: Castle = Object.freeze({
-    type: TypeLong,
+    type: long,
     color: Black,
     letter: q,
-    king: getPieceMove(k, TypeLong, Black), 
-    rook: getPieceMove(r, TypeLong, Black),
+    king: getPieceMove(k, long, Black), 
+    rook: getPieceMove(r, long, Black),
 });
 
 
@@ -73,24 +82,9 @@ export function getList(): Castle[] {
     return [...list];
 }
 
-
-export type Filter = (castle: Castle) => boolean;
-
-export function colorFilter(color: Color): Filter {
-    return castle => castle.color === color;
-}
-
-export function typeFilter(type: Type): Filter {
-    return castle => castle.type === type;
-}
-
-
-export function filterBy(...filters: Filter[]): Castle[] {
-    let res = getList();
-    for(const f of filters) {
-        res = res.filter(f);
-    }
-    return res;
+// {"K": val, "Q": val, "k": val, "q": val}
+export function getRights(val: boolean): Rights {
+    return getList().map(castle => castle.letter).reduce((map, type) => ({...map, [type]: val}), {});
 }
 
 
@@ -104,24 +98,32 @@ export function get(letter: string): Castle {
 }
 
 
-export function getPieceFile(piece: string, type: Type): string {
-    const pieceType = Piece.get(piece).type;
-
-    if(pieceType === Piece.TypeKing) return File.e;
-    else return (type === TypeLong)? File.a : File.h;
+export function byColor(color: Color): Filter<Castle> {
+    return castle => castle.color === color;
 }
 
-export function getPieceDirection(piece: string, type: Type): Direction {
-    const pieceType = Piece.get(piece).type;
-    
-    if(pieceType === Piece.TypeKing) return (type === TypeLong)? -2 : 2;
-    else return (type === TypeLong)? 3 : -2;
+export function byType(type: Type): Filter<Castle> {
+    return castle => castle.type === type;
 }
 
-export function getPieceMove(piece: string, type: Type, color: Color): Move {
-    const direction = getPieceDirection(piece, type);
+
+
+function getPieceFile(piece: Piece.Type, type: Type): string {
+    if(piece === king) return File.e;
+    return type === long? File.a : File.h;
+}
+
+function getPieceDirection(piece: Piece.Type, type: Type): Direction {
+    if(piece === king) return type === long? 2*Queenside : 2*Kingside;
+    return type === long? 3*Kingside : 2*Queenside;
+}
+
+function getPieceMove(piece: string, type: Type, color: Color): Move {
+    const pieceType = Piece.get(piece).type;
+
     const rank = nthRank(1, color);
-    const file = getPieceFile(piece, type);
-
-    return {piece: piece, direction: direction, from: Square.of(file, rank)};
+    const file = File.fileOf(getPieceFile(pieceType, type));
+    const direction = getPieceDirection(pieceType, type);
+    
+    return {piece: piece, direction: direction, from: Location.of(file, rank)};
 }

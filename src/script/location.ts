@@ -1,5 +1,3 @@
-import { Square } from './square.js';
-
 // Location = square unique ID
 export type Location = number;
 
@@ -27,11 +25,17 @@ export type Location = number;
 // *[] = dark square
 //
 
-export function of(square: Square): Location {
-    return 10*square.rank + square.file;
+export const None: Location = 0;
+
+
+export function of(file: number, rank: number): Location {
+    return 10*rank + file;
 }
 
-export function square(location: Location): Square {
-    let rank = Math.trunc(location/10);
-    return {rank: rank, file: location - 10*rank};
+export function file(loc: Location): number {
+    return loc - 10*rank(loc);
+}
+
+export function rank(loc: Location): number {
+    return Math.trunc(loc/10);
 }

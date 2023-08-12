@@ -38,7 +38,6 @@ const component = {
         
         setCastle: page.setCastle,
         disableCastle: page.disableCastle,
-        getEnPassantTargets: page.getEnPassantTargets,
 
         isSameState: page.isSameState,
         loadFEN: page.loadFEN,

@@ -2,6 +2,7 @@ import * as Piece from './piece.js';
 import * as Color from './color.js';
 import * as Castle from './castle.js';
 import * as File from './file.js';
+import * as Location from './location.js';
 import { State } from './state.js';
 import { Position, New, get, setRow } from './position.js';
 import { Size as size } from './size.js';
@@ -38,13 +39,19 @@ export function generate(s: State): string {
     // Piece placement, e.g. "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
     const placement: string = rows.join(RowDelimiter); 
 
-    // Available castle types, e.g. "KQkq"
+    // Castle rights, e.g. "KQkq"
     let castle: string = Object.keys(s.castle).filter(type => s.castle[type]).join("");
     if(castle === "") castle = NA;
 
-    let enPassant: string = s.enPassant;
-    if(enPassant === "") enPassant = NA;
+    // En passant
+    let enPassant: string = NA;
+    if(s.enPassant !== Location.None) {
+        const file = File.labelOf(Location.file(s.enPassant));
+        const rank = Location.rank(s.enPassant);
+        enPassant = `${file}${rank}`;
+    }
     
+    // Clocks
     const halfmove = s.clock.halfmove.toString();
     const fullmove = s.clock.fullmove.toString();
     
@@ -68,32 +75,27 @@ export function load(str: string): State {
     }
 
     // 3. Load
+    const pos = loadPosition(parts[0]);
     const move = parts[1];
-    const clock: Clock = {halfmove: parseInt(parts[4]), fullmove: parseInt(parts[5])};
+    const rights = parts[2];
 
-    let enPassant = parts[3];
-    if(enPassant === NA) enPassant = "";
-
-    // {'K': false, 'Q': false, 'k': false, 'q': false}
-    let castle: {[type: string]: boolean} = Castle.getList().map(castle => castle.letter)
-        .reduce((map, type) => ({...map, [type]: false}), {});
-
-    const castleValues = parts[2];
-    if(castleValues !== NA) {
-        for(const type of castleValues) castle[type] = true;
+    let castle = Castle.getRights(false);
+    if(rights !== NA) {
+        for(const type of rights) castle[type] = true;
     }
 
-    const pos: Position = loadPosition(parts[0]);
+    let enPassant = Location.None;
+    const target = parts[3];
 
-    const state = {
-        pos: pos,
-        move: move,
-        castle: castle,
-        enPassant: enPassant,
-        clock: clock,
-        id: "",
-    };
-
+    if(target !== NA) {
+        const file = File.fileOf(target[0]);
+        const rank = parseInt(target[1]);
+        enPassant = Location.of(file, rank);
+    }
+    
+    const clock: Clock = {halfmove: parseInt(parts[4]), fullmove: parseInt(parts[5])};
+    
+    const state = {pos: pos, move: move, castle: castle, enPassant: enPassant, clock: clock, id: ""};
     return state;
 }
 

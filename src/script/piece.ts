@@ -1,4 +1,5 @@
 import * as Move from './move.js';
+import { Filter } from './filter.js';
 import { Color, Black, White } from './color.js';
 
 
@@ -176,26 +177,6 @@ export function getList(): Piece[] {
 }
 
 
-export type Filter = (piece: Piece) => boolean;
-
-export function colorFilter(color: Color): Filter {
-    return piece => piece.color === color;
-}
-
-export function typeFilter(type: Type): Filter {
-    return piece => piece.type === type;
-}
-
-
-export function filterBy(...filters: Filter[]): Piece[] {
-    let res = getList();
-    for(const f of filters) {
-        res = res.filter(f);
-    }
-    return res;
-}
-
-
 // {"P": WhitePawn, "p": BlackPawn, ...}
 const map: {[letter: string]: Piece} = Object.freeze(
     list.reduce((map, piece) => ({...map, [piece.letter]: piece}), {})
@@ -203,4 +184,14 @@ const map: {[letter: string]: Piece} = Object.freeze(
 
 export function get(letter: string): Piece {
     return map[letter];
+}
+
+
+
+export function byColor(color: Color): Filter<Piece> {
+    return piece => piece.color === color;
+}
+
+export function byType(type: Type): Filter<Piece> {
+    return piece => piece.type === type;
 }
