@@ -6,14 +6,12 @@ import { Color, White } from './color.js';
 import { Position } from './position.js';
 
 
-// Game state
 export interface State {
     pos: Position,
     move: Color,
     castle: Castle.Rights,
     enPassant: Location.Location,
     clock: Clock.Clock,
-    id: string,
 };
 
 
@@ -24,6 +22,5 @@ export function New(): State {
         castle: Castle.getRights(true),
         enPassant: Location.None,
         clock: Clock.New(),
-        id: "",
     }
 }

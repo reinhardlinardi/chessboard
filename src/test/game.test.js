@@ -24,7 +24,7 @@ const K = Piece.WhiteKing.letter;
 const k = Piece.BlackKing.letter;
 
 
-test("Game-fromState", () => {
+test("Game-loadState", () => {
     const tcs = [
         {
             name: "empty setup, all valid",
@@ -33,7 +33,6 @@ test("Game-fromState", () => {
                 clock: {halfmove: Clock.MaxHalfmove, fullmove: 10},
                 enPassant: Location.None,
                 castle: Castle.getRights(false),
-                id: "",
                 pos: Setup.emptySetup(),
             },
             err: null,
@@ -42,7 +41,6 @@ test("Game-fromState", () => {
                 clock: {halfmove: Clock.MaxHalfmove, fullmove: 10},
                 enPassant: Location.None,
                 castle: Castle.getRights(false),
-                id: "",
                 pos: Setup.emptySetup(),
             },
         },
@@ -53,7 +51,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.None,
                 castle: Castle.getRights(true),
-                id: "",
                 pos: Setup.defaultSetup(),
             },
             err: null,
@@ -62,7 +59,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.None,
                 castle: Castle.getRights(true),
-                id: "",
                 pos: Setup.defaultSetup(),
             },
         },
@@ -73,7 +69,6 @@ test("Game-fromState", () => {
                 clock: {halfmove: Clock.MaxHalfmove+1, fullmove: 0},
                 enPassant: Location.None,
                 castle: Castle.getRights(true),
-                id: "",
                 pos: Setup.defaultSetup(),
             },
             err: null,
@@ -82,7 +77,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.None,
                 castle: Castle.getRights(true),
-                id: "",
                 pos: Setup.defaultSetup(),
             },
         },
@@ -93,7 +87,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.None,
                 castle: {[K]: true, [Q]: true, [k]: false, [q]: false},
-                id: "",
                 pos: [  
                     [_, r, _, _, k, _, _, r],
                     [_, q, _, _, p, p, p, _],
@@ -111,8 +104,7 @@ test("Game-fromState", () => {
                 move: Black,
                 clock: Clock.New(),
                 enPassant: Location.None,
-                castle: {[K]: false, [Q]: true, [k]: true, [q]: false},
-                id: "",
+                castle: {[K]: false, [Q]: true, [k]: false, [q]: false},
                 pos: [
                     [_, r, _, _, k, _, _, r],
                     [_, q, _, _, p, p, p, _],
@@ -133,7 +125,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.of(File.fileOf(File.a), 7),
                 castle: Castle.getRights(false),
-                id: "",
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -152,7 +143,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.None,
                 castle: Castle.getRights(false),
-                id: "",
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -173,7 +163,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.of(File.fileOf(File.c), 6),
                 castle: Castle.getRights(false),
-                id: "",
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -192,7 +181,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.None,
                 castle: Castle.getRights(false),
-                id: "",
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -213,7 +201,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.of(File.fileOf(File.h), 6),
                 castle: Castle.getRights(false),
-                id: "",
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -232,7 +219,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.None,
                 castle: Castle.getRights(false),
-                id: "",
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -253,7 +239,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.of(File.fileOf(File.b), 6),
                 castle: Castle.getRights(false),
-                id: "",
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -272,7 +257,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.None,
                 castle: Castle.getRights(false),
-                id: "",
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -293,7 +277,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.of(File.fileOf(File.a), 3),
                 castle: Castle.getRights(false),
-                id: "",
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -312,7 +295,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.of(File.fileOf(File.a), 3),
                 castle: Castle.getRights(false),
-                id: "",
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -333,7 +315,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.of(File.fileOf(File.g), 3),
                 castle: Castle.getRights(false),
-                id: "",
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -352,7 +333,6 @@ test("Game-fromState", () => {
                 clock: Clock.New(),
                 enPassant: Location.of(File.fileOf(File.g), 3),
                 castle: Castle.getRights(false),
-                id: "",
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -372,11 +352,14 @@ test("Game-fromState", () => {
         const game = new Game();
 
         try {
-            const get = game.fromState(tc.state);
-            expect(get).toEqual(tc.want);
+            game.loadState(tc.state);
         }
         catch(err) {
             expect(err.code).toEqual(tc.err);
+            continue;
         }
+
+        const get = game.getInitialGameState().state;
+        expect(get).toEqual(tc.want);
     }
 })

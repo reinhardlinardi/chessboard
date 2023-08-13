@@ -33,7 +33,6 @@ test("FEN-generate", () => {
                 clock: Clock.New(),
                 enPassant: Location.None,
                 castle: Castle.getRights(false),
-                id: "",
                 pos: Setup.emptySetup(),
             },
             want: "8/8/8/8/8/8/8/8 b - - 0 1",
@@ -45,7 +44,6 @@ test("FEN-generate", () => {
                 clock: Clock.New(),
                 enPassant: Location.None,
                 castle: Castle.getRights(true),
-                id: "",
                 pos: Setup.defaultSetup(),
             },
             want: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
@@ -60,7 +58,6 @@ test("FEN-generate", () => {
                 },
                 enPassant: Location.of(File.fileOf(File.c), 3),
                 castle: {[K]: true, [Q]: false, [k]: false, [q]: true},
-                id: "",
                 pos: [
                     [r, _, _, _, k, _, _, _],
                     [b, _, _, n, _, b, _, q],
@@ -178,7 +175,6 @@ test("FEN-load", () => {
                 castle: Castle.getRights(false),
                 enPassant: Location.None,
                 clock: {halfmove: 0, fullmove: 1},
-                id: "",
                 pos: Setup.emptySetup(),
             }
         },
@@ -191,7 +187,6 @@ test("FEN-load", () => {
                 castle: Castle.getRights(true),
                 enPassant: Location.None,
                 clock: {halfmove: 0, fullmove: 1},
-                id: "",
                 pos: Setup.defaultSetup(),
             }
         },
@@ -204,7 +199,6 @@ test("FEN-load", () => {
                 castle: {[K]: false, [Q]: true, [k]: true, [q]: false},
                 enPassant: Location.of(File.fileOf(File.e), 8),
                 clock: {halfmove: 101, fullmove: 0},
-                id: "",
                 pos: [
                     [r, _, _, _, k, _, _, _],
                     [b, R, _, p, _, b, _, q],
@@ -221,12 +215,16 @@ test("FEN-load", () => {
     ];
 
     for(const tc of tcs) {
+        let get;
+
         try {
-            const get = FEN.load(tc.str);
-            expect(get).toEqual(tc.want);
+            get = FEN.load(tc.str);
         }
         catch(err) {
             expect(err.code).toEqual(tc.err);
+            continue;
         }
+
+        expect(get).toEqual(tc.want);
     }
 });

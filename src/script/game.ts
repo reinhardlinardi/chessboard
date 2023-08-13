@@ -3,87 +3,132 @@ import * as Piece from './piece.js';
 import * as Location from './location.js';
 import * as EnPassant from './en-passant.js';
 import * as Filter from './filter.js';
-import { State, New } from './state.js';
-import { Color, opponentOf } from './color.js';
+import * as FEN from './fen.js';
+import * as ID from './id.js';
+import * as Clock from './clock.js';
+import * as Color from './color.js';
+import { Direction } from './direction.js';
+import { State } from './state.js';
 import { Position, getByLocation } from './position.js';
-import { Clock, FullmoveStart, HalfmoveStart, MaxHalfmove }  from './clock.js';
 import * as Err from './game-error.js';
 
 
+const numColor = Color.getList().length;
+
+
+export interface GameState {
+    state: State,
+    fen: string,
+    id: string,
+};
+
+export interface GameMove {
+    move: Color.Color,
+    pgn: string,
+    from: Location.Location,
+    direction: Direction,
+};
+
+
 export class Game {
-    private state: State;
     private start: boolean;
     private end: boolean;
 
+    private game: GameState | null;
+    private initial: GameState | null;
+    private moves: GameMove[];
+
+
     constructor() {
-        this.state = New();
+        this.game = null;
+        this.initial = null;
+        this.moves = [];
+
         this.start = false;
         this.end = false;
     }
 
-    /* Import game */
-
-    fromState(s: State): State {
+    loadState(s: State) {
         if(this.start || this.end) throw Err.New(Err.InvalidOp, "game has started or ended");
         
-        let st = {...s};
-        st.clock = this.validClock(st.clock);
-        st.castle = this.validCastleRights(st.castle, st.pos);
-        st.enPassant = this.validEnPassant(st.enPassant, st.move, st.pos);
+        const st = this.validStateOf(s);
+        this.validatePosition(s);
 
-        this.state = st;
+        const fen = FEN.generate(st);
+        const id = ID.generateFromFEN(fen);
+
+        this.initial = {state: st, fen: fen, id: id};
+        this.game = this.initial;
+    }
+
+    getInitialGameState(): GameState | null {
+        if(this.initial === null) return null;
+        else return {...this.initial};
+    }
+
+    private getMoveIdx(fullmove: number): number {
+        if(this.initial === null) return -1;
+        const s = this.initial.state;
+
+        let idx: number = numColor*(fullmove - s.clock.fullmove);
+        return s.move === Color.White? idx: Math.max(0, idx-1);
+    }
+
+    private validStateOf(s: State): State {
+        let st = {...s};
+
+        let clock = st.clock;
+        if(clock.halfmove > Clock.MaxHalfmove) clock.halfmove = Clock.HalfmoveStart;
+        if(clock.fullmove === 0) clock.fullmove = Clock.FullmoveStart;
+
+        let rights = st.castle;
+        for(const type in rights) {
+            if(rights[type]) {
+                const c = Castle.get(type);
+                const kingMoved = getByLocation(st.pos, c.king.from) !== c.king.piece;
+                const rookMoved = getByLocation(st.pos, c.rook.from) !== c.rook.piece;
+
+                if(kingMoved || rookMoved) rights[type] = false;
+            }
+        }
+
+        const none = Location.None;
+        if(st.enPassant !== none) {
+            if(!this.isValidEnPassantTarget(st.enPassant, st.move, st.pos)) st.enPassant = none;
+        }
+
         return st;
     }
 
-    private validClock(c: Clock): Clock {
-        return {
-            halfmove: (c.halfmove > MaxHalfmove)? HalfmoveStart : c.halfmove,
-            fullmove: (c.fullmove === 0)? FullmoveStart : c.fullmove,
-        }
-    }
-    
-    private validCastleRights(castle: Castle.Rights, pos: Position): Castle.Rights {
-        let valid = {...castle};
-
-        for(const type in valid) {
-            const c = Castle.get(type);
-            const king = c.king;
-            const rook = c.rook;
-
-            valid[type] = getByLocation(pos, king.from) === king.piece &&
-                getByLocation(pos, rook.from) === rook.piece;
-        }
-        return valid;
-    }
-
-    private validEnPassant(loc: Location.Location, player: Color, pos: Position): Location.Location {
-        const rank = Location.rank(loc);
-        const file = Location.file(loc);
+    private isValidEnPassantTarget(target: Location.Location, player: Color.Color, pos: Position): boolean {
+        const rank = Location.rank(target);
+        const file = Location.file(target);
         
         const targetRank = EnPassant.targetRank(player);
-        if(rank !== targetRank) return Location.None;
+        if(rank !== targetRank) return false;
         
-        const opponent = opponentOf(player);
+        const opponent = Color.opponentOf(player);
         const opponentPawnLoc = EnPassant.opponentPawn(file, player);
         
         const pawns = Filter.New(Piece.getList(), Piece.byType(Piece.TypePawn))();
-        const playerPawn = Filter.New(pawns, Piece.byColor(player))()[0].letter;
         const opponentPawn = Filter.New(pawns, Piece.byColor(opponent))()[0].letter;
         
-        if(getByLocation(pos, opponentPawnLoc) !== opponentPawn) return Location.None;
+        if(getByLocation(pos, opponentPawnLoc) !== opponentPawn) return false;
         
+        const playerPawn = Filter.New(pawns, Piece.byColor(player))()[0].letter;
         const playerPawnLoc = EnPassant.playerPawn(file, player);
+
         for(const l of playerPawnLoc) {
-            if(getByLocation(pos, l) === playerPawn) return loc;
+            if(getByLocation(pos, l) === playerPawn) return true;
         }
         
-        return Location.None;
+        return false;
     }
 
-    // private validatePosition(s: State) {
-    //     // 1. Count and locate both kings, each side should have exactly 1 king
-    //     // 2. No pawn in 1st and 8th rank
-    //     // 3. Side to move is not checking opponent king
-    //     // 4. If side to play is in check, there should be at most 2 attackers
-    // }
+    private validatePosition(s: State) {
+        // 1. Count and locate both kings, each side should have exactly 1 king
+        // 2. No pawn in 1st and 8th rank
+        // 3. Side to move is not checking opponent king
+        // 4. If side to play is in check, there should be at most 2 attackers
+    }
 };

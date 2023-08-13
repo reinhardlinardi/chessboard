@@ -95,7 +95,7 @@ export function load(str: string): State {
     
     const clock: Clock = {halfmove: parseInt(parts[4]), fullmove: parseInt(parts[5])};
     
-    const state = {pos: pos, move: move, castle: castle, enPassant: enPassant, clock: clock, id: ""};
+    const state = {pos: pos, move: move, castle: castle, enPassant: enPassant, clock: clock};
     return state;
 }
 
