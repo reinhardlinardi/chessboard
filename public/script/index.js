@@ -9,8 +9,10 @@ import * as Err from '../module/error.js';
 
 
 /* Tray */
-export const whitePieces = Filter.New(Piece.byColor(White))().map(piece => piece.letter);
-export const blackPieces = Filter.New(Piece.byColor(Black))().map(piece => piece.letter);
+const pieces = Piece.getList();
+
+export const whitePieces = Filter.New(pieces, Piece.byColor(White))().map(piece => piece.letter);
+export const blackPieces = Filter.New(pieces, Piece.byColor(Black))().map(piece => piece.letter);
 
 
 export function getTrayPieceIdx() {
@@ -62,6 +64,8 @@ export function resetBoard() {
 
 
 /* Form */
+const rights = Castle.getList();
+
 export function whiteColor() {
     return White;
 }
@@ -71,11 +75,11 @@ export function blackColor() {
 }
 
 export function getWhiteCastleTypes() {
-    Filter.New(Castle.getList(), Castle.byColor(White))();
+    return Filter.New(rights, Castle.byColor(White))();
 }
 
 export function getBlackCastleTypes() {
-    Filter.New(Castle.getList(), Castle.byColor(Black))();
+    return Filter.New(rights, Castle.byColor(Black))();
 }
 
 export function setCastle(ev) {
