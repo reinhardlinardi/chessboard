@@ -114,9 +114,9 @@
 
           <div class="subsection">
             <label class="section-text">Move</label>
-            <select class="form-select" v-model="state.move">
-              <option :value="whiteColor()">White to move</option>
-              <option :value="blackColor()">Black to move</option>
+            <select class="form-select" @change="setMove">
+              <option :value="white()" :selected="selectedMove(white())">White to move</option>
+              <option :value="black()" :selected="selectedMove(black())">Black to move</option>
             </select>
           </div>
 
@@ -129,7 +129,6 @@
                   <input type="checkbox"
                     :id="`checkbox-${opt.letter}`"
                     @click="setCastle"
-                    :disabled="disableCastle(opt.letter)"
                     :checked="this.state.castle[opt.letter]"
                     :data-castle-type="`${opt.letter}`"
                   />
@@ -146,7 +145,6 @@
                   <input type="checkbox"
                     :id="`checkbox-${opt.letter}`"
                     @click="setCastle"
-                    :disabled="disableCastle(opt.letter)"
                     :checked="this.state.castle[opt.letter]"
                     :data-castle-type="`${opt.letter}`"
                   >

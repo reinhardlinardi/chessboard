@@ -14,7 +14,7 @@ const component = {
         }
     },
     computed: {
-        fen: page.generateFEN,
+        fen: page.FEN,
     },
     methods: {
         getTrayPieceIdx: page.getTrayPieceIdx,
@@ -31,15 +31,18 @@ const component = {
         clearBoard: page.clearBoard,
         resetBoard: page.resetBoard,
 
-        whiteColor: page.whiteColor,
-        blackColor: page.blackColor,
+        white: page.white,
+        black: page.black,
         getWhiteCastleTypes: page.getWhiteCastleTypes,
         getBlackCastleTypes: page.getBlackCastleTypes,
         
+        selectedMove: page.selectedMove,
+        setMove: page.setMove,
         setCastle: page.setCastle,
-        disableCastle: page.disableCastle,
 
         isSameState: page.isSameState,
+        updateState: page.updateState,
+
         loadFEN: page.loadFEN,
 
         onChangeFEN: page.onChangeFEN,

@@ -4,8 +4,13 @@ import * as Setup from '../module/setup.js';
 import * as Piece from '../module/piece.js';
 import * as Castle from '../module/castle.js';
 import * as Filter from '../module/filter.js';
+import * as Position from '../module/position.js';
 import { White, Black } from '../module/color.js';
+import { Game } from '../module/game.js';
 import * as Err from '../module/error.js';
+
+
+const game = new Game();
 
 
 /* Tray */
@@ -54,11 +59,11 @@ export function flipBoard() {
 }
 
 export function clearBoard() {
-    this.state.pos = Setup.emptySetup();
+    this.updateState({pos: Setup.emptySetup()});
 }
 
 export function resetBoard() {
-    this.state = State.New();
+    this.updateState(State.New());
     this.flip = false;
 }
 
@@ -66,11 +71,11 @@ export function resetBoard() {
 /* Form */
 const rights = Castle.getList();
 
-export function whiteColor() {
+export function white() {
     return White;
 }
 
-export function blackColor() {
+export function black() {
     return Black;
 }
 
@@ -82,20 +87,22 @@ export function getBlackCastleTypes() {
     return Filter.New(rights, Castle.byColor(Black))();
 }
 
+export function selectedMove(color) {
+    return this.state.move === color;
+}
+
+export function setMove(ev) {
+    this.updateState({move: ev.target.value});
+}
+
 export function setCastle(ev) {
     const data = Common.getElementData(ev.target.id);
     const type = data.castleType;
     const value = ev.target.checked;
 
-    this.state.castle[type] = value;
-}
-
-export function disableCastle(type) {
-    // const hasPosition = Editor.hasCastlePosition(type, this.state.pos);
-    // if(!hasPosition) this.state.castle[type] = false;
-
-    // return !hasPosition;
-    return false;
+    let rights = {...this.state.castle};
+    rights[type] = value;
+    this.updateState({castle: rights});
 }
 
 
@@ -108,35 +115,39 @@ export function isSameState() {
         state.clock.fullmove === ref.clock.fullmove;
 }
 
+export function updateState(keys) {
+    let state = {...this.state};
+    for(const key in keys) state[key] = keys[key];
+
+    game.loadState(state);
+    this.state = game.getInitialGameState();
+}
+
+
 
 /* FEN */
 const fenParam = "fen";
 
-
-export function generateFEN() {
-    const fen = Common.generateFEN(this.state);
-    const id = Common.getStateId(fen);
-    this.state.id = id;
-    
+export function FEN() {
     if(this.isSameState()) Common.deleteQueryParam(fenParam);
-    else Common.setQueryParam(fenParam, fen);
+    else Common.setQueryParam(fenParam, this.state.fen);
 
-    return fen;
+    return this.state.fen;
 }
 
 export function loadFEN(str) {
-    try {
-        Common.loadFEN(str);
-    }
-    catch(err) {
-        console.log(Err.str(err));
-    }
+    // try {
+    //     Common.loadFEN(str);
+    // }
+    // catch(err) {
+    //     console.log(Err.str(err));
+    // }
 }
 
 
 /* Event listener */
 export function onChangeFEN(ev) {
-    this.loadFEN(ev.target.value);
+    // this.loadFEN(ev.target.value);
 }
 
 
@@ -154,10 +165,13 @@ export function onDropReplaceOrCopy(ev) {
     
     // Replace piece in dest
     const piece = Common.getDraggedPiece(srcId, this.state.pos);
-    Common.replacePiece(destId, piece, this.state.pos);
+
+    let pos = Position.copy(this.state.pos);
+    Common.replacePiece(destId, piece, pos);
 
     // Remove piece in src if not tray
-    if(!Common.fromTray(srcId)) Common.removePiece(srcId, this.state.pos);
+    if(!Common.fromTray(srcId)) Common.removePiece(srcId, pos);
+    this.updateState({pos: pos});
 }
 
 export function onDropRemove(ev) {
@@ -165,15 +179,18 @@ export function onDropRemove(ev) {
     const srcId = Common.dropGetId(ev);
 
     // Remove piece if src is not tray
-    if(!Common.fromTray(srcId)) Common.removePiece(srcId, this.state.pos);
+    if(!Common.fromTray(srcId)) {
+        let pos = Position.copy(this.state.pos);
+        
+        Common.removePiece(srcId, pos);
+        this.updateState({pos: pos});
+    }
 }
 
 
 /* Lifecycle */
 export function created() {
-    this.state = State.New();
-    this.state.id = Common.getStateId(Common.generateFEN(this.state));
-
+    this.updateState(State.New());
     this.initial = {
         clock: {...this.state.clock},
         id: this.state.id,

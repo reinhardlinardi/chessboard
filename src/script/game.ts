@@ -16,8 +16,7 @@ import * as Err from './game-error.js';
 const numColor = Color.getList().length;
 
 
-export interface GameState {
-    state: State,
+export interface GameState extends State {
     fen: string,
     id: string,
 };
@@ -55,7 +54,7 @@ export class Game {
         const fen = FEN.generate(st);
         const id = ID.generateFromFEN(fen);
 
-        this.initial = {state: st, fen: fen, id: id};
+        this.initial = {...st, fen: fen, id: id};
         this.game = this.initial;
     }
 
@@ -127,7 +126,7 @@ export class Game {
 
     private moveIdx(fullmove: number): number {
         if(this.initial === null) return -1;
-        const s = this.initial.state;
+        const s = this.initial;
 
         let idx: number = numColor*(fullmove - s.clock.fullmove);
         return s.move === Color.White? idx: Math.max(0, idx-1);

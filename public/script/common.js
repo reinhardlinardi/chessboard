@@ -1,8 +1,6 @@
 import * as Piece from '../module/piece.js';
 import * as File from '../module/file.js';
 import * as Position from '../module/position.js';
-import * as FEN from '../module/fen.js';
-import * as ID from '../module/id.js';
 import { Size as size } from '../module/size.js';
 
 
@@ -10,7 +8,7 @@ import { Size as size } from '../module/size.js';
 const q = new URLSearchParams(window.location.search);
 
 export function replaceHistory() {
-    const url = (q.size === 0)? "/" : `?${q.toString()}`; 
+    const url = q.size === 0? "/" : `?${q.toString()}`; 
     window.history.replaceState({}, "", url);
 }
 
@@ -53,22 +51,6 @@ export function getPiece(board, rank, file) {
 
 export function setPiece(piece, board, rank, file) {
     Position.set(piece, board, rank, file);
-}
-
-
-/* FEN */
-export function generateFEN(state) {
-    return FEN.generate(state);
-}
-
-export function loadFEN(str) {
-    return FEN.load(str);
-}
-
-
-/* State */
-export function getStateId(fen) {
-    return ID.generateFromFEN(fen);
 }
 
 
