@@ -52,8 +52,6 @@ export class Game {
         if(this.start || this.end) throw Err.New(Err.InvalidOp, "game has started or ended");
         
         const st = this.validStateOf(s);
-        this.validatePosition(s);
-
         const fen = FEN.generate(st);
         const id = ID.generateFromFEN(fen);
 
@@ -66,19 +64,10 @@ export class Game {
         else return {...this.initial};
     }
 
-    private getMoveIdx(fullmove: number): number {
-        if(this.initial === null) return -1;
-        const s = this.initial.state;
-
-        let idx: number = numColor*(fullmove - s.clock.fullmove);
-        return s.move === Color.White? idx: Math.max(0, idx-1);
-    }
-
     private validStateOf(s: State): State {
         let st = {...s};
 
         let clock = st.clock;
-        if(clock.halfmove > Clock.MaxHalfmove) clock.halfmove = Clock.HalfmoveStart;
         if(clock.fullmove === 0) clock.fullmove = Clock.FullmoveStart;
 
         let rights = st.castle;
@@ -125,10 +114,22 @@ export class Game {
         return false;
     }
 
-    private validatePosition(s: State) {
-        // 1. Count and locate both kings, each side should have exactly 1 king
-        // 2. No pawn in 1st and 8th rank
-        // 3. Side to move is not checking opponent king
-        // 4. If side to play is in check, there should be at most 2 attackers
+    // private validateState(s: State) {
+    //     // Clock
+    //     // Check max halfmove
+
+    //     // Position
+    //     // 1. Count and locate both kings, each side should have exactly 1 king
+    //     // 2. No pawn in 1st and 8th rank
+    //     // 3. Side to move is not checking opponent king
+    //     // 4. If side to play is in check, there should be at most 2 attackers
+    // }
+
+    private moveIdx(fullmove: number): number {
+        if(this.initial === null) return -1;
+        const s = this.initial.state;
+
+        let idx: number = numColor*(fullmove - s.clock.fullmove);
+        return s.move === Color.White? idx: Math.max(0, idx-1);
     }
 };

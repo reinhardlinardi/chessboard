@@ -74,7 +74,7 @@ test("Game-loadState", () => {
             err: null,
             want: {
                 move: White,
-                clock: Clock.New(),
+                clock: {halfmove: Clock.MaxHalfmove+1, fullmove: Clock.FullmoveStart},
                 enPassant: Location.None,
                 castle: Castle.getRights(true),
                 pos: Setup.defaultSetup(),
