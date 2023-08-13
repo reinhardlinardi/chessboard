@@ -5,7 +5,8 @@ export type Filter<T> = (t: T) => boolean;
 export function New<T>(list: T[], ...filters: Filter<T>[]): Fn<T> {
     let fn = () => list;
     for(const f of filters) {
-        fn = () => fn().filter(f);
+        let prev = fn;
+        fn = () => prev().filter(f);
     }
     return fn;
 }

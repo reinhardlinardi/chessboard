@@ -31,8 +31,6 @@ export class Game {
         st.castle = this.validCastleRights(st.castle, st.pos);
         st.enPassant = this.validEnPassant(st.enPassant, st.move, st.pos);
 
-        this.validatePosition(st);
-
         this.state = st;
         return st;
     }
@@ -82,10 +80,10 @@ export class Game {
         return Location.None;
     }
 
-    private validatePosition(s: State) {
-        // 1. Count and locate both kings, each side should have exactly 1 king
-        // 2. No pawn in 1st and 8th rank
-        // 3. Side to move is not checking opponent king
-        // 4. If side to play is in check, there should be at most 2 attackers
-    }
+    // private validatePosition(s: State) {
+    //     // 1. Count and locate both kings, each side should have exactly 1 king
+    //     // 2. No pawn in 1st and 8th rank
+    //     // 3. Side to move is not checking opponent king
+    //     // 4. If side to play is in check, there should be at most 2 attackers
+    // }
 };

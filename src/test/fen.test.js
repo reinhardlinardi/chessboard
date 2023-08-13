@@ -33,6 +33,7 @@ test("FEN-generate", () => {
                 clock: Clock.New(),
                 enPassant: Location.None,
                 castle: Castle.getRights(false),
+                id: "",
                 pos: Setup.emptySetup(),
             },
             want: "8/8/8/8/8/8/8/8 b - - 0 1",
@@ -44,6 +45,7 @@ test("FEN-generate", () => {
                 clock: Clock.New(),
                 enPassant: Location.None,
                 castle: Castle.getRights(true),
+                id: "",
                 pos: Setup.defaultSetup(),
             },
             want: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
@@ -58,6 +60,7 @@ test("FEN-generate", () => {
                 },
                 enPassant: Location.of(File.fileOf(File.c), 3),
                 castle: {[K]: true, [Q]: false, [k]: false, [q]: true},
+                id: "",
                 pos: [
                     [r, _, _, _, k, _, _, _],
                     [b, _, _, n, _, b, _, q],
@@ -143,7 +146,7 @@ test("FEN-load", () => {
             want: {},
         },
         {
-            name: "invalid castling",
+            name: "invalid castle rights",
             str: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w w - 0 1",
             err: Err.InvalidSyntax,
             want: {},
@@ -195,6 +198,7 @@ test("FEN-load", () => {
         {
             name: "random",
             str: "r3k3/bR1p1b1q/P1r1p2p/1pPPNpp1/Pn1p1nPP/1N3P2/3BB3/1Q2K2R b kQk e8 101 0",
+            err: null,
             want: {
                 move: Black,
                 castle: {[K]: false, [Q]: true, [k]: true, [q]: false},
