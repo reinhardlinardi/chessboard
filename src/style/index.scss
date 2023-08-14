@@ -31,7 +31,7 @@
     padding: 1px 0 10px 10px;
     border: 1px solid transparent;
     border-radius: 4px;
-    background-color: #c8c8c8;
+    background-color: #303030;
 }
 
 .control-container {
@@ -55,6 +55,7 @@
 
 .section-label {
     @extend %section-label;
+    color: #f0f0f0;
 }
 
 %section-text {
@@ -64,6 +65,7 @@
 
 .section-text {
     @extend %section-text;
+    color: #f0f0f0;
 }
 
 .form-select {

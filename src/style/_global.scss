@@ -8,7 +8,7 @@ select:focus {
     outline: none;
 }
 
-input:focus {
+input[type="text"]:focus {
     outline: none;
     border-color: #a8a8a8;
 }
