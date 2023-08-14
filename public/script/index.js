@@ -136,19 +136,16 @@ export function getFEN() {
     return this.state.fen;
 }
 
-export function loadFEN(str) {
+export function loadFEN(fen) {
     let state;
     
     try {
-        state = FEN.load(str);
-        game.loadState(state);
+        state = FEN.load(fen);
+        this.updateState(state);
     }
     catch(err) {
         console.log(Err.str(err));
-        return;
     }
-
-    this.state = game.getInitialGameState();
 }
 
 
@@ -197,12 +194,25 @@ export function onDropRemove(ev) {
 
 /* Lifecycle */
 export function created() {
-    this.updateState(State.New());
-    this.initial = {
-        clock: {...this.state.clock},
-        id: this.state.id,
-    };
-}
+    game.loadState(State.New());
 
-// TODO: If url has FEN query param, load FEN
-// Maybe put in created()?
+    let initial = game.getInitialGameState();
+    this.initial = {
+        clock: {...initial.clock},
+        id: initial.id,
+    };
+
+    let state = initial;
+    if(Common.hasQueryParam(fenParam)) {
+        let fen = Common.getQueryParam(fenParam);
+
+        try {
+            state = FEN.load(fen);
+        }
+        catch(err) {
+            console.log(Err.str(err));
+        }
+    }
+
+    this.updateState(state);
+}
