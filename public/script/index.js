@@ -5,6 +5,7 @@ import * as Piece from '../module/piece.js';
 import * as Castle from '../module/castle.js';
 import * as Filter from '../module/filter.js';
 import * as Position from '../module/position.js';
+import * as FEN from '../module/fen.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/game.js';
 import * as Err from '../module/error.js';
@@ -128,7 +129,7 @@ export function updateState(keys) {
 /* FEN */
 const fenParam = "fen";
 
-export function FEN() {
+export function getFEN() {
     if(this.isSameState()) Common.deleteQueryParam(fenParam);
     else Common.setQueryParam(fenParam, this.state.fen);
 
@@ -136,18 +137,24 @@ export function FEN() {
 }
 
 export function loadFEN(str) {
-    // try {
-    //     Common.loadFEN(str);
-    // }
-    // catch(err) {
-    //     console.log(Err.str(err));
-    // }
+    let state;
+    
+    try {
+        state = FEN.load(str);
+        game.loadState(state);
+    }
+    catch(err) {
+        console.log(Err.str(err));
+        return;
+    }
+
+    this.state = game.getInitialGameState();
 }
 
 
 /* Event listener */
 export function onChangeFEN(ev) {
-    // this.loadFEN(ev.target.value);
+    this.loadFEN(ev.target.value);
 }
 
 

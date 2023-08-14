@@ -14,7 +14,7 @@ const component = {
         }
     },
     computed: {
-        fen: page.FEN,
+        fen: page.getFEN,
     },
     methods: {
         getTrayPieceIdx: page.getTrayPieceIdx,
