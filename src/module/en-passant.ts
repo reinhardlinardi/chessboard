@@ -16,11 +16,11 @@ export function pawnRank(player: Color) {
     return nthRank(PawnRank, player);
 }
 
-export function opponentPawn(file: number, player: Color): Location.Location {
+export function opponentPawnLoc(file: number, player: Color): Location.Location {
     return Location.of(file, pawnRank(player));
 }
 
-export function playerPawn(file: number, player: Color): Location.Location[] {
+export function playerPawnsLoc(file: number, player: Color): Location.Location[] {
     let loc: Location.Location[] = [];
 
     if(file > 1) loc.push(Location.of(file-1, pawnRank(player)));

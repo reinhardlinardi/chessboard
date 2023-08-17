@@ -121,7 +121,7 @@ export function updateState(keys) {
     for(const key in keys) state[key] = keys[key];
 
     game.loadState(state);
-    this.state = game.getInitialGameState();
+    this.state = game.getSetupGameState();
 }
 
 
@@ -196,7 +196,7 @@ export function onDropRemove(ev) {
 export function created() {
     game.loadState(State.New());
 
-    let defaultState = game.getInitialGameState();
+    let defaultState = game.getSetupGameState();
     this.defaultState = {
         clock: {...defaultState.clock},
         id: defaultState.id,

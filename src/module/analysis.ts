@@ -30,37 +30,39 @@ export interface GameState extends State {
 
 
 export class Game {
-    private start: boolean;
-    private end: boolean;
+    private started: boolean;
+    // private ended: boolean;
+    private setupValid: boolean;
 
-    private game: GameState | null;
-    private initial: GameState | null;
+    private setup: GameState | null;
+    // private game: GameState | null;
     // private moves: GameMove[];
 
 
     constructor() {
-        this.game = null;
-        this.initial = null;
+        this.setup = null;
+        // this.game = null;
         // this.moves = [];
 
-        this.start = false;
-        this.end = false;
+        this.started = false;
+        // this.ended = false;
+        this.setupValid = false;
     }
 
     loadState(s: State) {
-        if(this.start || this.end) throw Err.New(Err.InvalidOp, "game has started or ended");
+        if(this.started) throw Err.New(Err.InvalidOp, "game has started");
         
         const st = this.validStateOf(s);
         const fen = FEN.generate(st);
         const id = ID.generateFromFEN(fen);
 
-        this.initial = {...st, fen: fen, id: id};
-        this.game = this.initial;
+        this.setup = {...st, fen: fen, id: id};
+        this.setupValid = false;
     }
 
-    getInitialGameState(): GameState | null {
-        if(this.initial === null) return null;
-        else return {...this.initial};
+    getSetupGameState(): GameState | null {
+        if(this.setup === null) return null;
+        else return {...this.setup};
     }
 
     private validStateOf(s: State): State {
@@ -96,7 +98,7 @@ export class Game {
         if(rank !== targetRank) return false;
         
         const opponent = Color.opponentOf(player);
-        const opponentPawnLoc = EnPassant.opponentPawn(file, player);
+        const opponentPawnLoc = EnPassant.opponentPawnLoc(file, player);
         
         const pawns = Filter.New(Piece.getList(), Piece.byType(Piece.TypePawn))();
         const opponentPawn = Filter.New(pawns, Piece.byColor(opponent))()[0].letter;
@@ -104,25 +106,27 @@ export class Game {
         if(getByLocation(pos, opponentPawnLoc) !== opponentPawn) return false;
         
         const playerPawn = Filter.New(pawns, Piece.byColor(player))()[0].letter;
-        const playerPawnLoc = EnPassant.playerPawn(file, player);
+        const playerPawnsLoc = EnPassant.playerPawnsLoc(file, player);
 
-        for(const l of playerPawnLoc) {
-            if(getByLocation(pos, l) === playerPawn) return true;
+        for(const loc of playerPawnsLoc) {
+            if(getByLocation(pos, loc) === playerPawn) return true;
         }
         
         return false;
     }
 
-    // private validateState(s: State) {
-    //     // Clock
-    //     // Check max halfmove
+    private validateState(s: State) {
+        // Clock
+        // Check max halfmove
 
-    //     // Position
-    //     // 1. Count and locate both kings, each side should have exactly 1 king
-    //     // 2. No pawn in 1st and 8th rank
-    //     // 3. Side to move is not checking opponent king
-    //     // 4. If side to play is in check, there should be at most 2 attackers
-    // }
+        // Position
+        // 1. Count and locate both kings, each side should have exactly 1 king
+        // 2. No pawn in 1st and 8th rank
+        // 3. Side to move is not checking opponent king
+        // 4. If side to play is in check, there should be at most 2 attackers
+
+        this.setupValid = true;
+    }
 
     // private moveIdx(fullmove: number): number {
     //     if(this.initial === null) return -1;
