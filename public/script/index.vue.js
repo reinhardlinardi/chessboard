@@ -6,7 +6,7 @@ const component = {
     data() {
         return {
             state: {},
-            initial: {
+            defaultState: {
                 clock: {},
                 id: "",
             },

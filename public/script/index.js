@@ -109,7 +109,7 @@ export function setCastle(ev) {
 
 /* State */
 export function isSameState() {
-    const ref = this.initial;
+    const ref = this.defaultState;
     const state = this.state;
 
     return state.id === ref.id && state.clock.halfmove === ref.clock.halfmove &&
@@ -196,13 +196,13 @@ export function onDropRemove(ev) {
 export function created() {
     game.loadState(State.New());
 
-    let initial = game.getInitialGameState();
-    this.initial = {
-        clock: {...initial.clock},
-        id: initial.id,
+    let defaultState = game.getInitialGameState();
+    this.defaultState = {
+        clock: {...defaultState.clock},
+        id: defaultState.id,
     };
 
-    let state = initial;
+    let state = defaultState;
     if(Common.hasQueryParam(fenParam)) {
         let fen = Common.getQueryParam(fenParam);
 
