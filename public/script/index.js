@@ -7,7 +7,7 @@ import * as Filter from '../module/filter.js';
 import * as Position from '../module/position.js';
 import * as FEN from '../module/fen.js';
 import { White, Black } from '../module/color.js';
-import { Game } from '../module/game.js';
+import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
 
 

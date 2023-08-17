@@ -4,9 +4,9 @@ import * as Location from '../../public/module/location.js';
 import * as Castle from '../../public/module/castle.js';
 import * as Clock from '../../public/module/clock.js';
 import * as File from '../../public/module/file.js';
-import { Game } from '../../public/module/game.js';
+import { Game } from '../../public/module/analysis.js';
 import { White, Black } from '../../public/module/color.js';
-import * as Err from '../../public/module/game-error.js';
+import * as Err from '../../public/module/analysis-error.js';
 
 
 const _ = Piece.None;

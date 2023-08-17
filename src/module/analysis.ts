@@ -10,7 +10,7 @@ import * as Color from './color.js';
 import { Direction } from './direction.js';
 import { State } from './state.js';
 import { Position, getByLocation } from './position.js';
-import * as Err from './game-error.js';
+import * as Err from './analysis-error.js';
 
 
 const numColor = Color.getList().length;
@@ -21,12 +21,12 @@ export interface GameState extends State {
     id: string,
 };
 
-export interface GameMove {
-    move: Color.Color,
-    pgn: string,
-    from: Location.Location,
-    direction: Direction,
-};
+// export interface GameMove {
+//     move: Color.Color,
+//     pgn: string,
+//     from: Location.Location,
+//     direction: Direction,
+// };
 
 
 export class Game {
@@ -35,13 +35,13 @@ export class Game {
 
     private game: GameState | null;
     private initial: GameState | null;
-    private moves: GameMove[];
+    // private moves: GameMove[];
 
 
     constructor() {
         this.game = null;
         this.initial = null;
-        this.moves = [];
+        // this.moves = [];
 
         this.start = false;
         this.end = false;
@@ -124,11 +124,11 @@ export class Game {
     //     // 4. If side to play is in check, there should be at most 2 attackers
     // }
 
-    private moveIdx(fullmove: number): number {
-        if(this.initial === null) return -1;
-        const s = this.initial;
+    // private moveIdx(fullmove: number): number {
+    //     if(this.initial === null) return -1;
+    //     const s = this.initial;
 
-        let idx: number = numColor*(fullmove - s.clock.fullmove);
-        return s.move === Color.White? idx: Math.max(0, idx-1);
-    }
+    //     let idx: number = numColor*(fullmove - s.clock.fullmove);
+    //     return s.move === Color.White? idx: Math.max(0, idx-1);
+    // }
 };
