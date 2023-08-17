@@ -359,7 +359,7 @@ test("Game-loadState", () => {
             continue;
         }
 
-        const s = game.getInitialGameState();
+        const s = game.getSetupGameState();
         const get = {pos: s.pos, move: s.move, castle: s.castle, enPassant: s.enPassant, clock: s.clock};
         expect(get).toEqual(tc.want);
     }
