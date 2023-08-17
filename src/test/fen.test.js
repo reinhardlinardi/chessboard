@@ -222,9 +222,8 @@ test("FEN-load", () => {
         }
         catch(err) {
             expect(err.code).toEqual(tc.err);
-            continue;
-        }
-
-        expect(get).toEqual(tc.want);
+        }    
+        
+        if(!tc.err) expect(get).toEqual(tc.want);
     }
 });

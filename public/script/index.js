@@ -120,7 +120,7 @@ export function updateState(keys) {
     let state = {...this.state};
     for(const key in keys) state[key] = keys[key];
 
-    game.loadState(state);
+    game.loadSetup(state);
     this.state = game.getSetupGameState();
 }
 
@@ -194,7 +194,7 @@ export function onDropRemove(ev) {
 
 /* Lifecycle */
 export function created() {
-    game.loadState(State.New());
+    game.loadSetup(State.New());
 
     let defaultState = game.getSetupGameState();
     this.defaultState = {

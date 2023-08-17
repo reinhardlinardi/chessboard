@@ -24,7 +24,7 @@ const K = Piece.WhiteKing.letter;
 const k = Piece.BlackKing.letter;
 
 
-test("Game-loadState", () => {
+test("Analysis-Game-loadSetup", () => {
     const tcs = [
         {
             name: "empty setup, all valid",
@@ -352,15 +352,144 @@ test("Game-loadState", () => {
         const game = new Game();
 
         try {
-            game.loadState(tc.state);
+            game.loadSetup(tc.state);
         }
         catch(err) {
             expect(err.code).toEqual(tc.err);
-            continue;
+        }
+    
+        if(!tc.err) {
+            const s = game.getSetupGameState();
+            const get = {pos: s.pos, move: s.move, castle: s.castle, enPassant: s.enPassant, clock: s.clock};
+            expect(get).toEqual(tc.want);
+        }
+    }
+})
+
+test("Analysis-Game-validateSetup", () => {
+    const tcs = [
+        {
+            name: "invalid halfmove",
+            state: {
+                move: White,
+                clock: {
+                    halfmove: Clock.MaxHalfmove + 1,
+                    fullmove: Clock.FullmoveStart,
+                },
+                enPassant: Location.None,
+                castle: Castle.getRights(true),
+                pos: Setup.defaultSetup(),
+            },
+            err: Err.InvalidHalfmove,
+        },
+        {
+            name: "no king",
+            state: {
+                move: Black,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: Setup.emptySetup(),
+            },
+            err: Err.InvalidKingCount,
+        },
+        {
+            name: "one side no king",
+            state: {
+                move: Black,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, k, _, q, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, Q, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+
+                ].reverse(),
+            },
+            err: Err.InvalidKingCount,
+        },
+        {
+            name: "one side more than one king",
+            state: {
+                move: Black,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, k, _, q, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, k, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, K, Q, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+
+                ].reverse(),
+            },
+            err: Err.InvalidKingCount,
+        },
+        {
+            name: "pawn in rank 1",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, q, k, _, _, _],
+                    [p, p, p, p, p, p, p, p],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [_, _, _, Q, K, _, _, P],
+
+                ].reverse(),
+            },
+            err: Err.InvalidPawnRank,
+        },
+        {
+            name: "pawn in rank 8",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, p, _, q, k, _, _, _],
+                    [p, p, p, p, p, p, p, p],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [_, _, _, Q, K, _, _, _],
+
+                ].reverse(),
+            },
+            err: Err.InvalidPawnRank,
+        },
+    ];
+
+    for(const tc of tcs) {
+        const game = new Game();
+        
+        try {
+            game.loadSetup(tc.state);
+            game.validateSetup();
+        }
+        catch(err) {
+            expect(err.code).toEqual(tc.err);
         }
 
-        const s = game.getSetupGameState();
-        const get = {pos: s.pos, move: s.move, castle: s.castle, enPassant: s.enPassant, clock: s.clock};
-        expect(get).toEqual(tc.want);
+        if(!tc.err) expect(() => game.validateSetup()).not.toThrow();
     }
 })

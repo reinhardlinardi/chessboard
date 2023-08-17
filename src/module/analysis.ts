@@ -6,14 +6,12 @@ import * as Filter from './filter.js';
 import * as FEN from './fen.js';
 import * as ID from './id.js';
 import * as Clock from './clock.js';
-import * as Color from './color.js';
 import { Direction } from './direction.js';
 import { State } from './state.js';
-import { Position, getByLocation } from './position.js';
+import { Color, White, Black, opponentOf } from './color.js';
+import { Position, get, getByLocation } from './position.js';
+import { Size as size } from './size.js';
 import * as Err from './analysis-error.js';
-
-
-const numColor = Color.getList().length;
 
 
 export interface GameState extends State {
@@ -46,10 +44,14 @@ export class Game {
 
         this.started = false;
         // this.ended = false;
-        this.setupValid = false;
+        this.setupValid = false; 
     }
 
-    loadState(s: State) {
+    getSetupGameState(): GameState | null {
+        return this.setup === null? null : {...this.setup};
+    }
+
+    loadSetup(s: State) {
         if(this.started) throw Err.New(Err.InvalidOp, "game has started");
         
         const st = this.validStateOf(s);
@@ -60,9 +62,30 @@ export class Game {
         this.setupValid = false;
     }
 
-    getSetupGameState(): GameState | null {
-        if(this.setup === null) return null;
-        else return {...this.setup};
+    validateSetup() {
+        if(this.started) throw Err.New(Err.InvalidOp, "game has started");
+
+        const setup = this.setup!;
+        const clock = setup.clock;
+
+        // Clock: Max halfmove should not be exceeded
+        if(clock.halfmove > Clock.MaxHalfmove) throw Err.New(Err.InvalidHalfmove, "invalid halfmove");
+        
+        // Position
+        const pos = setup.pos;
+
+        // 1. Count and locate both kings, each side should have exactly 1 king
+        const king: {[c: Color]: Location.Location} = {};
+        king[White] = this.setupLocateKing(pos, White);
+        king[Black] = this.setupLocateKing(pos, Black);
+        
+        // 2. No pawn in 1st and 8th rank
+        this.setupCheckPawnRank(pos);
+
+        // 3. Side to move is not checking opponent king
+        // 4. If side to play is in check, there should be at most 2 attackers
+
+        this.setupValid = true;
     }
 
     private validStateOf(s: State): State {
@@ -90,14 +113,14 @@ export class Game {
         return st;
     }
 
-    private isValidEnPassantTarget(target: Location.Location, player: Color.Color, pos: Position): boolean {
+    private isValidEnPassantTarget(target: Location.Location, player: Color, pos: Position): boolean {
         const rank = Location.rank(target);
         const file = Location.file(target);
         
         const targetRank = EnPassant.targetRank(player);
         if(rank !== targetRank) return false;
         
-        const opponent = Color.opponentOf(player);
+        const opponent = opponentOf(player);
         const opponentPawnLoc = EnPassant.opponentPawnLoc(file, player);
         
         const pawns = Filter.New(Piece.getList(), Piece.byType(Piece.TypePawn))();
@@ -115,24 +138,43 @@ export class Game {
         return false;
     }
 
-    private validateState(s: State) {
-        // Clock
-        // Check max halfmove
+    private setupLocateKing(pos: Position, color: Color): Location.Location {
+        let loc: Location.Location[] = [];
 
-        // Position
-        // 1. Count and locate both kings, each side should have exactly 1 king
-        // 2. No pawn in 1st and 8th rank
-        // 3. Side to move is not checking opponent king
-        // 4. If side to play is in check, there should be at most 2 attackers
+        const type = Piece.TypeKing;
+        const filters: Filter.Filter<Piece.Piece>[] = [Piece.byColor(color), Piece.byType(type)];
+        const target = Filter.New(Piece.getList(), ...filters)()[0].letter;
 
-        this.setupValid = true;
+        for(let rank = 1; rank <= size; rank++) {
+            for(let file = 1; file <= size; file++) {
+                const piece = get(pos, rank, file);
+                if(piece === target) loc.push(Location.of(file, rank));
+            }
+        }
+
+        if(loc.length !== 1) throw Err.New(Err.InvalidKingCount, `invalid king count for ${color}`);
+        return loc[0];
+    }
+
+    private setupCheckPawnRank(pos: Position) {
+        const ranks: number[] = [1, size];
+        
+        const pawns = Filter.New(Piece.getList(), Piece.byType(Piece.TypePawn))();
+        const P = Filter.New(pawns, Piece.byColor(White))()[0].letter;
+        const p = Filter.New(pawns, Piece.byColor(Black))()[0].letter;
+
+        for(const rank of ranks) {
+            for(let file = 1; file <= size; file++) {
+                const piece = get(pos, rank, file);
+                if(piece === P || piece === p) throw Err.New(Err.InvalidPawnRank, `no pawns allowed in rank ${rank}`);
+            }
+        }
     }
 
     // private moveIdx(fullmove: number): number {
-    //     if(this.initial === null) return -1;
-    //     const s = this.initial;
+    //     const s = this.setup!;
 
-    //     let idx: number = numColor*(fullmove - s.clock.fullmove);
-    //     return s.move === Color.White? idx: Math.max(0, idx-1);
+    //     let idx: number = 2*(fullmove - s.clock.fullmove);
+    //     return s.move === White? idx: Math.max(0, idx-1);
     // }
 };
