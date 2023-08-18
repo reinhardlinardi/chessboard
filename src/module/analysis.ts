@@ -77,7 +77,7 @@ export class Game {
         // 1. Count and locate king for both sides, each side should have exactly 1 king
         // 2. No pawn in 1st rank of both sides
         // 3. Validate check
-        this.setupValidateCountKing(setup.pos);
+        this.setupValidateKingCount(setup.pos);
         this.setupValidatePawnRank(setup.pos);
         this.setupValidateCheck(setup.move, setup.pos);
 
@@ -135,7 +135,7 @@ export class Game {
         return false;
     }
 
-    private setupValidateCountKing(pos: Position) {
+    private setupValidateKingCount(pos: Position) {
         let cnt: {[c: Color]: number} = {[White]: 0, [Black]: 0};
 
         const whiteKing = Piece.WhiteKing.letter;
@@ -174,6 +174,10 @@ export class Game {
     }
 
     private setupValidateCheck(player: Color, pos: Position) {
+        // Locate both kings (assuming king count already valid)
+
+
+        // Validation:
         // 1. Player is not checking opponent king
         // 2. If player is in check, there should be at most 2 attackers
     }
