@@ -44,8 +44,10 @@ const component = {
         updateState: page.updateState,
 
         loadFEN: page.loadFEN,
-
         onChangeFEN: page.onChangeFEN,
+
+        disableSubmit: page.disableSubmit,
+        onSubmit: page.onSubmit,
 
         onDragStart: page.onDragStart,
         onDropReplaceOrCopy: page.onDropReplaceOrCopy,

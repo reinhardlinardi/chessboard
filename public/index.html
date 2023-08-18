@@ -157,8 +157,11 @@
 
           <div class="subsection">
             <button class="button-nav"
-              disabled="disableSubmit()"
-            >Analysis →</button>
+              @click="onSubmit"  
+              :disabled="disableSubmit()"
+            >
+            Analysis →
+            </button>
           </div>
           
         </div>

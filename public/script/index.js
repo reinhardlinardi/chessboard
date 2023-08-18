@@ -148,10 +148,18 @@ export function loadFEN(fen) {
     }
 }
 
-
-/* Event listener */
 export function onChangeFEN(ev) {
     this.loadFEN(ev.target.value);
+}
+
+
+/* Submit */
+export function disableSubmit() {
+    return false;
+}
+
+export function onSubmit() {
+    
 }
 
 
