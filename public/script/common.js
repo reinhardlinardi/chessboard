@@ -102,8 +102,11 @@ export function dropGetId(ev) {
     const dnd = ev.dataTransfer;
 
     // Get dragged piece id
-    // Id is "\r\n" when we drag from empty square, so trim is used to transform invalid id to ""
-    return dnd.getData(mime).trim();
+    const id = dnd.getData(mime);
+
+    // Throw exception if text is dropped
+    if(getElement(id) === null) throw "ಠ_ಠ";
+    else return id;
 }
 
 export function getDraggedPiece(id, board) {

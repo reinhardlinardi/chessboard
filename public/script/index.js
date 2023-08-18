@@ -180,8 +180,8 @@ export function onDropReplaceOrCopy(ev) {
     const srcId = Common.dropGetId(ev);
     const destId = ev.target.id;
 
-    // Return if src not valid or dnd to self
-    if(srcId === "" || srcId === destId) return;
+    // Return if dnd to self
+    if(srcId === destId) return;
     
     // Replace piece in dest
     const piece = Common.getDraggedPiece(srcId, this.state.pos);
