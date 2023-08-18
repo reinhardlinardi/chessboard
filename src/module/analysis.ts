@@ -11,6 +11,7 @@ import { State } from './state.js';
 import { Color, White, Black, opponentOf } from './color.js';
 import { Position, get, getByLocation } from './position.js';
 import { Size as size } from './size.js';
+import { nthRank } from './rank.js';
 import * as Err from './analysis-error.js';
 
 
@@ -72,19 +73,13 @@ export class Game {
         // Clock: Max halfmove should not be exceeded
         if(clock.halfmove > Clock.MaxHalfmove) throw Err.New(Err.InvalidHalfmove, "invalid halfmove");
         
-        // Position
-        const pos = setup.pos;
-
+        // Position:
         // 1. Count and locate king for both sides, each side should have exactly 1 king
-        const king: {[c: Color]: Location.Location} = {};
-        king[White] = this.setupLocateKing(pos, White);
-        king[Black] = this.setupLocateKing(pos, Black);
-        
-        // 2. No pawn in 1st or 8th rank
-        this.setupCheckPawnRank(pos);
-
-        // 3. Side to move is not checking opponent king
-        // 4. If side to play is in check, there should be at most 2 attackers
+        // 2. No pawn in 1st rank of both sides
+        // 3. Validate check
+        this.setupValidateCountKing(setup.pos);
+        this.setupValidatePawnRank(setup.pos);
+        this.setupValidateCheck(setup.move, setup.pos);
 
         this.setupValid = true;
     }
@@ -108,7 +103,8 @@ export class Game {
 
         const none = Location.None;
         if(st.enPassant !== none) {
-            if(!this.isValidEnPassantTarget(st.enPassant, st.move, st.pos)) st.enPassant = none;
+            const valid = this.isValidEnPassantTarget(st.enPassant, st.move, st.pos);
+            if(!valid) st.enPassant = none;
         }
 
         return st;
@@ -139,37 +135,47 @@ export class Game {
         return false;
     }
 
-    private setupLocateKing(pos: Position, color: Color): Location.Location {
-        let loc: Location.Location[] = [];
+    private setupValidateCountKing(pos: Position) {
+        let cnt: {[c: Color]: number} = {[White]: 0, [Black]: 0};
 
-        const type = Piece.TypeKing;
-        const filters: Filter.Filter<Piece.Piece>[] = [Piece.byColor(color), Piece.byType(type)];
-        const target = Filter.New(Piece.getList(), ...filters)()[0].letter;
+        const whiteKing = Piece.WhiteKing.letter;
+        const blackKing = Piece.BlackKing.letter;
 
         for(let rank = 1; rank <= size; rank++) {
             for(let file = 1; file <= size; file++) {
                 const piece = get(pos, rank, file);
-                if(piece === target) loc.push(Location.of(file, rank));
+
+                if(piece === whiteKing) cnt[White]++;
+                if(piece === blackKing) cnt[Black]++;
             }
         }
 
-        if(loc.length !== 1) throw Err.New(Err.InvalidKingCount, `invalid king count for ${color}`);
-        return loc[0];
+        for(const color in cnt) {
+            if(cnt[color] !== 1) throw Err.New(Err.InvalidKingCount, `invalid ${color} king count`);
+        }
     }
 
-    private setupCheckPawnRank(pos: Position) {
-        const ranks: number[] = [1, size];
+    private setupValidatePawnRank(pos: Position) {
+        const n: number = 1;
+        const ranks: number[] = [nthRank(n, White), nthRank(n, Black)];
         
-        const pawns = Filter.New(Piece.getList(), Piece.byType(Piece.TypePawn))();
-        const P = Filter.New(pawns, Piece.byColor(White))()[0].letter;
-        const p = Filter.New(pawns, Piece.byColor(Black))()[0].letter;
+        const whitePawn = Piece.WhitePawn.letter;
+        const blackPawn = Piece.BlackPawn.letter;
 
         for(const rank of ranks) {
             for(let file = 1; file <= size; file++) {
                 const piece = get(pos, rank, file);
-                if(piece === P || piece === p) throw Err.New(Err.InvalidPawnRank, `no pawns allowed in rank ${rank}`);
+
+                if(piece === whitePawn || piece === blackPawn) {
+                    throw Err.New(Err.InvalidPawnRank, `no pawns allowed in rank ${rank}`);
+                }
             }
         }
+    }
+
+    private setupValidateCheck(player: Color, pos: Position) {
+        // 1. Player is not checking opponent king
+        // 2. If player is in check, there should be at most 2 attackers
     }
 
     // private moveIdx(fullmove: number): number {
