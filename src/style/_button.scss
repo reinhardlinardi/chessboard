@@ -2,19 +2,40 @@
 
 $font-size: min(2.4vw, 2.4vh);
 
-.button {
+%button {
     margin: 0 10px 0 0;
     border: 1px solid transparent;
     border-radius: 4px;
     padding: 4px 6px 4px 6px;
 
-    background-color: #e9e9ed;
-    
     text-align: center;
     vertical-align: middle;
     font-size: $font-size;
 }
 
-.button:hover {
+%button:hover {
     cursor: pointer;
+}
+
+.button {
+    @extend %button;
+    background-color: #d3d3d3;
+}
+
+.button-warning {
+    @extend %button;
+    background-color: #eb9c3d;
+    color: #f0f0f0;
+}
+
+.button-danger {
+    @extend %button;
+    background-color: #d9543f;
+    color: #f0f0f0;
+}
+
+.button-nav {
+    @extend %button;
+    background-color: #101010;
+    color: #f0f0f0;
 }

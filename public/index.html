@@ -105,8 +105,8 @@
         <div class="control-container">
           <p class="section-label">Board</p>
           <button class="button" @click="flipBoard">Flip</button>
-          <button class="button" @click="clearBoard">Clear</button>
-          <button class="button" @click="resetBoard">Reset</button>
+          <button class="button-warning" @click="clearBoard">Clear</button>
+          <button class="button-danger" @click="resetBoard">Reset</button>
         </div>
         
         <div class="option-container">
@@ -153,6 +153,12 @@
               </template>
             </div>
 
+          </div>
+
+          <div class="subsection">
+            <button class="button-nav"
+              disabled="disableSubmit()"
+            >Analysis →</button>
           </div>
           
         </div>
