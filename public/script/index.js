@@ -166,8 +166,8 @@ export function disableSubmit() {
     return false;
 }
 
-export function onSubmit() {
-    
+export function onSubmit(ev) {
+    Common.replaceURL("/analysis");
 }
 
 

@@ -4,16 +4,9 @@ import * as Position from '../module/position.js';
 import { Size as size } from '../module/size.js';
 
 
-/* History */
+/* URL */
 const q = new URLSearchParams(window.location.search);
 
-export function replaceHistory() {
-    const url = q.size === 0? "/" : `?${q.toString()}`; 
-    window.history.replaceState({}, "", url);
-}
-
-
-/* Query Param */
 export function hasQueryParam(name) {
     return q.has(name);
 }
@@ -30,6 +23,19 @@ export function setQueryParam(name, value) {
 export function deleteQueryParam(name) {
     q.delete(name);
     replaceHistory();
+}
+
+export function replaceHistory() {
+    const url = `${window.location.pathname}${queryURL()}`;
+    window.history.replaceState({}, "", url);
+}
+
+export function replaceURL(path) {
+    window.location.href = `${path}${queryURL()}`;
+}
+
+function queryURL() {
+    return q.size === 0? "" : `?${q.toString()}`;
 }
 
 
