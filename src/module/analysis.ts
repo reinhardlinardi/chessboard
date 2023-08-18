@@ -74,12 +74,12 @@ export class Game {
         // Position
         const pos = setup.pos;
 
-        // 1. Count and locate both kings, each side should have exactly 1 king
+        // 1. Count and locate king for both sides, each side should have exactly 1 king
         const king: {[c: Color]: Location.Location} = {};
         king[White] = this.setupLocateKing(pos, White);
         king[Black] = this.setupLocateKing(pos, Black);
         
-        // 2. No pawn in 1st and 8th rank
+        // 2. No pawn in 1st or 8th rank
         this.setupCheckPawnRank(pos);
 
         // 3. Side to move is not checking opponent king

@@ -155,6 +155,14 @@ export function onChangeFEN(ev) {
 
 /* Submit */
 export function disableSubmit() {
+    try {
+        game.validateSetup();
+    }
+    catch(err) {
+        console.log(Err.str(err));
+        return true;
+    }
+
     return false;
 }
 
