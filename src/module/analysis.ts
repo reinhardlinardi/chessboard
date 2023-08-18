@@ -64,8 +64,9 @@ export class Game {
 
     validateSetup() {
         if(this.started) throw Err.New(Err.InvalidOp, "game has started");
+        if(this.setup === null) throw Err.New(Err.NoSetupLoaded, "no setup loaded");
 
-        const setup = this.setup!;
+        const setup = this.setup;
         const clock = setup.clock;
 
         // Clock: Max halfmove should not be exceeded
