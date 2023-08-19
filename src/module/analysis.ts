@@ -6,6 +6,7 @@ import * as Filter from './filter.js';
 import * as FEN from './fen.js';
 import * as ID from './id.js';
 import * as Clock from './clock.js';
+import * as GamePos from './game-position.js';
 import { Direction } from './direction.js';
 import { State } from './state.js';
 import { Color, White, Black, opponentOf } from './color.js';
@@ -174,12 +175,17 @@ export class Game {
     }
 
     private setupValidateCheck(player: Color, pos: Position) {
-        // Locate both kings (assuming each side only have 1 king)
+        const opponent = opponentOf(player);
+
+        // Locate both kings
         const playerKingLoc = this.setupLocateKing(player, pos);
-        const opponentKingLoc = this.setupLocateKing(opponentOf(player), pos);
+        const opponentKingLoc = this.setupLocateKing(opponent, pos);
 
         // Validation:
         // 1. Player is not checking opponent king
+        const opponentAttack = GamePos.analyzeAttackOn(pos, opponent, opponentKingLoc);
+        console.log(opponentAttack);
+        
         // 2. If player is in check, there should be at most 2 attackers
     }
 
