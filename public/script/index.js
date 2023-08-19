@@ -145,6 +145,7 @@ export function loadFEN(fen) {
     }
     catch(err) {
         console.log(Err.str(err));
+        this.updateState();
     }
 }
 
