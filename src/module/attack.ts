@@ -8,6 +8,8 @@ export type Lines = {[direction: string]: string[]};
 export type Attacks = {[t: Type]: Lines};
 export type AttackMap = {[c: Color]: Attacks};
 
+
+// {"w": {"0": {"8": ["n"], ...}, "1": {"1": ["k"], ...}, "2": {"1": ["r","q"], ...}}, "b": ...}
 const attackMap: AttackMap = Object.freeze({
     [White]: attacksOn(White),
     [Black]: attacksOn(Black),
@@ -55,3 +57,5 @@ function sortAttackers(first: Attacker, second: Attacker): number {
     if(direction1 === direction2) return type1 - type2;
     else return direction1 - direction2;
 }
+
+console.log(JSON.stringify(attackMap));
