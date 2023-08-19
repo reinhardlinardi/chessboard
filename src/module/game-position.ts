@@ -34,13 +34,13 @@ export function analyzeAttackOn(pos: Position, color: Color, loc: Location.Locat
 
         for(const directionStr in lines) {
             const direction = parseInt(directionStr);
-            const pieces = lines[direction]; 
+            const pieces = lines[direction];
 
-            // if(type === PieceAttack.TypeRange)
-            /* else */
-            
-            const attackerLoc = getAttacker(pos, opponent, loc, direction, pieces);
+            const getAttackerFn = (type === PieceAttack.TypeRange)? getRangeAttacker : getAttacker;
+            const attackerLoc = getAttackerFn(pos, opponent, loc, direction, pieces);
             if(attackerLoc !== Location.None) attack.attackers.push(attackerLoc);
+
+            // if TypeRange check pins
         }
     }
 
@@ -58,6 +58,11 @@ function getAttacker(pos: Position, opponent: Color, loc: Location.Location, dir
     if(piece.color !== opponent) return Location.None;
 
     return pieces.includes(piece.letter)? attackerLoc : Location.None;
+}
+
+function getRangeAttacker(pos: Position, opponent: Color, loc: Location.Location, direction: Direction, pieces: string[]): Location.Location {
+    // TODO: Implement
+    return Location.None;
 }
 
 function outOfBound(loc: Location.Location): boolean {
