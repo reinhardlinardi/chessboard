@@ -174,12 +174,27 @@ export class Game {
     }
 
     private setupValidateCheck(player: Color, pos: Position) {
-        // Locate both kings (assuming king count already valid)
-
+        // Locate both kings (assuming each side only have 1 king)
+        const playerKingLoc = this.setupLocateKing(player, pos);
+        const opponentKingLoc = this.setupLocateKing(opponentOf(player), pos);
 
         // Validation:
         // 1. Player is not checking opponent king
         // 2. If player is in check, there should be at most 2 attackers
+    }
+
+    private setupLocateKing(color: Color, pos: Position): Location.Location {
+        const filter = Filter.New(Piece.getList(), Piece.byType(Piece.TypeKing), Piece.byColor(color));
+        const king = filter()[0].letter;
+
+        for(let rank = 1; rank <= size; rank++) {
+            for(let file = 1; file <= size; file++) {
+                const piece = get(pos, rank, file);
+                if(piece === king) return Location.of(file, rank);
+            }
+        }
+
+        return Location.None;
     }
 
     // private moveIdx(fullmove: number): number {

@@ -1,5 +1,6 @@
 import * as Direction from './direction.js';
 import * as PieceDirection from './piece-direction.js';
+import * as PieceAttack from './piece-attack.js';
 import { Filter } from './filter.js';
 import { Color, Black, White } from './color.js';
 
@@ -19,8 +20,7 @@ export const TypeKing: Type = 5;
 export interface AbstractPiece {
     type: Type,
     value: number,
-    range: boolean,
-    jump: boolean,
+    attack: PieceAttack.Type,
 };
 
 export interface Piece extends AbstractPiece {
@@ -33,43 +33,37 @@ export interface Piece extends AbstractPiece {
 export const Pawn: AbstractPiece = Object.freeze({
     type: TypePawn,
     value: 1,
-    range: false,
-    jump: false,
+    attack: PieceAttack.TypeAdjacent,
 });
 
 export const Knight: AbstractPiece = Object.freeze({
     type: TypeKnight,
     value: 3,
-    range: false,
-    jump: true,
+    attack: PieceAttack.TypeJump,
 });
 
 export const Bishop: AbstractPiece = Object.freeze({
     type: TypeBishop,
     value: 3,
-    range: true,
-    jump: false,
+    attack: PieceAttack.TypeRange,
 });
 
 export const Rook: AbstractPiece = Object.freeze({
     type: TypeRook,
     value: 5,
-    range: true,
-    jump: false,
+    attack: PieceAttack.TypeRange,
 });
 
 export const Queen: AbstractPiece = Object.freeze({
     type: TypeQueen,
     value: 9,
-    range: true,
-    jump: false,
+    attack: PieceAttack.TypeRange,
 });
 
 export const King: AbstractPiece = Object.freeze({
     type: TypeKing,
     value: 1000,
-    range: false,
-    jump: false,
+    attack: PieceAttack.TypeAdjacent,
 });
 
 export const WhitePawn: Piece = Object.freeze({
