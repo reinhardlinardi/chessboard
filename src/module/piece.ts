@@ -1,4 +1,5 @@
-import * as Move from './move.js';
+import * as Direction from './direction.js';
+import * as PieceDirection from './piece-direction.js';
 import { Filter } from './filter.js';
 import { Color, Black, White } from './color.js';
 
@@ -25,7 +26,8 @@ export interface AbstractPiece {
 export interface Piece extends AbstractPiece {
     color: Color,
     letter: string,
-    moves: Move.Move[],
+    move: Direction.Direction[],
+    capture: Direction.Direction[],
 };
 
 export const Pawn: AbstractPiece = Object.freeze({
@@ -74,84 +76,96 @@ export const WhitePawn: Piece = Object.freeze({
     ...Pawn,
     color: White,
     letter: "P",
-    moves: [Move.WhitePawnAdvance, Move.WhitePawnCapture],
+    move: [...PieceDirection.WhitePawnAdvance],
+    capture: [...PieceDirection.WhitePawnCapture],
 });
 
 export const BlackPawn: Piece = Object.freeze({
     ...Pawn,
     color: Black,
     letter: "p",
-    moves: [Move.BlackPawnAdvance, Move.BlackPawnCapture],
+    move: [...PieceDirection.BlackPawnAdvance],
+    capture: [...PieceDirection.BlackPawnCapture],
 });
 
 export const WhiteKnight: Piece = Object.freeze({
     ...Knight,
     color: White,
     letter: "N",
-    moves: [Move.Knight],
+    move: [...PieceDirection.Knight],
+    capture: [...PieceDirection.Knight],
 });
 
 export const BlackKnight: Piece = Object.freeze({
     ...Knight,
     color: Black,
     letter: "n",
-    moves: [Move.Knight],
+    move: [...PieceDirection.Knight],
+    capture: [...PieceDirection.Knight],
 });
 
 export const WhiteBishop: Piece = Object.freeze({
     ...Bishop,
     color: White,
     letter: "B",
-    moves: [Move.Bishop],
+    move: [...PieceDirection.Bishop],
+    capture: [...PieceDirection.Bishop],
 });
 
 export const BlackBishop: Piece = Object.freeze({
     ...Bishop,
     color: Black,
     letter: "b",
-    moves: [Move.Bishop],
+    move: [...PieceDirection.Bishop],
+    capture: [...PieceDirection.Bishop],
 });
 
 export const WhiteRook: Piece = Object.freeze({
     ...Rook,
     color: White,
     letter: "R",
-    moves: [Move.Rook],
+    move: [...PieceDirection.Rook],
+    capture: [...PieceDirection.Rook],
 });
 
 export const BlackRook: Piece = Object.freeze({
     ...Rook,
     color: Black,
     letter: "r",
-    moves: [Move.Rook],
+    move: [...PieceDirection.Rook],
+    capture: [...PieceDirection.Rook],
 });
 
 export const WhiteQueen: Piece = Object.freeze({
     ...Queen,
     color: White,
     letter: "Q",
-    moves: [Move.Queen],
+    move: [...PieceDirection.Queen],
+    capture: [...PieceDirection.Queen],
 });
 
 export const BlackQueen: Piece = Object.freeze({
     ...Queen,
     color: Black,
     letter: "q",
-    moves: [Move.Queen],
+    move: [...PieceDirection.Queen],
+    capture: [...PieceDirection.Queen],
 });
 
 export const WhiteKing: Piece = Object.freeze({
     ...King,
     color: White,
     letter: "K",
-    moves: [Move.King],
+    move: [...PieceDirection.King],
+    capture: [...PieceDirection.King],
 });
 
 export const BlackKing: Piece = Object.freeze({
     ...King,
     color: Black,
     letter: "k",
-    moves: [Move.King],
+    move: [...PieceDirection.King],
+    capture: [...PieceDirection.King],
 });
 
 
