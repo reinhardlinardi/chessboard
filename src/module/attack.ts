@@ -1,8 +1,7 @@
-import * as Direction from './direction.js';
 import * as Piece from './piece.js';
 import * as Filter from './filter.js';
-import { Color, White, Black, opponentOf } from './color.js';
 import { Type } from './piece-attack.js';
+import { Color, White, Black, opponentOf } from './color.js';
 
 
 export type Lines = {[direction: string]: string[]};
@@ -19,7 +18,7 @@ export function getMap(color: Color): Attacks {
 }
 
 
-type Attacker = {[d: Direction.Direction]: string};
+type Attacker = {[direction: string]: string};
 
 function attacksOn(color: Color): Attacks {
     const pieces = Filter.New(Piece.getList(), Piece.byColor(opponentOf(color)))();
@@ -33,12 +32,12 @@ function attacksOn(color: Color): Attacks {
     let attacks: Attacks = {};
 
     for(const entry of map) {
-        let direction = parseInt(Object.keys(entry)[0]);
+        let direction = Object.keys(entry)[0];
         let piece = Piece.get(entry[direction]);
         let type = piece.attack;
 
         if(!(type in attacks)) attacks[type] = {};
-        if(!(direction in attacks[type])) attacks[type][direction.toString()] = [];
+        if(!(direction in attacks[type])) attacks[type][direction] = [];
         attacks[type][direction].push(piece.letter);
     }
 
