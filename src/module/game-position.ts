@@ -9,7 +9,6 @@ import { TypeRange } from './piece-move.js';
 import * as Err from './game-position-error.js';
 
 
-
 export interface SquareAttack {
     attackers: Location.Location[],
     pins: Location.Location[],
@@ -62,14 +61,18 @@ function getAttacker(pos: Position, opponent: Color, loc: Location.Location, dir
 }
 
 function getRangeAttacker(pos: Position, opponent: Color, loc: Location.Location, direction: Direction, pieces: string[]): Location.Location {
-    const none = Location.None;
-    // let square = loc;
+    let square = loc;
 
-    // while(!outOfBound(square += direction)) {
-    // }
+    while(!outOfBound(square += direction)) {
+        const letter = getByLocation(pos, square);
+        if(letter === Piece.None) continue;
 
-    // TODO: Implement
-    return none;
+        const piece = Piece.get(letter);
+        if(piece.color === opponent && pieces.includes(piece.letter)) return square;
+        else break;
+    }
+
+    return Location.None;
 }
 
 function outOfBound(loc: Location.Location): boolean {
