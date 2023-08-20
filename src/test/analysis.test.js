@@ -477,6 +477,279 @@ test("Analysis-Game-validateSetup", () => {
             },
             err: Err.InvalidPawnRank,
         },
+        {
+            name: "opponent king in check 1",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, q, k, _, _, _],
+                    [p, p, p, P, p, p, p, p],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [_, _, _, Q, K, _, _, _],
+
+                ].reverse(),
+            },
+            err: Err.InvalidPosition,
+        },
+        {
+            name: "opponent king in check 2",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, q, k, _, _, _],
+                    [p, p, p, p, p, p, p, p],
+                    [_, _, _, _, _, N, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [_, _, _, Q, K, _, _, _],
+
+                ].reverse(),
+            },
+            err: Err.InvalidPosition,
+        },
+        {
+            name: "opponent king in check 3",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, q, k, _, _, R],
+                    [p, p, p, p, p, p, p, p],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [_, _, _, Q, K, _, _, _],
+
+                ].reverse(),
+            },
+            err: Err.InvalidPosition,
+        },
+        {
+            name: "opponent king in check 4",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, q, k, _, _, _],
+                    [p, p, p, _, p, p, p, p],
+                    [_, _, _, _, _, _, _, _],
+                    [_, B, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [_, _, _, Q, K, _, _, _],
+
+                ].reverse(),
+            },
+            err: Err.InvalidPosition,
+        },
+        {
+            name: "opponent king in check 5",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, q, k, _, _, _],
+                    [p, p, p, p, _, p, p, p],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, Q, _, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [_, _, _, Q, K, _, _, _],
+
+                ].reverse(),
+            },
+            err: Err.InvalidPosition,
+        },
+        {
+            name: "opponent king in check 6",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, q, k, _, _, _],
+                    [p, p, p, p, p, _, p, p],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, Q],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [_, _, _, Q, K, _, _, _],
+
+                ].reverse(),
+            },
+            err: Err.InvalidPosition,
+        },
+        {
+            name: "king adjacent with opponent's",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, q, _, _, _, _],
+                    [p, p, p, p, p, p, p, p],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, k, _, _, _],
+                    [_, _, _, _, K, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [_, _, _, Q, _, _, _, _],
+
+                ].reverse(),
+            },
+            err: Err.InvalidPosition,
+        },
+        {
+            name: "king in check too many attackers 1",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, q, k, _, _, _],
+                    [p, p, p, p, p, p, p, p],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, n, _, n, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [_, _, _, Q, K, _, _, q],
+
+                ].reverse(),
+            },
+            err: Err.InvalidPosition,
+        },
+        {
+            name: "king in check too many attackers 2",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, q, k, _, _, _],
+                    [p, p, p, p, p, p, p, p],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, n, _, n, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [r, _, _, Q, K, B, _, q],
+
+                ].reverse(),
+            },
+            err: Err.InvalidPosition,
+        },
+        {
+            name: "valid 1",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, q, k, _, _, _],
+                    [p, p, p, p, p, p, p, p],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, n, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [r, _, _, Q, K, r, _, q],
+
+                ].reverse(),
+            },
+            err: null,
+        },
+        {
+            name: "valid 2",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, q, k, _, _, _],
+                    [p, p, p, p, _, p, p, p],
+                    [_, _, b, _, _, _, _, _],
+                    [_, _, _, _, p, _, _, _],
+                    [_, _, _, _, K, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [_, _, _, Q, _, _, _, _],
+
+                ].reverse(),
+            },
+            err: null,
+        },
+        {
+            name: "valid 3",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, _, _, q, _, _, _, _],
+                    [p, p, p, p, _, k, p, p],
+                    [_, _, b, _, N, _, _, _],
+                    [_, _, _, B, p, _, _, _],
+                    [_, _, _, _, K, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [P, P, P, P, P, P, P, P],
+                    [_, _, _, Q, _, _, _, _],
+
+                ].reverse(),
+            },
+            err: null,
+        },
+        {
+            name: "valid 4",
+            state: {
+                move: White,
+                clock: Clock.New(),
+                enPassant: Location.None,
+                castle: Castle.getRights(false),
+                pos: [
+                    [_, q, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [k, _, _, _, _, _, _, _],
+                    [_, _, _, _, _, _, _, _],
+                    [K, _, _, _, _, _, _, _],
+
+                ].reverse(),
+            },
+            err: null,
+        },
     ];
 
     for(const tc of tcs) {
