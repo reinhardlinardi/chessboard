@@ -184,7 +184,7 @@ export class Game {
         // Validation:
         // 1. Player is not checking opponent king
         const opponentAttackers = GamePos.analyzeAttackOn(pos, opponent, opponentKingLoc);
-        if(opponentAttackers.length > 0) throw Err.New(Err.InvalidPosition, "opponent king can't be in check");
+        if(opponentAttackers.length > 0) throw Err.New(Err.InvalidPosition, `${opponent} king can't be in check`);
         
         // 2. If player is in check, there should be at most 2 attackers
         const attackers = GamePos.analyzeAttackOn(pos, player, playerKingLoc);
