@@ -75,7 +75,7 @@ export class Game {
         if(clock.halfmove > Clock.MaxHalfmove) throw Err.New(Err.InvalidHalfmove, "invalid halfmove");
         
         // Position:
-        // 1. Count and locate king for both sides, each side should have exactly 1 king
+        // 1. Count king for both sides, each side should have exactly 1 king
         // 2. No pawn in 1st rank of both sides
         // 3. Validate check
         this.setupValidateKingCount(setup.pos);
