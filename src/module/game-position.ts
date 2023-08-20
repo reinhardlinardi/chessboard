@@ -1,12 +1,11 @@
 import * as Location from './location.js';
 import * as Piece from './piece.js';
 import * as Attack from './attack.js';
-import * as PieceAttack from './piece-attack.js';
 import { Color, White, Black, opponentOf } from './color.js';
 import { Position, getByLocation } from './position.js';
 import { Size as size } from './size.js';
 import { Direction } from './direction.js';
-import { TypeRange } from './piece-attack.js';
+import { TypeRange } from './piece-move.js';
 import * as Err from './game-position-error.js';
 
 
@@ -36,7 +35,7 @@ export function analyzeAttackOn(pos: Position, color: Color, loc: Location.Locat
             const direction = parseInt(directionStr);
             const pieces = lines[direction];
 
-            const getAttackerFn = (type === PieceAttack.TypeRange)? getRangeAttacker : getAttacker;
+            const getAttackerFn = (type === TypeRange)? getRangeAttacker : getAttacker;
             const attackerLoc = getAttackerFn(pos, opponent, loc, direction, pieces);
             if(attackerLoc !== Location.None) attack.attackers.push(attackerLoc);
 
@@ -48,21 +47,29 @@ export function analyzeAttackOn(pos: Position, color: Color, loc: Location.Locat
 }
 
 function getAttacker(pos: Position, opponent: Color, loc: Location.Location, direction: Direction, pieces: string[]): Location.Location {
-    let attackerLoc = loc + direction;
-    if(outOfBound(attackerLoc)) return Location.None;
+    const none = Location.None;
 
-    const attacker = getByLocation(pos, attackerLoc);
-    if(attacker === Piece.None) return Location.None;
+    let square = loc + direction;
+    if(outOfBound(square)) return none;
+
+    const letter = getByLocation(pos, square);
+    if(letter === Piece.None) return none;
     
-    const piece = Piece.get(attacker);
-    if(piece.color !== opponent) return Location.None;
+    const piece = Piece.get(letter);
+    if(piece.color !== opponent) return none;
 
-    return pieces.includes(piece.letter)? attackerLoc : Location.None;
+    return pieces.includes(piece.letter)? square : none;
 }
 
 function getRangeAttacker(pos: Position, opponent: Color, loc: Location.Location, direction: Direction, pieces: string[]): Location.Location {
+    const none = Location.None;
+    // let square = loc;
+
+    // while(!outOfBound(square += direction)) {
+    // }
+
     // TODO: Implement
-    return Location.None;
+    return none;
 }
 
 function outOfBound(loc: Location.Location): boolean {

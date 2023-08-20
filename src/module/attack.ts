@@ -1,6 +1,6 @@
 import * as Piece from './piece.js';
 import * as Filter from './filter.js';
-import { Type } from './piece-attack.js';
+import { Type } from './piece-move.js';
 import { Color, White, Black, opponentOf } from './color.js';
 
 
@@ -9,7 +9,7 @@ export type Attacks = {[t: Type]: Lines};
 export type AttackMap = {[c: Color]: Attacks};
 
 
-// {"w": {"0": {"8": ["n"], ...}, "1": {"1": ["k"], ...}, "2": {"1": ["r","q"], ...}}, "b": ...}
+// {"w": {"0": {"1": ["k"], "8": ["n"], "9": ["p", "k"], ...}, "1": {"1": ["r", "q"], ...}}, "b": ...}
 const attackMap: AttackMap = Object.freeze({
     [White]: attacksOn(White),
     [Black]: attacksOn(Black),

@@ -1,14 +1,16 @@
 import * as Direction from './direction.js';
 
 
-export const WhitePawnAdvance: readonly Direction.Direction[] = Object.freeze([Direction.Black]);
-export const WhitePawnCapture: readonly Direction.Direction[] = Object.freeze(Direction.BlackDiagonal);
+export type Directions = readonly Direction.Direction[];
 
-export const BlackPawnAdvance: readonly Direction.Direction[] = Object.freeze([Direction.White]);
-export const BlackPawnCapture: readonly Direction.Direction[] = Object.freeze(Direction.WhiteDiagonal);
+export const WhitePawnAdvance: Directions = Object.freeze([Direction.Black]);
+export const WhitePawnCapture: Directions = Object.freeze(Direction.BlackDiagonal);
 
-export const Knight: readonly Direction.Direction[] = Object.freeze([21, 19, 12, 8, -8, -12, -19, -21]);
-export const Bishop: readonly Direction.Direction[] = Object.freeze(Direction.Diagonal);
-export const Rook: readonly Direction.Direction[] = Object.freeze([...Direction.Vertical, ...Direction.Horizontal]);
-export const Queen: readonly Direction.Direction[] = Object.freeze(Direction.All);
-export const King: readonly Direction.Direction[] = Object.freeze(Direction.All);
+export const BlackPawnAdvance: Directions = Object.freeze([Direction.White]);
+export const BlackPawnCapture: Directions = Object.freeze(Direction.WhiteDiagonal);
+
+export const Knight: Directions = Object.freeze([21, 19, 12, 8, -8, -12, -19, -21]);
+export const Bishop: Directions = Object.freeze(Direction.Diagonal);
+export const Rook: Directions = Object.freeze([...Direction.Vertical, ...Direction.Horizontal]);
+export const Queen: Directions = Object.freeze(Direction.All);
+export const King: Directions = Object.freeze(Direction.All);
