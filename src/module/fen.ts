@@ -88,7 +88,7 @@ export function load(str: string): State {
     const target = parts[3];
 
     if(target !== NA) {
-        const file = File.fileOf(target[0]);
+        const file = File.of(target[0]);
         const rank = parseInt(target[1]);
         enPassant = Location.of(file, rank);
     }

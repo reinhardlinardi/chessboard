@@ -56,7 +56,7 @@ test("FEN-generate", () => {
                     halfmove: 99,
                     fullmove: 100,
                 },
-                enPassant: Location.of(File.fileOf(File.c), 3),
+                enPassant: Location.of(File.of(File.c), 3),
                 castle: {[K]: true, [Q]: false, [k]: false, [q]: true},
                 pos: [
                     [r, _, _, _, k, _, _, _],
@@ -197,7 +197,7 @@ test("FEN-load", () => {
             want: {
                 move: Black,
                 castle: {[K]: false, [Q]: true, [k]: true, [q]: false},
-                enPassant: Location.of(File.fileOf(File.e), 8),
+                enPassant: Location.of(File.of(File.e), 8),
                 clock: {halfmove: 101, fullmove: 0},
                 pos: [
                     [r, _, _, _, k, _, _, _],

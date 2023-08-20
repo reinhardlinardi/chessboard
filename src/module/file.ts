@@ -24,6 +24,6 @@ const map: {[file: string]: number} = Object.freeze(
     label.reduce((map, label, idx) => ({...map, [label]: idx+1}), {})
 );
 
-export function fileOf(label: string): number {
+export function of(label: string): number {
     return map[label];
 }

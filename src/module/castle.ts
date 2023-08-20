@@ -122,7 +122,7 @@ function getPieceMove(piece: string, type: Type, color: Color): Move {
     const pieceType = Piece.get(piece).type;
 
     const rank = nthRank(1, color);
-    const file = File.fileOf(getPieceFile(pieceType, type));
+    const file = File.of(getPieceFile(pieceType, type));
     const direction = getPieceDirection(pieceType, type);
     
     return {piece: piece, direction: direction, from: Location.of(file, rank)};

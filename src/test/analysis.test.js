@@ -123,7 +123,7 @@ test("Analysis-Game-loadSetup", () => {
             state: {
                 move: White,
                 clock: Clock.New(),
-                enPassant: Location.of(File.fileOf(File.a), 7),
+                enPassant: Location.of(File.of(File.a), 7),
                 castle: Castle.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
@@ -161,7 +161,7 @@ test("Analysis-Game-loadSetup", () => {
             state: {
                 move: White,
                 clock: Clock.New(),
-                enPassant: Location.of(File.fileOf(File.c), 6),
+                enPassant: Location.of(File.of(File.c), 6),
                 castle: Castle.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
@@ -199,7 +199,7 @@ test("Analysis-Game-loadSetup", () => {
             state: {
                 move: White,
                 clock: Clock.New(),
-                enPassant: Location.of(File.fileOf(File.h), 6),
+                enPassant: Location.of(File.of(File.h), 6),
                 castle: Castle.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
@@ -237,7 +237,7 @@ test("Analysis-Game-loadSetup", () => {
             state: {
                 move: Black,
                 clock: Clock.New(),
-                enPassant: Location.of(File.fileOf(File.b), 6),
+                enPassant: Location.of(File.of(File.b), 6),
                 castle: Castle.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
@@ -275,7 +275,7 @@ test("Analysis-Game-loadSetup", () => {
             state: {
                 move: Black,
                 clock: Clock.New(),
-                enPassant: Location.of(File.fileOf(File.a), 3),
+                enPassant: Location.of(File.of(File.a), 3),
                 castle: Castle.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
@@ -293,7 +293,7 @@ test("Analysis-Game-loadSetup", () => {
             want: {
                 move: Black,
                 clock: Clock.New(),
-                enPassant: Location.of(File.fileOf(File.a), 3),
+                enPassant: Location.of(File.of(File.a), 3),
                 castle: Castle.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
@@ -313,7 +313,7 @@ test("Analysis-Game-loadSetup", () => {
             state: {
                 move: Black,
                 clock: Clock.New(),
-                enPassant: Location.of(File.fileOf(File.g), 3),
+                enPassant: Location.of(File.of(File.g), 3),
                 castle: Castle.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
@@ -331,7 +331,7 @@ test("Analysis-Game-loadSetup", () => {
             want: {
                 move: Black,
                 clock: Clock.New(),
-                enPassant: Location.of(File.fileOf(File.g), 3),
+                enPassant: Location.of(File.of(File.g), 3),
                 castle: Castle.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
