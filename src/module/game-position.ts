@@ -9,13 +9,7 @@ import { TypeRange } from './piece-move.js';
 import * as Err from './game-position-error.js';
 
 
-export interface SquareAttack {
-    attackers: Location.Location[],
-    pins: Location.Location[],
-};
-
-
-export function analyzeAttackOn(pos: Position, color: Color, loc: Location.Location): SquareAttack {
+export function analyzeAttackOn(pos: Position, color: Color, loc: Location.Location): Location.Location[] {
     const piece = getByLocation(pos, loc);
     if(piece !== Piece.None) {
         if(Piece.get(piece).color !== color) throw Err.New(Err.ConflictParam, "color not equal piece color");
@@ -24,7 +18,7 @@ export function analyzeAttackOn(pos: Position, color: Color, loc: Location.Locat
     const opponent = opponentOf(color);
 
     const map = Attack.getMap(color);
-    let attack: SquareAttack = {attackers: [], pins: []};
+    let attackers: Location.Location[] = [];
 
     for(const typeStr in map) {
         const type = parseInt(typeStr);
@@ -36,13 +30,11 @@ export function analyzeAttackOn(pos: Position, color: Color, loc: Location.Locat
 
             const getAttackerFn = (type === TypeRange)? getRangeAttacker : getAttacker;
             const attackerLoc = getAttackerFn(pos, opponent, loc, direction, pieces);
-            if(attackerLoc !== Location.None) attack.attackers.push(attackerLoc);
-
-            // if TypeRange check pins
+            if(attackerLoc !== Location.None) attackers.push(attackerLoc);
         }
     }
 
-    return attack;
+    return attackers;
 }
 
 function getAttacker(pos: Position, opponent: Color, loc: Location.Location, direction: Direction, pieces: string[]): Location.Location {
