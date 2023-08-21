@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage ./watch css|js
+# Usage: ./watch css|js
 
 case $1 in
     'css')
