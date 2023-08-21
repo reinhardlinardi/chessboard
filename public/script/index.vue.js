@@ -44,6 +44,7 @@ const component = {
         updateState: page.updateState,
 
         loadFEN: page.loadFEN,
+        copyFEN: page.copyFEN,
         onChangeFEN: page.onChangeFEN,
 
         disableSubmit: page.disableSubmit,

@@ -149,6 +149,13 @@ export function loadFEN(fen) {
     }
 }
 
+export function copyFEN(ev) {
+    const fen = Common.getElement("fen").value;
+    navigator.clipboard.writeText(fen);
+    
+    console.log("FEN copied");
+}
+
 export function onChangeFEN(ev) {
     this.loadFEN(ev.target.value);
 }

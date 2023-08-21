@@ -91,11 +91,13 @@
         <div class="fen-container">
           <label class="fen-label">FEN</label>
           <input type="text"
+            id="fen"
             class="fen-input"
             :value="this.fen"
             @change="onChangeFEN"
             spellcheck="false"
           >
+          <button class="button-background" @click="copyFEN">📋</button>
         </div>
 
       </div>
