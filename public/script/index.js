@@ -220,13 +220,12 @@ export function onDropRemove(ev) {
 export function created() {
     game.loadSetup(State.New());
 
-    let defaultState = game.getSetupGameState();
+    let state = game.getSetupGameState();
     this.defaultState = {
-        clock: {...defaultState.clock},
-        id: defaultState.id,
+        clock: {...state.clock},
+        id: state.id,
     };
 
-    let state = defaultState;
     if(Common.hasQueryParam(fenParam)) {
         let fen = Common.getQueryParam(fenParam);
 
