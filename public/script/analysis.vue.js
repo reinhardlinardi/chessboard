@@ -14,9 +14,6 @@ const component = {
         }
     },
     methods: {
-        whiteAdvantage: page.whiteAdvantage,
-        blackAdvantage: page.blackAdvantage,
-        
         rankOf: page.rankOf,
         fileOf: page.fileOf,
         labelOf: page.labelOf,

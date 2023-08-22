@@ -1,21 +1,11 @@
 import * as Common from './common.js';
 import * as State from '../module/state.js';
-import * as Position from '../module/position.js';
+import * as Piece from '../module/piece.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
 
 
 const game = new Game();
-
-
-/* Info bar */
-export function whiteAdvantage() {
-
-}
-
-export function blackAdvantage() {
-
-}
 
 
 /* Board */
