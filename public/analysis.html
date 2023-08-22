@@ -17,42 +17,55 @@
 
     <div id="app" class="perfect-center">
 
-      <div class="invisible-tray">
-        <!-- <template v-for="idx in getTrayPieceIdx()">
-          <div>
-              <img class="piece"
-                :src="`svg/${getTopTrayPiece(idx)}.svg`"
-                :id="`piece-top-tray-${idx}`"
-                draggable="true"
-                @dragstart="onDragStart"
-                :data-piece-type="`${getTopTrayPiece(idx)}`"
-              >
-          </div>
-        </template> -->
-      
-      </div>
+      <div>
 
-      <div class="board">
-        <template v-for="(row, y) in state.pos">
-          <template v-for="(_, x) in row">
+        <div class="top-info-bar">
+          ♙♘♗♖♕ +123456789
+        </div>
 
-            <div :class="(y+x) % 2 === 0? 'light-square':'dark-square'"
-              :id="`board-y${y}-x${x}`"
-              :data-square="`${labelOf(x)}${rankOf(y)}`"
-              :data-rank="rankOf(y)"
-              :data-file="fileOf(x)"
-            >
-              <img class="piece" 
-                v-if="!isEmpty(rankOf(y), fileOf(x))"
-                :src="`svg/${getPiece(rankOf(y), fileOf(x))}.svg`"
-                :id="`piece-y${y}-x${x}`"
+        <div class="board">
+          <template v-for="(row, y) in state.pos">
+            <template v-for="(_, x) in row">
+
+              <div :class="(y+x) % 2 === 0? 'light-square':'dark-square'"
+                :id="`board-y${y}-x${x}`"
+                :data-square="`${labelOf(x)}${rankOf(y)}`"
+                @dragover.prevent
+                @drop.prevent="onDropReplaceOrCopy"
                 :data-rank="rankOf(y)"
                 :data-file="fileOf(x)"
               >
-            </div>
+                <img class="piece" 
+                  v-if="!isEmpty(rankOf(y), fileOf(x))"
+                  :src="`svg/${getPiece(rankOf(y), fileOf(x))}.svg`"
+                  :id="`piece-y${y}-x${x}`"
+                  draggable="true"
+                  @dragstart="onDragStart"
+                  :data-rank="rankOf(y)"
+                  :data-file="fileOf(x)"
+                >
+              </div>
 
+            </template>
           </template>
-        </template>
+        </div>
+
+        <div class="bottom-info-bar">
+          ♙♘♗♖♕ +123456789
+        </div>
+
+        <div class="fen-container">
+          <label class="fen-label">FEN</label>
+          <input type="text"
+            id="fen"
+            class="fen-input"
+            :value="this.state.fen"
+            spellcheck="false"
+            readonly
+          >
+          <button class="button-background" @click="copyFEN">📋</button>
+        </div>
+
       </div>
 
     </div>

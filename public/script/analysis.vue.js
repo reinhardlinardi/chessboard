@@ -6,12 +6,13 @@ const component = {
     data() {
         return {
             state: {},
+            defaultState: {
+                clock: {},
+                id: "",
+            },
             flip: false,
         }
     },
-    // computed: {
-    //     fen: page.getFEN,
-    // },
     methods: {
         // getTrayPiece: page.getTrayPiece,
         
@@ -23,13 +24,14 @@ const component = {
 
         flipBoard: page.flipBoard,
 
+        isSameState: page.isSameState,
         updateState: page.updateState,
 
-        // copyFEN: page.copyFEN,
+        copyFEN: page.copyFEN,
 
-        // onDragStart: page.onDragStart,
-        // onDropReplaceOrCopy: page.onDropReplaceOrCopy,
-        // onDropRemove: page.onDropRemove,
+        onDragStart: page.onDragStart,
+        onDropReplaceOrCopy: page.onDropReplaceOrCopy,
+        onDropRemove: page.onDropRemove,
     },
     created: page.created,
 };

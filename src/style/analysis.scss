@@ -1,5 +1,22 @@
 @use 'global';
 @use 'board';
 @use 'button';
+@use 'common';
+@use 'font';
 
+%info-bar {
+    @extend %font-open-sans;
+    font-size: min(2.2vw, 2.2vh);
+    color: #f0f0f0;
+}
 
+.top-info-bar {
+    @extend %info-bar;
+    margin: 8px 0 0 0;
+    padding: 0 0 5px 0;
+}
+
+.bottom-info-bar {
+    @extend %info-bar;
+    padding: 6px 0 0 0;
+}
