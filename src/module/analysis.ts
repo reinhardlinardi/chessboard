@@ -15,13 +15,18 @@ import { nthRank } from './rank.js';
 import * as Err from './analysis-error.js';
 
 
+export type PieceCount = {[piece: string]: number};
+export type PosRepeat = {[id: string]: number};
+
+
 export interface GameState extends State {
     fen: string,
     id: string,
     
     from: Location.Location,
     to: Location.Location,
-    count: {[id: string]: number},
+    count: PieceCount,
+    repeat: PosRepeat,
 };
 
 
@@ -59,9 +64,10 @@ export class Game {
         
         const from = Location.None;
         const to = Location.None;
-        const count = {[id]: 1};
+        const count = this.setupPieceCount(st.pos);
+        const repeat: PosRepeat = {[id]: 1};
 
-        this.game = [{...st, fen: fen, id: id, from: from, to: to, count: count}];
+        this.game = [{...st, fen: fen, id: id, from: from, to: to, count: count, repeat: repeat}];
         this.setupValid = false;
     }
 
@@ -158,6 +164,18 @@ export class Game {
         }
         
         return false;
+    }
+
+    private setupPieceCount(pos: Position): PieceCount {
+        let count: PieceCount = Piece.getList().reduce((map, piece) => ({...map, [piece.letter]: 0}), {});
+
+        for(let rank = 1; rank <= size; rank++) {
+            for(let file = 1; file <= size; file++) {
+                const piece = get(pos, rank, file);
+                if(piece !== Piece.None) count[piece]++;
+            }
+        }
+        return count;
     }
 
     private setupValidateKingCount(pos: Position) {
