@@ -31,7 +31,7 @@
                 :id="`board-y${y}-x${x}`"
                 :data-square="`${labelOf(x)}${rankOf(y)}`"
                 @dragover.prevent
-                @drop.prevent="onDropReplaceOrCopy"
+                @drop.prevent="onDropReplace"
                 :data-rank="rankOf(y)"
                 :data-file="fileOf(x)"
               >

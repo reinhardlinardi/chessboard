@@ -84,11 +84,6 @@ export function isEmpty(board, rank, file) {
 /* Drag and drop */
 const mime = "text/plain";
 
-
-export function fromTray(id) {
-    return id.includes("tray");
-}
-
 export function dragSetId(ev, id) {
     let dnd = ev.dataTransfer;
 
@@ -107,11 +102,6 @@ export function dropGetId(ev) {
     // Throw exception if text is dropped
     if(getElement(id) === null) throw "ಠ_ಠ";
     else return id;
-}
-
-export function getDraggedPiece(id, board) {
-    const data = getElementData(id);
-    return fromTray(id)? data.pieceType : getPiece(board, data.rank, data.file);
 }
 
 export function replacePiece(id, piece, board) {

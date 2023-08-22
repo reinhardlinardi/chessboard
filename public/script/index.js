@@ -180,6 +180,15 @@ export function onSubmit(ev) {
 
 
 /* Drag and drop */
+export function fromTray(id) {
+    return id.includes("tray");
+}
+
+export function getDraggedPiece(id) {
+    const data = Common.getElementData(id);
+    return fromTray(id)? data.pieceType : Common.getPiece(this.state.pos, data.rank, data.file);
+}
+
 export function onDragStart(ev) {
     Common.dragSetId(ev, ev.target.id);
 }
@@ -192,13 +201,13 @@ export function onDropReplaceOrCopy(ev) {
     if(srcId === destId) return;
     
     // Replace piece in dest
-    const piece = Common.getDraggedPiece(srcId, this.state.pos);
+    const piece = this.getDraggedPiece(srcId);
 
     let pos = Position.copy(this.state.pos);
     Common.replacePiece(destId, piece, pos);
 
     // Remove piece in src if not tray
-    if(!Common.fromTray(srcId)) Common.removePiece(srcId, pos);
+    if(!fromTray(srcId)) Common.removePiece(srcId, pos);
     this.updateState({pos: pos});
 }
 
@@ -207,7 +216,7 @@ export function onDropRemove(ev) {
     const srcId = Common.dropGetId(ev);
 
     // Remove piece if src is not tray
-    if(!Common.fromTray(srcId)) {
+    if(!fromTray(srcId)) {
         let pos = Position.copy(this.state.pos);
         
         Common.removePiece(srcId, pos);

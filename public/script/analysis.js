@@ -8,6 +8,16 @@ import * as Err from '../module/error.js';
 const game = new Game();
 
 
+/* Info bar */
+export function whiteAdvantage() {
+
+}
+
+export function blackAdvantage() {
+
+}
+
+
 /* Board */
 export function rankOf(y) {
     return Common.rankOf(y, this.flip);
@@ -64,7 +74,12 @@ export function onDragStart(ev) {
     Common.dragSetId(ev, ev.target.id);
 }
 
-export function onDropReplaceOrCopy(ev) {
+export function getDraggedPiece(id) {
+    const data = Common.getElementData(id);
+    return Common.getPiece(this.state.pos, data.rank, data.file);
+}
+
+export function onDropReplace(ev) {
     const srcId = Common.dropGetId(ev);
     const destId = ev.target.id;
 
@@ -72,27 +87,12 @@ export function onDropReplaceOrCopy(ev) {
     if(srcId === destId) return;
     
     // Replace piece in dest
-    const piece = Common.getDraggedPiece(srcId, this.state.pos);
+    const piece = this.getDraggedPiece(srcId, this.state.pos);
 
-    let pos = Position.copy(this.state.pos);
-    Common.replacePiece(destId, piece, pos);
-
-    // Remove piece in src if not tray
-    if(!Common.fromTray(srcId)) Common.removePiece(srcId, pos);
-    // this.updateState({pos: pos});
-}
-
-export function onDropRemove(ev) {
-    // Get dragged piece id
-    const srcId = Common.dropGetId(ev);
-
-    // Remove piece if src is not tray
-    if(!Common.fromTray(srcId)) {
-        let pos = Position.copy(this.state.pos);
-        
-        Common.removePiece(srcId, pos);
-        // this.updateState({pos: pos});
-    }
+    let state = {...this.state};
+    Common.replacePiece(destId, piece, state.pos);
+    Common.removePiece(srcId, state.pos);
+    this.updateState(state);
 }
 
 

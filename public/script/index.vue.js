@@ -50,6 +50,7 @@ const component = {
         disableSubmit: page.disableSubmit,
         onSubmit: page.onSubmit,
 
+        getDraggedPiece: page.getDraggedPiece,
         onDragStart: page.onDragStart,
         onDropReplaceOrCopy: page.onDropReplaceOrCopy,
         onDropRemove: page.onDropRemove,

@@ -14,7 +14,8 @@ const component = {
         }
     },
     methods: {
-        // getTrayPiece: page.getTrayPiece,
+        whiteAdvantage: page.whiteAdvantage,
+        blackAdvantage: page.blackAdvantage,
         
         rankOf: page.rankOf,
         fileOf: page.fileOf,
@@ -29,9 +30,9 @@ const component = {
 
         copyFEN: page.copyFEN,
 
+        getDraggedPiece: page.getDraggedPiece,
         onDragStart: page.onDragStart,
-        onDropReplaceOrCopy: page.onDropReplaceOrCopy,
-        onDropRemove: page.onDropRemove,
+        onDropReplace: page.onDropReplace,
     },
     created: page.created,
 };
