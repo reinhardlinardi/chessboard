@@ -7,7 +7,6 @@ import * as FEN from './fen.js';
 import * as ID from './id.js';
 import * as Clock from './clock.js';
 import * as GamePos from './game-position.js';
-import { Direction } from './direction.js';
 import { State } from './state.js';
 import { Color, White, Black, opponentOf } from './color.js';
 import { Position, get, getByLocation } from './position.js';
@@ -19,38 +18,36 @@ import * as Err from './analysis-error.js';
 export interface GameState extends State {
     fen: string,
     id: string,
+    
+    from: Location.Location,
+    to: Location.Location,
+    count: {[id: string]: number},
 };
-
-// export interface GameMove {
-//     move: Color.Color,
-//     pgn: string,
-//     from: Location.Location,
-//     direction: Direction,
-// };
 
 
 export class Game {
     private started: boolean;
-    // private ended: boolean;
     private setupValid: boolean;
 
-    private setup: GameState | null;
-    // private game: GameState | null;
-    // private moves: GameMove[];
-
+    private game: GameState[];
+    private moves: string[];
 
     constructor() {
-        this.setup = null;
-        // this.game = null;
-        // this.moves = [];
+        this.game = [];
+        this.moves = [];
 
         this.started = false;
-        // this.ended = false;
         this.setupValid = false; 
     }
 
     getSetupGameState(): GameState | null {
-        return this.setup === null? null : {...this.setup};
+        if(this.game.length === 0) return null;
+        return this.game[0];
+    }
+
+    getGameState(fullmove: number, color: Color): GameState | null {
+        const idx = this.gameStateIdx(fullmove, color);
+        return idx < 0? null : this.game[idx];
     }
 
     loadSetup(s: State) {
@@ -59,16 +56,20 @@ export class Game {
         const st = this.validStateOf(s);
         const fen = FEN.generate(st);
         const id = ID.generateFromFEN(fen);
+        
+        const from = Location.None;
+        const to = Location.None;
+        const count = {[id]: 1};
 
-        this.setup = {...st, fen: fen, id: id};
+        this.game = [{...st, fen: fen, id: id, from: from, to: to, count: count}];
         this.setupValid = false;
     }
 
     validateSetup() {
         if(this.started) throw Err.New(Err.InvalidOp, "game has started");
-        if(this.setup === null) throw Err.New(Err.NoSetupLoaded, "no setup loaded");
+        if(this.game.length === 0) throw Err.New(Err.NoSetupLoaded, "no setup loaded");
 
-        const setup = this.setup;
+        const setup = this.game[0];
         const clock = setup.clock;
 
         // Clock: Max halfmove should not be exceeded
@@ -83,6 +84,29 @@ export class Game {
         this.setupValidateCheck(setup.move, setup.pos);
 
         this.setupValid = true;
+    }
+
+    start() {
+        if(!this.setupValid) throw Err.New(Err.InvalidOp, "invalid setup");
+        this.started = true;
+    }
+
+    private gameStateIdx(fullmove: number, color: Color): number {
+        if(this.game.length === 0) return -1;
+
+        const setup = this.game[0];
+        if(fullmove < setup.clock.fullmove) return -1;
+
+        let idx: number = 2*(fullmove - setup.clock.fullmove);
+        if(color === Black) idx++;
+        if(setup.move === Black) idx--;
+
+        return idx;
+    }
+
+    private moveIdx(fullmove: number, color: Color): number {
+        const idx = this.gameStateIdx(fullmove, color)-1;
+        return idx < 0? -1 : idx;
     }
 
     private validStateOf(s: State): State {
@@ -204,11 +228,4 @@ export class Game {
 
         return Location.None;
     }
-
-    // private moveIdx(fullmove: number): number {
-    //     const s = this.setup!;
-
-    //     let idx: number = 2*(fullmove - s.clock.fullmove);
-    //     return s.move === White? idx: Math.max(0, idx-1);
-    // }
 };
