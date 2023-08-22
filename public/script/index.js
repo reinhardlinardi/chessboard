@@ -108,7 +108,7 @@ export function setCastle(ev) {
 
 
 /* State */
-export function isSameState() {
+export function isDefaultState() {
     const ref = this.defaultState;
     const state = this.state;
 
@@ -130,8 +130,8 @@ export function updateState(keys) {
 const fenParam = "fen";
 
 export function getFEN() {
-    if(this.isSameState()) Common.deleteQueryParam(fenParam);
-    else Common.setQueryParam(fenParam, this.state.fen);
+    if(this.isDefaultState()) Common.deleteQuery(fenParam);
+    else Common.setQuery(fenParam, this.state.fen);
 
     return this.state.fen;
 }
@@ -175,7 +175,12 @@ export function disableSubmit() {
 }
 
 export function onSubmit(ev) {
-    Common.replaceURL("/analysis");
+    let query = {};
+
+    if(!this.isDefaultState()) {
+        query = {import: fenParam, [fenParam]: Common.getQuery(fenParam)};
+    }
+    Common.openURL("/analysis", query);
 }
 
 
@@ -235,8 +240,8 @@ export function created() {
         id: state.id,
     };
 
-    if(Common.hasQueryParam(fenParam)) {
-        let fen = Common.getQueryParam(fenParam);
+    if(Common.hasQuery(fenParam)) {
+        let fen = Common.getQuery(fenParam);
 
         try {
             state = FEN.load(fen);

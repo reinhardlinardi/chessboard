@@ -7,35 +7,38 @@ import { Size as size } from '../module/size.js';
 /* URL */
 const q = new URLSearchParams(window.location.search);
 
-export function hasQueryParam(name) {
+export function hasQuery(name) {
     return q.has(name);
 }
 
-export function getQueryParam(name) {
+export function getQuery(name) {
     return q.get(name);
 }
 
-export function setQueryParam(name, value) {
+export function setQuery(name, value) {
     q.set(name, value);
     replaceHistory();
 }
 
-export function deleteQueryParam(name) {
+export function deleteQuery(name) {
     q.delete(name);
     replaceHistory();
 }
 
 export function replaceHistory() {
-    const url = `${window.location.pathname}${queryURL()}`;
+    const url = `${window.location.pathname}${queryURL(q)}`;
     window.history.replaceState({}, "", url);
 }
 
-export function replaceURL(path) {
-    window.location.href = `${path}${queryURL()}`;
+export function openURL(path, params) {
+    const query = new URLSearchParams();
+    for(const key in params) query.set(key, params[key]);
+    
+    window.location.href = `${path}${queryURL(query)}`;
 }
 
-function queryURL() {
-    return q.size === 0? "" : `?${q.toString()}`;
+function queryURL(query) {
+    return query.size === 0? "" : `?${query.toString()}`;
 }
 
 

@@ -40,7 +40,7 @@ const component = {
         setMove: page.setMove,
         setCastle: page.setCastle,
 
-        isSameState: page.isSameState,
+        isDefaultState: page.isDefaultState,
         updateState: page.updateState,
 
         loadFEN: page.loadFEN,

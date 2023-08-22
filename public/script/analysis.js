@@ -35,7 +35,7 @@ export function flipBoard() {
 
 
 /* State */
-export function isSameState() {
+export function isDefaultState() {
     const ref = this.defaultState;
     const state = this.state;
 

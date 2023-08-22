@@ -22,7 +22,7 @@ const component = {
 
         flipBoard: page.flipBoard,
 
-        isSameState: page.isSameState,
+        isDefaultState: page.isDefaultState,
         updateState: page.updateState,
 
         copyFEN: page.copyFEN,
