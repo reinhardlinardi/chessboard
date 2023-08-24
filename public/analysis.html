@@ -19,9 +19,7 @@
 
       <div>
 
-        <div class="top-info-bar">
-          ♙♘♗♖♕ +123456789
-        </div>
+        <div class="top-adv-bar" v-text="advantage(flip? white():black())"></div>
 
         <div class="board">
           <template v-for="(row, y) in state.pos">
@@ -50,9 +48,7 @@
           </template>
         </div>
 
-        <div class="bottom-info-bar">
-          ♙♘♗♖♕ +123456789
-        </div>
+        <div class="bottom-adv-bar" v-text="advantage(flip? black():white())"></div>
 
         <div class="fen-container">
           <label class="fen-label">FEN</label>

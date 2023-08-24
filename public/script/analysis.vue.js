@@ -14,6 +14,10 @@ const component = {
         }
     },
     methods: {
+        white: page.white,
+        black: page.black,
+        advantage: page.advantage,
+
         rankOf: page.rankOf,
         fileOf: page.fileOf,
         labelOf: page.labelOf,

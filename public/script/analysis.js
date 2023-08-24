@@ -1,10 +1,76 @@
 import * as Common from './common.js';
 import * as FEN from '../module/fen.js';
+import * as Piece from '../module/piece.js';
+import * as Filter from '../module/filter.js';
+import * as AbstractPiece from '../module/abstract-piece.js';
+import * as Type from '../module/piece-type.js';
+import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
 
 
 const game = new Game();
+
+
+/* Advantage bar */
+const abstractPieces = AbstractPiece.getList();
+const pieces = Piece.getList();
+
+const types = abstractPieces.map(piece => piece.type);
+const values = abstractPieces.reduce((map, piece) => ({...map, [piece.type]: piece.value}), {});
+const whitePieces = Filter.New(pieces, Piece.byColor(White))().reduce((map, piece) => ({...map, [piece.type]: piece.letter}), {});
+const blackPieces = Filter.New(pieces, Piece.byColor(Black))().reduce((map, piece) => ({...map, [piece.type]: piece.letter}), {});
+
+const figurine = {
+    [Type.TypePawn]: "♟︎",
+    [Type.TypeKnight]: "♞",
+    [Type.TypeBishop]: "♝",
+    [Type.TypeRook]: "♜",
+    [Type.TypeQueen]: "♛",
+}
+
+export function white() {
+    return White;
+}
+
+export function black() {
+    return Black;
+}
+
+export function advantage(color) {
+    let str = "";
+    let total = 0;
+    
+    let cnt = countDifference(this.state.count)
+    if(color === Black) {
+        for(const type in cnt) cnt[type] *= -1;
+    }
+
+    for(const type in cnt) {
+        const diff = cnt[type];
+        if(diff === 0) continue;
+        if(diff > 0) str += figurine[type].repeat(diff);
+
+        total += diff * values[type];
+    }
+
+    if(total > 0) str += ` +${total}`;
+    return str;
+}
+
+function countDifference(count) {
+    let cnt = {};
+    
+    for(let idx = 0; idx < types.length; idx++) {
+        const type = types[idx];
+        if(type !== Type.TypeKing) {
+            const whiteCount = count[whitePieces[type]];
+            const blackCount = count[blackPieces[type]];
+            cnt[type] = whiteCount-blackCount;
+        }
+    }
+    return cnt;
+}
 
 
 /* Board */
