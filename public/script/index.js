@@ -109,7 +109,7 @@ export function setCastle(ev) {
 
 /* State */
 export function isDefaultState() {
-    const ref = this.defaultState;
+    const ref = this.stateDefault;
     const state = this.state;
 
     return state.id === ref.id && state.clock.halfmove === ref.clock.halfmove &&
@@ -127,11 +127,11 @@ export function updateState(keys) {
 
 
 /* FEN */
-const fenParam = "fen";
+const paramFEN = "fen";
 
 export function getFEN() {
-    if(this.isDefaultState()) Common.deleteQuery(fenParam);
-    else Common.setQuery(fenParam, this.state.fen);
+    if(this.isDefaultState()) Common.deleteQuery(paramFEN);
+    else Common.setQuery(paramFEN, this.state.fen);
 
     return this.state.fen;
 }
@@ -178,7 +178,7 @@ export function onSubmit(ev) {
     let query = {};
 
     if(!this.isDefaultState()) {
-        query = {import: fenParam, [fenParam]: Common.getQuery(fenParam)};
+        query = {import: paramFEN, [paramFEN]: Common.getQuery(paramFEN)};
     }
     Common.openURL("/analysis", query);
 }
@@ -232,24 +232,30 @@ export function onDropRemove(ev) {
 
 /* Lifecycle */
 export function created() {
-    game.loadSetup(State.New());
-
-    let state = game.getSetupGameState();
-    this.defaultState = {
-        clock: {...state.clock},
-        id: state.id,
+    const ref = State.New();
+    
+    game.loadSetup(ref);
+    this.stateDefault = {
+        clock: {...ref.clock},
+        id: game.getSetupGameState().id,
     };
 
-    if(Common.hasQuery(fenParam)) {
-        let fen = Common.getQuery(fenParam);
+    let state = ref;
+    if(Common.hasQuery(paramFEN)) state = importStateFromFEN(ref);
+    
+    this.updateState(state);
+}
 
-        try {
-            state = FEN.load(fen);
-        }
-        catch(err) {
-            console.log(Err.str(err));
-        }
+function importStateFromFEN(ref) {
+    let state = ref;
+    let fen = Common.getQuery(paramFEN);
+
+    try {
+        state = FEN.load(fen);
+    }
+    catch(err) {
+        console.log(Err.str(err));
     }
 
-    this.updateState(state);
+    return state;
 }

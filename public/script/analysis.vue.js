@@ -6,11 +6,11 @@ const component = {
     data() {
         return {
             state: {},
-            defaultState: {
+            flip: false,
+            stateDefault: {
                 clock: {},
                 id: "",
             },
-            flip: false,
         }
     },
     methods: {

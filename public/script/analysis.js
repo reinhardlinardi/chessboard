@@ -1,6 +1,6 @@
 import * as Common from './common.js';
 import * as State from '../module/state.js';
-import * as Piece from '../module/piece.js';
+import * as FEN from '../module/fen.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
 
@@ -36,7 +36,7 @@ export function flipBoard() {
 
 /* State */
 export function isDefaultState() {
-    const ref = this.defaultState;
+    const ref = this.stateDefault;
     const state = this.state;
 
     return state.id === ref.id && state.clock.halfmove === ref.clock.halfmove &&
@@ -49,7 +49,7 @@ export function updateState(state) {
 
 
 /* FEN */
-const fenParam = "fen";
+const paramFEN = "fen";
 
 export function copyFEN(ev) {
     const fen = Common.getElement("fen").value;
@@ -87,35 +87,50 @@ export function onDropReplace(ev) {
 
 
 /* Lifecycle */
+const paramImport = "import";
+
 export function created() {
     game.loadSetup(State.New());
+    const ref = game.getSetupGameState();
 
-    let state = game.getSetupGameState();
-    this.defaultState = {
-        clock: {...state.clock},
-        id: state.id,
+    this.stateDefault = {
+        clock: {...ref.clock},
+        id: ref.id,
     };
 
-    // if(Common.hasQueryParam(fenParam)) {
-    //     let fen = Common.getQueryParam(fenParam);
-
-    //     try {
-    //         state = FEN.load(fen);
-    //         game.loadSetup(state);
-    //     }
-    //     catch(err) {
-    //         console.log(Err.str(err));
-    //     }
-    // }
+    let gameState = ref;
+    if(Common.hasQuery(paramImport)) gameState = importGameState(ref);
 
     try {
         game.validateSetup();
-        state = game.getSetupGameState();
     }
     catch(err) {
         console.log(Err.str(err));
+        gameState = ref;
     }
 
     game.start();
-    this.updateState(state);
+    this.updateState(gameState);
+}
+
+function importGameState(ref) {
+    const from = Common.getQuery(paramImport);
+    
+    if(from === paramFEN && Common.hasQuery(paramFEN)) return importFromFEN(ref);
+}
+
+function importFromFEN(ref) {
+    let gameState = ref;
+    let fen = Common.getQuery(paramFEN);
+
+    try {
+        let state = FEN.load(fen);
+        game.loadSetup(state);
+        gameState = game.getSetupGameState();
+    }
+    catch(err) {
+        console.log(Err.str(err));        
+    }
+
+    return gameState;
 }
