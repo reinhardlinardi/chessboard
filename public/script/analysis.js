@@ -1,5 +1,4 @@
 import * as Common from './common.js';
-import * as State from '../module/state.js';
 import * as FEN from '../module/fen.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
