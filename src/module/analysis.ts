@@ -12,6 +12,7 @@ import { Color, White, Black, opponentOf } from './color.js';
 import { Position, get, getByLocation } from './position.js';
 import { Size as size } from './size.js';
 import { nthRank } from './rank.js';
+import { TypePawn } from './piece-type.js';
 import { getKingLocation } from './game-position-util.js';
 import * as Err from './analysis-error.js';
 
@@ -155,7 +156,7 @@ export class Game {
         const opponent = opponentOf(player);
         const opponentPawnLoc = EnPassant.opponentPawnLoc(file, player);
         
-        const pawns = Filter.New(Piece.getList(), Piece.byType(Piece.TypePawn))();
+        const pawns = Filter.New(Piece.getList(), Piece.byType(TypePawn))();
         const opponentPawn = Filter.New(pawns, Piece.byColor(opponent))()[0].letter;
         
         if(getByLocation(pos, opponentPawnLoc) !== opponentPawn) return false;

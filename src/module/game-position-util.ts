@@ -4,6 +4,7 @@ import * as Location from './location.js';
 import { Color } from './color.js';
 import { Size as size } from './size.js';
 import { Position, get } from './position.js';
+import { TypeKing } from './piece-type.js';
 
 
 export function outOfBound(loc: Location.Location): boolean {
@@ -15,7 +16,7 @@ export function outOfBound(loc: Location.Location): boolean {
 
 export function getKingLocation(pos: Position, color: Color): Location.Location {
     const pieces = Piece.getList();
-    const king = Filter.New(pieces, Piece.byType(Piece.TypeKing), Piece.byColor(color))()[0].letter;
+    const king = Filter.New(pieces, Piece.byType(TypeKing), Piece.byColor(color))()[0].letter;
 
     for(let rank = 1; rank <= size; rank++) {
         for(let file = 1; file <= size; file++) {

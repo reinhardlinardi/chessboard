@@ -1,6 +1,7 @@
 import * as Piece from './piece.js';
 import * as File from './file.js';
 import * as Location from './location.js';
+import * as PieceType from './piece-type.js';
 import { nthRank } from './rank.js';
 import { Filter } from './filter.js';
 import { Color, White, Black } from './color.js';
@@ -40,7 +41,7 @@ const k = Piece.BlackKing.letter;
 
 const short = TypeShort;
 const long = TypeLong;
-const king = Piece.TypeKing;
+const king = PieceType.TypeKing;
 
 
 export const WhiteShort: Castle = Object.freeze({
@@ -108,12 +109,12 @@ export function byType(type: Type): Filter<Castle> {
 
 
 
-function getPieceFile(piece: Piece.Type, type: Type): string {
+function getPieceFile(piece: PieceType.Type, type: Type): string {
     if(piece === king) return File.e;
     return type === long? File.a : File.h;
 }
 
-function getPieceDirection(piece: Piece.Type, type: Type): Direction {
+function getPieceDirection(piece: PieceType.Type, type: Type): Direction {
     if(piece === king) return type === long? 2*Queenside : 2*Kingside;
     return type === long? 3*Kingside : 2*Queenside;
 }
