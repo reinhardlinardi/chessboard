@@ -11,14 +11,12 @@ src = {}
 gen = {}
 
 src_res.each_line do |line|
-    path = line.strip!
-    file = File.basename(path, ".ts")
+    file = File.basename(line.strip!, ".ts")
     src[file] = nil
 end
 
 gen_res.each_line do |line|
-    path = line.strip!
-    file = File.basename(path, ".js")
+    file = File.basename(line.strip!, ".js")
     gen[file] = nil
 end
 
@@ -26,14 +24,11 @@ delete = []
 cmd = "rm -rf"
 
 gen.each_key do |file|
-    if !src.has_key?(file)
-        delete.push(file)
-    end
+    delete.push(file) if !src.has_key?(file)
 end
 
 delete.each do |file|
-    path = "public/module/#{file}.js"
-    cmd += " #{path}"
+    cmd += " public/module/#{file}.js"
 end
 
-`#{cmd}`
+`#{cmd}` if delete.length > 0

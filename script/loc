@@ -15,12 +15,11 @@ res.each_line.with_index do |line, idx|
     str = line.split(" ")
 
     filename = File.basename(str[1])
-    len = filename.length
-    max_len = len > max_len ? len : max_len
-
     loc = str[0].to_i
-    total += loc
     data[filename] = loc
+
+    total += loc
+    max_len = filename.length > max_len ? filename.length : max_len    
 end
 
 max_digits = total.to_s.length
