@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage: ./test [debug] ...
+# Usage: ./test [debug] [args]...
 
 node_args=''
 jest_args=''
@@ -9,10 +9,7 @@ if [[ $1 == 'debug' ]]
 then
     node_args='--inspect-brk'
     jest_args='--runInBand'
-
-    # Remove first argument
     shift
 fi
 
-# Pass remaining arguments to end of command
 yarn node $node_args --experimental-vm-modules $(yarn bin jest) $jest_args $@

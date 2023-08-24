@@ -3,14 +3,15 @@
 # Usage: ./loc
 
 # ---
-out = `find src/module public/script -type f | xargs wc -l | head -n -1`
+
+res = `find src/module public/script -type f | sort | xargs wc -l | head -n -1`
 
 data = {}
 
 max_len = 0
 total = 0
 
-out.each_line.with_index do | line, idx |
+res.each_line.with_index do |line, idx|
     str = line.split(" ")
 
     filename = File.basename(str[1])
@@ -24,7 +25,7 @@ end
 
 max_digits = total.to_s.length
 
-data.each do | filename, loc |
+data.each do |filename, loc|
     len = filename.length
     digits = loc.to_s.length
     print " " * (max_len-len), filename, " = ",  " " * (max_digits-digits), loc, "\n"
