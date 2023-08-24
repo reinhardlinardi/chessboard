@@ -232,30 +232,24 @@ export function onDropRemove(ev) {
 
 /* Lifecycle */
 export function created() {
-    const ref = State.New();
-    
-    game.loadSetup(ref);
+    game.useDefaultSetup();
+
+    const gameState = game.getSetupGameState();
     this.stateDefault = {
-        clock: {...ref.clock},
-        id: game.getSetupGameState().id,
+        clock: {...gameState.clock},
+        id: gameState.id,
     };
 
-    let state = ref;
-    if(Common.hasQuery(paramFEN)) state = importStateFromFEN(ref);
-    
-    this.updateState(state);
-}
-
-function importStateFromFEN(ref) {
-    let state = ref;
-    let fen = Common.getQuery(paramFEN);
-
-    try {
-        state = FEN.load(fen);
-    }
-    catch(err) {
-        console.log(Err.str(err));
+    const fen = Common.getQuery(paramFEN);
+    if(fen) {
+        try {
+            game.loadSetup(FEN.load(fen));
+        }
+        catch(err) {
+            console.log(Err.str(err));
+            game.useDefaultSetup();
+        }
     }
 
-    return state;
+    this.state = game.getSetupGameState();
 }

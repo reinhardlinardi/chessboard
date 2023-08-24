@@ -6,8 +6,8 @@ import * as Filter from './filter.js';
 import * as FEN from './fen.js';
 import * as ID from './id.js';
 import * as Clock from './clock.js';
+import * as State from './state.js';
 import * as GamePos from './game-position.js';
-import { State } from './state.js';
 import { Color, White, Black, opponentOf } from './color.js';
 import { Position, get, getByLocation } from './position.js';
 import { Size as size } from './size.js';
@@ -20,7 +20,7 @@ export type PieceCount = {[piece: string]: number};
 export type PosRepeat = {[id: string]: number};
 
 
-export interface GameState extends State {
+export interface GameState extends State.State {
     fen: string,
     id: string,
     
@@ -56,19 +56,19 @@ export class Game {
         return idx < 0? null : this.game[idx];
     }
 
-    loadSetup(s: State) {
+    useDefaultSetup() {
+        if(this.started) throw Err.New(Err.InvalidOp, "game has started");
+
+        const gameState = this.setupGameStateOf(State.New());
+        this.game = [gameState];
+        this.setupValid = true;
+    }
+
+    loadSetup(s: State.State) {
         if(this.started) throw Err.New(Err.InvalidOp, "game has started");
         
-        const st = this.validStateOf(s);
-        const fen = FEN.generate(st);
-        const id = ID.generateFromFEN(fen);
-        
-        const from = Location.None;
-        const to = Location.None;
-        const count = this.setupPieceCount(st.pos);
-        const repeat: PosRepeat = {[id]: 1};
-
-        this.game = [{...st, fen: fen, id: id, from: from, to: to, count: count, repeat: repeat}];
+        const gameState = this.setupGameStateOf(this.validStateOf(s));
+        this.game = [gameState];
         this.setupValid = false;
     }
 
@@ -96,6 +96,9 @@ export class Game {
     start() {
         if(!this.setupValid) throw Err.New(Err.InvalidOp, "invalid setup");
         this.started = true;
+
+        // TODO: Remove
+        // Move.generateAll(this.game[this.game.length-1]);
     }
 
     private gameStateIdx(fullmove: number, color: Color): number {
@@ -116,7 +119,7 @@ export class Game {
         return idx < 0? -1 : idx;
     }
 
-    private validStateOf(s: State): State {
+    private validStateOf(s: State.State): State.State {
         let st = {...s};
 
         let clock = st.clock;
@@ -177,6 +180,18 @@ export class Game {
             }
         }
         return count;
+    }
+
+    private setupGameStateOf(s: State.State): GameState {
+        const fen = FEN.generate(s);
+        const id = ID.generateFromFEN(fen);
+        
+        const from = Location.None;
+        const to = Location.None;
+        const count = this.setupPieceCount(s.pos);
+        const repeat: PosRepeat = {[id]: 1};
+
+        return {...s, fen: fen, id: id, from: from, to: to, count: count, repeat: repeat};
     }
 
     private setupValidateKingCount(pos: Position) {

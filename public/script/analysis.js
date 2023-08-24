@@ -90,47 +90,32 @@ export function onDropReplace(ev) {
 const paramImport = "import";
 
 export function created() {
-    game.loadSetup(State.New());
-    const ref = game.getSetupGameState();
+    game.useDefaultSetup();
 
+    const ref = game.getSetupGameState();
     this.stateDefault = {
         clock: {...ref.clock},
         id: ref.id,
     };
 
-    let gameState = ref;
-    if(Common.hasQuery(paramImport)) gameState = importGameState(ref);
-
-    try {
-        game.validateSetup();
-    }
-    catch(err) {
-        console.log(Err.str(err));
-        gameState = ref;
+    const from = Common.getQuery(paramImport);
+    if(from && from === paramFEN) {
+        try {
+            game.loadSetup(importGameState(from));
+            game.validateSetup();
+        }
+        catch(err) {
+            console.log(Err.str(err));
+            game.useDefaultSetup();
+        }
     }
 
     game.start();
-    this.updateState(gameState);
+    this.updateState(game.getSetupGameState());
+
+    if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);
 }
 
-function importGameState(ref) {
-    const from = Common.getQuery(paramImport);
-    
-    if(from === paramFEN && Common.hasQuery(paramFEN)) return importFromFEN(ref);
-}
-
-function importFromFEN(ref) {
-    let gameState = ref;
-    let fen = Common.getQuery(paramFEN);
-
-    try {
-        let state = FEN.load(fen);
-        game.loadSetup(state);
-        gameState = game.getSetupGameState();
-    }
-    catch(err) {
-        console.log(Err.str(err));        
-    }
-
-    return gameState;
+function importGameState(from) {
+    if(from === paramFEN) return FEN.load(Common.getQuery(paramFEN));
 }

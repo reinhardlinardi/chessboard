@@ -7,10 +7,6 @@ import { Size as size } from '../module/size.js';
 /* URL */
 const q = new URLSearchParams(window.location.search);
 
-export function hasQuery(name) {
-    return q.has(name);
-}
-
 export function getQuery(name) {
     return q.get(name);
 }
@@ -22,6 +18,11 @@ export function setQuery(name, value) {
 
 export function deleteQuery(name) {
     q.delete(name);
+    replaceHistory();
+}
+
+export function deleteQueries(...names) {
+    for(const name of names) q.delete(name);
     replaceHistory();
 }
 

@@ -93,7 +93,7 @@
           <input type="text"
             id="fen"
             class="fen-input"
-            :value="this.fen"
+            :value="fen"
             @change="onChangeFEN"
             spellcheck="false"
           >
@@ -131,7 +131,7 @@
                   <input type="checkbox"
                     :id="`checkbox-${opt.letter}`"
                     @click="setCastle"
-                    :checked="this.state.castle[opt.letter]"
+                    :checked="state.castle[opt.letter]"
                     :data-castle-type="`${opt.letter}`"
                   />
                   <label class="section-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
@@ -147,7 +147,7 @@
                   <input type="checkbox"
                     :id="`checkbox-${opt.letter}`"
                     @click="setCastle"
-                    :checked="this.state.castle[opt.letter]"
+                    :checked="state.castle[opt.letter]"
                     :data-castle-type="`${opt.letter}`"
                   >
                   <label class="section-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
