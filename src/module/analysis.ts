@@ -12,6 +12,7 @@ import { Color, White, Black, opponentOf } from './color.js';
 import { Position, get, getByLocation } from './position.js';
 import { Size as size } from './size.js';
 import { nthRank } from './rank.js';
+import { getKingLocation } from './game-position-util.js';
 import * as Err from './analysis-error.js';
 
 
@@ -220,8 +221,8 @@ export class Game {
         const opponent = opponentOf(player);
 
         // Locate both kings
-        const playerKingLoc = this.setupLocateKing(player, pos);
-        const opponentKingLoc = this.setupLocateKing(opponent, pos);
+        const playerKingLoc = getKingLocation(pos, player);
+        const opponentKingLoc = getKingLocation(pos, opponent);
 
         // Validation:
         // 1. Player is not checking opponent king
@@ -231,19 +232,5 @@ export class Game {
         // 2. If player is in check, there should be at most 2 attackers
         const attackers = GamePos.analyzeAttackOn(pos, player, playerKingLoc);
         if(attackers.length > 2) throw Err.New(Err.InvalidPosition, "too many checking pieces");
-    }
-
-    private setupLocateKing(color: Color, pos: Position): Location.Location {
-        const filter = Filter.New(Piece.getList(), Piece.byType(Piece.TypeKing), Piece.byColor(color));
-        const king = filter()[0].letter;
-
-        for(let rank = 1; rank <= size; rank++) {
-            for(let file = 1; file <= size; file++) {
-                const piece = get(pos, rank, file);
-                if(piece === king) return Location.of(file, rank);
-            }
-        }
-
-        return Location.None;
     }
 };

@@ -6,6 +6,7 @@ import { Position, getByLocation } from './position.js';
 import { Size as size } from './size.js';
 import { Direction } from './direction.js';
 import { TypeRange } from './piece-move.js';
+import { outOfBound } from './game-position-util.js';
 import * as Err from './game-position-error.js';
 
 
@@ -67,9 +68,4 @@ function getRangeAttacker(pos: Position, opponent: Color, loc: Location.Location
     return Location.None;
 }
 
-function outOfBound(loc: Location.Location): boolean {
-    const file = Location.file(loc);
-    const rank = Location.rank(loc);
 
-    return !(file >= 1 && file <= size && rank >= 1 && rank <= size);
-}
