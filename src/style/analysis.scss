@@ -1,23 +1,44 @@
 @use 'global';
+@use 'layout';
 @use 'board';
 @use 'button';
 @use 'common';
 @use 'font';
 
-%info-bar {
+
+%adv-bar {
     @extend %font-open-sans;
-    font-size: min(2.4vw, 2.4vh);
+    font-size: min(2.2vw, 2.2vh);
     text-align: right;
-    color: #f0f0f0;
 }
 
 .top-adv-bar {
-    @extend %info-bar;
+    @extend %adv-bar;
     margin: 8px 0 0 0;
     padding: 0 0 5px 0;
 }
 
 .bottom-adv-bar {
-    @extend %info-bar;
+    @extend %adv-bar;
     padding: 6px 0 0 0;
+}
+
+%adv {
+    display: inline-block;
+}
+
+.piece-adv {
+    @extend %adv;
+    color: #d8d8d8;
+    padding: 0 5px 0 0;
+}
+
+.point-adv {
+    @extend %adv;
+    color: #e8e8e8;
+}
+
+.fen-container {
+    @extend %perfect-center;
+    margin: 20px 0 10px 0;
 }

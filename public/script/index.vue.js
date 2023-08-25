@@ -17,6 +17,9 @@ const component = {
         fen: page.getFEN,
     },
     methods: {
+        white: page.white,
+        black: page.black,
+
         getTrayPieceIdx: page.getTrayPieceIdx,
         getTopTrayPiece: page.getTopTrayPiece,
         getBottomTrayPiece: page.getBottomTrayPiece,
@@ -30,9 +33,7 @@ const component = {
         flipBoard: page.flipBoard,
         clearBoard: page.clearBoard,
         resetBoard: page.resetBoard,
-
-        white: page.white,
-        black: page.black,
+        
         getWhiteCastleTypes: page.getWhiteCastleTypes,
         getBlackCastleTypes: page.getBlackCastleTypes,
         

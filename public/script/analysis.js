@@ -12,7 +12,17 @@ import * as Err from '../module/error.js';
 const game = new Game();
 
 
-/* Advantage bar */
+/* Color */
+export function white() {
+    return White;
+}
+
+export function black() {
+    return Black;
+}
+
+
+/* Material advantage */
 const abstractPieces = AbstractPiece.getList();
 const pieces = Piece.getList();
 
@@ -29,15 +39,17 @@ const figurine = {
     [Type.TypeQueen]: "♛",
 }
 
-export function white() {
-    return White;
+
+
+export function pieceAdvantage(color) {
+    let cnt = countDifference(this.state.count);
+    if(color === Black) {
+        for(const type in cnt) cnt[type] *= -1;
+    }
+
 }
 
-export function black() {
-    return Black;
-}
-
-export function advantage(color) {
+export function materialAdvantage(color) {
     let str = "";
     let total = 0;
     

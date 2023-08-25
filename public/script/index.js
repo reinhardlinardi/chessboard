@@ -6,6 +6,7 @@ import * as Castle from '../module/castle.js';
 import * as Filter from '../module/filter.js';
 import * as Position from '../module/position.js';
 import * as FEN from '../module/fen.js';
+import * as AbstractPiece from '../module/abstract-piece.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
@@ -14,7 +15,18 @@ import * as Err from '../module/error.js';
 const game = new Game();
 
 
+/* Color */
+export function white() {
+    return White;
+}
+
+export function black() {
+    return Black;
+}
+
+
 /* Tray */
+const abstractPieces = AbstractPiece.getList();
 const pieces = Piece.getList();
 
 export const whitePieces = Filter.New(pieces, Piece.byColor(White))().map(piece => piece.letter);
@@ -22,7 +34,7 @@ export const blackPieces = Filter.New(pieces, Piece.byColor(Black))().map(piece 
 
 
 export function getTrayPieceIdx() {
-    return [...Array(whitePieces.length).keys()];
+    return [...Array(abstractPieces.length).keys()];
 }
 
 export function getTopTrayPiece(idx) {
@@ -71,14 +83,6 @@ export function resetBoard() {
 
 /* Form */
 const rights = Castle.getList();
-
-export function white() {
-    return White;
-}
-
-export function black() {
-    return Black;
-}
 
 export function getWhiteCastleTypes() {
     return Filter.New(rights, Castle.byColor(White))();

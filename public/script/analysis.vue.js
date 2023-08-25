@@ -16,7 +16,9 @@ const component = {
     methods: {
         white: page.white,
         black: page.black,
-        advantage: page.advantage,
+        
+        pieceAdvantage: page.pieceAdvantage,
+        pointAdvantage: page.pointAdvantage,
 
         rankOf: page.rankOf,
         fileOf: page.fileOf,

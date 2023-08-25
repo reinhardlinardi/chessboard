@@ -1,7 +1,9 @@
 @use 'global';
+@use 'layout';
 @use 'board';
 @use 'button';
 @use 'common';
+
 
 %tray {
     @extend %grid;
@@ -57,7 +59,11 @@
 
 .checkbox-container {
     @extend %section-text;
-
     display: flex;
     align-items: center;
+}
+
+.fen-container {
+    @extend %perfect-center;
+    margin: 30px 0 0 0;
 }

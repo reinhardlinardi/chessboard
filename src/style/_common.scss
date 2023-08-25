@@ -1,6 +1,7 @@
 @use 'layout';
 @use 'font';
 
+
 %side-container {
     margin: 0 0 0 15px;
 }
@@ -27,13 +28,6 @@
 .section-text {
     @extend %section-text;
     color: #f0f0f0;
-}
-
-.fen-container {
-    @extend %perfect-center;
-
-    margin: 20px 0 0 0;
-    padding: 10px 0 10px 0;
 }
 
 .fen-label {
