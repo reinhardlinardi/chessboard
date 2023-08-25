@@ -13,15 +13,17 @@ const component = {
             },
         }
     },
-    // computed: {
-    //     pieceDifference: page.pieceDifference,
-    // },
+    computed: {
+        pieceDifference: page.pieceDifference,
+    },
     methods: {
         white: page.white,
         black: page.black,
         
-        // pieceAdvantage: page.pieceAdvantage,
-        // pointAdvantage: page.pointAdvantage,
+        topPieceAdvantage: page.topPieceAdvantage,
+        topPointAdvantage: page.topPointAdvantage,
+        bottomPieceAdvantage: page.bottomPieceAdvantage,
+        bottomPointAdvantage: page.bottomPointAdvantage,
 
         rankOf: page.rankOf,
         fileOf: page.fileOf,

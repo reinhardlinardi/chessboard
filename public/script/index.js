@@ -26,11 +26,11 @@ export function black() {
 
 
 /* Tray */
-const abstractPieces = AbstractPiece.getList();
+const abstractPieces = Object.freeze(AbstractPiece.getList());
 
-const pieces = Piece.getList();
-const whitePieces = Filter.New(pieces, Piece.byColor(White))().map(piece => piece.letter);
-const blackPieces = Filter.New(pieces, Piece.byColor(Black))().map(piece => piece.letter);
+const pieces = Object.freeze(Piece.getList());
+const whitePieces = Object.freeze(Filter.New(pieces, Piece.byColor(White))().map(piece => piece.letter));
+const blackPieces = Object.freeze(Filter.New(pieces, Piece.byColor(Black))().map(piece => piece.letter));
 
 
 export function getTrayPieceIdx() {

@@ -23,64 +23,90 @@ export function black() {
 
 
 /* Advantage */
-const abstractPieces = AbstractPiece.getList();
-const types = abstractPieces.map(piece => piece.type);
-const values = abstractPieces.reduce((map, piece) => ({...map, [piece.type]: piece.value}), {});
+const abstractPieces = Object.freeze(AbstractPiece.getList());
+const pieceTypes = Object.freeze(abstractPieces.map(piece => piece.type));
+const pieceValues = Object.freeze(abstractPieces.reduce((map, piece) => ({...map, [piece.type]: piece.value}), {}));
 
-const pieces = Piece.getList();
-const whitePieces = Filter.New(pieces, Piece.byColor(White))().reduce((map, piece) => ({...map, [piece.type]: piece.letter}), {});
-const blackPieces = Filter.New(pieces, Piece.byColor(Black))().reduce((map, piece) => ({...map, [piece.type]: piece.letter}), {});
+const pieces = Object.freeze(Piece.getList());
+const whitePieces = Object.freeze(Filter.New(pieces, Piece.byColor(White))().reduce((map, piece) => ({...map, [piece.type]: piece.letter}), {}));
+const blackPieces = Object.freeze(Filter.New(pieces, Piece.byColor(Black))().reduce((map, piece) => ({...map, [piece.type]: piece.letter}), {}));
 
-const figurine = {
+const figurine = Object.freeze({
     [Type.TypePawn]: "♟︎",
     [Type.TypeKnight]: "♞",
     [Type.TypeBishop]: "♝",
     [Type.TypeRook]: "♜",
     [Type.TypeQueen]: "♛",
-};
+});
+const multiplierDiff = Object.freeze({[White]: 1, [Black]: -1});
 
-function pieceDifference() {
+
+export function pieceDifference() {
     let diff = {};
-    for(const type of types) {
+
+    for(const type of pieceTypes) {
         const whiteCount = this.state.count[whitePieces[type]];
         const blackCount = this.state.count[blackPieces[type]];
         diff[type] = whiteCount-blackCount;
     }
-
     return diff;
 }
 
-
-export function pieceAdvantage(color) {
-    let cnt = countDifference(this.state.count);
-    if(color === Black) {
-        for(const type in cnt) cnt[type] *= -1;
-    }
-
+export function topPieceAdvantage() {
+    const color = this.flip? White : Black;
+    const adv = pieceAdvantage(this.pieceDifference, color);
+    return pieceAdvantageStr(adv);
 }
 
-export function materialAdvantage(color) {
+export function topPointAdvantage() {
+    const color = this.flip? White : Black;
+    const points = pointDifference(this.pieceDifference, color);
+    return pointAdvantageStr(points);
+}
+
+export function bottomPieceAdvantage() {
+    const color = this.flip? Black : White;
+    const adv = pieceAdvantage(this.pieceDifference, color);
+    return pieceAdvantageStr(adv);
+}
+
+export function bottomPointAdvantage() {
+    const color = this.flip? Black : White;
+    const points = pointDifference(this.pieceDifference, color);
+    return pointAdvantageStr(points);
+}
+
+function pieceAdvantageStr(adv) {
     let str = "";
-    let total = 0;
-    
-    let cnt = countDifference(this.state.count)
-    if(color === Black) {
-        for(const type in cnt) cnt[type] *= -1;
-    }
+    for(const type in adv) str += figurine[type].repeat(adv[type]);
 
-    for(const type in cnt) {
-        const diff = cnt[type];
-        if(diff === 0) continue;
-        if(diff > 0) str += figurine[type].repeat(diff);
-
-        total += diff * values[type];
-    }
-
-    if(total > 0) str += ` +${total}`;
     return str;
 }
 
+function pointAdvantageStr(points) {
+    return points > 0? `+${points}` : "";
+}
 
+
+function pieceAdvantage(diff, color) {
+    let adv = {};
+
+    for(const type in diff) {
+        const cnt = diff[type] * multiplierDiff[color];
+        if(cnt > 0) adv[type] = cnt;
+    }
+    return adv;
+}
+
+function pointDifference(diff, color) {
+    let points = 0;
+
+    for(const type in diff) {
+        const cnt = diff[type] * multiplierDiff[color];
+        points += cnt * pieceValues[type];
+    }
+    return points;
+}
 
 
 /* Board */

@@ -15,7 +15,7 @@
 .top-adv-bar {
     @extend %adv-bar;
     margin: 8px 0 0 0;
-    padding: 0 0 5px 0;
+    padding: 0 0 6px 0;
 }
 
 .bottom-adv-bar {
@@ -30,12 +30,12 @@
 .piece-adv {
     @extend %adv;
     color: #d8d8d8;
-    padding: 0 5px 0 0;
 }
 
 .point-adv {
     @extend %adv;
     color: #e8e8e8;
+    padding: 0 0 0 5px;
 }
 
 .fen-container {
