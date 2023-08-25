@@ -20,8 +20,11 @@
       <div>
 
         <div class="top-adv-bar">
-          <div class="piece-adv" v-text="topPieceAdvantage()"></div>
-          <div class="point-adv" v-text="topPointAdvantage()"></div>
+          <div class="piece-adv" v-text="formatPieceAdv(topPieceAdv())">
+          </div>
+          <div class="point-adv" v-show="topPointAdv() > 0">
+            <span v-text="formatPointAdv(topPointAdv())"></span>
+          </div>
         </div>
 
         <div class="board">
@@ -52,8 +55,11 @@
         </div>
 
         <div class="bottom-adv-bar">
-          <div class="piece-adv" v-text="bottomPieceAdvantage()"></div>
-          <div class="point-adv" v-text="bottomPointAdvantage()"></div>
+          <div class="piece-adv" v-text="formatPieceAdv(bottomPieceAdv())">
+          </div>
+          <div class="point-adv" v-show="bottomPointAdv() > 0">
+            <span v-text="formatPointAdv(bottomPointAdv())"></span>
+          </div>
         </div>
 
         <div class="fen-container">

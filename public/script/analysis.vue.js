@@ -20,10 +20,12 @@ const component = {
         white: page.white,
         black: page.black,
         
-        topPieceAdvantage: page.topPieceAdvantage,
-        topPointAdvantage: page.topPointAdvantage,
-        bottomPieceAdvantage: page.bottomPieceAdvantage,
-        bottomPointAdvantage: page.bottomPointAdvantage,
+        topPieceAdv: page.topPieceAdv,
+        topPointAdv: page.topPointAdv,
+        bottomPieceAdv: page.bottomPieceAdv,
+        bottomPointAdv: page.bottomPointAdv,
+        formatPieceAdv: page.formatPieceAdv,
+        formatPointAdv: page.formatPointAdv,
 
         rankOf: page.rankOf,
         fileOf: page.fileOf,

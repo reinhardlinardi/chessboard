@@ -52,39 +52,35 @@ export function pieceDifference() {
     return diff;
 }
 
-export function topPieceAdvantage() {
+export function topPieceAdv() {
     const color = this.flip? White : Black;
-    const adv = pieceAdvantage(this.pieceDifference, color);
-    return pieceAdvantageStr(adv);
+    return pieceAdvantage(this.pieceDifference, color);
 }
 
-export function topPointAdvantage() {
+export function topPointAdv() {
     const color = this.flip? White : Black;
-    const points = pointDifference(this.pieceDifference, color);
-    return pointAdvantageStr(points);
+    return Math.max(0, pointDifference(this.pieceDifference, color));
 }
 
-export function bottomPieceAdvantage() {
+export function bottomPieceAdv() {
     const color = this.flip? Black : White;
-    const adv = pieceAdvantage(this.pieceDifference, color);
-    return pieceAdvantageStr(adv);
+    return pieceAdvantage(this.pieceDifference, color);
 }
 
-export function bottomPointAdvantage() {
+export function bottomPointAdv() {
     const color = this.flip? Black : White;
-    const points = pointDifference(this.pieceDifference, color);
-    return pointAdvantageStr(points);
+    return Math.max(0, pointDifference(this.pieceDifference, color));
 }
 
-function pieceAdvantageStr(adv) {
+export function formatPieceAdv(adv) {
     let str = "";
+    
     for(const type in adv) str += figurine[type].repeat(adv[type]);
-
     return str;
 }
 
-function pointAdvantageStr(points) {
-    return points > 0? `+${points}` : "";
+export function formatPointAdv(points) {
+    return `+${points}`;
 }
 
 
