@@ -60,5 +60,3 @@ function sortAttackers(first: Attacker, second: Attacker): number {
     if(direction1 === direction2) return type1 - type2;
     else return direction1 - direction2;
 }
-
-console.log(attackMap);
