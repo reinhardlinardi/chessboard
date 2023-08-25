@@ -27,7 +27,10 @@ function attacksOn(color: Color): Attacks {
 
     let map: Attacker[] = [];
     for(const piece of pieces) {
-        for(const capture of piece.capture) map.push({[-1*capture]: piece.letter});
+        for(const move of piece.moves) {
+            if(!move.capture) continue;
+            for(const direction of move.directions) map.push({[-1*direction]: piece.letter});
+        }
     }
 
     map.sort(sortAttackers);
@@ -57,3 +60,5 @@ function sortAttackers(first: Attacker, second: Attacker): number {
     if(direction1 === direction2) return type1 - type2;
     else return direction1 - direction2;
 }
+
+console.log(attackMap);
