@@ -259,7 +259,7 @@ test("GamePosition-analyzeAttackOn", () => {
 
         if(!tc.err) {
             expect(get.length).toEqual(tc.want.length);
-            for(const loc of tc.want) expect(get.findIndex(l => l === loc)).not.toEqual(-1);
+            for(const loc of tc.want) expect(get.includes(loc)).toEqual(true);
         }
     }
 })

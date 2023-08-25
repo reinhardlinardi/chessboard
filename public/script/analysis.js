@@ -2,8 +2,8 @@ import * as Common from './common.js';
 import * as FEN from '../module/fen.js';
 import * as Piece from '../module/piece.js';
 import * as Filter from '../module/filter.js';
-import * as AbstractPiece from '../module/abstract-piece.js';
 import * as Type from '../module/piece-type.js';
+import * as AbstractPiece from '../module/abstract-piece.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
@@ -22,12 +22,12 @@ export function black() {
 }
 
 
-/* Material advantage */
+/* Advantage */
 const abstractPieces = AbstractPiece.getList();
-const pieces = Piece.getList();
-
 const types = abstractPieces.map(piece => piece.type);
 const values = abstractPieces.reduce((map, piece) => ({...map, [piece.type]: piece.value}), {});
+
+const pieces = Piece.getList();
 const whitePieces = Filter.New(pieces, Piece.byColor(White))().reduce((map, piece) => ({...map, [piece.type]: piece.letter}), {});
 const blackPieces = Filter.New(pieces, Piece.byColor(Black))().reduce((map, piece) => ({...map, [piece.type]: piece.letter}), {});
 
@@ -37,8 +37,18 @@ const figurine = {
     [Type.TypeBishop]: "♝",
     [Type.TypeRook]: "♜",
     [Type.TypeQueen]: "♛",
-}
+};
 
+function pieceDifference() {
+    let diff = {};
+    for(const type of types) {
+        const whiteCount = this.state.count[whitePieces[type]];
+        const blackCount = this.state.count[blackPieces[type]];
+        diff[type] = whiteCount-blackCount;
+    }
+
+    return diff;
+}
 
 
 export function pieceAdvantage(color) {
@@ -70,19 +80,7 @@ export function materialAdvantage(color) {
     return str;
 }
 
-function countDifference(count) {
-    let cnt = {};
-    
-    for(let idx = 0; idx < types.length; idx++) {
-        const type = types[idx];
-        if(type !== Type.TypeKing) {
-            const whiteCount = count[whitePieces[type]];
-            const blackCount = count[blackPieces[type]];
-            cnt[type] = whiteCount-blackCount;
-        }
-    }
-    return cnt;
-}
+
 
 
 /* Board */
@@ -165,6 +163,7 @@ export function onDropReplace(ev) {
 
 /* Lifecycle */
 const paramImport = "import";
+const formats = [paramFEN];
 
 export function created() {
     game.useDefaultSetup();
@@ -175,10 +174,11 @@ export function created() {
         id: ref.id,
     };
 
-    const from = Common.getQuery(paramImport);
-    if(from && from === paramFEN) {
+    const format = Common.getQuery(paramImport);
+
+    if(format && formats.includes(format)) {
         try {
-            game.loadSetup(importGameState(from));
+            game.loadSetup(importGameState(format));
             game.validateSetup();
         }
         catch(err) {
@@ -193,6 +193,6 @@ export function created() {
     if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);
 }
 
-function importGameState(from) {
-    if(from === paramFEN) return FEN.load(Common.getQuery(paramFEN));
+function importGameState(format) {
+    if(format === paramFEN) return FEN.load(Common.getQuery(paramFEN));
 }
