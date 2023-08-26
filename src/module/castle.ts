@@ -2,8 +2,8 @@ import * as Piece from './piece.js';
 import * as File from './file.js';
 import * as Location from './location.js';
 import * as PieceType from './piece-type.js';
-import { nthRank } from './rank.js';
 import { Filter } from './filter.js';
+import { nthRank } from './rank.js';
 import { Color, White, Black } from './color.js';
 import { Direction, Kingside, Queenside } from './direction.js';
 
@@ -19,8 +19,9 @@ export type Rights = {[type: Type]: boolean};
 
 export interface Move {
     piece: string,
-    direction: Direction,
     from: Location.Location,
+    direction: Direction,
+    squares: number,
 };
 
 export interface Castle {
@@ -32,49 +33,80 @@ export interface Castle {
 };
 
 
-const R = Piece.WhiteRook.letter;
-const r = Piece.BlackRook.letter;
-const Q = Piece.WhiteQueen.letter;
-const q = Piece.BlackQueen.letter;
-const K = Piece.WhiteKing.letter;
-const k = Piece.BlackKing.letter;
+const king = PieceType.TypeKing;
+const rook = PieceType.TypeRook;
 
 const short = TypeShort;
 const long = TypeLong;
-const king = PieceType.TypeKing;
+
+// {"w": {"3": "R", "5": "K"}, "b": {"3": "r", "5": "k"}}
+const piece = Object.freeze({
+    [White]: {[king]: Piece.WhiteKing.letter, [rook]: Piece.WhiteRook.letter},
+    [Black]: {[king]: Piece.BlackKing.letter, [rook]: Piece.BlackRook.letter},
+});
+
+// {"3": {"O-O": "h", "O-O-O": "a"}, "5": {"O-O": "e", "O-O-O": "e"}}
+const pieceFile = Object.freeze({
+    [king]: {[short]: File.e, [long]: File.e},
+    [rook]: {[short]: File.h, [long]: File.a},
+});
+
+// {"3": {"O-O": -1, "O-O-O": 1}, "5": {"O-O": 1, "O-O-O": -1}}
+const directions = Object.freeze({
+    [king]: {[short]: Kingside, [long]: Queenside},
+    [rook]: {[short]: Queenside, [long]: Kingside},
+});
+
+// {"3": {"O-O": 2, "O-O-O": 3}, "5": {"O-O": 2, "O-O-O": 2}}
+const squares = Object.freeze({
+    [king]: {[short]: 2, [long]: 2},
+    [rook]: {[short]: 2, [long]: 3},
+});
 
 
 export const WhiteShort: Castle = Object.freeze({
     type: short,
     color: White,
-    letter: K,
-    king: getPieceMove(K, short, White), 
-    rook: getPieceMove(R, short, White),
+    letter: Piece.WhiteKing.letter,
+    king: castleMoveOf(king, White, short),
+    rook: castleMoveOf(rook, White, short),
 });
 
 export const BlackShort: Castle = Object.freeze({
     type: short,
     color: Black,
-    letter: k,
-    king: getPieceMove(k, short, Black), 
-    rook: getPieceMove(r, short, Black),
+    letter: Piece.BlackKing.letter,
+    king: castleMoveOf(king, Black, short),
+    rook: castleMoveOf(rook, Black, short),
 });
 
 export const WhiteLong: Castle = Object.freeze({
     type: long,
     color: White,
-    letter: Q,
-    king: getPieceMove(K, long, White), 
-    rook: getPieceMove(R, long, White),
+    letter: Piece.WhiteQueen.letter,
+    king: castleMoveOf(king, White, long),
+    rook: castleMoveOf(rook, White, long),
 });
 
 export const BlackLong: Castle = Object.freeze({
     type: long,
     color: Black,
-    letter: q,
-    king: getPieceMove(k, long, Black), 
-    rook: getPieceMove(r, long, Black),
+    letter: Piece.BlackQueen.letter,
+    king: castleMoveOf(king, Black, long),
+    rook: castleMoveOf(rook, Black, long),
 });
+
+function castleMoveOf(pieceType: PieceType.Type, color: Color, type: Type): Move {
+    const file = File.of(pieceFile[pieceType][type]);
+    const rank = nthRank(1, color);
+
+    return {
+        piece: piece[color][pieceType],
+        from: Location.of(file, rank),
+        direction: directions[pieceType][type],
+        squares: squares[pieceType][type],
+    };
+}
 
 
 const list: readonly Castle[] = Object.freeze([WhiteShort, WhiteLong, BlackShort, BlackLong]);
@@ -105,26 +137,4 @@ export function byColor(color: Color): Filter<Castle> {
 
 export function byType(type: Type): Filter<Castle> {
     return castle => castle.type === type;
-}
-
-
-
-function getPieceFile(piece: PieceType.Type, type: Type): string {
-    if(piece === king) return File.e;
-    return type === long? File.a : File.h;
-}
-
-function getPieceDirection(piece: PieceType.Type, type: Type): Direction {
-    if(piece === king) return type === long? 2*Queenside : 2*Kingside;
-    return type === long? 3*Kingside : 2*Queenside;
-}
-
-function getPieceMove(piece: string, type: Type, color: Color): Move {
-    const pieceType = Piece.get(piece).type;
-
-    const rank = nthRank(1, color);
-    const file = File.of(getPieceFile(pieceType, type));
-    const direction = getPieceDirection(pieceType, type);
-    
-    return {piece: piece, direction: direction, from: Location.of(file, rank)};
 }
