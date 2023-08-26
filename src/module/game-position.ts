@@ -41,31 +41,27 @@ export function analyzeAttackOn(pos: Position, color: Color, loc: Loc): Loc[] {
 
 function getAttacker(pos: Position, opponent: Color, loc: Loc, direction: Direction, attackers: string[]): Loc {
     const none = Location.None;
-
     let square = loc + direction;
+    
     if(outOfBound(square)) return none;
-
-    const suspect = getByLocation(pos, square);
-    if(suspect === Piece.None) return none;
-
-    return isAttacker(suspect, opponent, attackers)? square : none;
+    return isAttackerOn(square, pos, opponent, attackers)? square : none;
 }
 
 function getRangeAttacker(pos: Position, opponent: Color, loc: Loc, direction: Direction, attackers: string[]): Loc {
     let square = loc;
 
     while(!outOfBound(square += direction)) {
-        const suspect = getByLocation(pos, square);
-        if(suspect === Piece.None) continue;
-
-        if(isAttacker(suspect, opponent, attackers)) return square;
-        else break;
+        if(isAttackerOn(square, pos, opponent, attackers)) return square;
+        if(getByLocation(pos, square) !== Piece.None) break;
     }
 
     return Location.None;
 }
 
-function isAttacker(suspect: string, opponent: Color, attackers: string[]): boolean {
+function isAttackerOn(square: Loc, pos: Position, opponent: Color, attackers: string[]): boolean {
+    const suspect = getByLocation(pos, square);
+    if(suspect === Piece.None) return false;
+
     const piece = Piece.get(suspect);
     return piece.color === opponent && attackers.includes(suspect);
 }
