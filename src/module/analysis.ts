@@ -8,6 +8,7 @@ import * as ID from './id.js';
 import * as Clock from './clock.js';
 import * as State from './state.js';
 import * as GamePos from './game-position.js';
+import * as Move from './move.js';
 import { Color, White, Black, opponentOf } from './color.js';
 import { Position, get, getByLocation } from './position.js';
 import { Size as size } from './size.js';
@@ -99,7 +100,7 @@ export class Game {
         this.started = true;
 
         // TODO: Remove
-        // Move.generateAll(this.game[this.game.length-1]);
+        console.log(Move.generate(this.game[0]));
     }
 
     private gameStateIdx(fullmove: number, color: Color): number {
