@@ -18,18 +18,24 @@ import { getKingLocation } from './game-position-util.js';
 import * as Err from './analysis-error.js';
 
 
-export type PieceCount = {[piece: string]: number};
-export type PosRepeat = {[id: string]: number};
+type PieceCount = {[piece: string]: number};
+type PosRepeat = {[id: string]: number};
 
 
-export interface GameState extends State.State {
+export interface SetupState extends State.State {
     fen: string,
     id: string,
-    
-    from: Location.Location,
-    to: Location.Location,
+};
+
+export interface GameState extends SetupState {
     count: PieceCount,
     repeat: PosRepeat,
+};
+
+export interface GameMove {
+    from: Location.Location,
+    to: Location.Location,
+    pgn: string,
 };
 
 
@@ -37,20 +43,17 @@ export class Game {
     private started: boolean;
     private setupValid: boolean;
 
+    private setup: SetupState;
     private game: GameState[];
-    private moves: string[];
+    private moves: GameMove[];
 
     constructor() {
+        this.started = false;
+        this.setupValid = true; 
+        
+        this.setup = this.setupStateOf(State.New());
         this.game = [];
         this.moves = [];
-
-        this.started = false;
-        this.setupValid = false; 
-    }
-
-    getSetupGameState(): GameState | null {
-        if(this.game.length === 0) return null;
-        return this.game[0];
     }
 
     getGameState(fullmove: number, color: Color): GameState | null {
@@ -58,68 +61,71 @@ export class Game {
         return idx < 0? null : this.game[idx];
     }
 
-    useDefaultSetup() {
+    getInitialGameState(): GameState | null {
+        return this.getGameState(0, this.setup.move);
+    }
+
+    getSetupState(): SetupState {
+        return this.setup;
+    }
+
+    start() {
+        if(!this.setupValid) throw Err.New(Err.InvalidOp, "invalid setup");
+
+        this.game.push(this.setupGameStateOf(this.setup));
+        this.started = true;
+        
+        // TODO: Remove
+        console.log(Move.generate(this.game[0]));
+    }
+
+    resetSetup() {
         if(this.started) throw Err.New(Err.InvalidOp, "game has started");
 
-        const gameState = this.setupGameStateOf(State.New());
-        this.game = [gameState];
+        this.setup = this.setupStateOf(State.New());
         this.setupValid = true;
     }
 
     loadSetup(s: State.State) {
         if(this.started) throw Err.New(Err.InvalidOp, "game has started");
         
-        const gameState = this.setupGameStateOf(this.validStateOf(s));
-        this.game = [gameState];
+        this.setup = this.setupStateOf(this.validStateOf(s));
         this.setupValid = false;
     }
 
     validateSetup() {
         if(this.started) throw Err.New(Err.InvalidOp, "game has started");
-        if(this.game.length === 0) throw Err.New(Err.NoSetupLoaded, "no setup loaded");
-
-        const setup = this.game[0];
-        const clock = setup.clock;
 
         // Clock: Max halfmove should not be exceeded
+        const clock = this.setup.clock;
         if(clock.halfmove > Clock.MaxHalfmove) throw Err.New(Err.InvalidHalfmove, "invalid halfmove");
         
         // Position:
         // 1. Count king for both sides, each side should have exactly 1 king
         // 2. No pawn in 1st rank of both sides
         // 3. Validate check
-        this.setupValidateKingCount(setup.pos);
-        this.setupValidatePawnRank(setup.pos);
-        this.setupValidateCheck(setup.move, setup.pos);
+        this.setupValidateKingCount(this.setup.pos);
+        this.setupValidatePawnRank(this.setup.pos);
+        this.setupValidateCheck(this.setup.move, this.setup.pos);
 
         this.setupValid = true;
-    }
-
-    start() {
-        if(!this.setupValid) throw Err.New(Err.InvalidOp, "invalid setup");
-        this.started = true;
-
-        // TODO: Remove
-        console.log(Move.generate(this.game[0]));
-    }
+    }    
 
     private gameStateIdx(fullmove: number, color: Color): number {
-        if(this.game.length === 0) return -1;
+        const setupFullmove = this.setup.clock.fullmove;
+        if(fullmove < setupFullmove) return 0;
 
-        const setup = this.game[0];
-        if(fullmove < setup.clock.fullmove) return -1;
+        let offset = 1;
+        offset += color === Black? 1 : 0;
+        offset += this.setup.move === Black? -1 : 0;
 
-        let idx: number = 2*(fullmove - setup.clock.fullmove);
-        if(color === Black) idx++;
-        if(setup.move === Black) idx--;
-
-        return idx;
+        return 2*(fullmove - setupFullmove) + offset;
     }
 
-    private moveIdx(fullmove: number, color: Color): number {
-        const idx = this.gameStateIdx(fullmove, color)-1;
-        return idx < 0? -1 : idx;
-    }
+    // private moveIdx(fullmove: number, color: Color): number {
+    //     const idx = this.gameStateIdx(fullmove, color)-1;
+    //     return idx < 0? -1 : idx;
+    // }
 
     private validStateOf(s: State.State): State.State {
         let st = {...s};
@@ -145,6 +151,20 @@ export class Game {
         }
 
         return st;
+    }
+
+    private setupStateOf(s: State.State): SetupState {
+        const fen = FEN.generate(s);
+        const id = ID.generateFromFEN(fen);
+
+        return {...s, fen: fen, id: id};
+    }
+
+    private setupGameStateOf(s: SetupState): GameState {
+        const count = this.setupPieceCount(s.pos);
+        const repeat: PosRepeat = {[s.id]: 1};
+
+        return {...s, count: count, repeat: repeat};
     }
 
     private isValidEnPassantTarget(target: Location.Location, player: Color, pos: Position): boolean {
@@ -182,18 +202,6 @@ export class Game {
             }
         }
         return count;
-    }
-
-    private setupGameStateOf(s: State.State): GameState {
-        const fen = FEN.generate(s);
-        const id = ID.generateFromFEN(fen);
-        
-        const from = Location.None;
-        const to = Location.None;
-        const count = this.setupPieceCount(s.pos);
-        const repeat: PosRepeat = {[id]: 1};
-
-        return {...s, fen: fen, id: id, from: from, to: to, count: count, repeat: repeat};
     }
 
     private setupValidateKingCount(pos: Position) {

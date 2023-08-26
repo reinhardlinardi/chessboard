@@ -125,7 +125,7 @@ export function updateState(keys) {
     for(const key in keys) state[key] = keys[key];
 
     game.loadSetup(state);
-    this.state = game.getSetupGameState();
+    this.state = game.getSetupState();
 }
 
 
@@ -236,12 +236,10 @@ export function onDropRemove(ev) {
 
 /* Lifecycle */
 export function created() {
-    game.useDefaultSetup();
-
-    const gameState = game.getSetupGameState();
+    const setupState = game.getSetupState();
     this.stateDefault = {
-        clock: {...gameState.clock},
-        id: gameState.id,
+        clock: {...setupState.clock},
+        id: setupState.id,
     };
 
     const fen = Common.getQuery(paramFEN);
@@ -251,9 +249,9 @@ export function created() {
         }
         catch(err) {
             console.log(Err.str(err));
-            game.useDefaultSetup();
+            game.resetSetup();
         }
     }
 
-    this.state = game.getSetupGameState();
+    this.state = game.getSetupState();
 }

@@ -359,7 +359,7 @@ test("Analysis-Game-loadSetup", () => {
         }
     
         if(!tc.err) {
-            const s = game.getSetupGameState();
+            const s = game.getSetupState();
             const get = {pos: s.pos, move: s.move, castle: s.castle, enPassant: s.enPassant, clock: s.clock};
             expect(get).toEqual(tc.want);
         }

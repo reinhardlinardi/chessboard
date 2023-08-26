@@ -188,12 +188,10 @@ const paramImport = "import";
 const formats = [paramFEN];
 
 export function created() {
-    game.useDefaultSetup();
-
-    const ref = game.getSetupGameState();
+    const setupState = game.getSetupState();
     this.stateDefault = {
-        clock: {...ref.clock},
-        id: ref.id,
+        clock: {...setupState.clock},
+        id: setupState.id,
     };
 
     const format = Common.getQuery(paramImport);
@@ -205,12 +203,12 @@ export function created() {
         }
         catch(err) {
             console.log(Err.str(err));
-            game.useDefaultSetup();
+            game.resetSetup();
         }
     }
 
     game.start();
-    this.updateState(game.getSetupGameState());
+    this.updateState(game.getInitialGameState());
 
     if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);
 }
