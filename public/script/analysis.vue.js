@@ -11,6 +11,7 @@ const component = {
                 clock: {},
                 id: "",
             },
+            selected: 0,
         }
     },
     computed: {

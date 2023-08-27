@@ -4,6 +4,7 @@ import * as Piece from '../module/piece.js';
 import * as Filter from '../module/filter.js';
 import * as Type from '../module/piece-type.js';
 import * as AbstractPiece from '../module/abstract-piece.js';
+import * as Location from '../module/location.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
@@ -159,6 +160,21 @@ export function copyFEN(ev) {
 /* Drag and drop */
 export function onDragStart(ev) {
     Common.dragSetId(ev, ev.target.id);
+
+    let data;
+
+    try {
+        data = Common.getElementData(ev.target.id);
+    }
+    catch(err) {
+        throw "ಠ_ಠ";
+    }
+
+    const rank = parseInt(data.rank);
+    const file = parseInt(data.file);
+
+    this.selected = Location.of(file, rank);
+    console.log(this.selected);
 }
 
 export function getDraggedPiece(id) {
@@ -167,6 +183,8 @@ export function getDraggedPiece(id) {
 }
 
 export function onDropReplace(ev) {
+    this.selected = Location.None;
+
     const srcId = Common.dropGetId(ev);
     const destId = ev.target.id;
 
@@ -208,7 +226,9 @@ export function created() {
     }
 
     game.start();
+
     this.updateState(game.getInitialGameState());
+    this.selected = Location.None;
 
     if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);
     console.log(this.state.moves);
