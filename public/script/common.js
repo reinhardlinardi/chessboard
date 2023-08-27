@@ -110,10 +110,16 @@ export function dropGetId(ev) {
 
 export function replacePiece(id, piece, board) {
     const data = getElementData(id);
-    setPiece(piece, board, data.rank, data.file);
+    const rank = parseInt(data.rank);
+    const file = parseInt(data.file);
+
+    setPiece(piece, board, rank, file);
 }
 
 export function removePiece(id, board) {
     const data = getElementData(id);
-    setPiece(_, board, data.rank, data.file);
+    const rank = parseInt(data.rank);
+    const file = parseInt(data.file);
+    
+    setPiece(_, board, rank, file);
 }
