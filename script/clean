@@ -4,31 +4,29 @@
 
 # --- 
 
-src_res = `find src/module -type f`
-gen_res = `find public/module -type f`
+src_path = `find src/module -type f`
+gen_path = `find public/module -type f`
 
 src = {}
 gen = {}
 
-src_res.each_line do |line|
+src_path.each_line { |line|
     file = File.basename(line.strip!, ".ts")
     src[file] = nil
-end
+}
 
-gen_res.each_line do |line|
+gen_path.each_line { |line|
     file = File.basename(line.strip!, ".js")
     gen[file] = nil
-end
+}
 
 delete = []
-cmd = "rm -rf"
+gen.each_key { |file| delete.push(file) if !src.has_key?(file) }
 
-gen.each_key do |file|
-    delete.push(file) if !src.has_key?(file)
+args = delete.map { |file| "public/module/#{file}.js" }.join("")
+cmd = "rm #{args}"
+
+if delete.length > 0
+    puts cmd
+    `#{cmd}`
 end
-
-delete.each do |file|
-    cmd += " public/module/#{file}.js"
-end
-
-`#{cmd}` if delete.length > 0
