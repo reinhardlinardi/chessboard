@@ -4,31 +4,35 @@
 
 # ---
 
-res = `find src/module public/script -type f | sort | xargs wc -l | head -n -1`
+ts_loc = `find src/module -type f | xargs wc -l | head -n -1`
+js_loc = `find public/script -type f | xargs wc -l | head -n -1`
 
-data = {}
+ext = ["ts", "js"]
+count = [0, 0]
+loc = [0, 0]
 
-max_len = 0
-total = 0
+ts_loc.each_line { |line| loc[0] += line.split(" ")[0].to_i; count[0] += 1 }
+js_loc.each_line { |line| loc[1] += line.split(" ")[0].to_i; count[1] += 1 }
 
-res.each_line.with_index do |line, idx|
-    str = line.split(" ")
+header = ["src", "#files", "LOC"]
+footer = "total"
+total = [count.reduce(:+), loc.reduce(:+)]
 
-    filename = File.basename(str[1])
-    loc = str[0].to_i
-    data[filename] = loc
+len = [[header[0].length, footer.length, 2].max, [header[1].length, total[0].to_s.length].max, [header[2].length, total[1].to_s.length].max]
 
-    total += loc
-    max_len = filename.length > max_len ? filename.length : max_len    
-end
+header.each_index { |i|
+    if i == 0 then print header[i], " " * (len[i]-header[i].length)
+    else print " " * (2+len[i]-header[i].length), header[i]
+    end
+}
 
-max_digits = total.to_s.length
+puts
 
-data.each do |filename, loc|
-    len = filename.length
-    digits = loc.to_s.length
-    print " " * (max_len-len), filename, " = ",  " " * (max_digits-digits), loc, "\n"
-end
+ext.each_index { |i|
+    print ext[i], " " * (len[0]-ext[i].length)
+    print " " * (2+len[1]-count[i].to_s.length), count[i]
+    print " " * (2+len[2]-loc[i].to_s.length), loc[i], "\n"
+}
 
-print "-" * (max_len+max_digits+3), " +\n"
-print " " * (max_len-5), "total = ", total, "\n"
+print "-" * (len.reduce(:+) + 2*(len.length-1)), " +\n"
+print footer, " " * (len[0]-footer.length), " " * (2+len[1]-total[0].to_s.length), total[0], " " * (2+len[2]-total[1].to_s.length), total[1], "\n"
