@@ -30,6 +30,7 @@ export interface SetupState extends State.State {
 export interface GameState extends SetupState {
     count: PieceCount,
     repeat: PosRepeat,
+    moves: Move.Move,
 };
 
 export interface GameMove {
@@ -58,7 +59,7 @@ export class Game {
 
     getGameState(fullmove: number, color: Color): GameState | null {
         const idx = this.gameStateIdx(fullmove, color);
-        return idx < 0? null : this.game[idx];
+        return idx < 0? null : {...this.game[idx]};
     }
 
     getInitialGameState(): GameState | null {
@@ -66,7 +67,7 @@ export class Game {
     }
 
     getSetupState(): SetupState {
-        return this.setup;
+        return {...this.setup};
     }
 
     start() {
@@ -74,9 +75,6 @@ export class Game {
 
         this.game.push(this.setupGameStateOf(this.setup));
         this.started = true;
-        
-        // TODO: Remove
-        console.log(Move.generate(this.game[0]));
     }
 
     resetSetup() {
@@ -164,7 +162,12 @@ export class Game {
         const count = this.setupPieceCount(s.pos);
         const repeat: PosRepeat = {[s.id]: 1};
 
-        return {...s, count: count, repeat: repeat};
+        const moves = this.generateLegalMoves(s);
+        return {...s, count: count, repeat: repeat, moves: moves};
+    }
+
+    private generateLegalMoves(s: State.State): Move.Move {
+        return Move.generate(s);
     }
 
     private isValidEnPassantTarget(target: Location.Location, player: Color, pos: Position): boolean {

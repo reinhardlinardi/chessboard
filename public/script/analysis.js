@@ -211,6 +211,7 @@ export function created() {
     this.updateState(game.getInitialGameState());
 
     if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);
+    console.log(this.state.moves);
 }
 
 function importGameState(format) {
