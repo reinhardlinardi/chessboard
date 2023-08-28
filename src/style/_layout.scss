@@ -1,6 +1,5 @@
 %grid {
     display: grid;
-    gap: 0 0;
 }
 
 %flex {
@@ -21,4 +20,16 @@
     @extend %flex;
     @extend %justify-center;
     @extend %align-center;
+}
+
+.justify-center {
+    @extend %justify-center;
+}
+
+.align-center {
+    @extend %align-center;
+}
+
+.perfect-center {
+    @extend %perfect-center;
 }

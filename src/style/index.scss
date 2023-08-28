@@ -1,13 +1,16 @@
+@use 'size';
 @use 'global';
-@use 'layout';
+@use 'common';
 @use 'board';
 @use 'button';
-@use 'common';
+@use 'text';
+@use 'layout';
 
 
 %tray {
     @extend %grid;
-    grid-template-columns: repeat(8, board.$square-size);
+    gap: 0 0;
+    grid-template-columns: repeat(size.$size, board.$square-size);
     grid-template-rows: board.$square-size;
 
     border: 1px solid transparent;
@@ -48,8 +51,9 @@
 }
 
 .form-select {
-    @extend %section-text;
+    @extend %text;
     margin: 0 10px 0 10px;
+    color: black;
 }
 
 .castle-container {
@@ -58,9 +62,7 @@
 }
 
 .checkbox-container {
-    @extend %section-text;
-    display: flex;
-    align-items: center;
+    @extend %align-center;
 }
 
 .fen-container {

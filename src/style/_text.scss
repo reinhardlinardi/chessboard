@@ -1,0 +1,28 @@
+@use 'font';
+
+
+$label-size: min(2.5vw, 2.5vh);
+$text-size: min(2.4vw, 2.4vh);
+
+$text-color: #f0f0f0;
+
+
+%label {
+    font-family: 'Roboto', sans-serif;
+    font-size: $label-size;
+    color: $text-color;
+}
+
+%text {
+    font-family: 'Roboto', sans-serif;
+    font-size: $text-size;
+    color: $text-color;
+}
+
+.label {
+    @extend %label;
+}
+
+.text {
+    @extend %text;
+}

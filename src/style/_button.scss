@@ -1,7 +1,5 @@
-@use 'font';
+@use 'text';
 
-
-$font-size: min(2.4vw, 2.4vh);
 
 %button {
     margin: 0 10px 0 0;
@@ -11,7 +9,8 @@ $font-size: min(2.4vw, 2.4vh);
 
     text-align: center;
     vertical-align: middle;
-    font-size: $font-size;
+
+    font-size: text.$text-size;
 }
 
 %button:hover {
@@ -25,20 +24,20 @@ $font-size: min(2.4vw, 2.4vh);
 
 .button-warning {
     @extend %button;
+    @extend %text;
     background-color: #eb9c3d;
-    color: #f0f0f0;
 }
 
 .button-danger {
     @extend %button;
+    @extend %text;
     background-color: #d9543f;
-    color: #f0f0f0;
 }
 
 .button-nav {
     @extend %button;
+    @extend %text;
     background-color: #019443;
-    color: #f0f0f0;
 }
 
 .button-nav:disabled {

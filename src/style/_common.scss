@@ -1,44 +1,25 @@
-@use 'layout';
-@use 'font';
+@use 'text';
 
 
-%side-container {
+.right-container {
     margin: 0 0 0 15px;
 }
 
-.right-container {
-    @extend %side-container;
-}
-
-%section-label {
-    @extend %font-roboto;
-    font-size: min(2.5vw, 2.5vh);
-}
-
-%section-text {
-    @extend %font-roboto;
-    font-size: min(2.4vw, 2.4vh);
-}
-
 .section-label {
-    @extend %section-label;
-    color: #f0f0f0;
+    @extend %label;
 }
 
 .section-text {
-    @extend %section-text;
-    color: #f0f0f0;
+    @extend %text;
 }
 
 .fen-label {
-    @extend %section-label;
+    @extend %label;
     margin: 0 10px 0 0;
-
-    color: #f0f0f0;
 }
 
 .fen-input {
-    @extend %section-text;
+    @extend %text;
     border: 1px solid transparent;
     border-radius: 4px;
     padding: 4px;

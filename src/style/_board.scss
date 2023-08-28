@@ -1,27 +1,27 @@
+@use 'size';
 @use 'layout';
 
 
-$square-size: min(7.5vw, 7.5vh);
 $light: #f9f6d6;
 $dark: #c88e3b;
 
+$square-size: min(7.5vw, 7.5vh);
+
+
 .board {
     @extend %grid;
-    grid-template-columns: repeat(8, $square-size);
-    grid-template-rows: repeat(8, $square-size);
-}
-
-%square {
-    @extend %perfect-center;
+    gap: 0 0;
+    grid-template-columns: repeat(size.$size, $square-size);
+    grid-template-rows: repeat(size.$size, $square-size);
 }
 
 .light-square {
-    @extend %square;
+    @extend %perfect-center;
     background-color: $light;
 }
-    
+
 .dark-square {
-    @extend %square;
+    @extend %perfect-center;
     background-color: $dark;
 } 
 

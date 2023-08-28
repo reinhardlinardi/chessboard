@@ -1,4 +1,6 @@
 @use 'layout';
+@use 'font';
+@use 'text';
 
 
 body {
@@ -12,16 +14,4 @@ select:focus {
 input[type="text"]:focus {
     outline: none;
     border-color: #a8a8a8;
-}
-
-.justify-center {
-    @extend %justify-center;
-}
-
-.align-center {
-    @extend %align-center;
-}
-
-.perfect-center {
-    @extend %perfect-center;
 }

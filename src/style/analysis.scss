@@ -1,8 +1,7 @@
 @use 'global';
-@use 'layout';
+@use 'common';
 @use 'board';
 @use 'button';
-@use 'common';
 @use 'font';
 
 
@@ -24,7 +23,7 @@
 %adv {
     display: inline-block;
 
-    @extend %font-open-sans;
+    font-family: 'Open Sans', sans-serif;
     font-size: min(2.2vw, 2.2vh);
 }
 
