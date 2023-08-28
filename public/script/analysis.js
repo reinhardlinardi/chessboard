@@ -128,6 +128,14 @@ export function getPiece(rank, file) {
     return Common.getPiece(this.state.pos, rank, file);
 }
 
+export function canBeOccupied(rank, file) {
+    if(this.selected === Location.None) return false;
+    if(!(this.selected in this.state.moves)) return false;
+
+    const loc = Location.of(file, rank);
+    return this.state.moves[this.selected].includes(loc);
+}
+
 export function flipBoard() {
     this.flip = !this.flip;
 }
@@ -173,9 +181,7 @@ export function onDragStart(ev) {
 
     const rank = parseInt(data.rank);
     const file = parseInt(data.file);
-
     this.selected = Location.of(file, rank);
-    console.log(this.selected);
 }
 
 export function getDraggedPiece(id) {
@@ -235,7 +241,6 @@ export function created() {
     this.selected = Location.None;
 
     if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);
-    console.log(this.state.moves);
 }
 
 function importGameState(format) {

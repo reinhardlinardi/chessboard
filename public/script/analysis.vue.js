@@ -7,11 +7,11 @@ const component = {
         return {
             state: {},
             flip: false,
+            selected: 0,
             stateDefault: {
                 clock: {},
                 id: "",
             },
-            selected: 0,
         }
     },
     computed: {
@@ -33,6 +33,8 @@ const component = {
         labelOf: page.labelOf,
         isEmpty: page.isEmpty,
         getPiece: page.getPiece,
+
+        canBeOccupied: page.canBeOccupied,
 
         flipBoard: page.flipBoard,
 

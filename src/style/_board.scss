@@ -2,6 +2,8 @@
 
 
 $square-size: min(7.5vw, 7.5vh);
+$light: #f9f6d6;
+$dark: #c88e3b;
 
 .board {
     @extend %grid;
@@ -9,12 +11,18 @@ $square-size: min(7.5vw, 7.5vh);
     grid-template-rows: repeat(8, $square-size);
 }
 
+%square {
+    @extend %perfect-center;
+}
+
 .light-square {
-    background-color: #f9f6d6;
+    @extend %square;
+    background-color: $light;
 }
     
 .dark-square {
-    background-color: #c88e3b;
+    @extend %square;
+    background-color: $dark;
 } 
 
 .piece {

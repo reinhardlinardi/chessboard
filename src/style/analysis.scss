@@ -43,3 +43,17 @@
     @extend %perfect-center;
     margin: 15px 0 10px 0;
 }
+
+%marker {
+    font-size: min(4vw, 4vh);
+}
+
+.mark-on-light {
+    @extend %marker;
+    color: board.$dark;
+}
+
+.mark-on-dark {
+    @extend %marker;
+    color: board.$light;
+}

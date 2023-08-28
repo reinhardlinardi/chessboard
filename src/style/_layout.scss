@@ -19,6 +19,6 @@
 
 %perfect-center {
     @extend %flex;
-    justify-content: center;
-    align-items: center;
+    @extend %justify-center;
+    @extend %align-center;
 }
