@@ -1,5 +1,4 @@
 import * as Common from './common.js';
-import * as State from '../module/state.js';
 import * as Setup from '../module/setup.js';
 import * as Piece from '../module/piece.js';
 import * as Castle from '../module/castle.js';
@@ -76,7 +75,8 @@ export function clearBoard() {
 }
 
 export function resetBoard() {
-    this.updateState(State.New());
+    game.resetSetup();
+    this.state = game.getSetupState();
     this.flip = false;
 }
 
