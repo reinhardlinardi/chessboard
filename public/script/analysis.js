@@ -195,8 +195,8 @@ export function onDropReplace(ev) {
     const piece = this.getDraggedPiece(srcId, this.state.pos);
 
     let state = {...this.state};
-    Common.replacePiece(destId, piece, state.pos);
-    Common.removePiece(srcId, state.pos);
+    Common.replacePieceById(destId, piece, state.pos);
+    Common.removePieceById(srcId, state.pos);
     this.updateState(state);
 }
 

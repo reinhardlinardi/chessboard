@@ -1,6 +1,7 @@
 import * as Piece from '../module/piece.js';
 import * as File from '../module/file.js';
 import * as Position from '../module/position.js';
+import * as Location from '../module/location.js';
 import { Size as size } from '../module/size.js';
 
 
@@ -104,11 +105,18 @@ export function dropGetId(ev) {
     const id = dnd.getData(mime);
 
     // Throw exception if text is dropped
-    if(getElement(id) === null) throw "ಠ_ಠ";
-    else return id;
+    if(!getElement(id)) throw "ಠ_ಠ";
+    return id;
 }
 
-export function replacePiece(id, piece, board) {
+export function replacePiece(loc, piece, board) {
+    const rank = Location.rank(loc);
+    const file = Location.file(loc);
+
+    setPiece(piece, board, rank, file);
+}
+
+export function replacePieceById(id, piece, board) {
     const data = getElementData(id);
     const rank = parseInt(data.rank);
     const file = parseInt(data.file);
@@ -116,7 +124,14 @@ export function replacePiece(id, piece, board) {
     setPiece(piece, board, rank, file);
 }
 
-export function removePiece(id, board) {
+export function removePiece(loc, board) {
+    const rank = Location.rank(loc);
+    const file = Location.file(loc);
+
+    setPiece(_, board, rank, file);
+}
+
+export function removePieceById(id, board) {
     const data = getElementData(id);
     const rank = parseInt(data.rank);
     const file = parseInt(data.file);

@@ -216,10 +216,10 @@ export function onDropReplaceOrCopy(ev) {
     const piece = this.getDraggedPiece(srcId);
 
     let pos = Position.copy(this.state.pos);
-    Common.replacePiece(destId, piece, pos);
+    Common.replacePieceById(destId, piece, pos);
 
     // Remove piece in src if not tray
-    if(!fromTray(srcId)) Common.removePiece(srcId, pos);
+    if(!fromTray(srcId)) Common.removePieceById(srcId, pos);
     this.updateState({pos: pos});
 }
 
@@ -231,7 +231,7 @@ export function onDropRemove(ev) {
     if(!fromTray(srcId)) {
         let pos = Position.copy(this.state.pos);
         
-        Common.removePiece(srcId, pos);
+        Common.removePieceById(srcId, pos);
         this.updateState({pos: pos});
     }
 }
