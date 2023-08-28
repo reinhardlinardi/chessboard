@@ -39,6 +39,7 @@ const figurine = Object.freeze({
     [Type.TypeRook]: "♜",
     [Type.TypeQueen]: "♛",
 });
+
 const multiplierDiff = Object.freeze({[White]: 1, [Black]: -1});
 
 
@@ -81,7 +82,7 @@ export function formatPieceAdv(adv) {
 }
 
 export function formatPointAdv(points) {
-    return `+${points}`;
+    return points > 0? `+${points}` : "";
 }
 
 

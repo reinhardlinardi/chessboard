@@ -7,8 +7,6 @@
 
 
 %adv-bar {
-    @extend %font-open-sans;
-    font-size: min(2.2vw, 2.2vh);
     text-align: right;
 }
 
@@ -20,11 +18,14 @@
 
 .bottom-adv-bar {
     @extend %adv-bar;
-    padding: 6px 0 0 0;
+    padding: 5px 0 0 0;
 }
 
 %adv {
     display: inline-block;
+
+    @extend %font-open-sans;
+    font-size: min(2.2vw, 2.2vh);
 }
 
 .piece-adv {
@@ -40,5 +41,5 @@
 
 .fen-container {
     @extend %perfect-center;
-    margin: 20px 0 10px 0;
+    margin: 15px 0 10px 0;
 }
