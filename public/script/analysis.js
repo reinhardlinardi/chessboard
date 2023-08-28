@@ -179,7 +179,10 @@ export function onDragStart(ev) {
 
 export function getDraggedPiece(id) {
     const data = Common.getElementData(id);
-    return Common.getPiece(this.state.pos, data.rank, data.file);
+    const rank = parseInt(data.rank);
+    const file = parseInt(data.file);
+
+    return Common.getPiece(this.state.pos, rank, file);
 }
 
 export function onDropReplace(ev) {
