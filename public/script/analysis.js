@@ -82,7 +82,7 @@ export function formatPieceAdv(adv) {
 }
 
 export function formatPointAdv(points) {
-    return points > 0? `+${points}` : "";
+    return `+${points}`;
 }
 
 
