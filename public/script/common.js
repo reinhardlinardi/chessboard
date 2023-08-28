@@ -94,8 +94,6 @@ export function dragSetId(ev, id) {
 
     // Save dragged piece id
     dnd.setData(mime, id);
-    // Allow copy or move piece
-    dnd.effectAllowed = "copyMove";
 }
 
 export function dropGetId(ev) {
