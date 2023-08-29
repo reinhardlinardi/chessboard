@@ -1,7 +1,7 @@
 import * as Piece from '../module/piece.js';
 import * as File from '../module/file.js';
 import * as Position from '../module/position.js';
-import * as Location from '../module/location.js';
+import * as Loc from '../module/location.js';
 import { Size as size } from '../module/size.js';
 
 
@@ -60,8 +60,16 @@ export function getPiece(board, rank, file) {
     return Position.get(board, rank, file);
 }
 
+export function getPieceByLoc(board, loc) {
+    return Position.getByLocation(board, loc);
+}
+
 export function setPiece(piece, board, rank, file) {
     Position.set(piece, board, rank, file);
+}
+
+export function setPieceByLoc(piece, board, loc) {
+    Position.setByLocation(piece, board, loc);
 }
 
 
@@ -107,32 +115,28 @@ export function dropGetId(ev) {
     return id;
 }
 
-export function replacePiece(loc, piece, board) {
-    const rank = Location.rank(loc);
-    const file = Location.file(loc);
-
+export function replacePiece(rank, file, piece, board) {
     setPiece(piece, board, rank, file);
+}
+
+export function replacePieceByLoc(loc, piece, board) {
+    replacePiece(Loc.rank(loc), Loc.file(loc), piece, board);
 }
 
 export function replacePieceById(id, piece, board) {
     const data = getElementData(id);
-    const rank = parseInt(data.rank);
-    const file = parseInt(data.file);
-
-    setPiece(piece, board, rank, file);
+    replacePiece(parseInt(data.rank), parseInt(data.file), piece, board);
 }
 
-export function removePiece(loc, board) {
-    const rank = Location.rank(loc);
-    const file = Location.file(loc);
-
+export function removePiece(rank, file, board) {
     setPiece(_, board, rank, file);
+}
+
+export function removePieceByLoc(loc, board) {
+    removePiece(Loc.rank(loc), Loc.file(loc), board);
 }
 
 export function removePieceById(id, board) {
     const data = getElementData(id);
-    const rank = parseInt(data.rank);
-    const file = parseInt(data.file);
-    
-    setPiece(_, board, rank, file);
+    removePiece(parseInt(data.rank), parseInt(data.file), board);
 }

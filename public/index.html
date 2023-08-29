@@ -131,10 +131,11 @@
                   <input type="checkbox"
                     :id="`checkbox-${opt.letter}`"
                     @click="setCastle"
+                    :value="`${opt.letter}`"
                     :checked="state.castle[opt.letter]"
-                    :data-castle-type="`${opt.letter}`"
+                    :disabled="disableCastle(opt.letter)"
                   />
-                  <label class="section-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
+                  <label class="checkbox-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
                 </div>
               </template>
             </div>
@@ -147,10 +148,11 @@
                   <input type="checkbox"
                     :id="`checkbox-${opt.letter}`"
                     @click="setCastle"
+                    :value="`${opt.letter}`"
                     :checked="state.castle[opt.letter]"
-                    :data-castle-type="`${opt.letter}`"
+                    :disabled="disableCastle(opt.letter)"
                   >
-                  <label class="section-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
+                  <label class="checkbox-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
                 </div>
               </template>
             </div>
@@ -160,7 +162,7 @@
           <div class="subsection">
             <button class="button-nav"
               @click="onSubmit"  
-              :disabled="disableSubmit()"
+              :disabled="!validSetup"
             >
             Analysis →
             </button>

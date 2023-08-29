@@ -101,13 +101,23 @@ export function setMove(ev) {
 }
 
 export function setCastle(ev) {
-    const data = Common.getElementData(ev.target.id);
-    const type = data.castleType;
+    const type = ev.target.value;
     const value = ev.target.checked;
 
     let rights = {...this.state.castle};
     rights[type] = value;
     this.updateState({castle: rights});
+}
+
+export function disableCastle(type) {
+    if(!this.validSetup) return true;
+    
+    const castle = Castle.get(type);
+    const king = castle.king;
+    const rook = castle.rook;
+
+    return !(Common.getPieceByLoc(this.state.pos, king.from) === king.piece &&
+        Common.getPieceByLoc(this.state.pos, rook.from) === rook.piece);
 }
 
 
@@ -128,6 +138,17 @@ export function updateState(keys) {
     this.state = game.getSetupState();
 }
 
+export function validSetup() {
+    try {
+        game.validateSetup();
+    }
+    catch(err) {
+        console.log(Err.str(err));
+        return false;
+    }
+
+    return true;
+}
 
 
 /* FEN */
@@ -166,18 +187,6 @@ export function onChangeFEN(ev) {
 
 
 /* Submit */
-export function disableSubmit() {
-    try {
-        game.validateSetup();
-    }
-    catch(err) {
-        console.log(Err.str(err));
-        return true;
-    }
-
-    return false;
-}
-
 export function onSubmit(ev) {
     let query = {};
 

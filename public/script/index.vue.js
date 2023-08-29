@@ -15,6 +15,7 @@ const component = {
     },
     computed: {
         fen: page.getFEN,
+        validSetup: page.validSetup,
     },
     methods: {
         white: page.white,
@@ -40,6 +41,7 @@ const component = {
         selectedMove: page.selectedMove,
         setMove: page.setMove,
         setCastle: page.setCastle,
+        disableCastle: page.disableCastle,
 
         isDefaultState: page.isDefaultState,
         updateState: page.updateState,
@@ -48,7 +50,6 @@ const component = {
         copyFEN: page.copyFEN,
         onChangeFEN: page.onChangeFEN,
 
-        disableSubmit: page.disableSubmit,
         onSubmit: page.onSubmit,
 
         getDraggedPiece: page.getDraggedPiece,

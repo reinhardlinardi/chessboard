@@ -16,6 +16,10 @@ input[type="text"]:focus {
     border-color: #a8a8a8;
 }
 
+input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+}
+
 img {
     cursor: pointer;
 }
