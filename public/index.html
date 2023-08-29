@@ -32,7 +32,7 @@
                   :id="`piece-top-tray-${idx}`"
                   draggable="true"
                   @dragstart="onDragStart"
-                  :data-piece-type="`${getTopTrayPiece(idx)}`"
+                  :data-piece-type="getTopTrayPiece(idx)"
                 >
             </div>
           </template>
@@ -80,7 +80,7 @@
                   :id="`piece-bottom-tray-${idx}`"
                   draggable="true"
                   @dragstart="onDragStart"
-                  :data-piece-type="`${getBottomTrayPiece(idx)}`"
+                  :data-piece-type="getBottomTrayPiece(idx)"
                 >
             </div>
           </template>
@@ -131,7 +131,7 @@
                   <input type="checkbox"
                     :id="`checkbox-${opt.letter}`"
                     @click="setCastle"
-                    :value="`${opt.letter}`"
+                    :value="opt.letter"
                     :checked="state.castle[opt.letter]"
                     :disabled="disableCastle(opt.letter)"
                   />
@@ -148,7 +148,7 @@
                   <input type="checkbox"
                     :id="`checkbox-${opt.letter}`"
                     @click="setCastle"
-                    :value="`${opt.letter}`"
+                    :value="opt.letter"
                     :checked="state.castle[opt.letter]"
                     :disabled="disableCastle(opt.letter)"
                   >
