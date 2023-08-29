@@ -15,7 +15,6 @@ const component = {
     },
     computed: {
         fen: page.getFEN,
-        validSetup: page.validSetup,
     },
     methods: {
         white: page.white,
@@ -45,6 +44,7 @@ const component = {
 
         isDefaultState: page.isDefaultState,
         updateState: page.updateState,
+        validSetup: page.validSetup,
 
         loadFEN: page.loadFEN,
         copyFEN: page.copyFEN,

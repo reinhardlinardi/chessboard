@@ -110,8 +110,6 @@ export function setCastle(ev) {
 }
 
 export function disableCastle(type) {
-    if(!this.validSetup) return true;
-    
     const castle = Castle.get(type);
     const king = castle.king;
     const rook = castle.rook;
