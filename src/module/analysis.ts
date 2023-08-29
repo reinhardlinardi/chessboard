@@ -52,11 +52,6 @@ export class Game {
         if(this.game.length === 0) return null;
         return {...this.currentStateData()};
     }
-    
-    // getStateData(fullmove: number, color: Color): State | null {
-    //     const idx = this.gameStateIdx(fullmove, color);
-    //     return idx < 0? null : {...this.game[idx]};
-    // }
 
     start() {
         if(!this.setupValid) throw Err.New(Err.InvalidOp, "invalid setup");
@@ -255,6 +250,11 @@ export class Game {
         const attackers = GamePos.analyzeAttackOn(pos, player, playerKingLoc);
         if(attackers.length > 2) throw Err.New(Err.SetupInvalidPosition, "too many checking pieces");
     }
+
+    // getStateData(fullmove: number, color: Color): State | null {
+    //     const idx = this.gameStateIdx(fullmove, color);
+    //     return idx < 0? null : {...this.game[idx]};
+    // }
 
     // private stateIdx(fullmove: number, color: Color): number {
     //     const setupFullmove = this.setup.clock.fullmove;
