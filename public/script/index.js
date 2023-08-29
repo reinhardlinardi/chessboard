@@ -10,6 +10,7 @@ import * as Loc from '../module/location.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
+import * as Face from './face.js';
 
 
 const game = new Game();
@@ -202,7 +203,13 @@ export function fromTray(id) {
 }
 
 export function getDraggedPiece(id) {
-    return fromTray(id)? Common.getPieceType(id) : Common.getPiece(this.state.pos, Common.getLoc(id));
+    try {
+        if(fromTray(id)) return Common.getPieceType(id);
+        else return Common.getPiece(this.state.pos, Common.getLoc(id));
+    }
+    catch(err) {
+        Face.disapprove();
+    }
 }
 
 export function onDragStart(ev) {

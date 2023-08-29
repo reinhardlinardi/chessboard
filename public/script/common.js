@@ -49,8 +49,8 @@ export function getElement(id) {
     return document.getElementById(id);
 }
 
+// Return data from data-* attribute
 export function getElementData(id) {
-    // Return data from data-* attribute
     return getElement(id).dataset;
 }
 
@@ -67,12 +67,12 @@ export function setPiece(piece, board, loc) {
 
 /* Data */
 export function getLoc(id) {
-    const data = getDataElseAnnoyed(id);
+    const data = getElementData(id);
     return Loc.of(parseInt(data.file), parseInt(data.rank));
 }
 
 export function getPieceType(id) {
-    const data = getDataElseAnnoyed(id);
+    const data = getElementData(id);
     return data.pieceType;
 }
 
@@ -124,19 +124,4 @@ export function removePiece(loc, board) {
 
 export function removePieceById(id, board) {
     removePiece(getLoc(id), board);
-}
-
-
-/* Bonus */
-export function annoyed() {
-    throw "ಠ_ಠ";
-}
-
-function getDataElseAnnoyed(id) {
-    try {
-        return getElementData(id);
-    }
-    catch(err) {
-        annoyed();
-    }
 }
