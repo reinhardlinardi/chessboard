@@ -12,9 +12,7 @@ export function promoteRank(color: Color): number {
 }
 
 
-const list: readonly p.Type[] = Object.freeze(
-    [p.TypeQueen, p.TypeRook, p.TypeBishop, p.TypeKnight]
-);
+const list: readonly p.Type[] = Object.freeze([p.TypeQueen, p.TypeRook, p.TypeBishop, p.TypeKnight]);
 
 export function getTypes(): p.Type[] {
     return [...list];
