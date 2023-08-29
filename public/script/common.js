@@ -56,26 +56,29 @@ export function getElementData(id) {
 
 
 /* Board */
-export function getPiece(board, rank, file) {
-    return Position.get(board, rank, file);
-}
-
-export function getPieceByLoc(board, loc) {
+export function getPiece(board, loc) {
     return Position.getByLoc(board, loc);
 }
 
-export function setPiece(piece, board, rank, file) {
-    Position.set(piece, board, rank, file);
+export function setPiece(piece, board, loc) {
+    Position.setByLoc(piece, board, loc);
 }
 
-export function setPieceByLoc(piece, board, loc) {
-    Position.setByLoc(piece, board, loc);
+
+/* Data */
+export function getLoc(id) {
+    const data = getDataElseAnnoyed(id);
+    return Loc.of(parseInt(data.file), parseInt(data.rank));
+}
+
+export function getPieceType(id) {
+    const data = getDataElseAnnoyed(id);
+    return data.pieceType;
 }
 
 
 /* Rendering */
 const _ = Piece.None;
-
 
 export function rankOf(y, flip) {
     return flip? y+1 : size-y;
@@ -89,8 +92,8 @@ export function labelOf(x, flip) {
     return File.labelOf(fileOf(x, flip));
 }
 
-export function isEmpty(board, rank, file) {
-    return getPiece(board, rank, file) === _;
+export function isEmpty(board, loc) {
+    return _ === getPiece(board, loc);
 }
 
 
@@ -99,44 +102,41 @@ const mime = "text/plain";
 
 export function dragSetId(ev, id) {
     let dnd = ev.dataTransfer;
-
-    // Save dragged piece id
     dnd.setData(mime, id);
 }
 
 export function dropGetId(ev) {
     const dnd = ev.dataTransfer;
-
-    // Get dragged piece id
-    const id = dnd.getData(mime);
-
-    // Throw exception if text is dropped
-    if(!getElement(id)) throw "ಠ_ಠ";
-    return id;
+    return dnd.getData(mime);
 }
 
-export function replacePiece(rank, file, piece, board) {
-    setPiece(piece, board, rank, file);
-}
-
-export function replacePieceByLoc(loc, piece, board) {
-    replacePiece(Loc.rank(loc), Loc.file(loc), piece, board);
+export function replacePiece(loc, piece, board) {
+    setPiece(piece, board, loc);
 }
 
 export function replacePieceById(id, piece, board) {
-    const data = getElementData(id);
-    replacePiece(parseInt(data.rank), parseInt(data.file), piece, board);
+    replacePiece(getLoc(id), piece, board);
 }
 
-export function removePiece(rank, file, board) {
-    setPiece(_, board, rank, file);
-}
-
-export function removePieceByLoc(loc, board) {
-    removePiece(Loc.rank(loc), Loc.file(loc), board);
+export function removePiece(loc, board) {
+    setPiece(_, board, loc);
 }
 
 export function removePieceById(id, board) {
-    const data = getElementData(id);
-    removePiece(parseInt(data.rank), parseInt(data.file), board);
+    removePiece(getLoc(id), board);
+}
+
+
+/* Bonus */
+export function annoyed() {
+    throw "ಠ_ಠ";
+}
+
+function getDataElseAnnoyed(id) {
+    try {
+        return getElementData(id);
+    }
+    catch(err) {
+        annoyed();
+    }
 }

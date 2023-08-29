@@ -32,28 +32,34 @@ export class Game {
         this.started = false;
         this.setupValid = true; 
         
-        this.setup = this.setupStateOf(newState());
+        this.setup = this.setupDataOf(newState());
         this.game = [];
         this.moves = [];
     }
 
-    getGameState(fullmove: number, color: Color): State | null {
-        const idx = this.gameStateIdx(fullmove, color);
-        return idx < 0? null : {...this.game[idx]};
-    }
-
-    getInitialGameState(): State | null {
-        return this.getGameState(0, this.setup.move);
-    }
-
-    getSetupState(): Setup {
+    getSetupData(): Setup {
         return {...this.setup};
     }
+
+    getInitialStateData(): State | null {
+        if(this.game.length === 0) return null;
+        return {...this.game[0]};
+    }
+
+    getCurrentStateData(): State | null {
+        if(this.game.length === 0) return null;
+        return {...this.currentStateData()};
+    }
+    
+    // getStateData(fullmove: number, color: Color): State | null {
+    //     const idx = this.gameStateIdx(fullmove, color);
+    //     return idx < 0? null : {...this.game[idx]};
+    // }
 
     start() {
         if(!this.setupValid) throw Err.New(Err.InvalidOp, "invalid setup");
 
-        this.game.push(this.setupGameStateOf(this.setup));
+        this.game.push(this.stateDataOf(this.setup));
         this.evalPosition();
         this.started = true;
     }
@@ -61,14 +67,14 @@ export class Game {
     resetSetup() {
         if(this.started) throw Err.New(Err.InvalidOp, "game has started");
 
-        this.setup = this.setupStateOf(newState());
+        this.setup = this.setupDataOf(newState());
         this.setupValid = true;
     }
 
     loadSetup(s: state) {
         if(this.started) throw Err.New(Err.InvalidOp, "game has started");
         
-        this.setup = this.setupStateOf(this.validStateOf(s));
+        this.setup = this.setupDataOf(this.validStateOf(s));
         this.setupValid = false;
     }
 
@@ -88,32 +94,21 @@ export class Game {
         this.setupValidateCheck(this.setup.move, this.setup.pos);
 
         this.setupValid = true;
-    }    
-
-    private gameStateIdx(fullmove: number, color: Color): number {
-        const setupFullmove = this.setup.clock.fullmove;
-        if(fullmove < setupFullmove) return 0;
-
-        let offset = 1;
-        offset += color === Black? 1 : 0;
-        offset += this.setup.move === Black? -1 : 0;
-
-        return 2*(fullmove - setupFullmove) + offset;
     }
 
-    // private moveIdx(fullmove: number, color: Color): number {
-    //     const idx = this.gameStateIdx(fullmove, color)-1;
-    //     return idx < 0? -1 : idx;
-    // }
+    private currentStateData() {
+        return this.game[this.game.length-1];
+    }
 
     private evalPosition() {
-        const current = this.game[this.game.length-1];
+        const current = this.currentStateData();
         
         // TODO: Implement
         // 1. Check if player in check, then check if checkmated
         // 2. Check draws: 3-fold repetition, 50-move rule, insufficient material
         // 3. Generate legal moves, if 0 legal moves, then draw by stalemate
 
+        // TODO: Change
         current.ended = false;
         current.moves = this.generateLegalMoves(current);
     }
@@ -148,14 +143,14 @@ export class Game {
         return st;
     }
 
-    private setupStateOf(s: state): Setup {
+    private setupDataOf(s: state): Setup {
         const fen = FEN.generate(s);
         const id = StateID.generateFromFEN(fen);
 
         return {...s, fen: fen, id: id};
     }
 
-    private setupGameStateOf(s: Setup): State {
+    private stateDataOf(s: Setup): State {
         const pieces = this.setupPieceCount(s.pos);
         const repeat: StateCount = {[s.id]: 1};
 
@@ -253,4 +248,20 @@ export class Game {
         const attackers = GamePos.analyzeAttackOn(pos, player, playerKingLoc);
         if(attackers.length > 2) throw Err.New(Err.InvalidPosition, "too many checking pieces");
     }
+
+    // private stateIdx(fullmove: number, color: Color): number {
+    //     const setupFullmove = this.setup.clock.fullmove;
+    //     if(fullmove < setupFullmove) return 0;
+
+    //     let offset = 1;
+    //     offset += color === Black? 1 : 0;
+    //     offset += this.setup.move === Black? -1 : 0;
+
+    //     return 2*(fullmove - setupFullmove) + offset;
+    // }
+
+    // private moveIdx(fullmove: number, color: Color): number {
+    //     const idx = this.gameStateIdx(fullmove, color)-1;
+    //     return idx < 0? -1 : idx;
+    // }
 };

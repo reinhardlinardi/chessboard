@@ -121,19 +121,22 @@ export function labelOf(x) {
 }
 
 export function isEmpty(rank, file) {
-    return Common.isEmpty(this.state.pos, rank, file);
+    return Common.isEmpty(this.state.pos, Loc.of(file, rank));
 }
 
 export function getPiece(rank, file) {
-    return Common.getPiece(this.state.pos, rank, file);
+    return Common.getPiece(this.state.pos, Loc.of(file, rank));
 }
 
 export function canBeOccupied(rank, file) {
-    if(this.selected === Loc.None) return false;
-    if(!(this.selected in this.state.moves)) return false;
+    const moves = this.state.moves;
+    const src = this.selected;
+    const dest = Loc.of(file, rank);
 
-    const loc = Loc.of(file, rank);
-    return this.state.moves[this.selected].includes(loc);
+    if(src === Loc.None) return false;
+    if(!(src in moves)) return false;
+
+    return moves[src].includes(dest);
 }
 
 export function flipBoard() {
@@ -216,10 +219,10 @@ const paramImport = "import";
 const formats = [paramFEN];
 
 export function created() {
-    const setupState = game.getSetupState();
+    const setup = game.getSetupData();
     this.stateDefault = {
-        clock: {...setupState.clock},
-        id: setupState.id,
+        clock: {...setup.clock},
+        id: setup.id,
     };
 
     const format = Common.getQuery(paramImport);
@@ -237,10 +240,11 @@ export function created() {
 
     game.start();
 
-    this.updateState(game.getInitialGameState());
+    this.updateState(game.getInitialStateData());
     this.selected = Loc.None;
 
     if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);
+    console.log(this.state);
 }
 
 function importGameState(format) {

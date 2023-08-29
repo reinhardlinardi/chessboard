@@ -6,6 +6,7 @@ import * as Filter from '../module/filter.js';
 import * as Position from '../module/position.js';
 import * as FEN from '../module/fen.js';
 import * as AbstractPiece from '../module/abstract-piece.js';
+import * as Loc from '../module/location.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
@@ -59,11 +60,11 @@ export function labelOf(x) {
 }
 
 export function isEmpty(rank, file) {
-    return Common.isEmpty(this.state.pos, rank, file);
+    return Common.isEmpty(this.state.pos, Loc.of(file, rank));
 }
 
 export function getPiece(rank, file) {
-    return Common.getPiece(this.state.pos, rank, file);
+    return Common.getPiece(this.state.pos, Loc.of(file, rank));
 }
 
 export function flipBoard() {
@@ -76,7 +77,7 @@ export function clearBoard() {
 
 export function resetBoard() {
     game.resetSetup();
-    this.state = game.getSetupState();
+    this.state = game.getSetupData();
     this.flip = false;
 }
 
@@ -114,8 +115,8 @@ export function disableCastle(type) {
     const king = castle.king;
     const rook = castle.rook;
 
-    return !(Common.getPieceByLoc(this.state.pos, king.from) === king.piece &&
-        Common.getPieceByLoc(this.state.pos, rook.from) === rook.piece);
+    return Common.getPiece(this.state.pos, king.from) !== king.piece ||
+        Common.getPiece(this.state.pos, rook.from) !== rook.piece;
 }
 
 
@@ -133,7 +134,7 @@ export function updateState(keys) {
     for(const key in keys) state[key] = keys[key];
 
     game.loadSetup(state);
-    this.state = game.getSetupState();
+    this.state = game.getSetupData();
 }
 
 export function validSetup() {
@@ -201,11 +202,7 @@ export function fromTray(id) {
 }
 
 export function getDraggedPiece(id) {
-    const data = Common.getElementData(id);
-    const rank = parseInt(data.rank);
-    const file = parseInt(data.file);
-
-    return fromTray(id)? data.pieceType : Common.getPiece(this.state.pos, rank, file);
+    return fromTray(id)? Common.getPieceType(id) : Common.getPiece(this.state.pos, Common.getLoc(id));
 }
 
 export function onDragStart(ev) {
@@ -246,10 +243,10 @@ export function onDropRemove(ev) {
 
 /* Lifecycle */
 export function created() {
-    const setupState = game.getSetupState();
+    const setup = game.getSetupData();
     this.stateDefault = {
-        clock: {...setupState.clock},
-        id: setupState.id,
+        clock: {...setup.clock},
+        id: setup.id,
     };
 
     const fen = Common.getQuery(paramFEN);
@@ -263,5 +260,5 @@ export function created() {
         }
     }
 
-    this.state = game.getSetupState();
+    this.state = game.getSetupData();
 }
