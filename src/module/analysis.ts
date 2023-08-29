@@ -228,7 +228,7 @@ export class Game {
 
                     const piece = Piece.get(subject);
                     if(piece.color === color && piece.type === TypePawn) {
-                        throw Err.New(Err.SetupInvalidPawnRank, `${color} pawns not allowed in rank ${rank}`);
+                        throw Err.New(Err.SetupInvalidPawnRank, `${color} pawn not allowed in rank ${rank}`);
                     }
                 }
             }
