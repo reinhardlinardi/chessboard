@@ -380,7 +380,7 @@ test("Analysis-Game-validateSetup", () => {
                 castle: Castle.getRights(true),
                 pos: Setup.defaultSetup(),
             },
-            err: Err.InvalidHalfmove,
+            err: Err.SetupInvalidHalfmove,
         },
         {
             name: "no king",
@@ -391,7 +391,7 @@ test("Analysis-Game-validateSetup", () => {
                 castle: Castle.getRights(false),
                 pos: Setup.emptySetup(),
             },
-            err: Err.InvalidKingCount,
+            err: Err.SetupInvalidKingCount,
         },
         {
             name: "one side no king",
@@ -412,7 +412,7 @@ test("Analysis-Game-validateSetup", () => {
 
                 ].reverse(),
             },
-            err: Err.InvalidKingCount,
+            err: Err.SetupInvalidKingCount,
         },
         {
             name: "one side more than one king",
@@ -433,7 +433,7 @@ test("Analysis-Game-validateSetup", () => {
 
                 ].reverse(),
             },
-            err: Err.InvalidKingCount,
+            err: Err.SetupInvalidKingCount,
         },
         {
             name: "pawn in rank 1",
@@ -454,7 +454,7 @@ test("Analysis-Game-validateSetup", () => {
 
                 ].reverse(),
             },
-            err: Err.InvalidPawnRank,
+            err: Err.SetupInvalidPawnRank,
         },
         {
             name: "pawn in rank 8",
@@ -475,7 +475,7 @@ test("Analysis-Game-validateSetup", () => {
 
                 ].reverse(),
             },
-            err: Err.InvalidPawnRank,
+            err: Err.SetupInvalidPawnRank,
         },
         {
             name: "opponent king in check 1",
@@ -496,7 +496,7 @@ test("Analysis-Game-validateSetup", () => {
 
                 ].reverse(),
             },
-            err: Err.InvalidPosition,
+            err: Err.SetupInvalidPosition,
         },
         {
             name: "opponent king in check 2",
@@ -517,7 +517,7 @@ test("Analysis-Game-validateSetup", () => {
 
                 ].reverse(),
             },
-            err: Err.InvalidPosition,
+            err: Err.SetupInvalidPosition,
         },
         {
             name: "opponent king in check 3",
@@ -538,7 +538,7 @@ test("Analysis-Game-validateSetup", () => {
 
                 ].reverse(),
             },
-            err: Err.InvalidPosition,
+            err: Err.SetupInvalidPosition,
         },
         {
             name: "opponent king in check 4",
@@ -559,7 +559,7 @@ test("Analysis-Game-validateSetup", () => {
 
                 ].reverse(),
             },
-            err: Err.InvalidPosition,
+            err: Err.SetupInvalidPosition,
         },
         {
             name: "opponent king in check 5",
@@ -580,7 +580,7 @@ test("Analysis-Game-validateSetup", () => {
 
                 ].reverse(),
             },
-            err: Err.InvalidPosition,
+            err: Err.SetupInvalidPosition,
         },
         {
             name: "opponent king in check 6",
@@ -601,7 +601,7 @@ test("Analysis-Game-validateSetup", () => {
 
                 ].reverse(),
             },
-            err: Err.InvalidPosition,
+            err: Err.SetupInvalidPosition,
         },
         {
             name: "king adjacent with opponent's",
@@ -622,7 +622,7 @@ test("Analysis-Game-validateSetup", () => {
 
                 ].reverse(),
             },
-            err: Err.InvalidPosition,
+            err: Err.SetupInvalidPosition,
         },
         {
             name: "king in check too many attackers 1",
@@ -643,7 +643,7 @@ test("Analysis-Game-validateSetup", () => {
 
                 ].reverse(),
             },
-            err: Err.InvalidPosition,
+            err: Err.SetupInvalidPosition,
         },
         {
             name: "king in check too many attackers 2",
@@ -664,7 +664,7 @@ test("Analysis-Game-validateSetup", () => {
 
                 ].reverse(),
             },
-            err: Err.InvalidPosition,
+            err: Err.SetupInvalidPosition,
         },
         {
             name: "valid 1",

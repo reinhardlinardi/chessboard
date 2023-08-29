@@ -83,7 +83,7 @@ export class Game {
 
         // Clock: Max halfmove should not be exceeded
         const clock = this.setup.clock;
-        if(clock.halfmove > Clock.MaxHalfmove) throw Err.New(Err.InvalidHalfmove, "invalid halfmove");
+        if(clock.halfmove > Clock.MaxHalfmove) throw Err.New(Err.SetupInvalidHalfmove, "invalid halfmove");
         
         // Position:
         // 1. Count king for both sides, each side should have exactly 1 king
@@ -210,7 +210,7 @@ export class Game {
         }
 
         for(const color in cnt) {
-            if(cnt[color] !== 1) throw Err.New(Err.InvalidKingCount, `invalid ${color} king count`);
+            if(cnt[color] !== 1) throw Err.New(Err.SetupInvalidKingCount, `invalid ${color} king count`);
         }
     }
 
@@ -226,7 +226,7 @@ export class Game {
                 const piece = get(pos, rank, file);
 
                 if(piece === whitePawn || piece === blackPawn) {
-                    throw Err.New(Err.InvalidPawnRank, `no pawns allowed in rank ${rank}`);
+                    throw Err.New(Err.SetupInvalidPawnRank, `no pawns allowed in rank ${rank}`);
                 }
             }
         }
@@ -242,11 +242,11 @@ export class Game {
         // Validation:
         // 1. Player is not checking opponent king
         const opponentAttackers = GamePos.analyzeAttackOn(pos, opponent, opponentKingLoc);
-        if(opponentAttackers.length > 0) throw Err.New(Err.InvalidPosition, `${opponent} king can't be in check`);
+        if(opponentAttackers.length > 0) throw Err.New(Err.SetupInvalidPosition, `${opponent} king can't be in check`);
         
         // 2. If player is in check, there should be at most 2 attackers
         const attackers = GamePos.analyzeAttackOn(pos, player, playerKingLoc);
-        if(attackers.length > 2) throw Err.New(Err.InvalidPosition, "too many checking pieces");
+        if(attackers.length > 2) throw Err.New(Err.SetupInvalidPosition, "too many checking pieces");
     }
 
     // private stateIdx(fullmove: number, color: Color): number {
