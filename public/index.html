@@ -19,7 +19,7 @@
 
       <div>
 
-        <div class="top-tray"
+        <div class="tray"
           @dragenter.prevent
           @dragover.prevent
           @drop.prevent="onDropRemove"
@@ -40,6 +40,11 @@
           <div></div>
       
         </div>
+
+        <div class="tray-gutter"
+          @dragenter.prevent
+          @dragover.prevent
+        ></div>
 
         <div class="board">
           <template v-for="(row, y) in state.pos">
@@ -69,7 +74,12 @@
           </template>
         </div>
 
-        <div class="bottom-tray"
+        <div class="tray-gutter"
+          @dragenter.prevent
+          @dragover.prevent
+        ></div>
+
+        <div class="tray"
           @dragenter.prevent
           @dragover.prevent
           @drop.prevent="onDropRemove"

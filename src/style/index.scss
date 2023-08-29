@@ -7,7 +7,7 @@
 @use 'layout';
 
 
-%tray {
+.tray {
     @extend %grid;
     gap: 0 0;
     grid-template-columns: repeat(size.$size, board.$square-size);
@@ -19,14 +19,8 @@
     background-color: #505050;
 }
 
-.top-tray {
-    @extend %tray;
-    margin: 0 0 8px 0;
-}
-
-.bottom-tray {
-    @extend %tray;
-    margin: 8px 0 0 0;
+.tray-gutter {
+    height: 8px;
 }
 
 %subcontainer {
