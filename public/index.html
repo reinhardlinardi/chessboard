@@ -15,19 +15,22 @@
   
   <body>
 
-    <div id="app" class="perfect-center">
+    <div id="app">
+
+      <div class="global-container"
+        @dragenter.prevent
+        @dragover.prevent
+      >
 
       <div>
 
-        <div class="tray"
-          @dragenter.prevent
-          @dragover.prevent
+        <div class="top-tray"
           @drop.prevent="onDropRemove"
         >
       
           <div></div>
           <template v-for="idx in getTrayPieceIdx()">
-            <div>
+            <div class="perfect-center">
                 <img class="piece"
                   :src="`svg/${getTopTrayPiece(idx)}.svg`"
                   :id="`piece-top-tray-${idx}`"
@@ -41,19 +44,12 @@
       
         </div>
 
-        <div class="tray-gutter"
-          @dragenter.prevent
-          @dragover.prevent
-        ></div>
-
         <div class="board">
           <template v-for="(row, y) in state.pos">
             <template v-for="(_, x) in row">
 
               <div :class="(y+x) % 2 === 0? 'light-square':'dark-square'"
                 :id="`board-y${y}-x${x}`"
-                @dragenter.prevent
-                @dragover.prevent
                 @drop.prevent="onDropReplaceOrCopy"
                 :data-square="`${labelOf(x)}${rankOf(y)}`"
                 :data-rank="rankOf(y)"
@@ -74,20 +70,13 @@
           </template>
         </div>
 
-        <div class="tray-gutter"
-          @dragenter.prevent
-          @dragover.prevent
-        ></div>
-
-        <div class="tray"
-          @dragenter.prevent
-          @dragover.prevent
+        <div class="bottom-tray"
           @drop.prevent="onDropRemove"
         >
 
           <div></div>
           <template v-for="idx in getTrayPieceIdx()">
-            <div>
+            <div class="perfect-center">
                 <img class="piece"
                   :src="`svg/${getBottomTrayPiece(idx)}.svg`"
                   :id="`piece-bottom-tray-${idx}`"
@@ -183,6 +172,8 @@
           
         </div>
       
+      </div>
+
       </div>
 
     </div>

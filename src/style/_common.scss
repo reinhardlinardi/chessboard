@@ -1,5 +1,12 @@
 @use 'text';
+@use 'layout';
 
+
+.global-container {
+    @extend %perfect-center;
+    width: 100%;
+    height: 100%;
+}
 
 .right-container {
     margin: 0 0 0 15px;
