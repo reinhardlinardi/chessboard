@@ -1,6 +1,6 @@
 import * as Castle from './castle.js';
 import * as Piece from './piece.js';
-import * as Location from './location.js';
+import * as Loc from './location.js';
 import * as EnPassant from './en-passant.js';
 import * as Filter from './filter.js';
 import * as FEN from './fen.js';
@@ -10,7 +10,7 @@ import * as GamePos from './game-position.js';
 import * as GameMove from './move.js';
 import * as Result from './game-result.js';
 import { Color, White, Black, opponentOf } from './color.js';
-import { Position, get, getByLocation } from './position.js';
+import { Position, get, getByLoc } from './position.js';
 import { Size as size } from './size.js';
 import { State as state, New as newState } from './state.js';
 import { nthRank } from './rank.js';
@@ -132,14 +132,14 @@ export class Game {
         for(const type in rights) {
             if(rights[type]) {
                 const c = Castle.get(type);
-                const kingMoved = getByLocation(st.pos, c.king.from) !== c.king.piece;
-                const rookMoved = getByLocation(st.pos, c.rook.from) !== c.rook.piece;
+                const kingMoved = getByLoc(st.pos, c.king.from) !== c.king.piece;
+                const rookMoved = getByLoc(st.pos, c.rook.from) !== c.rook.piece;
 
                 if(kingMoved || rookMoved) rights[type] = false;
             }
         }
 
-        const none = Location.None;
+        const none = Loc.None;
         if(st.enPassant !== none) {
             const valid = this.isValidEnPassantTarget(st.enPassant, st.move, st.pos);
             if(!valid) st.enPassant = none;
@@ -162,9 +162,9 @@ export class Game {
         return {...s, ended: false, result: 0, pieces: pieces, repeat: repeat, moves: {}};
     }
 
-    private isValidEnPassantTarget(target: Location.Location, player: Color, pos: Position): boolean {
-        const rank = Location.rank(target);
-        const file = Location.file(target);
+    private isValidEnPassantTarget(target: Loc.Location, player: Color, pos: Position): boolean {
+        const rank = Loc.rank(target);
+        const file = Loc.file(target);
         
         const targetRank = EnPassant.targetRank(player);
         if(rank !== targetRank) return false;
@@ -175,13 +175,13 @@ export class Game {
         const pawns = Filter.New(Piece.getList(), Piece.byType(TypePawn))();
         const opponentPawn = Filter.New(pawns, Piece.byColor(opponent))()[0].letter;
         
-        if(getByLocation(pos, opponentPawnLoc) !== opponentPawn) return false;
+        if(getByLoc(pos, opponentPawnLoc) !== opponentPawn) return false;
         
         const playerPawn = Filter.New(pawns, Piece.byColor(player))()[0].letter;
         const playerPawnsLoc = EnPassant.playerPawnsLoc(file, player);
 
         for(const loc of playerPawnsLoc) {
-            if(getByLocation(pos, loc) === playerPawn) return true;
+            if(getByLoc(pos, loc) === playerPawn) return true;
         }
         
         return false;

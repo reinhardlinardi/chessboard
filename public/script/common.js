@@ -61,7 +61,7 @@ export function getPiece(board, rank, file) {
 }
 
 export function getPieceByLoc(board, loc) {
-    return Position.getByLocation(board, loc);
+    return Position.getByLoc(board, loc);
 }
 
 export function setPiece(piece, board, rank, file) {
@@ -69,7 +69,7 @@ export function setPiece(piece, board, rank, file) {
 }
 
 export function setPieceByLoc(piece, board, loc) {
-    Position.setByLocation(piece, board, loc);
+    Position.setByLoc(piece, board, loc);
 }
 
 

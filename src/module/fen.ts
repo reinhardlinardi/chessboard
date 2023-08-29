@@ -2,7 +2,7 @@ import * as Piece from './piece.js';
 import * as Color from './color.js';
 import * as Castle from './castle.js';
 import * as File from './file.js';
-import * as Location from './location.js';
+import * as Loc from './location.js';
 import { State } from './state.js';
 import { Position, New, get, setRow } from './position.js';
 import { Size as size } from './size.js';
@@ -45,9 +45,9 @@ export function generate(s: State): string {
 
     // En passant
     let enPassant: string = NA;
-    if(s.enPassant !== Location.None) {
-        const file = File.labelOf(Location.file(s.enPassant));
-        const rank = Location.rank(s.enPassant);
+    if(s.enPassant !== Loc.None) {
+        const file = File.labelOf(Loc.file(s.enPassant));
+        const rank = Loc.rank(s.enPassant);
         enPassant = `${file}${rank}`;
     }
     
@@ -84,13 +84,13 @@ export function load(str: string): State {
         for(const type of rights) castle[type] = true;
     }
 
-    let enPassant = Location.None;
+    let enPassant = Loc.None;
     const target = parts[3];
 
     if(target !== NA) {
         const file = File.of(target[0]);
         const rank = parseInt(target[1]);
-        enPassant = Location.of(file, rank);
+        enPassant = Loc.of(file, rank);
     }
     
     const clock: Clock = {halfmove: parseInt(parts[4]), fullmove: parseInt(parts[5])};

@@ -2,7 +2,7 @@ import * as Piece from '../../public/module/piece.js';
 import * as State from '../../public/module/state.js';
 import * as Move from '../../public/module/move.js';
 import * as Castle from '../../public/module/castle.js';
-import * as Location from '../../public/module/location.js';
+import * as Loc from '../../public/module/location.js';
 import * as File from '../../public/module/file.js';
 import * as Clock from '../../public/module/clock.js';
 import { White, Black } from '../../public/module/color.js';
@@ -52,7 +52,7 @@ test("Move-generate", () => {
             state: {
                 move: White,
                 clock: Clock.New(),
-                enPassant: Location.of(File.of(File.h), 6),
+                enPassant: Loc.of(File.h, 6),
                 castle: Castle.getRights(true),
                 pos: [
                     [r, q, _, _, k, _, _, r],
@@ -90,7 +90,7 @@ test("Move-generate", () => {
             state: {
                 move: Black,
                 clock: Clock.New(),
-                enPassant: Location.of(File.of(File.d), 3),
+                enPassant: Loc.of(File.d, 3),
                 castle: Castle.getRights(true),
                 pos: [
                     [r, q, _, _, k, _, _, r],

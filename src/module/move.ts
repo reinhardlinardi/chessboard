@@ -1,4 +1,4 @@
-import * as Location from './location.js';
+import * as Loc from './location.js';
 import * as Piece from './piece.js';
 import * as PieceMove from './piece-move.js';
 import * as Castle from './castle.js';
@@ -6,14 +6,14 @@ import * as EnPassant from './en-passant.js';
 import { State } from './state.js';
 import { Size as size } from './size.js';
 import { Color, opponentOf } from './color.js';
-import { Position, getByLocation } from './position.js';
+import { Position, getByLoc } from './position.js';
 import { nthRank } from './rank.js';
 import { outOfBound } from './game-position-util.js';
 import { TypeRange } from './piece-move.js';
 import { TypeKing, TypePawn } from './piece-type.js';
 
 
-type Loc = Location.Location;
+type Loc = Loc.Location;
 
 
 export type Moves = {[loc: Loc]: Loc[]}
@@ -28,9 +28,9 @@ function generatePieceMoves(pos: Position, color: Color): Moves {
 
     for(let rank = 1; rank <= size; rank++) {
         for(let file = 1; file <= size; file++) {
-            const loc = Location.of(file, rank);
+            const loc = Loc.of(file, rank);
 
-            const current = getByLocation(pos, loc);
+            const current = getByLoc(pos, loc);
             if(current === Piece.None) continue;
 
             const piece = Piece.get(current);
@@ -52,7 +52,7 @@ function getDirectMoves(pos: Position, loc: Loc, color: Color): Loc[] {
     let moves: Loc[] = [];
     
     const opponent = opponentOf(color);
-    const piece = Piece.get(getByLocation(pos, loc));
+    const piece = Piece.get(getByLoc(pos, loc));
 
     for(const move of piece.moves) {
         for(const direction of move.directions) {
@@ -70,7 +70,7 @@ function getRangeMoves(pos: Position, loc: Loc, color: Color): Loc[] {
     let moves: Loc[] = [];
 
     const opponent = opponentOf(color);
-    const piece = Piece.get(getByLocation(pos, loc));
+    const piece = Piece.get(getByLoc(pos, loc));
 
     for(const move of piece.moves) {
         for(const direction of move.directions) {
@@ -78,7 +78,7 @@ function getRangeMoves(pos: Position, loc: Loc, color: Color): Loc[] {
 
             while(!outOfBound(square += direction)) {
                 if(canOccupy(square, pos, move, opponent)) moves.push(square);
-                if(getByLocation(pos, square) !== Piece.None) break;
+                if(getByLoc(pos, square) !== Piece.None) break;
             }
         }
     }
@@ -93,16 +93,16 @@ function getTwoRankPawnMoves(pos: Position, color: Color): Moves {
     const rank = nthRank(n, color);
 
     for(let file = 1; file <= size; file++) {
-        const loc = Location.of(file, rank)
+        const loc = Loc.of(file, rank)
 
-        const current = getByLocation(pos, loc);
+        const current = getByLoc(pos, loc);
         if(current === Piece.None) continue;
 
         const piece = Piece.get(current);
         if(piece.color !== color || piece.type !== TypePawn) continue;
 
-        const oneAhead = Location.of(file, nthRank(n+1, color));
-        const twoAhead = Location.of(file, nthRank(n+2, color));
+        const oneAhead = Loc.of(file, nthRank(n+1, color));
+        const twoAhead = Loc.of(file, nthRank(n+2, color));
         if(canMoveTo(oneAhead, pos) && canMoveTo(twoAhead, pos)) moves[loc] = [twoAhead];
     }
 
@@ -119,14 +119,14 @@ function getCastleMoves(pos: Position, rights: Castle.Rights, color: Color): Mov
             const rook = castle.rook;
 
             if(castle.color !== color) continue;
-            if(getByLocation(pos, king.from) !== king.piece) continue;
-            if(getByLocation(pos, rook.from) !== rook.piece) continue;
+            if(getByLoc(pos, king.from) !== king.piece) continue;
+            if(getByLoc(pos, rook.from) !== rook.piece) continue;
 
             let clear = true;
 
             for(let loc = rook.from; loc != king.from; loc += rook.direction) {
                 if(loc === rook.from) continue;
-                if(getByLocation(pos, loc) !== Piece.None) clear = false;
+                if(getByLoc(pos, loc) !== Piece.None) clear = false;
             }
             if(clear) {
                 if(!(king.from in moves)) moves[king.from] = [];
@@ -141,12 +141,12 @@ function getCastleMoves(pos: Position, rights: Castle.Rights, color: Color): Mov
 function getEnPassantMoves(pos: Position, enPassant: Loc, color: Color): Moves {
     let moves: Moves = {};
     
-    if(enPassant != Location.None) {
-        const file = Location.file(enPassant);
+    if(enPassant != Loc.None) {
+        const file = Loc.file(enPassant);
         const playerPawnsLoc = EnPassant.playerPawnsLoc(file, color);
 
         for(const loc of playerPawnsLoc) {
-            if(getByLocation(pos, loc) !== Piece.None) moves[loc] = [enPassant];
+            if(getByLoc(pos, loc) !== Piece.None) moves[loc] = [enPassant];
         }
     }
     return moves;
@@ -159,11 +159,11 @@ function canOccupy(square: Loc, pos: Position, move: PieceMove.Move, opponent: C
 }
 
 function canMoveTo(square: Loc, pos: Position): boolean {
-    return getByLocation(pos, square) === Piece.None;
+    return getByLoc(pos, square) === Piece.None;
 }
 
 function canCaptureOn(square: Loc, pos: Position, opponent: Color): boolean {
-    const target = getByLocation(pos, square);
+    const target = getByLoc(pos, square);
     if(target === Piece.None) return false;
 
     const piece = Piece.get(target);

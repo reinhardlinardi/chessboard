@@ -4,7 +4,7 @@ import * as Piece from '../module/piece.js';
 import * as Filter from '../module/filter.js';
 import * as Type from '../module/piece-type.js';
 import * as AbstractPiece from '../module/abstract-piece.js';
-import * as Location from '../module/location.js';
+import * as Loc from '../module/location.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
@@ -129,10 +129,10 @@ export function getPiece(rank, file) {
 }
 
 export function canBeOccupied(rank, file) {
-    if(this.selected === Location.None) return false;
+    if(this.selected === Loc.None) return false;
     if(!(this.selected in this.state.moves)) return false;
 
-    const loc = Location.of(file, rank);
+    const loc = Loc.of(file, rank);
     return this.state.moves[this.selected].includes(loc);
 }
 
@@ -181,7 +181,7 @@ export function onDragStart(ev) {
 
     const rank = parseInt(data.rank);
     const file = parseInt(data.file);
-    this.selected = Location.of(file, rank);
+    this.selected = Loc.of(file, rank);
 }
 
 export function getDraggedPiece(id) {
@@ -193,7 +193,7 @@ export function getDraggedPiece(id) {
 }
 
 export function onDropReplace(ev) {
-    this.selected = Location.None;
+    this.selected = Loc.None;
 
     const srcId = Common.dropGetId(ev);
     const destId = ev.target.id;
@@ -238,7 +238,7 @@ export function created() {
     game.start();
 
     this.updateState(game.getInitialGameState());
-    this.selected = Location.None;
+    this.selected = Loc.None;
 
     if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);
 }

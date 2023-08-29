@@ -1,14 +1,14 @@
-export const a: string = "a";
-export const b: string = "b";
-export const c: string = "c";
-export const d: string = "d";
-export const e: string = "e";
-export const f: string = "f";
-export const g: string = "g";
-export const h: string = "h";
+export const a: number = 1;
+export const b: number = 2;
+export const c: number = 3;
+export const d: number = 4;
+export const e: number = 5;
+export const f: number = 6;
+export const g: number = 7;
+export const h: number = 8;
 
 
-const label: readonly string[] = Object.freeze([a, b, c, d, e, f, g, h]);
+const label: readonly string[] = Object.freeze(["a", "b", "c", "d", "e", "f", "g", "h"]);
 
 export function getLabels(): string[] {
     return [...label];

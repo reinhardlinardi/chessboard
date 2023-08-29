@@ -2,7 +2,7 @@ import * as Piece from '../../public/module/piece.js';
 import * as FEN from '../../public/module/fen.js';
 import * as Setup from '../../public/module/setup.js';
 import * as Clock from '../../public/module/clock.js';
-import * as Location from '../../public/module/location.js';
+import * as Loc from '../../public/module/location.js';
 import * as File from '../../public/module/file.js';
 import * as Castle from '../../public/module/castle.js';
 import { White, Black } from '../../public/module/color.js';
@@ -31,7 +31,7 @@ test("FEN-generate", () => {
             state: {
                 move: Black,
                 clock: Clock.New(),
-                enPassant: Location.None,
+                enPassant: Loc.None,
                 castle: Castle.getRights(false),
                 pos: Setup.emptySetup(),
             },
@@ -42,7 +42,7 @@ test("FEN-generate", () => {
             state: {
                 move: White,
                 clock: Clock.New(),
-                enPassant: Location.None,
+                enPassant: Loc.None,
                 castle: Castle.getRights(true),
                 pos: Setup.defaultSetup(),
             },
@@ -56,7 +56,7 @@ test("FEN-generate", () => {
                     halfmove: 99,
                     fullmove: 100,
                 },
-                enPassant: Location.of(File.of(File.c), 3),
+                enPassant: Loc.of(File.c, 3),
                 castle: {[K]: true, [Q]: false, [k]: false, [q]: true},
                 pos: [
                     [r, _, _, _, k, _, _, _],
@@ -173,7 +173,7 @@ test("FEN-load", () => {
             want: {
                 move: Black,
                 castle: Castle.getRights(false),
-                enPassant: Location.None,
+                enPassant: Loc.None,
                 clock: {halfmove: 0, fullmove: 1},
                 pos: Setup.emptySetup(),
             }
@@ -185,7 +185,7 @@ test("FEN-load", () => {
             want: {
                 move: White,
                 castle: Castle.getRights(true),
-                enPassant: Location.None,
+                enPassant: Loc.None,
                 clock: {halfmove: 0, fullmove: 1},
                 pos: Setup.defaultSetup(),
             }
@@ -197,7 +197,7 @@ test("FEN-load", () => {
             want: {
                 move: Black,
                 castle: {[K]: false, [Q]: true, [k]: true, [q]: false},
-                enPassant: Location.of(File.of(File.e), 8),
+                enPassant: Loc.of(File.e, 8),
                 clock: {halfmove: 101, fullmove: 0},
                 pos: [
                     [r, _, _, _, k, _, _, _],

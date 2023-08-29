@@ -1,6 +1,6 @@
 import * as Piece from './piece.js';
 import * as File from './file.js';
-import * as Location from './location.js';
+import * as Loc from './location.js';
 import * as PieceType from './piece-type.js';
 import { Filter } from './filter.js';
 import { nthRank } from './rank.js';
@@ -19,7 +19,7 @@ export type Rights = {[type: Type]: boolean};
 
 export interface Move {
     piece: string,
-    from: Location.Location,
+    from: Loc.Location,
     direction: Direction,
     squares: number,
 };
@@ -97,12 +97,12 @@ export const BlackLong: Castle = Object.freeze({
 });
 
 function castleMoveOf(pieceType: PieceType.Type, color: Color, type: Type): Move {
-    const file = File.of(pieceFile[pieceType][type]);
+    const file = pieceFile[pieceType][type];
     const rank = nthRank(1, color);
 
     return {
         piece: piece[color][pieceType],
-        from: Location.of(file, rank),
+        from: Loc.of(file, rank),
         direction: directions[pieceType][type],
         squares: squares[pieceType][type],
     };
