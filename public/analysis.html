@@ -15,82 +15,85 @@
 
   <body>
 
-    <div id="app" class="perfect-center">
+    <div id="app">
 
-      <div>
+      <div class="global-container"
+        @dragenter.prevent
+        @dragover.prevent
+      >
 
-        <div class="top-adv-bar">
-          <div class="piece-adv" v-text="formatPieceAdv(topPieceAdv())"></div>
-          <div class="point-adv" v-show="topPointAdv() > 0">
-            <span v-text="formatPointAdv(topPointAdv())"></span>
+        <div>
+
+          <div class="top-adv-bar">
+            <div class="piece-adv" v-text="formatPieceAdv(topPieceAdv())"></div>
+            <div class="point-adv" v-show="topPointAdv() > 0">
+              <span v-text="formatPointAdv(topPointAdv())"></span>
+            </div>
           </div>
-        </div>
 
-        <div class="board">
-          <template v-for="(row, y) in state.pos">
-            <template v-for="(_, x) in row">
+          <div class="board">
+            <template v-for="(row, y) in state.pos">
+              <template v-for="(_, x) in row">
 
-              <div :class="(y+x) % 2 === 0? 'light-square':'dark-square'"
-                :id="`board-y${y}-x${x}`"
-                :data-square="`${labelOf(x)}${rankOf(y)}`"
-                @dragenter.prevent
-                @dragover.prevent
-                @drop.prevent="onDrop"
-                :data-rank="rankOf(y)"
-                :data-file="fileOf(x)"
-              >
-
-                <img class="piece" 
-                  v-if="!isEmpty(rankOf(y), fileOf(x))"
-                  :src="`svg/${getPiece(rankOf(y), fileOf(x))}.svg`"
-                  :id="`piece-y${y}-x${x}`"
-                  @click="onClick"
-                  draggable="true"
-                  @dragstart="onDragStart"
+                <div :class="(y+x) % 2 === 0? 'light-square':'dark-square'"
+                  :id="`board-y${y}-x${x}`"
+                  :data-square="`${labelOf(x)}${rankOf(y)}`"
+                  @drop.prevent="onDrop"
                   :data-rank="rankOf(y)"
                   :data-file="fileOf(x)"
                 >
-                <div class="marker-container"
-                  v-else-if="canBeOccupied(rankOf(y), fileOf(x))"
-                  :id="`marker-container-y${y}-x${x}`"
-                  @click="onClick"
-                  @dragenter.prevent
-                  @dragover.prevent
-                  :data-rank="rankOf(y)"
-                  :data-file="fileOf(x)"
-                >
-                  <div :class="(y+x) % 2 === 0? 'mark-on-light':'mark-on-dark'"
-                    :id="`marker-y${y}-x${x}`"
+
+                  <img class="piece" 
+                    v-if="!isEmpty(rankOf(y), fileOf(x))"
+                    :src="`svg/${getPiece(rankOf(y), fileOf(x))}.svg`"
+                    :id="`piece-y${y}-x${x}`"
+                    @click="onClick"
+                    draggable="true"
+                    @dragstart="onDragStart"
                     :data-rank="rankOf(y)"
                     :data-file="fileOf(x)"
                   >
-                  ●
+                  <div class="marker-container"
+                    v-else-if="canBeOccupied(rankOf(y), fileOf(x))"
+                    :id="`marker-container-y${y}-x${x}`"
+                    @click="onClick"
+                    :data-rank="rankOf(y)"
+                    :data-file="fileOf(x)"
+                  >
+                    <div :class="(y+x) % 2 === 0? 'mark-on-light':'mark-on-dark'"
+                      :id="`marker-y${y}-x${x}`"
+                      :data-rank="rankOf(y)"
+                      :data-file="fileOf(x)"
+                    >
+                    ●
+                    </div>
                   </div>
+
                 </div>
 
-              </div>
-
+              </template>
             </template>
-          </template>
-        </div>
-
-        <div class="bottom-adv-bar">
-          <div class="piece-adv" v-text="formatPieceAdv(bottomPieceAdv())"></div>
-          <div class="point-adv" v-show="bottomPointAdv() > 0">
-            <span v-text="formatPointAdv(bottomPointAdv())"></span>
           </div>
-        </div>
 
-        <div class="fen-container">
-          <label class="fen-label">FEN</label>
-          <input type="text"
-            id="fen"
-            class="fen-input"
-            :value="state.fen"
-            spellcheck="false"
-            readonly
-          >
-          <button class="button-background" @click="copyFEN">📋</button>
+          <div class="bottom-adv-bar">
+            <div class="piece-adv" v-text="formatPieceAdv(bottomPieceAdv())"></div>
+            <div class="point-adv" v-show="bottomPointAdv() > 0">
+              <span v-text="formatPointAdv(bottomPointAdv())"></span>
+            </div>
+          </div>
+
+          <div class="fen-container">
+            <label class="fen-label">FEN</label>
+            <input type="text"
+              id="fen"
+              class="fen-input"
+              :value="state.fen"
+              spellcheck="false"
+              readonly
+            >
+            <button class="button-background" @click="copyFEN">📋</button>
+          </div>
+
         </div>
 
       </div>

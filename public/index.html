@@ -22,157 +22,157 @@
         @dragover.prevent
       >
 
-      <div>
+        <div>
 
-        <div class="top-tray"
-          @drop.prevent="onDropRemove"
-        >
-      
-          <div></div>
-          <template v-for="idx in getTrayPieceIdx()">
-            <div class="perfect-center">
-                <img class="piece"
-                  :src="`svg/${getTopTrayPiece(idx)}.svg`"
-                  :id="`piece-top-tray-${idx}`"
-                  draggable="true"
-                  @dragstart="onDragStart"
-                  :data-piece-type="getTopTrayPiece(idx)"
-                >
-            </div>
-          </template>
-          <div></div>
-      
-        </div>
+          <div class="top-tray"
+            @drop.prevent="onDropRemove"
+          >
+          
+            <div></div>
+            <template v-for="idx in getTrayPieceIdx()">
+              <div class="perfect-center">
+                  <img class="piece"
+                    :src="`svg/${getTopTrayPiece(idx)}.svg`"
+                    :id="`piece-top-tray-${idx}`"
+                    draggable="true"
+                    @dragstart="onDragStart"
+                    :data-piece-type="getTopTrayPiece(idx)"
+                  >
+              </div>
+            </template>
+            <div></div>
+        
+          </div>
 
-        <div class="board">
-          <template v-for="(row, y) in state.pos">
-            <template v-for="(_, x) in row">
+          <div class="board">
+            <template v-for="(row, y) in state.pos">
+              <template v-for="(_, x) in row">
 
-              <div :class="(y+x) % 2 === 0? 'light-square':'dark-square'"
-                :id="`board-y${y}-x${x}`"
-                @drop.prevent="onDropReplaceOrCopy"
-                :data-square="`${labelOf(x)}${rankOf(y)}`"
-                :data-rank="rankOf(y)"
-                :data-file="fileOf(x)"
-              >
-                <img class="piece" 
-                  v-if="!isEmpty(rankOf(y), fileOf(x))"
-                  :src="`svg/${getPiece(rankOf(y), fileOf(x))}.svg`"
-                  :id="`piece-y${y}-x${x}`"
-                  draggable="true"
-                  @dragstart="onDragStart"
+                <div :class="(y+x) % 2 === 0? 'light-square':'dark-square'"
+                  :id="`board-y${y}-x${x}`"
+                  @drop.prevent="onDropReplaceOrCopy"
+                  :data-square="`${labelOf(x)}${rankOf(y)}`"
                   :data-rank="rankOf(y)"
                   :data-file="fileOf(x)"
                 >
-              </div>
-
-            </template>
-          </template>
-        </div>
-
-        <div class="bottom-tray"
-          @drop.prevent="onDropRemove"
-        >
-
-          <div></div>
-          <template v-for="idx in getTrayPieceIdx()">
-            <div class="perfect-center">
-                <img class="piece"
-                  :src="`svg/${getBottomTrayPiece(idx)}.svg`"
-                  :id="`piece-bottom-tray-${idx}`"
-                  draggable="true"
-                  @dragstart="onDragStart"
-                  :data-piece-type="getBottomTrayPiece(idx)"
-                >
-            </div>
-          </template>
-          <div></div>
-
-        </div>
-
-        <div class="fen-container">
-          <label class="fen-label">FEN</label>
-          <input type="text"
-            id="fen"
-            class="fen-input"
-            :value="fen"
-            @change="onChangeFEN"
-            spellcheck="false"
-          >
-          <button class="button-background" @click="copyFEN">📋</button>
-        </div>
-
-      </div>
-
-      <div class="right-container">
-
-        <div class="control-container">
-          <p class="section-label">Board</p>
-          <button class="button" @click="flipBoard">Flip</button>
-          <button class="button-warning" @click="clearBoard">Clear</button>
-          <button class="button-danger" @click="resetBoard">Reset</button>
-        </div>
-        
-        <div class="option-container">
-          <p class="section-label">Options</p>
-
-          <div class="subsection">
-            <label class="section-text">Move</label>
-            <select class="form-select" @change="setMove">
-              <option :value="white()" :selected="selectedMove(white())">White to move</option>
-              <option :value="black()" :selected="selectedMove(black())">Black to move</option>
-            </select>
-          </div>
-
-          <div class="subsection">
-            <div class="castle-container">
-              <label class="section-text">White</label>
-
-              <template v-for="opt in getWhiteCastleTypes()">
-                <div class="checkbox-container">
-                  <input type="checkbox"
-                    :id="`checkbox-${opt.letter}`"
-                    @click="setCastle"
-                    :value="opt.letter"
-                    :checked="state.castle[opt.letter]"
-                    :disabled="disableCastle(opt.letter)"
-                  />
-                  <label class="checkbox-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
-                </div>
-              </template>
-            </div>
-
-            <div class="castle-container">
-              <label class="section-text">Black</label>
-              
-              <template v-for="opt in getBlackCastleTypes()">
-                <div class="checkbox-container">
-                  <input type="checkbox"
-                    :id="`checkbox-${opt.letter}`"
-                    @click="setCastle"
-                    :value="opt.letter"
-                    :checked="state.castle[opt.letter]"
-                    :disabled="disableCastle(opt.letter)"
+                  <img class="piece" 
+                    v-if="!isEmpty(rankOf(y), fileOf(x))"
+                    :src="`svg/${getPiece(rankOf(y), fileOf(x))}.svg`"
+                    :id="`piece-y${y}-x${x}`"
+                    draggable="true"
+                    @dragstart="onDragStart"
+                    :data-rank="rankOf(y)"
+                    :data-file="fileOf(x)"
                   >
-                  <label class="checkbox-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
                 </div>
+
               </template>
-            </div>
+            </template>
+          </div>
+
+          <div class="bottom-tray"
+            @drop.prevent="onDropRemove"
+          >
+
+            <div></div>
+            <template v-for="idx in getTrayPieceIdx()">
+              <div class="perfect-center">
+                  <img class="piece"
+                    :src="`svg/${getBottomTrayPiece(idx)}.svg`"
+                    :id="`piece-bottom-tray-${idx}`"
+                    draggable="true"
+                    @dragstart="onDragStart"
+                    :data-piece-type="getBottomTrayPiece(idx)"
+                  >
+              </div>
+            </template>
+            <div></div>
 
           </div>
 
-          <div class="subsection">
-            <button class="button-nav"
-              @click="onSubmit"  
-              :disabled="!validSetup()"
+          <div class="fen-container">
+            <label class="fen-label">FEN</label>
+            <input type="text"
+              id="fen"
+              class="fen-input"
+              :value="fen"
+              @change="onChangeFEN"
+              spellcheck="false"
             >
-            Analysis →
-            </button>
+            <button class="button-background" @click="copyFEN">📋</button>
+          </div>
+
+        </div>
+
+        <div class="right-container">
+
+          <div class="control-container">
+            <p class="section-label">Board</p>
+            <button class="button" @click="flipBoard">Flip</button>
+            <button class="button-warning" @click="clearBoard">Clear</button>
+            <button class="button-danger" @click="resetBoard">Reset</button>
           </div>
           
+          <div class="option-container">
+            <p class="section-label">Options</p>
+
+            <div class="subsection">
+              <label class="section-text">Move</label>
+              <select class="form-select" @change="setMove">
+                <option :value="white()" :selected="selectedMove(white())">White to move</option>
+                <option :value="black()" :selected="selectedMove(black())">Black to move</option>
+              </select>
+            </div>
+
+            <div class="subsection">
+              <div class="castle-container">
+                <label class="section-text">White</label>
+
+                <template v-for="opt in getWhiteCastleTypes()">
+                  <div class="checkbox-container">
+                    <input type="checkbox"
+                      :id="`checkbox-${opt.letter}`"
+                      @click="setCastle"
+                      :value="opt.letter"
+                      :checked="state.castle[opt.letter]"
+                      :disabled="disableCastle(opt.letter)"
+                    />
+                    <label class="checkbox-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
+                  </div>
+                </template>
+              </div>
+
+              <div class="castle-container">
+                <label class="section-text">Black</label>
+                
+                <template v-for="opt in getBlackCastleTypes()">
+                  <div class="checkbox-container">
+                    <input type="checkbox"
+                      :id="`checkbox-${opt.letter}`"
+                      @click="setCastle"
+                      :value="opt.letter"
+                      :checked="state.castle[opt.letter]"
+                      :disabled="disableCastle(opt.letter)"
+                    >
+                    <label class="checkbox-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
+                  </div>
+                </template>
+              </div>
+
+            </div>
+
+            <div class="subsection">
+              <button class="button-nav"
+                @click="onSubmit"  
+                :disabled="!validSetup()"
+              >
+              Analysis →
+              </button>
+            </div>
+            
+          </div>
+        
         </div>
-      
-      </div>
 
       </div>
 
