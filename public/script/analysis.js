@@ -206,26 +206,6 @@ export function onDrop(ev) {
 }
 
 
-// export function onDropReplace(ev) {
-//     const src = this.selected;
-//     this.updateSelected(Loc.None);
-
-//     const srcId = Common.dropGetId(ev);
-//     const destId = ev.target.id;
-
-//     // Return if dnd to self
-//     if(srcId === destId) return;
-    
-//     // Replace piece in dest
-//     const piece = this.getDraggedPiece(srcId, this.state.pos);
-
-//     let state = {...this.state};
-//     Common.replacePieceById(destId, piece, state.pos);
-//     Common.removePieceById(srcId, state.pos);
-//     this.updateState(state);
-// }
-
-
 /* Lifecycle */
 const paramImport = "import";
 const formats = [paramFEN];
