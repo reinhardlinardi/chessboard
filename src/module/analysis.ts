@@ -10,6 +10,7 @@ import * as GamePos from './game-position.js';
 import * as GameMove from './move.js';
 import * as Promotion from './promotion.js';
 import * as Result from './game-result.js';
+import * as Draw from './draw.js';
 import { Color, White, Black, opponentOf } from './color.js';
 import { Position, get, getByLoc } from './position.js';
 import { Size as size } from './size.js';
@@ -152,10 +153,13 @@ export class Game {
     }
 
     private stateDataOf(s: Setup): State {
+        const ended = false;
+        const result = {score: Result.Tie, drawReason: Draw.ReasonNone};
+        
         const pieces = this.setupPieceCount(s.pos);
         const repeat: StateCount = {[s.id]: 1};
-
-        return {...s, ended: false, result: 0, pieces: pieces, repeat: repeat, moves: {}};
+        
+        return {...s, ended: ended, result: result, pieces: pieces, repeat: repeat, moves: {}};
     }
 
     private isValidEnPassantTarget(target: Loc.Location, player: Color, pos: Position): boolean {
