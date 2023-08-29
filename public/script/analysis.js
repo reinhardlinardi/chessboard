@@ -47,8 +47,8 @@ export function pieceDifference() {
     let diff = {};
 
     for(const type of pieceTypes) {
-        const whiteCount = this.state.count[whitePieces[type]];
-        const blackCount = this.state.count[blackPieces[type]];
+        const whiteCount = this.state.pieces[whitePieces[type]];
+        const blackCount = this.state.pieces[blackPieces[type]];
         diff[type] = whiteCount-blackCount;
     }
     return diff;
