@@ -8,6 +8,7 @@ import * as StateID from './state-id.js';
 import * as Clock from './clock.js';
 import * as GamePos from './game-position.js';
 import * as GameMove from './move.js';
+import * as Promotion from './promotion.js';
 import * as Result from './game-result.js';
 import { Color, White, Black, opponentOf } from './color.js';
 import { Position, get, getByLoc } from './position.js';
@@ -215,18 +216,20 @@ export class Game {
     }
 
     private setupValidatePawnRank(pos: Position) {
-        const n: number = 1;
-        const ranks: number[] = [nthRank(n, White), nthRank(n, Black)];
-        
-        const whitePawn = Piece.WhitePawn.letter;
-        const blackPawn = Piece.BlackPawn.letter;
+        const colors: Color[] = [White, Black];
 
-        for(const rank of ranks) {
-            for(let file = 1; file <= size; file++) {
-                const piece = get(pos, rank, file);
+        for(const color of colors) {
+            const ranks = [nthRank(1, color), Promotion.promoteRank(color)];
 
-                if(piece === whitePawn || piece === blackPawn) {
-                    throw Err.New(Err.SetupInvalidPawnRank, `no pawns allowed in rank ${rank}`);
+            for(const rank of ranks) {
+                for(let file = 1; file <= size; file++) {
+                    const subject = get(pos, rank, file);
+                    if(subject === Piece.None) continue;
+
+                    const piece = Piece.get(subject);
+                    if(piece.color === color && piece.type === TypePawn) {
+                        throw Err.New(Err.SetupInvalidPawnRank, `${color} pawns not allowed in rank ${rank}`);
+                    }
                 }
             }
         }
