@@ -33,25 +33,41 @@
               <div :class="(y+x) % 2 === 0? 'light-square':'dark-square'"
                 :id="`board-y${y}-x${x}`"
                 :data-square="`${labelOf(x)}${rankOf(y)}`"
+                @dragenter.prevent
                 @dragover.prevent
-                @drop.prevent="onDropReplace"
+                @drop.prevent="onDrop"
                 :data-rank="rankOf(y)"
                 :data-file="fileOf(x)"
               >
+
                 <img class="piece" 
                   v-if="!isEmpty(rankOf(y), fileOf(x))"
                   :src="`svg/${getPiece(rankOf(y), fileOf(x))}.svg`"
                   :id="`piece-y${y}-x${x}`"
+                  @click="onClick"
                   draggable="true"
                   @dragstart="onDragStart"
                   :data-rank="rankOf(y)"
                   :data-file="fileOf(x)"
                 >
-                <div :class="(y+x) % 2 === 0? 'mark-on-light':'mark-on-dark'"
+                <div class="marker-container"
                   v-else-if="canBeOccupied(rankOf(y), fileOf(x))"
+                  :id="`marker-container-y${y}-x${x}`"
+                  @click="onClick"
+                  @dragenter.prevent
+                  @dragover.prevent
+                  :data-rank="rankOf(y)"
+                  :data-file="fileOf(x)"
                 >
-                ●
+                  <div :class="(y+x) % 2 === 0? 'mark-on-light':'mark-on-dark'"
+                    :id="`marker-y${y}-x${x}`"
+                    :data-rank="rankOf(y)"
+                    :data-file="fileOf(x)"
+                  >
+                  ●
+                  </div>
                 </div>
+
               </div>
 
             </template>

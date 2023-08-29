@@ -29,7 +29,7 @@
     margin: 8px 0 0 0;
 }
 
-%sub-container {
+%subcontainer {
     padding: 1px 0 10px 10px;
     border: 1px solid transparent;
     border-radius: 4px;
@@ -37,12 +37,12 @@
 }
 
 .control-container {
-    @extend %sub-container;
+    @extend %subcontainer;
     margin: 0 0 15px 0;
 }
 
 .option-container {
-    @extend %sub-container;
+    @extend %subcontainer;
     margin: 15px 0 0px 0;
 }
 

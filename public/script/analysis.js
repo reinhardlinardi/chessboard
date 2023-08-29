@@ -8,6 +8,7 @@ import * as Loc from '../module/location.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
+import * as Face from './face.js';
 
 
 const game = new Game();
@@ -129,14 +130,14 @@ export function getPiece(rank, file) {
 }
 
 export function canBeOccupied(rank, file) {
+    if(this.state.ended) return false;
+
     const moves = this.state.moves;
-    const src = this.selected;
-    const dest = Loc.of(file, rank);
+    const src = this.select.loc;
+    const loc = Loc.of(file, rank);
 
-    if(src === Loc.None) return false;
     if(!(src in moves)) return false;
-
-    return moves[src].includes(dest);
+    return moves[src].includes(loc);
 }
 
 export function flipBoard() {
@@ -153,10 +154,6 @@ export function isDefaultState() {
         state.clock.fullmove === ref.clock.fullmove;
 }
 
-export function updateState(state) {
-    this.state = state;
-}
-
 
 /* FEN */
 const paramFEN = "fen";
@@ -169,49 +166,64 @@ export function copyFEN(ev) {
 }
 
 
-/* Drag and drop */
-export function onDragStart(ev) {
-    Common.dragSetId(ev, ev.target.id);
-
-    let data;
-
-    try {
-        data = Common.getElementData(ev.target.id);
-    }
-    catch(err) {
-        throw "ಠ_ಠ";
-    }
-
-    const rank = parseInt(data.rank);
-    const file = parseInt(data.file);
-    this.selected = Loc.of(file, rank);
+/* Move */
+export function move(src, dest) {
+    console.log("move from", src, "to", dest);
 }
 
-export function getDraggedPiece(id) {
-    const data = Common.getElementData(id);
-    const rank = parseInt(data.rank);
-    const file = parseInt(data.file);
 
-    return Common.getPiece(this.state.pos, rank, file);
-}
-
-export function onDropReplace(ev) {
-    this.selected = Loc.None;
-
-    const srcId = Common.dropGetId(ev);
-    const destId = ev.target.id;
-
-    // Return if dnd to self
-    if(srcId === destId) return;
+/* Selection */
+export function onClick(ev) {
+    const moves = this.state.moves;
+    const current = this.select.loc;
+    const loc = Common.getLoc(ev.target.id);
     
-    // Replace piece in dest
-    const piece = this.getDraggedPiece(srcId, this.state.pos);
-
-    let state = {...this.state};
-    Common.replacePieceById(destId, piece, state.pos);
-    Common.removePieceById(srcId, state.pos);
-    this.updateState(state);
+    if(current === Loc.None) this.select = {click: true, loc: loc};
+    else if(current === loc) this.select = {click: false, loc: Loc.None};
+    else if(!moves[current].includes(loc)) this.select.loc = loc;
+    else {
+        this.select = {click: false, loc: Loc.None};
+        this.move(current, loc);
+    }
 }
+
+export function onDragStart(ev) {
+    const src = Common.getLoc(ev.target.id);
+    this.select = {click: false, loc: src};
+}
+
+export function onDrop(ev) {
+    const src = this.select.loc;
+
+    if(this.select.click || src === Loc.None) Face.disapprove();
+    else {
+        const moves = this.state.moves;
+        const loc =  Common.getLoc(ev.target.id);
+
+        this.select.loc = Loc.None;
+        if(moves[src].includes(loc)) this.move(src, loc);
+    }
+}
+
+
+// export function onDropReplace(ev) {
+//     const src = this.selected;
+//     this.updateSelected(Loc.None);
+
+//     const srcId = Common.dropGetId(ev);
+//     const destId = ev.target.id;
+
+//     // Return if dnd to self
+//     if(srcId === destId) return;
+    
+//     // Replace piece in dest
+//     const piece = this.getDraggedPiece(srcId, this.state.pos);
+
+//     let state = {...this.state};
+//     Common.replacePieceById(destId, piece, state.pos);
+//     Common.removePieceById(srcId, state.pos);
+//     this.updateState(state);
+// }
 
 
 /* Lifecycle */
@@ -240,11 +252,10 @@ export function created() {
 
     game.start();
 
-    this.updateState(game.getInitialStateData());
-    this.selected = Loc.None;
+    this.state = game.getInitialStateData();
+    this.select.loc = Loc.None;
 
     if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);
-    console.log(this.state);
 }
 
 function importGameState(format) {

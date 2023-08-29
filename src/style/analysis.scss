@@ -43,8 +43,16 @@
     margin: 15px 0 10px 0;
 }
 
+.marker-container {
+    @extend %perfect-center;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
 %marker {
-    font-size: min(3.6vw, 3.6vh);
+    font-size: min(3vw, 3vh);
+    user-select: none;
 }
 
 .mark-on-light {

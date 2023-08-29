@@ -7,7 +7,10 @@ const component = {
         return {
             state: {},
             flip: false,
-            selected: 0,
+            select: {
+                click: false,
+                loc: 0,
+            },
             stateDefault: {
                 clock: {},
                 id: "",
@@ -33,19 +36,19 @@ const component = {
         labelOf: page.labelOf,
         isEmpty: page.isEmpty,
         getPiece: page.getPiece,
-
         canBeOccupied: page.canBeOccupied,
 
         flipBoard: page.flipBoard,
 
         isDefaultState: page.isDefaultState,
-        updateState: page.updateState,
 
         copyFEN: page.copyFEN,
 
-        getDraggedPiece: page.getDraggedPiece,
+        move: page.move,
+
+        onClick: page.onClick,
         onDragStart: page.onDragStart,
-        onDropReplace: page.onDropReplace,
+        onDrop: page.onDrop,
     },
     created: page.created,
 };
