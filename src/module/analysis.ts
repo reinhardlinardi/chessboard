@@ -4,69 +4,49 @@ import * as Location from './location.js';
 import * as EnPassant from './en-passant.js';
 import * as Filter from './filter.js';
 import * as FEN from './fen.js';
-import * as ID from './id.js';
+import * as StateID from './state-id.js';
 import * as Clock from './clock.js';
-import * as State from './state.js';
 import * as GamePos from './game-position.js';
-import * as Move from './move.js';
+import * as GameMove from './move.js';
+import * as Result from './game-result.js';
 import { Color, White, Black, opponentOf } from './color.js';
 import { Position, get, getByLocation } from './position.js';
 import { Size as size } from './size.js';
+import { State as state, New as newState } from './state.js';
 import { nthRank } from './rank.js';
 import { TypePawn } from './piece-type.js';
 import { getKingLocation } from './game-position-util.js';
+import { Setup, State, Move, PieceCount, StateCount } from './game-data.js';
 import * as Err from './analysis-error.js';
-
-
-type PieceCount = {[piece: string]: number};
-type PosRepeat = {[id: string]: number};
-
-
-export interface SetupState extends State.State {
-    fen: string,
-    id: string,
-};
-
-export interface GameState extends SetupState {
-    count: PieceCount,
-    repeat: PosRepeat,
-    moves: Move.Move,
-};
-
-export interface GameMove {
-    from: Location.Location,
-    to: Location.Location,
-    pgn: string,
-};
 
 
 export class Game {
     private started: boolean;
     private setupValid: boolean;
 
-    private setup: SetupState;
-    private game: GameState[];
-    private moves: GameMove[];
+    private setup: Setup;
+    private game: State[];
+    private moves: Move[];
 
     constructor() {
         this.started = false;
         this.setupValid = true; 
         
-        this.setup = this.setupStateOf(State.New());
+        this.setup = this.setupStateOf(newState());
         this.game = [];
         this.moves = [];
     }
 
-    getGameState(fullmove: number, color: Color): GameState | null {
+    getGameState(fullmove: number, color: Color): State | null {
         const idx = this.gameStateIdx(fullmove, color);
         return idx < 0? null : {...this.game[idx]};
     }
 
-    getInitialGameState(): GameState | null {
+    getInitialGameState(): State | null {
         return this.getGameState(0, this.setup.move);
     }
 
-    getSetupState(): SetupState {
+    getSetupState(): Setup {
         return {...this.setup};
     }
 
@@ -74,17 +54,18 @@ export class Game {
         if(!this.setupValid) throw Err.New(Err.InvalidOp, "invalid setup");
 
         this.game.push(this.setupGameStateOf(this.setup));
+        this.evalPosition();
         this.started = true;
     }
 
     resetSetup() {
         if(this.started) throw Err.New(Err.InvalidOp, "game has started");
 
-        this.setup = this.setupStateOf(State.New());
+        this.setup = this.setupStateOf(newState());
         this.setupValid = true;
     }
 
-    loadSetup(s: State.State) {
+    loadSetup(s: state) {
         if(this.started) throw Err.New(Err.InvalidOp, "game has started");
         
         this.setup = this.setupStateOf(this.validStateOf(s));
@@ -125,7 +106,23 @@ export class Game {
     //     return idx < 0? -1 : idx;
     // }
 
-    private validStateOf(s: State.State): State.State {
+    private evalPosition() {
+        const current = this.game[this.game.length-1];
+        
+        // TODO: Implement
+        // 1. Check if player in check, then check if checkmated
+        // 2. Check draws: 3-fold repetition, 50-move rule, insufficient material
+        // 3. Generate legal moves, if 0 legal moves, then draw by stalemate
+
+        current.ended = false;
+        current.moves = this.generateLegalMoves(current);
+    }
+
+    private generateLegalMoves(s: state): GameMove.Moves {
+        return GameMove.generate(s);
+    }
+
+    private validStateOf(s: state): state {
         let st = {...s};
 
         let clock = st.clock;
@@ -151,23 +148,18 @@ export class Game {
         return st;
     }
 
-    private setupStateOf(s: State.State): SetupState {
+    private setupStateOf(s: state): Setup {
         const fen = FEN.generate(s);
-        const id = ID.generateFromFEN(fen);
+        const id = StateID.generateFromFEN(fen);
 
         return {...s, fen: fen, id: id};
     }
 
-    private setupGameStateOf(s: SetupState): GameState {
-        const count = this.setupPieceCount(s.pos);
-        const repeat: PosRepeat = {[s.id]: 1};
+    private setupGameStateOf(s: Setup): State {
+        const pieces = this.setupPieceCount(s.pos);
+        const repeat: StateCount = {[s.id]: 1};
 
-        const moves = this.generateLegalMoves(s);
-        return {...s, count: count, repeat: repeat, moves: moves};
-    }
-
-    private generateLegalMoves(s: State.State): Move.Move {
-        return Move.generate(s);
+        return {...s, ended: false, result: 0, pieces: pieces, repeat: repeat, moves: {}};
     }
 
     private isValidEnPassantTarget(target: Location.Location, player: Color, pos: Position): boolean {

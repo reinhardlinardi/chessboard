@@ -16,14 +16,15 @@ import { TypeKing, TypePawn } from './piece-type.js';
 type Loc = Location.Location;
 
 
-export type Move = {[loc: Loc]: Loc[]}
+export type Moves = {[loc: Loc]: Loc[]}
 
-export function generate(s: State): Move {
+export function generate(s: State): Moves {
     return mergeMoves(generatePieceMoves(s.pos, s.move), generateSpecialMoves(s.pos, s.move, s.castle, s.enPassant));
 }
 
-function generatePieceMoves(pos: Position, color: Color): Move {
-    let moves: Move = {};
+
+function generatePieceMoves(pos: Position, color: Color): Moves {
+    let moves: Moves = {};
 
     for(let rank = 1; rank <= size; rank++) {
         for(let file = 1; file <= size; file++) {
@@ -43,7 +44,7 @@ function generatePieceMoves(pos: Position, color: Color): Move {
     return moves;
 }
 
-function generateSpecialMoves(pos: Position, color: Color, rights: Castle.Rights, enPassant: Loc): Move {
+function generateSpecialMoves(pos: Position, color: Color, rights: Castle.Rights, enPassant: Loc): Moves {
     return {...getTwoRankPawnMoves(pos, color), ...getCastleMoves(pos, rights, color), ...getEnPassantMoves(pos, enPassant, color)};
 }
 
@@ -85,8 +86,8 @@ function getRangeMoves(pos: Position, loc: Loc, color: Color): Loc[] {
     return moves;
 }
 
-function getTwoRankPawnMoves(pos: Position, color: Color): Move {
-    let moves: Move = {};
+function getTwoRankPawnMoves(pos: Position, color: Color): Moves {
+    let moves: Moves = {};
 
     const n = 2;
     const rank = nthRank(n, color);
@@ -108,8 +109,8 @@ function getTwoRankPawnMoves(pos: Position, color: Color): Move {
     return moves;
 }
 
-function getCastleMoves(pos: Position, rights: Castle.Rights, color: Color): Move {
-    let moves: Move = {};
+function getCastleMoves(pos: Position, rights: Castle.Rights, color: Color): Moves {
+    let moves: Moves = {};
     
     for(let type in rights) {
         if(rights[type]) {
@@ -137,8 +138,8 @@ function getCastleMoves(pos: Position, rights: Castle.Rights, color: Color): Mov
     return moves;
 }
 
-function getEnPassantMoves(pos: Position, enPassant: Loc, color: Color): Move {
-    let moves: Move = {};
+function getEnPassantMoves(pos: Position, enPassant: Loc, color: Color): Moves {
+    let moves: Moves = {};
     
     if(enPassant != Location.None) {
         const file = Location.file(enPassant);
@@ -169,8 +170,8 @@ function canCaptureOn(square: Loc, pos: Position, opponent: Color): boolean {
     return piece.color === opponent && piece.type !== TypeKing;
 }
 
-function mergeMoves(...moves: Move[]): Move {
-    let res: Move = {};
+function mergeMoves(...moves: Moves[]): Moves {
+    let res: Moves = {};
 
     for(const move of moves) {
         for(const square in move) {
