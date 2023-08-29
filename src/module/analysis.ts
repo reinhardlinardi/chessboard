@@ -11,7 +11,6 @@ import * as GameMove from './move.js';
 import * as Promotion from './promotion.js';
 import * as Result from './game-result.js';
 import * as Draw from './draw.js';
-import { Color, White, Black, opponentOf } from './color.js';
 import { Position, get, getByLoc } from './position.js';
 import { Size as size } from './size.js';
 import { State as state, New as newState } from './state.js';
@@ -19,6 +18,7 @@ import { nthRank } from './rank.js';
 import { TypePawn } from './piece-type.js';
 import { getKingLocation } from './game-position-util.js';
 import { Setup, State, Move, PieceCount, StateCount } from './game-data.js';
+import { Color, White, Black, opponentOf, getList as getColors } from './color.js';
 import * as Err from './analysis-error.js';
 
 
@@ -215,7 +215,7 @@ export class Game {
     }
 
     private setupValidatePawnRank(pos: Position) {
-        const colors: Color[] = [White, Black];
+        const colors = getColors();
 
         for(const color of colors) {
             const ranks = [nthRank(1, color), Promotion.promoteRank(color)];
