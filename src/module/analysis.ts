@@ -237,14 +237,21 @@ export class Game {
         const playerKingLoc = getKingLocation(pos, player);
         const opponentKingLoc = getKingLocation(pos, opponent);
 
+        // Get all attacked squares
+        const playerAttacks = Attack.getAttackersOf(opponent, pos);
+        const opponentAttacks = Attack.getAttackersOf(player, pos);
+         
         // Validation:
         // 1. Player is not checking opponent king
-        const opponentAttackers = Attack.getAttackersLoc(pos, opponent, opponentKingLoc);
-        if(opponentAttackers.length > 0) throw Err.New(Err.SetupInvalidPosition, `${opponent} king can't be in check`);
+        if(opponentKingLoc in playerAttacks) {
+            throw Err.New(Err.SetupInvalidPosition, `${opponent} king can't be in check`);
+        }
         
         // 2. If player is in check, there should be at most 2 attackers
-        const attackers = Attack.getAttackersLoc(pos, player, playerKingLoc);
-        if(attackers.length > 2) throw Err.New(Err.SetupInvalidPosition, "too many checking pieces");
+        if(playerKingLoc in opponentAttacks) {
+            const numAttacker = opponentAttacks[playerKingLoc].length;
+            if(numAttacker > 2) throw Err.New(Err.SetupInvalidPosition, "too many checking pieces");
+        }
     }
 
     // getStateData(fullmove: number, color: Color): State | null {
