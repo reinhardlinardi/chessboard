@@ -29,7 +29,7 @@ export function getAttackersOf(color: Color, pos: Position): Attackers {
             const piece = Piece.get(suspect);
             if(piece.color !== opponent) continue;
 
-            const attacked = getLocAttackedBy(opponent, loc, pos);
+            const attacked = getLocAttackedBy(loc, pos);
             for(const square of attacked) {
                 if(!(square in attackers)) attackers[square] = [];
                 attackers[square].push(loc);
@@ -40,39 +40,34 @@ export function getAttackersOf(color: Color, pos: Position): Attackers {
     return attackers;
 }
 
-function getLocAttackedBy(color: Color, loc: Location, pos: Position): Location[] {
+function getLocAttackedBy(loc: Location, pos: Position): Location[] {
     const piece = Piece.get(getByLoc(pos, loc));
 
     const getLocAttackedFn = piece.attack === TypeRange? getLocRangeAttackedBy : getLocDirectAttackedBy;
-    return getLocAttackedFn(color, loc, pos);
+    return getLocAttackedFn(loc, pos);
 }
 
-function getLocDirectAttackedBy(color: Color, loc: Location, pos: Position): Location[] {
-    let attacked: Location[] = [];
-
-    const opponent = opponentOf(color);
+function getLocDirectAttackedBy(loc: Location, pos: Position): Location[] {
     const piece = Piece.get(getByLoc(pos, loc));
+    let attacked: Location[] = [];
 
     for(const move of piece.moves) {
         if(!move.capture) continue;
 
         for(const direction of move.directions) {
             const square = loc + direction;
-            if(outOfBound(square)) continue;
 
-            const object = getByLoc(pos, square);
-            if(object === Piece.None || Piece.get(object).color === opponent) attacked.push(square);
+            if(outOfBound(square)) continue;
+            else attacked.push(square);
         }
     }
 
     return attacked;
 }
 
-function getLocRangeAttackedBy(color: Color, loc: Location, pos: Position): Location[] {
-    let attacked: Location[] = [];
-
-    const opponent = opponentOf(color);
+function getLocRangeAttackedBy(loc: Location, pos: Position): Location[] {
     const piece = Piece.get(getByLoc(pos, loc));
+    let attacked: Location[] = [];
 
     for(const move of piece.moves) {
         if(!move.capture) continue;
@@ -81,15 +76,8 @@ function getLocRangeAttackedBy(color: Color, loc: Location, pos: Position): Loca
             let square = loc;
 
             while(!outOfBound(square += direction)) {
-                const object = getByLoc(pos, square);
-                
-                if(object === Piece.None) {
-                    attacked.push(square);
-                    continue;
-                }
-
-                if(Piece.get(object).color === opponent) attacked.push(square);
-                break;
+                attacked.push(square);
+                if(getByLoc(pos, square) !== Piece.None) break;
             }
         }
     }
