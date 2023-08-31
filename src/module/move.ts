@@ -37,10 +37,10 @@ function generatePieceMoves(pos: Position, color: Color): Moves {
         for(let file = 1; file <= size; file++) {
             const loc = Loc.of(file, rank);
 
-            const current = getByLoc(pos, loc);
-            if(current === Piece.None) continue;
+            const subject = getByLoc(pos, loc);
+            if(subject === Piece.None) continue;
 
-            const piece = Piece.get(current);
+            const piece = Piece.get(subject);
             if(piece.color !== color) continue;
             
             const getMovesFn = piece.attack === TypeRange? getRangeMoves : getDirectMoves;
@@ -103,10 +103,10 @@ function getTwoRankPawnMoves(pos: Position, color: Color): Moves {
     for(let file = 1; file <= size; file++) {
         const loc = Loc.of(file, rank)
 
-        const current = getByLoc(pos, loc);
-        if(current === Piece.None) continue;
+        const subject = getByLoc(pos, loc);
+        if(subject === Piece.None) continue;
 
-        const piece = Piece.get(current);
+        const piece = Piece.get(subject);
         if(piece.color !== color || piece.type !== TypePawn) continue;
 
         const oneAhead = Loc.of(file, nthRank(n+1, color));
