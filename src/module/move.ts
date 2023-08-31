@@ -18,10 +18,17 @@ type Loc = Loc.Location;
 
 export type Moves = {[loc: Loc]: Loc[]}
 
-export function generate(s: State): Moves {
-    return mergeMoves(generatePieceMoves(s.pos, s.move), generateSpecialMoves(s.pos, s.move, s.castle, s.enPassant));
+export function getLegalMoves(s: State): Moves {
+    const all = generate(s);
+    return all;
 }
 
+
+function generate(s: State): Moves {
+    const ordinary = generatePieceMoves(s.pos, s.move);
+    const special = generateSpecialMoves(s.pos, s.move, s.castle, s.enPassant);
+    return mergeMoves(ordinary, special);
+}
 
 function generatePieceMoves(pos: Position, color: Color): Moves {
     let moves: Moves = {};

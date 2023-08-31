@@ -107,11 +107,7 @@ export class Game {
 
         // TODO: Change
         current.ended = false;
-        current.moves = this.generateLegalMoves(current);
-    }
-
-    private generateLegalMoves(s: state): GameMove.Moves {
-        return GameMove.generate(s);
+        current.moves = GameMove.getLegalMoves(current);
     }
 
     private validStateOf(s: state): state {
