@@ -176,13 +176,15 @@ export function move(src, dest) {
 export function onClick(ev) {
     const moves = this.state.moves;
     const current = this.select.loc;
+
     const loc = Common.getLoc(ev.target.id);
+    const reset = {click: false, loc: Loc.None};
     
     if(current === Loc.None) this.select = {click: true, loc: loc};
-    else if(current === loc) this.select = {click: false, loc: Loc.None};
+    else if(current === loc || !(current in moves)) this.select = reset;
     else if(!moves[current].includes(loc)) this.select.loc = loc;
     else {
-        this.select = {click: false, loc: Loc.None};
+        this.select = reset;
         this.move(current, loc);
     }
 }
@@ -194,15 +196,14 @@ export function onDragStart(ev) {
 
 export function onDrop(ev) {
     const src = this.select.loc;
-
     if(this.select.click || src === Loc.None) Face.disapprove();
-    else {
-        const moves = this.state.moves;
-        const loc =  Common.getLoc(ev.target.id);
+    
+    const moves = this.state.moves;
+    const loc =  Common.getLoc(ev.target.id);
 
-        this.select.loc = Loc.None;
-        if(moves[src].includes(loc)) this.move(src, loc);
-    }
+    this.select.loc = Loc.None;
+    if(!(src in moves)) return;
+    if(moves[src].includes(loc)) this.move(src, loc);
 }
 
 
