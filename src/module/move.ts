@@ -52,7 +52,8 @@ function generatePieceMoves(pos: Position, color: Color): Moves {
 }
 
 function generateSpecialMoves(pos: Position, color: Color, rights: Castle.Rights, enPassant: Loc): Moves {
-    return {...getTwoRankPawnMoves(pos, color), ...getCastleMoves(pos, rights, color), ...getEnPassantMoves(pos, enPassant, color)};
+    return {...getTwoRankPawnMoves(pos, color), ...getCastleMoves(pos, rights, color),
+        ...getEnPassantMoves(pos, enPassant, color)};
 }
 
 function getDirectMoves(pos: Position, loc: Loc, color: Color): Loc[] {
