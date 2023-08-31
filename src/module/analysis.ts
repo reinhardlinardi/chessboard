@@ -6,7 +6,7 @@ import * as Filter from './filter.js';
 import * as FEN from './fen.js';
 import * as StateID from './state-id.js';
 import * as Clock from './clock.js';
-import * as GamePos from './game-position.js';
+import * as Attack from './attack.js';
 import * as GameMove from './move.js';
 import * as Promotion from './promotion.js';
 import * as Result from './game-result.js';
@@ -16,7 +16,7 @@ import { Size as size } from './size.js';
 import { State as state, New as newState } from './state.js';
 import { nthRank } from './rank.js';
 import { TypePawn } from './piece-type.js';
-import { getKingLocation } from './game-position-util.js';
+import { getKingLocation } from './position-util.js';
 import { Setup, State, Move, PieceCount, StateCount } from './game-data.js';
 import { Color, White, Black, opponentOf, getList as getColors } from './color.js';
 import * as Err from './analysis-error.js';
@@ -239,11 +239,11 @@ export class Game {
 
         // Validation:
         // 1. Player is not checking opponent king
-        const opponentAttackers = GamePos.analyzeAttackOn(pos, opponent, opponentKingLoc);
+        const opponentAttackers = Attack.getAttackersLoc(pos, opponent, opponentKingLoc);
         if(opponentAttackers.length > 0) throw Err.New(Err.SetupInvalidPosition, `${opponent} king can't be in check`);
         
         // 2. If player is in check, there should be at most 2 attackers
-        const attackers = GamePos.analyzeAttackOn(pos, player, playerKingLoc);
+        const attackers = Attack.getAttackersLoc(pos, player, playerKingLoc);
         if(attackers.length > 2) throw Err.New(Err.SetupInvalidPosition, "too many checking pieces");
     }
 

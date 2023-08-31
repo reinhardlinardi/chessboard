@@ -8,15 +8,15 @@ import { Size as size } from './size.js';
 import { Color, opponentOf } from './color.js';
 import { Position, getByLoc } from './position.js';
 import { nthRank } from './rank.js';
-import { outOfBound } from './game-position-util.js';
+import { outOfBound } from './position-util.js';
 import { TypeRange } from './piece-move.js';
 import { TypeKing, TypePawn } from './piece-type.js';
 
 
-type Loc = Loc.Location;
+type Location = Loc.Location;
 
 
-export type Moves = {[loc: Loc]: Loc[]}
+export type Moves = {[loc: Location]: Location[]}
 
 export function getLegalMoves(s: State): Moves {
     const all = generate(s);
@@ -51,13 +51,13 @@ function generatePieceMoves(pos: Position, color: Color): Moves {
     return moves;
 }
 
-function generateSpecialMoves(pos: Position, color: Color, rights: Castle.Rights, enPassant: Loc): Moves {
+function generateSpecialMoves(pos: Position, color: Color, rights: Castle.Rights, enPassant: Location): Moves {
     return {...getTwoRankPawnMoves(pos, color), ...getCastleMoves(pos, rights, color),
         ...getEnPassantMoves(pos, enPassant, color)};
 }
 
-function getDirectMoves(pos: Position, loc: Loc, color: Color): Loc[] {
-    let moves: Loc[] = [];
+function getDirectMoves(pos: Position, loc: Location, color: Color): Location[] {
+    let moves: Location[] = [];
     
     const opponent = opponentOf(color);
     const piece = Piece.get(getByLoc(pos, loc));
@@ -74,8 +74,8 @@ function getDirectMoves(pos: Position, loc: Loc, color: Color): Loc[] {
     return moves;
 }
 
-function getRangeMoves(pos: Position, loc: Loc, color: Color): Loc[] {
-    let moves: Loc[] = [];
+function getRangeMoves(pos: Position, loc: Location, color: Color): Location[] {
+    let moves: Location[] = [];
 
     const opponent = opponentOf(color);
     const piece = Piece.get(getByLoc(pos, loc));
@@ -146,7 +146,7 @@ function getCastleMoves(pos: Position, rights: Castle.Rights, color: Color): Mov
     return moves;
 }
 
-function getEnPassantMoves(pos: Position, enPassant: Loc, color: Color): Moves {
+function getEnPassantMoves(pos: Position, enPassant: Location, color: Color): Moves {
     let moves: Moves = {};
     
     if(enPassant != Loc.None) {
@@ -160,17 +160,17 @@ function getEnPassantMoves(pos: Position, enPassant: Loc, color: Color): Moves {
     return moves;
 }
 
-function canOccupy(square: Loc, pos: Position, move: PieceMove.Move, opponent: Color): boolean {
+function canOccupy(square: Location, pos: Position, move: PieceMove.Move, opponent: Color): boolean {
     if(move.move && canMoveTo(square, pos)) return true;
     if(move.capture && canCaptureOn(square, pos, opponent)) return true;
     return false;
 }
 
-function canMoveTo(square: Loc, pos: Position): boolean {
+function canMoveTo(square: Location, pos: Position): boolean {
     return getByLoc(pos, square) === Piece.None;
 }
 
-function canCaptureOn(square: Loc, pos: Position, opponent: Color): boolean {
+function canCaptureOn(square: Location, pos: Position, opponent: Color): boolean {
     const target = getByLoc(pos, square);
     if(target === Piece.None) return false;
 

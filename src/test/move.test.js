@@ -23,7 +23,7 @@ const K = Piece.WhiteKing.letter;
 const k = Piece.BlackKing.letter;
 
 
-test("Move-generate", () => {
+test("Move-getLegalMoves", () => {
     const tcs = [
         {
             name: "default setup",
@@ -126,7 +126,7 @@ test("Move-generate", () => {
     ];
 
     for(const tc of tcs) {
-        const get = Move.generate(tc.state);
+        const get = Move.getLegalMoves(tc.state);
         const want = tc.want;
         
         expect(Object.keys(get).length).toEqual(Object.keys(want).length);

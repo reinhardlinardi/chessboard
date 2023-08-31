@@ -7,14 +7,17 @@ import { Position, get } from './position.js';
 import { TypeKing } from './piece-type.js';
 
 
-export function outOfBound(loc: Loc.Location): boolean {
+type Location = Loc.Location;
+
+
+export function outOfBound(loc: Location): boolean {
     const file = Loc.file(loc);
     const rank = Loc.rank(loc);
 
     return file < 1 || file > size || rank < 1 || rank > size;
 }
 
-export function getKingLocation(pos: Position, color: Color): Loc.Location {
+export function getKingLocation(pos: Position, color: Color): Location {
     const pieces = Piece.getList();
     const king = Filter.New(pieces, Piece.byType(TypeKing), Piece.byColor(color))()[0].letter;
 

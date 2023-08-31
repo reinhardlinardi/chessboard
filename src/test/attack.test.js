@@ -1,10 +1,9 @@
 import * as Piece from '../../public/module/piece.js';
 import * as Setup from '../../public/module/setup.js';
-import * as GamePos from '../../public/module/game-position.js'
+import * as Attack from '../../public/module/attack.js';
 import * as Loc from '../../public/module/location.js';
 import * as File from '../../public/module/file.js';
 import { White, Black } from '../../public/module/color.js';
-import * as Err from '../../public/module/game-position-error.js';
 
 
 const _ = Piece.None;
@@ -22,13 +21,12 @@ const K = Piece.WhiteKing.letter;
 const k = Piece.BlackKing.letter;
 
 
-test("GamePosition-analyzeAttackOn", () => {
+test("Attack-getAttackersLoc", () => {
     const tcs = [
         {
             name: "empty setup",
             color: Black,
             loc: Loc.of(File.a, 8),
-            err: null,
             want: [],
             pos: Setup.emptySetup(),
         },
@@ -36,7 +34,6 @@ test("GamePosition-analyzeAttackOn", () => {
             name: "default setup",
             color: White,
             loc: Loc.of(File.f, 2),
-            err: null,
             want: [],
             pos: Setup.defaultSetup(),
         },
@@ -44,7 +41,6 @@ test("GamePosition-analyzeAttackOn", () => {
             name: "color not equal piece color",
             color: Black,
             loc: Loc.of(File.f, 2),
-            err: Err.ConflictParam,
             want: [],
             pos: Setup.defaultSetup(),
         },
@@ -52,7 +48,6 @@ test("GamePosition-analyzeAttackOn", () => {
             name: "knight attacker",
             color: White,
             loc: Loc.of(File.e, 1),
-            err: null,
             want: [
                 Loc.of(File.d, 3),
             ],
@@ -72,7 +67,6 @@ test("GamePosition-analyzeAttackOn", () => {
             name: "pawn attacker",
             color: White,
             loc: Loc.of(File.e, 1),
-            err: null,
             want: [
                 Loc.of(File.f, 2),
             ],
@@ -92,7 +86,6 @@ test("GamePosition-analyzeAttackOn", () => {
             name: "bishop attacker",
             color: White,
             loc: Loc.of(File.e, 1),
-            err: null,
             want: [
                 Loc.of(File.h, 4),
             ],
@@ -112,7 +105,6 @@ test("GamePosition-analyzeAttackOn", () => {
             name: "rook attacker",
             color: White,
             loc: Loc.of(File.e, 1),
-            err: null,
             want: [
                 Loc.of(File.a, 1),
             ],
@@ -132,7 +124,6 @@ test("GamePosition-analyzeAttackOn", () => {
             name: "queen attacker",
             color: White,
             loc: Loc.of(File.e, 1),
-            err: null,
             want: [
                 Loc.of(File.a, 5),
             ],
@@ -152,7 +143,6 @@ test("GamePosition-analyzeAttackOn", () => {
             name: "multiple attackers",
             color: White,
             loc: Loc.of(File.e, 1),
-            err: null,
             want: [
                 Loc.of(File.h, 4),
                 Loc.of(File.g, 1),
@@ -173,7 +163,6 @@ test("GamePosition-analyzeAttackOn", () => {
             name: "king attacker",
             color: Black,
             loc: Loc.of(File.e, 7),
-            err: null,
             want: [
                 Loc.of(File.e, 6),
             ],
@@ -193,7 +182,6 @@ test("GamePosition-analyzeAttackOn", () => {
             name: "attack blocked 1",
             color: Black,
             loc: Loc.of(File.e, 8),
-            err: null,
             want: [],
             pos: [
                 [_, _, _, _, k, b, _, R],
@@ -211,7 +199,6 @@ test("GamePosition-analyzeAttackOn", () => {
             name: "attack blocked 2",
             color: Black,
             loc: Loc.of(File.e, 8),
-            err: null,
             want: [],
             pos: [
                 [_, _, _, _, k, B, _, R],
@@ -229,7 +216,6 @@ test("GamePosition-analyzeAttackOn", () => {
             name: "1 attack blocked",
             color: Black,
             loc: Loc.of(File.e, 8),
-            err: null,
             want: [
                 Loc.of(File.e, 1),
             ],
@@ -251,7 +237,7 @@ test("GamePosition-analyzeAttackOn", () => {
         let get;
 
         try {
-            get = GamePos.analyzeAttackOn(tc.pos, tc.color, tc.loc);
+            get = Attack.getAttackersLoc(tc.pos, tc.color, tc.loc);
         }
         catch(err) {
             expect(err.code).toEqual(tc.err);
