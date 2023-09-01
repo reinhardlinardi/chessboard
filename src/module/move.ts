@@ -3,31 +3,49 @@ import * as Piece from './piece.js';
 import * as PieceMove from './piece-move.js';
 import * as Castle from './castle.js';
 import * as EnPassant from './en-passant.js';
+import * as Attack from './attack.js';
 import { State } from './state.js';
 import { Size as size } from './size.js';
 import { Color, opponentOf } from './color.js';
 import { Position, getByLoc } from './position.js';
 import { nthRank } from './rank.js';
-import { outOfBound } from './position-util.js';
+import { Filter, New as newFilter } from './filter.js';
+import { getKingLocation, outOfBound } from './position-util.js';
 import { TypeRange } from './piece-move.js';
 import { TypeKing, TypePawn } from './piece-type.js';
 
 
 type Location = Loc.Location;
-
+type Attackers = Attack.Attackers;
 
 export type Moves = {[loc: Location]: Location[]}
 
+
 export function getLegalMoves(s: State): Moves {
-    const all = generate(s);
-    return all;
+    const moves = generateMoves(s);
+    const attackers = Attack.getAttackersOf(s.move, s.pos);
+
+    // if in check, return moves that get player to get out of check
+    // else eliminate illegal moves
+
+    return eliminateIllegalMoves(s, moves, attackers);
 }
 
 
-function generate(s: State): Moves {
+function generateMoves(s: State): Moves {
     const ordinary = generatePieceMoves(s.pos, s.move);
     const special = generateSpecialMoves(s.pos, s.move, s.castle, s.enPassant);
     return mergeMoves(ordinary, special);
+}
+
+function eliminateIllegalMoves(s: State, moves: Moves, attackers: Attackers): Moves {
+    const legal = {...moves};
+    
+    const kingLoc = getKingLocation(s.pos, s.move);
+    const inCheck = getSelfInCheckLoc(s.pos, s.move, kingLoc, attackers);
+    filterMoveLoc(legal, kingLoc, excludeLoc(inCheck));
+
+    return legal;
 }
 
 function generatePieceMoves(pos: Position, color: Color): Moves {
@@ -160,6 +178,19 @@ function getEnPassantMoves(pos: Position, enPassant: Location, color: Color): Mo
     return moves;
 }
 
+function getSelfInCheckLoc(pos: Position, color: Color, kingLoc: Location, attackers: Attackers): Location[] {
+    let inCheck: Location[] = [];
+    const king = Piece.get(getByLoc(pos, kingLoc));
+
+    for(const move of king.moves) {
+        for(const direction of move.directions) {
+            const square = kingLoc + direction;
+            if(Attack.isAttacked(square, attackers)) inCheck.push(square);
+        }
+    }
+    return inCheck;
+}
+
 function canOccupy(square: Location, pos: Position, move: PieceMove.Move, opponent: Color): boolean {
     if(move.move && canMoveTo(square, pos)) return true;
     if(move.capture && canCaptureOn(square, pos, opponent)) return true;
@@ -188,4 +219,12 @@ function mergeMoves(...moves: Moves[]): Moves {
         }
     }
     return res;
+}
+
+function filterMoveLoc(moves: Moves, src: Location, ...filters: Filter<Location>[]) {
+    moves[src] = newFilter(moves[src], ...filters)();
+}
+
+function excludeLoc(list: Location[]): Filter<Location> {
+    return loc => !list.includes(loc);
 }

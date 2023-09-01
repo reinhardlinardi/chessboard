@@ -40,6 +40,11 @@ export function getAttackersOf(color: Color, pos: Position): Attackers {
     return attackers;
 }
 
+export function isAttacked(loc: Location, attackers: Attackers): boolean {
+    return loc in attackers;
+}
+
+
 function getLocAttackedBy(loc: Location, pos: Position): Location[] {
     const piece = Piece.get(getByLoc(pos, loc));
 
