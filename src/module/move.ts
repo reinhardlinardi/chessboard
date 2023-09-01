@@ -42,7 +42,7 @@ function eliminateIllegalMoves(s: State, moves: Moves, attackers: Attackers): Mo
     const legal = {...moves};
     
     const kingLoc = getKingLocation(s.pos, s.move);
-    const inCheck = getSelfInCheckLoc(s.pos, s.move, kingLoc, attackers);
+    const inCheck = getKingMoveInCheckLoc(s.pos, kingLoc, attackers);
     filterMoveLoc(legal, kingLoc, excludeLoc(inCheck));
 
     return legal;
@@ -178,7 +178,7 @@ function getEnPassantMoves(pos: Position, enPassant: Location, color: Color): Mo
     return moves;
 }
 
-function getSelfInCheckLoc(pos: Position, color: Color, kingLoc: Location, attackers: Attackers): Location[] {
+function getKingMoveInCheckLoc(pos: Position, kingLoc: Location, attackers: Attackers): Location[] {
     let inCheck: Location[] = [];
     const king = Piece.get(getByLoc(pos, kingLoc));
 
