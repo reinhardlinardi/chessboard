@@ -12,8 +12,8 @@ import { getKingLoc, outOfBound } from './position-util.js';
 type Location = Loc.Location;
 type Attacked = {[square: Location]: Direction};
 
-export type Attacker = {[attacker: Location]: Direction};
-export type Attacks = {[attacked: Location]: Attacker};
+export type Attackers = {[attacker: Location]: Direction};
+export type Attacks = {[attacked: Location]: Attackers};
 export type Pin = {[pinned: Location]: Direction};
 
 
@@ -56,31 +56,44 @@ export function getAttacksOf(color: Color, pos: Position): Attacks {
     return attacks;
 }
 
-// export function getPinnedPiecesOf(color: Color, pos: Position, attackers: Attacks): Pin {
-//     let pin: Pin = {};
+export function getPinnedPiecesOf(color: Color, pos: Position, attacks: Attacks): Pin {
+    let pin: Pin = {};
 
-//     const kingLoc = getKingLoc(pos, color);
-//     const rangeAttackMap = AttackMap.get(color)[TypeRange];
+    const kingLoc = getKingLoc(pos, color);
+    const rangeAttackMap = AttackMap.get(color)[TypeRange];
 
-//     for(const str in rangeAttackMap) {
-//         const direction = parseInt(str);
-//         let square = kingLoc;
+    for(const mapKey in rangeAttackMap) {
+        const direction = parseInt(mapKey);
+        let square = kingLoc;
 
-//         while(!outOfBound(square += direction)) {
-//             const object = getByLoc(pos, square);
-//             if(object === Piece.None) continue;
+        while(!outOfBound(square += direction)) {
+            const object = getByLoc(pos, square);
+            if(object === Piece.None) continue;
 
-//             const piece = Piece.get(object);
-//             if(piece.color !== color || !isAttacked(square, attackers)) break;
-            
-//             // check if same direction
-//             pin[square] = direction;
-//             break;
-//         }
-//     }
+            const piece = Piece.get(object);
+            if(piece.color !== color) break;
 
-//     return pin;
-// }
+            if(isAttacked(square, attacks)) {
+                const attackers = attacks[square];
+                
+                for(const locKey in attackers) {
+                    const loc = parseInt(locKey);
+                    const attacker = Piece.get(getByLoc(pos, loc));
+
+                    // Only range attackers can pin
+                    if(attacker.attack !== TypeRange) continue;
+                    if(attackers[loc] === direction) {
+                        pin[square] = direction;
+                        break;
+                    }
+                }
+            }
+            break;
+        }
+    }
+
+    return pin;
+}
 
 
 function locAttackedFrom(loc: Location, pos: Position): Attacked {
