@@ -163,7 +163,7 @@ test("FEN-load", () => {
         {
             name: "invalid row square count 2nd rank",
             str: "rnbqkbnr/pppppppp/8/8/8/8/PPPP2PPP/RNBQKBNR w KQkq - 0 1",
-            err: Err.InvalidRowNumSquares,
+            err: Err.InvalidSquareCount,
             want: {},
         },
         {

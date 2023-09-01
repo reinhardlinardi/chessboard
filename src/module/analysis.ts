@@ -16,7 +16,7 @@ import { Size as size } from './size.js';
 import { State as state, New as newState } from './state.js';
 import { nthRank } from './rank.js';
 import { TypePawn } from './piece-type.js';
-import { getKingLocation } from './position-util.js';
+import { getKingLoc } from './position-util.js';
 import { Setup, State, Move, PieceCount, StateCount } from './game-data.js';
 import { Color, White, Black, opponentOf, getList as getColors } from './color.js';
 import * as Err from './analysis-error.js';
@@ -80,7 +80,7 @@ export class Game {
 
         // Clock: Max halfmove should not be exceeded
         const clock = this.setup.clock;
-        if(clock.halfmove > Clock.MaxHalfmove) throw Err.New(Err.SetupInvalidHalfmove, "invalid halfmove");
+        if(clock.halfmove > Clock.MaxHalfmove) throw Err.New(Err.SetupHalfmove, "invalid halfmove");
         
         // Position:
         // 1. Count king for both sides, each side should have exactly 1 king
@@ -206,7 +206,7 @@ export class Game {
         }
 
         for(const color in cnt) {
-            if(cnt[color] !== 1) throw Err.New(Err.SetupInvalidKingCount, `invalid ${color} king count`);
+            if(cnt[color] !== 1) throw Err.New(Err.SetupKingCount, `invalid ${color} king count`);
         }
     }
 
@@ -223,7 +223,7 @@ export class Game {
 
                     const piece = Piece.get(subject);
                     if(piece.color === color && piece.type === TypePawn) {
-                        throw Err.New(Err.SetupInvalidPawnRank, `${color} pawn not allowed in rank ${rank}`);
+                        throw Err.New(Err.SetupPawnRank, `${color} pawn not allowed in rank ${rank}`);
                     }
                 }
             }
@@ -233,24 +233,22 @@ export class Game {
     private setupValidateCheck(player: Color, pos: Position) {
         const opponent = opponentOf(player);
 
-        // Locate both kings
-        const playerKingLoc = getKingLocation(pos, player);
-        const opponentKingLoc = getKingLocation(pos, opponent);
-
-        // Get all attacked squares
-        const playerAttacks = Attack.getAttackersOf(opponent, pos);
-        const opponentAttacks = Attack.getAttackersOf(player, pos);
-         
         // Validation:
         // 1. Player is not checking opponent king
-        if(opponentKingLoc in playerAttacks) {
-            throw Err.New(Err.SetupInvalidPosition, `${opponent} king can't be in check`);
+        const opponentKing = getKingLoc(pos, opponent);
+        const playerAttacks = Attack.getAttacksOf(opponent, pos);
+
+        if(opponentKing in playerAttacks) {
+            throw Err.New(Err.SetupPosition, `${opponent} king can't be in check`);
         }
-        
+
         // 2. If player is in check, there should be at most 2 attackers
-        if(playerKingLoc in opponentAttacks) {
-            const numAttacker = opponentAttacks[playerKingLoc].length;
-            if(numAttacker > 2) throw Err.New(Err.SetupInvalidPosition, "too many checking pieces");
+        const playerKing = getKingLoc(pos, player);
+        const opponentAttacks = Attack.getAttacksOf(player, pos);
+        
+        if(playerKing in opponentAttacks) {
+            const numAttacker = Attack.numAttackersOf(playerKing, opponentAttacks);
+            if(numAttacker > 2) throw Err.New(Err.SetupPosition, "too many checking pieces");
         }
     }
 

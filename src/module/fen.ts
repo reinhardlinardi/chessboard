@@ -121,7 +121,7 @@ function loadPosition(str: string): Position {
         }
         
         // Number of empty + occupied squares in rank must be equal to 8
-        if(cnt !== size) throw Err.New(Err.InvalidRowNumSquares, `invalid num of squares for rank ${rank}`);
+        if(cnt !== size) throw Err.New(Err.InvalidSquareCount, `invalid num of squares for rank ${rank}`);
         else setRow(squares.split(""), pos, rank);
     }
 

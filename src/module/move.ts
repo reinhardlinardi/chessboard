@@ -9,26 +9,35 @@ import { Size as size } from './size.js';
 import { Color, opponentOf } from './color.js';
 import { Position, getByLoc } from './position.js';
 import { nthRank } from './rank.js';
-import { Filter, New as newFilter } from './filter.js';
-import { getKingLocation, outOfBound } from './position-util.js';
+import { getKingLoc, outOfBound } from './position-util.js';
 import { TypeRange } from './piece-move.js';
 import { TypeKing, TypePawn } from './piece-type.js';
 
 
 type Location = Loc.Location;
-type Attackers = Attack.Attackers;
+type Attacks = Attack.Attacks;
 
 export type Moves = {[loc: Location]: Location[]}
 
 
 export function getLegalMoves(s: State): Moves {
     const moves = generateMoves(s);
-    const attackers = Attack.getAttackersOf(s.move, s.pos);
 
-    // if in check, return moves that get player to get out of check
-    // else eliminate illegal moves
+    const attacks = Attack.getAttacksOf(s.move, s.pos);
+    // const pin = Attack.getPinnedPiecesOf(s.move, s.pos, attacks);
+    // TODO: is en passant pinned
+    
+    // If in check, return out of check moves
+    if(Attack.isKingAttacked(s.move, s.pos, attacks)) return moves; // TODO: change
+    
+    // If not in check:
+    // 1. Removes king moves that put self in check
+    removeKingIllegalMoves(moves, s.pos, s.move, attacks);
 
-    return eliminateIllegalMoves(s, moves, attackers);
+    // 2. Remove illegal moves for pieces pinned to the king
+
+    // console.log(pin);
+    return moves;
 }
 
 
@@ -36,16 +45,6 @@ function generateMoves(s: State): Moves {
     const ordinary = generatePieceMoves(s.pos, s.move);
     const special = generateSpecialMoves(s.pos, s.move, s.castle, s.enPassant);
     return mergeMoves(ordinary, special);
-}
-
-function eliminateIllegalMoves(s: State, moves: Moves, attackers: Attackers): Moves {
-    const legal = {...moves};
-    
-    const kingLoc = getKingLocation(s.pos, s.move);
-    const inCheck = getKingMoveInCheckLoc(s.pos, kingLoc, attackers);
-    filterMoveLoc(legal, kingLoc, excludeLoc(inCheck));
-
-    return legal;
 }
 
 function generatePieceMoves(pos: Position, color: Color): Moves {
@@ -178,18 +177,22 @@ function getEnPassantMoves(pos: Position, enPassant: Location, color: Color): Mo
     return moves;
 }
 
-function getKingMoveInCheckLoc(pos: Position, kingLoc: Location, attackers: Attackers): Location[] {
-    let inCheck: Location[] = [];
-    const king = Piece.get(getByLoc(pos, kingLoc));
+function removeKingIllegalMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks) {
+    let legal: Location[] = [];
+
+    const loc = getKingLoc(pos, color);
+    const king = Piece.get(getByLoc(pos, loc));
 
     for(const move of king.moves) {
         for(const direction of move.directions) {
-            const square = kingLoc + direction;
-            if(Attack.isAttacked(square, attackers)) inCheck.push(square);
+            const square = loc + direction;
+            if(!Attack.isAttacked(square, attacks)) legal.push(square);
         }
     }
-    return inCheck;
+
+    moves[loc] = legal;
 }
+
 
 function canOccupy(square: Location, pos: Position, move: PieceMove.Move, opponent: Color): boolean {
     if(move.move && canMoveTo(square, pos)) return true;
@@ -219,12 +222,4 @@ function mergeMoves(...moves: Moves[]): Moves {
         }
     }
     return res;
-}
-
-function filterMoveLoc(moves: Moves, src: Location, ...filters: Filter<Location>[]) {
-    moves[src] = newFilter(moves[src], ...filters)();
-}
-
-function excludeLoc(list: Location[]): Filter<Location> {
-    return loc => !list.includes(loc);
 }
