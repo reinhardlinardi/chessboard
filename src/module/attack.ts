@@ -2,7 +2,6 @@ import * as Loc from './location.js';
 import * as Piece from './piece.js';
 import * as AttackMap from './attack-map.js';
 import * as EnPassant from './en-passant.js';
-import * as Filter from './filter.js';
 import * as Pieces from './pieces.js';
 import { Position, get, getByLoc } from './position.js';
 import { Size as size } from './size.js';
@@ -84,7 +83,6 @@ export function pinnedPiecesOf(color: Color, pos: Position, attacks: Attacks): P
                     const loc = parseInt(locKey);
                     const attacker = Pieces.get(getByLoc(pos, loc));
 
-                    // Only range attackers can pin
                     if(attacker.attack !== TypeRange) continue;
                     if(attackers[loc] === direction) {
                         pin[square] = direction;
@@ -99,36 +97,60 @@ export function pinnedPiecesOf(color: Color, pos: Position, attacks: Attacks): P
     return pin;
 }
 
-// export function isEnPassantIndirectPinned(file: number, player: Color, pos: Position): boolean {
-//     const rank = EnPassant.pawnRank(player);
-//     if(Loc.rank(getKingLoc(pos, player)) !== rank) return false;
+export function isEnPassantIndirectPinned(file: number, player: Color, pos: Position): boolean {
+    const rank = EnPassant.pawnRank(player);
+    if(Loc.rank(getKingLoc(pos, player)) !== rank) return false;
+
+    let pawnLoc: Location[] = [];
+    const pawns = getEnPassantPawns(file, pos, player);
+    const colors = getColors();
+
+    for(const color of colors) {
+        if(pawns[color].length !== 1) return false;
+        pawnLoc.push(pawns[color][0]);
+    }
+
+    const opponent = opponentOf(player);
+
+    const king = Pieces.getBy(player, TypeKing).letter;
+    const opponentQueen = Pieces.getBy(opponent, TypeQueen).letter;
+    const opponentRook = Pieces.getBy(opponent, TypeRook).letter;
+
+    const search: {[c: Color]: string[]} = {[player]: [king], [opponent]: [opponentQueen, opponentRook]};
+
+    const queensideFile = Loc.file(Math.min(...pawnLoc));
+    const kingsideFile = Loc.file(Math.max(...pawnLoc));
+
+    let queensideColor = player;
+    let found = false;
+
+    for(let file = queensideFile-1; file >= 1; file--) {
+        const subject = get(pos, rank, file);
+        if(subject === Piece.None) continue;
+
+        for(const color of colors) {
+            if(search[color].includes(subject)) {
+                queensideColor = color;
+                found = true;
+                break;
+            }
+        }
+        break;
+    }
+
+    if(!found) return false;
+
+    for(let file = kingsideFile+1; file <= size; file++) {
+        const subject = get(pos, rank, file);
+        if(subject === Piece.None) continue;
+
+        const otherColor = opponentOf(queensideColor);
+        if(search[otherColor].includes(subject)) return true;
+        else break;
+    }
     
-//     const colors = getColors();
-//     const pawns = getEnPassantPawns(file, pos, player);
-//     for(const color of colors) {
-//         if(pawns[color].length !== 1) return false;
-//     }
-
-//     const opponent = opponentOf(player);
-
-//     const king = Filter.New(Piece.getList(), Piece.byColor(player), Piece.byType(TypeKing))()[0].letter;
-//     const opponentQueen = Filter.New(Piece.getList(), Piece.byColor(opponent), Piece.byType(TypeRook))()[0].letter;
-//     const opponentRook = Filter.New(Piece.getList(), Piece.byColor(opponent), Piece.byType(TypeRook))()[0].letter;
-
-//     const search: {[c: Color]: string} = {}
-    
-//     const playerPawnLoc = pawns[player][0];
-//     const opponentPawnLoc = pawns[opponent][0];
-
-//     const queenside = Loc.file(Math.min(playerPawnLoc, opponentPawnLoc));
-//     const kingside = Loc.file(Math.max(playerPawnLoc, opponentPawnLoc));
-
-//     for(let file = queenside; file >= 1; file--) {
-//         if(get(pos, rank, file) !== Piece.None) {
-//         }
-//     }
-//     return true;
-// }
+    return false;
+}
 
 
 function locAttackedFrom(loc: Location, pos: Position): Attacked {

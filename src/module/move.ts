@@ -27,7 +27,7 @@ export function getLegalMoves(s: State): Moves {
 
     const attacks = Attack.attacksOn(s.move, s.pos);
     const pin = Attack.pinnedPiecesOf(s.move, s.pos, attacks);
-    // TODO: is en passant pinned
+    const indirectPin = Attack.isEnPassantIndirectPinned(Loc.file(s.enPassant), s.move, s.pos);
     
     // If in check, return out of check moves
     if(Attack.isKingAttacked(s.move, s.pos, attacks)) return moves; // TODO: change
@@ -39,6 +39,7 @@ export function getLegalMoves(s: State): Moves {
     // 2. Remove illegal moves for pieces pinned to the king
 
     console.log(pin);
+    console.log(indirectPin);
     return moves;
 }
 
