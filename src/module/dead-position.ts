@@ -1,10 +1,9 @@
 // Dead position (https://en.wikipedia.org/wiki/Rules_of_chess#Dead_position)
 
 import * as p from './piece-type.js'
-import * as Piece from './piece.js';
-import * as Filter from './filter.js';
-import * as AbstractPiece from './abstract-piece.js';
 import { PieceCount } from './game-data.js';
+import { getByColor as piecesByColor } from '../module/piece-list.js';
+import { getList as abstractPieceList } from './abstract-piece-list.js';
 import { Color, White, Black, getList as getColors } from './color.js';
 
 
@@ -46,13 +45,11 @@ export function isDead(count: PieceCount): boolean {
 
 function isCountMatch(count: PieceCount, expected: TypeCountMap): boolean {
     const colors = getColors();
-    const pieces = Piece.getList();
-
     let actual: TypeCountMap = {};
 
     for(const color of colors) {
-        const fn = Filter.New(pieces, Piece.byColor(color));
-        actual[color] = fn().reduce((map, piece) => ({...map, [piece.type]: count[piece.letter]}), {});
+        const pieces = piecesByColor(color);
+        actual[color] = pieces.reduce((map, piece) => ({...map, [piece.type]: count[piece.letter]}), {});
     }
 
     for(const color of colors) {
@@ -64,7 +61,7 @@ function isCountMatch(count: PieceCount, expected: TypeCountMap): boolean {
 }
 
 function setDefaultZero(t: TypeCount): TypeCount {
-    const count: TypeCount = AbstractPiece.getList().reduce((map, piece) => ({...map, [piece.type]: 0}), {});
+    const count: TypeCount = abstractPieceList().reduce((map, piece) => ({...map, [piece.type]: 0}), {});
     for(const type in t) count[type] = t[type];
 
     return count;

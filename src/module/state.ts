@@ -4,6 +4,7 @@ import * as Castle from './castle.js';
 import * as Loc from './location.js';
 import { Color, White } from './color.js';
 import { Position } from './position.js';
+import { getRights as getCastleRights } from './castle-list.js';
 
 
 export interface State {
@@ -19,7 +20,7 @@ export function New(): State {
     return {
         pos: Setup.defaultSetup(),
         move: White,
-        castle: Castle.getRights(true),
+        castle: getCastleRights(true),
         enPassant: Loc.None,
         clock: Clock.New(),
     }

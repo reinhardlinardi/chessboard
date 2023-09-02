@@ -13,4 +13,3 @@ export const SetupHalfmove: string = "INVALID_HALFMOVE";
 export const SetupKingCount: string = "INVALID_KING_COUNT";
 export const SetupPawnRank: string = "INVALID_PAWN_RANK";
 export const SetupPosition: string = "INVALID_POSITION";
-

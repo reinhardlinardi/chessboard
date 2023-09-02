@@ -1,11 +1,11 @@
 import * as Common from './common.js';
 import * as FEN from '../module/fen.js';
 import * as Piece from '../module/piece.js';
-import * as Filter from '../module/filter.js';
 import * as Type from '../module/piece-type.js';
-import * as AbstractPiece from '../module/abstract-piece.js';
 import * as Loc from '../module/location.js';
 import { White, Black } from '../module/color.js';
+import { getList as abstractPieceList } from '../module/abstract-piece-list.js';
+import { getByColor as piecesByColor } from '../module/piece-list.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
 import * as Face from './face.js';
@@ -25,13 +25,11 @@ export function black() {
 
 
 /* Advantage */
-const abstractPieces = Object.freeze(AbstractPiece.getList());
-const pieceTypes = Object.freeze(abstractPieces.map(piece => piece.type));
-const pieceValues = Object.freeze(abstractPieces.reduce((map, piece) => ({...map, [piece.type]: piece.value}), {}));
+const pieceTypes = Object.freeze(abstractPieceList().map(piece => piece.type));
+const pieceValues = Object.freeze(abstractPieceList().reduce((map, piece) => ({...map, [piece.type]: piece.value}), {}));
 
-const pieces = Object.freeze(Piece.getList());
-const whitePieces = Object.freeze(Filter.New(pieces, Piece.byColor(White))().reduce((map, piece) => ({...map, [piece.type]: piece.letter}), {}));
-const blackPieces = Object.freeze(Filter.New(pieces, Piece.byColor(Black))().reduce((map, piece) => ({...map, [piece.type]: piece.letter}), {}));
+const whitePieces = Object.freeze(piecesByColor(White)).reduce((map, piece) => ({...map, [piece.type]: piece.letter}), {});
+const blackPieces = Object.freeze(piecesByColor(Black)).reduce((map, piece) => ({...map, [piece.type]: piece.letter}), {});
 
 const figurine = Object.freeze({
     [Type.TypePawn]: "♟︎",

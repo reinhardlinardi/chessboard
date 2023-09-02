@@ -1,12 +1,12 @@
 import * as Piece from './piece.js';
-import * as Filter from './filter.js';
 import * as Loc from './location.js';
 import * as File from './file.js';
 import * as EnPassant from './en-passant.js';
-import { Color, getList as getColors, opponentOf } from './color.js';
 import { Size as size } from './size.js';
 import { Position, get, getByLoc } from './position.js';
 import { TypeKing, TypePawn } from './piece-type.js';
+import { get as getPiece, getBy as pieceBy } from '../module/piece-list.js';
+import { Color, getList as getColors, opponentOf } from './color.js';
 
 
 type Location = Loc.Location;
@@ -21,8 +21,7 @@ export function outOfBound(loc: Location): boolean {
 }
 
 export function getKingLoc(pos: Position, color: Color): Location {
-    const pieces = Piece.getList();
-    const king = Filter.New(pieces, Piece.byType(TypeKing), Piece.byColor(color))()[0].letter;
+    const king = pieceBy(color, TypeKing).letter;
 
     for(let rank = 1; rank <= size; rank++) {
         for(let file = 1; file <= size; file++) {
@@ -39,11 +38,10 @@ export function getEnPassantPawns(file: number, pos: Position, player: Color): E
     const opponent = opponentOf(player);
 
     const pawn: {[c: Color]: string} = {};
-    const pieces = Piece.getList();
     const colors = getColors();
 
     for(const color of colors) {
-        pawn[color] = Filter.New(pieces, Piece.byType(TypePawn), Piece.byColor(color))()[0].letter;
+        pawn[color] = pieceBy(color, TypePawn).letter;
         loc[color] = [];
     }
 
@@ -68,6 +66,6 @@ function isPawn(loc: Location, pos: Position): boolean {
     const subject = getByLoc(pos, loc);
     if(subject === Piece.None) return false;
 
-    const piece = Piece.get(subject);
+    const piece = getPiece(subject);
     return piece.type === TypePawn;
 }
