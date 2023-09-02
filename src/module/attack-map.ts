@@ -1,5 +1,5 @@
 import * as Piece from './piece.js';
-import * as Filter from './filter.js';
+import * as Filter from './filter-util.js';
 import { Type } from './piece-move.js';
 import { Color, White, Black, opponentOf } from './color.js';
 
@@ -23,7 +23,8 @@ export function get(color: Color): Attacks {
 type Attacker = {[direction: string]: string};
 
 function attacksOn(color: Color): Attacks {
-    const pieces = Filter.New(Piece.getList(), Piece.byColor(opponentOf(color)))();
+    const opponent = opponentOf(color);
+    const pieces = Filter.getPieces(Piece.byColor(opponent));
 
     let map: Attacker[] = [];
     for(const piece of pieces) {

@@ -2,11 +2,11 @@ import * as Common from './common.js';
 import * as Setup from '../module/setup.js';
 import * as Piece from '../module/piece.js';
 import * as Castle from '../module/castle.js';
-import * as Filter from '../module/filter.js';
+import * as Filter from '../module/filter-util.js';
 import * as Position from '../module/position.js';
 import * as FEN from '../module/fen.js';
-import * as AbstractPiece from '../module/abstract-piece.js';
 import * as Loc from '../module/location.js';
+import * as AbstractPiece from '../module/abstract-piece.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
@@ -29,9 +29,8 @@ export function black() {
 /* Tray */
 const abstractPieces = Object.freeze(AbstractPiece.getList());
 
-const pieces = Object.freeze(Piece.getList());
-const whitePieces = Object.freeze(Filter.New(pieces, Piece.byColor(White))().map(piece => piece.letter));
-const blackPieces = Object.freeze(Filter.New(pieces, Piece.byColor(Black))().map(piece => piece.letter));
+const whitePieces = Object.freeze(Filter.getPieces(Piece.byColor(White)).map(piece => piece.letter));
+const blackPieces = Object.freeze(Filter.getPieces(Piece.byColor(Black)).map(piece => piece.letter));
 
 
 export function getTrayPieceIdx() {
@@ -84,14 +83,12 @@ export function resetBoard() {
 
 
 /* Form */
-const rights = Castle.getList();
-
 export function getWhiteCastleTypes() {
-    return Filter.New(rights, Castle.byColor(White))();
+    return Filter.getCastleList(Castle.byColor(White));
 }
 
 export function getBlackCastleTypes() {
-    return Filter.New(rights, Castle.byColor(Black))();
+    return Filter.getCastleList(Castle.byColor(Black));
 }
 
 export function selectedMove(color) {

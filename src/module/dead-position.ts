@@ -2,7 +2,7 @@
 
 import * as p from './piece-type.js'
 import * as Piece from './piece.js';
-import * as Filter from './filter.js';
+import * as Filter from './filter-util.js';
 import * as AbstractPiece from './abstract-piece.js';
 import { PieceCount } from './game-data.js';
 import { Color, White, Black, getList as getColors } from './color.js';
@@ -46,13 +46,11 @@ export function isDead(count: PieceCount): boolean {
 
 function isCountMatch(count: PieceCount, expected: TypeCountMap): boolean {
     const colors = getColors();
-    const pieces = Piece.getList();
-
     let actual: TypeCountMap = {};
 
     for(const color of colors) {
-        const fn = Filter.New(pieces, Piece.byColor(color));
-        actual[color] = fn().reduce((map, piece) => ({...map, [piece.type]: count[piece.letter]}), {});
+        const pieces = Filter.getPieces(Piece.byColor(color));
+        actual[color] = pieces.reduce((map, piece) => ({...map, [piece.type]: count[piece.letter]}), {});
     }
 
     for(const color of colors) {

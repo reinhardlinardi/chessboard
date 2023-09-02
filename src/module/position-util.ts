@@ -1,5 +1,5 @@
 import * as Piece from './piece.js';
-import * as Filter from './filter.js';
+import * as Filter from './filter-util.js';
 import * as Loc from './location.js';
 import * as File from './file.js';
 import * as EnPassant from './en-passant.js';
@@ -21,8 +21,7 @@ export function outOfBound(loc: Location): boolean {
 }
 
 export function getKingLoc(pos: Position, color: Color): Location {
-    const pieces = Piece.getList();
-    const king = Filter.New(pieces, Piece.byType(TypeKing), Piece.byColor(color))()[0].letter;
+    const king = Filter.getPiece(Piece.byType(TypeKing), Piece.byColor(color)).letter;
 
     for(let rank = 1; rank <= size; rank++) {
         for(let file = 1; file <= size; file++) {
@@ -39,11 +38,10 @@ export function getEnPassantPawns(file: number, pos: Position, player: Color): E
     const opponent = opponentOf(player);
 
     const pawn: {[c: Color]: string} = {};
-    const pieces = Piece.getList();
     const colors = getColors();
 
     for(const color of colors) {
-        pawn[color] = Filter.New(pieces, Piece.byType(TypePawn), Piece.byColor(color))()[0].letter;
+        pawn[color] = Filter.getPiece(Piece.byType(TypePawn), Piece.byColor(color)).letter;
         loc[color] = [];
     }
 
