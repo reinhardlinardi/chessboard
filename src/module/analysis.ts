@@ -222,7 +222,7 @@ export class Game {
         // Validation:
         // 1. Player is not checking opponent king
         const opponentKing = getKingLoc(pos, opponent);
-        const playerAttacks = Attack.getAttacksOn(opponent, pos);
+        const playerAttacks = Attack.attacksOn(opponent, pos);
 
         if(opponentKing in playerAttacks) {
             throw Err.New(Err.SetupPosition, `${opponent} king can't be in check`);
@@ -230,7 +230,7 @@ export class Game {
 
         // 2. If player is in check, there should be at most 2 attackers
         const playerKing = getKingLoc(pos, player);
-        const opponentAttacks = Attack.getAttacksOn(player, pos);
+        const opponentAttacks = Attack.attacksOn(player, pos);
         
         if(playerKing in opponentAttacks) {
             const numAttacker = Attack.numAttackersOf(playerKing, opponentAttacks);
