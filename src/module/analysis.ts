@@ -8,13 +8,13 @@ import * as GameMove from './move.js';
 import * as Promotion from './promotion.js';
 import * as Result from './game-result.js';
 import * as Draw from './draw.js';
+import * as Pieces from './pieces.js';
+import * as Castles from './castles.js';
 import { Size as size } from './size.js';
-import { Position, get, getByLoc } from './position.js';
 import { nthRank } from './rank.js';
+import { Position, get, getByLoc } from './position.js';
 import { State as state, New as newState } from './state.js';
 import { TypePawn } from './piece-type.js';
-import { get as getCastle } from './castle-list.js';
-import { get as getPiece, getList as pieceList } from './piece-list.js';
 import { getKingLoc, getEnPassantPawns } from './position-util.js';
 import { Setup, State, Move, PieceCount, StateCount } from './game-data.js';
 import { Color, White, Black, opponentOf, getList as getColors } from './color.js';
@@ -118,7 +118,7 @@ export class Game {
         let rights = st.castle;
         for(const type in rights) {
             if(rights[type]) {
-                const c = getCastle(type);
+                const c = Castles.get(type);
                 const kingMoved = getByLoc(st.pos, c.king.from) !== c.king.piece;
                 const rookMoved = getByLoc(st.pos, c.rook.from) !== c.rook.piece;
 
@@ -164,7 +164,7 @@ export class Game {
     }
 
     private setupPieceCount(pos: Position): PieceCount {
-        let count: PieceCount = pieceList().reduce((map, piece) => ({...map, [piece.letter]: 0}), {});
+        let count: PieceCount = Pieces.getList().reduce((map, piece) => ({...map, [piece.letter]: 0}), {});
 
         for(let rank = 1; rank <= size; rank++) {
             for(let file = 1; file <= size; file++) {
@@ -206,7 +206,7 @@ export class Game {
                     const subject = get(pos, rank, file);
                     if(subject === Piece.None) continue;
 
-                    const piece = getPiece(subject);
+                    const piece = Pieces.get(subject);
                     if(piece.color === color && piece.type === TypePawn) {
                         throw Err.New(Err.SetupPawnRank, `${color} pawn not allowed in rank ${rank}`);
                     }

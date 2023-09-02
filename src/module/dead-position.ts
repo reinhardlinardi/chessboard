@@ -1,9 +1,9 @@
 // Dead position (https://en.wikipedia.org/wiki/Rules_of_chess#Dead_position)
 
-import * as p from './piece-type.js'
+import * as p from './piece-type.js';
+import * as Pieces from './pieces.js';
+import * as AbstractPieces from './abstract-pieces.js';
 import { PieceCount } from './game-data.js';
-import { getByColor as piecesByColor } from '../module/piece-list.js';
-import { getList as abstractPieceList } from './abstract-piece-list.js';
 import { Color, White, Black, getList as getColors } from './color.js';
 
 
@@ -48,7 +48,7 @@ function isCountMatch(count: PieceCount, expected: TypeCountMap): boolean {
     let actual: TypeCountMap = {};
 
     for(const color of colors) {
-        const pieces = piecesByColor(color);
+        const pieces = Pieces.getByColor(color);
         actual[color] = pieces.reduce((map, piece) => ({...map, [piece.type]: count[piece.letter]}), {});
     }
 
@@ -61,7 +61,7 @@ function isCountMatch(count: PieceCount, expected: TypeCountMap): boolean {
 }
 
 function setDefaultZero(t: TypeCount): TypeCount {
-    const count: TypeCount = abstractPieceList().reduce((map, piece) => ({...map, [piece.type]: 0}), {});
+    const count: TypeCount = AbstractPieces.getList().reduce((map, piece) => ({...map, [piece.type]: 0}), {});
     for(const type in t) count[type] = t[type];
 
     return count;

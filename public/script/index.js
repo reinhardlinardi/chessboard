@@ -3,10 +3,10 @@ import * as Setup from '../module/setup.js';
 import * as Position from '../module/position.js';
 import * as FEN from '../module/fen.js';
 import * as Loc from '../module/location.js';
+import * as Pieces from '../module/pieces.js';
+import * as Castles from '../module/castles.js';
+import * as AbstractPieces from '../module/abstract-pieces.js';
 import { White, Black } from '../module/color.js';
-import { getByColor as piecesByColor } from '../module/piece-list.js';
-import { get as getCastle, getByColor as castleByColor } from '../module/castle-list.js';
-import { getList as abstractPieceList } from '../module/abstract-piece-list.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
 import * as Face from './face.js';
@@ -26,12 +26,12 @@ export function black() {
 
 
 /* Tray */
-const whitePieces = Object.freeze(piecesByColor(White)).map(piece => piece.letter);
-const blackPieces = Object.freeze(piecesByColor(Black)).map(piece => piece.letter);
+const whitePieces = Object.freeze(Pieces.getByColor(White)).map(piece => piece.letter);
+const blackPieces = Object.freeze(Pieces.getByColor(Black)).map(piece => piece.letter);
 
 
 export function getTrayPieceIdx() {
-    return [...Array(abstractPieceList().length).keys()];
+    return [...Array(AbstractPieces.getList().length).keys()];
 }
 
 export function getTopTrayPiece(idx) {
@@ -81,11 +81,11 @@ export function resetBoard() {
 
 /* Form */
 export function getWhiteCastleTypes() {
-    return castleByColor(White);
+    return Castles.getByColor(White);
 }
 
 export function getBlackCastleTypes() {
-    return castleByColor(Black);
+    return Castles.getByColor(Black);
 }
 
 export function selectedMove(color) {
@@ -106,7 +106,7 @@ export function setCastle(ev) {
 }
 
 export function disableCastle(type) {
-    const castle = getCastle(type);
+    const castle = Castles.get(type);
     const king = castle.king;
     const rook = castle.rook;
 

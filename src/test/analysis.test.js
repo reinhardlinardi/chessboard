@@ -3,9 +3,9 @@ import * as Setup from '../../public/module/setup.js';
 import * as Loc from '../../public/module/location.js';
 import * as Clock from '../../public/module/clock.js';
 import * as File from '../../public/module/file.js';
+import * as Castles from '../../public/module/castles.js';
 import { Game } from '../../public/module/analysis.js';
 import { White, Black } from '../../public/module/color.js';
-import { getRights as getCastleRights } from '../../public/module/castle-list.js';
 import * as Err from '../../public/module/analysis-error.js';
 
 
@@ -32,7 +32,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: Black,
                 clock: {halfmove: Clock.MaxHalfmove, fullmove: 10},
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: Setup.emptySetup(),
             },
             err: null,
@@ -40,7 +40,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: Black,
                 clock: {halfmove: Clock.MaxHalfmove, fullmove: 10},
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: Setup.emptySetup(),
             },
         },
@@ -50,7 +50,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(true),
+                castle: Castles.getRights(true),
                 pos: Setup.defaultSetup(),
             },
             err: null,
@@ -58,7 +58,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(true),
+                castle: Castles.getRights(true),
                 pos: Setup.defaultSetup(),
             },
         },
@@ -68,7 +68,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: White,
                 clock: {halfmove: Clock.MaxHalfmove+1, fullmove: 0},
                 enPassant: Loc.None,
-                castle: getCastleRights(true),
+                castle: Castles.getRights(true),
                 pos: Setup.defaultSetup(),
             },
             err: null,
@@ -76,7 +76,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: White,
                 clock: {halfmove: Clock.MaxHalfmove+1, fullmove: Clock.FullmoveStart},
                 enPassant: Loc.None,
-                castle: getCastleRights(true),
+                castle: Castles.getRights(true),
                 pos: Setup.defaultSetup(),
             },
         },
@@ -124,7 +124,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.of(File.a, 7),
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -142,7 +142,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -162,7 +162,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.of(File.c, 6),
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -180,7 +180,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -200,7 +200,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.of(File.h, 6),
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -218,7 +218,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -238,7 +238,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: Black,
                 clock: Clock.New(),
                 enPassant: Loc.of(File.b, 6),
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -256,7 +256,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: Black,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -276,7 +276,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: Black,
                 clock: Clock.New(),
                 enPassant: Loc.of(File.a, 3),
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -294,7 +294,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: Black,
                 clock: Clock.New(),
                 enPassant: Loc.of(File.a, 3),
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -314,7 +314,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: Black,
                 clock: Clock.New(),
                 enPassant: Loc.of(File.g, 3),
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -332,7 +332,7 @@ test("Analysis-Game-loadSetup", () => {
                 move: Black,
                 clock: Clock.New(),
                 enPassant: Loc.of(File.g, 3),
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [  
                     [_, r, _, _, k, _, _, _],
                     [_, q, _, _, p, p, p, r],
@@ -377,7 +377,7 @@ test("Analysis-Game-validateSetup", () => {
                     fullmove: Clock.FullmoveStart,
                 },
                 enPassant: Loc.None,
-                castle: getCastleRights(true),
+                castle: Castles.getRights(true),
                 pos: Setup.defaultSetup(),
             },
             err: Err.SetupHalfmove,
@@ -388,7 +388,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: Black,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: Setup.emptySetup(),
             },
             err: Err.SetupKingCount,
@@ -399,7 +399,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: Black,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, _, _, _, _, _],
                     [_, _, _, k, _, q, _, _],
@@ -420,7 +420,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: Black,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, _, _, _, _, _],
                     [_, _, _, k, _, q, _, _],
@@ -441,7 +441,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, q, k, _, _, _],
                     [p, p, p, p, p, p, p, p],
@@ -462,7 +462,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, p, _, q, k, _, _, _],
                     [p, p, p, p, p, p, p, p],
@@ -483,7 +483,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, q, k, _, _, _],
                     [p, p, p, P, p, p, p, p],
@@ -504,7 +504,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, q, k, _, _, _],
                     [p, p, p, p, p, p, p, p],
@@ -525,7 +525,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, q, k, _, _, R],
                     [p, p, p, p, p, p, p, p],
@@ -546,7 +546,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, q, k, _, _, _],
                     [p, p, p, _, p, p, p, p],
@@ -567,7 +567,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, q, k, _, _, _],
                     [p, p, p, p, _, p, p, p],
@@ -588,7 +588,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, q, k, _, _, _],
                     [p, p, p, p, p, _, p, p],
@@ -609,7 +609,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, q, _, _, _, _],
                     [p, p, p, p, p, p, p, p],
@@ -630,7 +630,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, q, k, _, _, _],
                     [p, p, p, p, p, p, p, p],
@@ -651,7 +651,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, q, k, _, _, _],
                     [p, p, p, p, p, p, p, p],
@@ -672,7 +672,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, q, k, _, _, _],
                     [p, p, p, p, p, p, p, p],
@@ -693,7 +693,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, q, k, _, _, _],
                     [p, p, p, p, _, p, p, p],
@@ -714,7 +714,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, _, _, q, _, _, _, _],
                     [p, p, p, p, _, k, p, p],
@@ -735,7 +735,7 @@ test("Analysis-Game-validateSetup", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: [
                     [_, q, _, _, _, _, _, _],
                     [_, _, _, _, _, _, _, _],

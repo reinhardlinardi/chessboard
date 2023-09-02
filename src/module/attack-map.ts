@@ -1,6 +1,6 @@
+import * as Pieces from './pieces.js';
 import { Type } from './piece-move.js';
 import { Color, White, Black, opponentOf } from './color.js';
-import { get as getPiece, getByColor as piecesByColor } from './piece-list.js';
 
 
 export type Lines = {[direction: string]: string[]};
@@ -23,7 +23,7 @@ type Attacker = {[direction: string]: string};
 
 function attacksOn(color: Color): Attacks {
     const opponent = opponentOf(color);
-    const pieces = piecesByColor(opponent);
+    const pieces = Pieces.getByColor(opponent);
 
     let map: Attacker[] = [];
     for(const piece of pieces) {
@@ -38,7 +38,7 @@ function attacksOn(color: Color): Attacks {
 
     for(const entry of map) {
         let direction = Object.keys(entry)[0];
-        let piece = getPiece(entry[direction]);
+        let piece = Pieces.get(entry[direction]);
         let type = piece.attack;
 
         if(!(type in attacks)) attacks[type] = {};
@@ -54,8 +54,8 @@ function sortAttackers(first: Attacker, second: Attacker): number {
     let direction1 = parseInt(Object.keys(first)[0]);
     let direction2 = parseInt(Object.keys(second)[0]);
 
-    let type1 = getPiece(first[direction1]).attack;
-    let type2 = getPiece(second[direction2]).attack;
+    let type1 = Pieces.get(first[direction1]).attack;
+    let type2 = Pieces.get(second[direction2]).attack;
 
     if(direction1 === direction2) return type1 - type2;
     else return direction1 - direction2;

@@ -4,8 +4,8 @@ import * as Setup from '../../public/module/setup.js';
 import * as Clock from '../../public/module/clock.js';
 import * as Loc from '../../public/module/location.js';
 import * as File from '../../public/module/file.js';
+import * as Castles from '../../public/module/castles.js';
 import { White, Black } from '../../public/module/color.js';
-import { getRights as getCastleRights } from '../../public/module/castle-list.js';
 import * as Err from '../../public/module/fen-error.js';
 
 
@@ -32,7 +32,7 @@ test("FEN-generate", () => {
                 move: Black,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 pos: Setup.emptySetup(),
             },
             want: "8/8/8/8/8/8/8/8 b - - 0 1",
@@ -43,7 +43,7 @@ test("FEN-generate", () => {
                 move: White,
                 clock: Clock.New(),
                 enPassant: Loc.None,
-                castle: getCastleRights(true),
+                castle: Castles.getRights(true),
                 pos: Setup.defaultSetup(),
             },
             want: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
@@ -172,7 +172,7 @@ test("FEN-load", () => {
             err: null,
             want: {
                 move: Black,
-                castle: getCastleRights(false),
+                castle: Castles.getRights(false),
                 enPassant: Loc.None,
                 clock: {halfmove: 0, fullmove: 1},
                 pos: Setup.emptySetup(),
@@ -184,7 +184,7 @@ test("FEN-load", () => {
             err: null,
             want: {
                 move: White,
-                castle: getCastleRights(true),
+                castle: Castles.getRights(true),
                 enPassant: Loc.None,
                 clock: {halfmove: 0, fullmove: 1},
                 pos: Setup.defaultSetup(),

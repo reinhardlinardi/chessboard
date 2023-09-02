@@ -1,14 +1,14 @@
 import * as Piece from './piece.js';
 import * as File from './file.js';
 import * as Loc from './location.js';
+import * as Pieces from './pieces.js';
+import * as Castles from './castles.js';
 import { State } from './state.js';
 import { Size as size } from './size.js';
 import { Clock } from './clock.js';
 import { isNumeric } from './string-util.js';
 import { getList as getColors } from './color.js';
 import { Position, New, get, setRow } from './position.js';
-import { getList as pieceList } from './piece-list.js';
-import { getList as castleList, getRights as getCastleRights } from './castle-list.js';
 import * as Err from './fen-error.js';
 
 
@@ -80,7 +80,7 @@ export function load(str: string): State {
     const move = parts[1];
     const rights = parts[2];
 
-    let castle = getCastleRights(false);
+    let castle = Castles.getRights(false);
     if(rights !== NA) {
         for(const type of rights) castle[type] = true;
     }
@@ -135,7 +135,7 @@ const regex: readonly string[] = Object.freeze(regexPatterns());
 function regexPatterns(): string[] {
     const num = [...Array(size).keys()].map(n => (n+1).toString()).join("");
     
-    const pieces = pieceList().map(piece => piece.letter).join("");
+    const pieces = Pieces.getList().map(piece => piece.letter).join("");
     const squareRegex = `[${pieces}${num}]{1,${size}}`; // [PNBRQKpnbrqk12345678]{1,8}
     
     // ^[PNBRQKpnbrqk12345678]{1,8}(?:/[PNBRQKpnbrqk12345678]{1,8}){7}$
@@ -144,7 +144,7 @@ function regexPatterns(): string[] {
     const colors = getColors();
     const moveRegex = `^[${colors}]$`; // ^[w,b]$
 
-    const castles = castleList().map(castle => castle.letter).join("");
+    const castles = Castles.getList().map(castle => castle.letter).join("");
     const castleRegex = `^${NA}|[${castles}]{1,${castles.length}}$`; // ^-|[KQkq]{1,4}$
 
     const files = File.getLabels().join("");

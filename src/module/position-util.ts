@@ -5,7 +5,7 @@ import * as EnPassant from './en-passant.js';
 import { Size as size } from './size.js';
 import { Position, get, getByLoc } from './position.js';
 import { TypeKing, TypePawn } from './piece-type.js';
-import { get as getPiece, getBy as pieceBy } from '../module/piece-list.js';
+import { get as getPiece, getBy as pieceBy } from './pieces.js';
 import { Color, getList as getColors, opponentOf } from './color.js';
 
 
