@@ -24,7 +24,7 @@ export function getLegalMoves(s: State): Moves {
     const moves = generateMoves(s);
 
     const attacks = Attack.getAttacksOf(s.move, s.pos);
-    // const pin = Attack.getPinnedPiecesOf(s.move, s.pos, attacks);
+    const pin = Attack.getPinnedPiecesOf(s.move, s.pos, attacks);
     // TODO: is en passant pinned
     
     // If in check, return out of check moves
@@ -36,7 +36,7 @@ export function getLegalMoves(s: State): Moves {
 
     // 2. Remove illegal moves for pieces pinned to the king
 
-    // console.log(pin);
+    console.log(pin);
     return moves;
 }
 
