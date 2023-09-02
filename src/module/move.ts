@@ -23,7 +23,7 @@ export type Moves = {[loc: Location]: Location[]}
 export function getLegalMoves(s: State): Moves {
     const moves = generateMoves(s);
 
-    const attacks = Attack.getAttacksOf(s.move, s.pos);
+    const attacks = Attack.getAttacksOn(s.move, s.pos);
     const pin = Attack.getPinnedPiecesOf(s.move, s.pos, attacks);
     // TODO: is en passant pinned
     

@@ -30,7 +30,7 @@ export function numAttackersOf(loc: Location, attacks: Attacks): number {
 }
 
 
-export function getAttacksOf(color: Color, pos: Position): Attacks {
+export function getAttacksOn(color: Color, pos: Position): Attacks {
     let attacks: Attacks = {};
 
     const opponent = opponentOf(color);
