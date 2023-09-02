@@ -2,19 +2,17 @@ import * as Piece from './piece.js';
 import * as File from './file.js';
 import * as Loc from './location.js';
 import * as PieceType from './piece-type.js';
-import { Filter } from './filter.js';
 import { nthRank } from './rank.js';
 import { Color, White, Black } from './color.js';
 import { Direction, Kingside, Queenside } from './direction.js';
 
 
 export type Type = string;
+export type Rights = {[type: Type]: boolean};
+
 
 export const TypeShort: Type = "O-O";
 export const TypeLong: Type = "O-O-O";
-
-
-export type Rights = {[type: Type]: boolean};
 
 
 export interface Move {
@@ -106,35 +104,4 @@ function castleMoveOf(pieceType: PieceType.Type, color: Color, type: Type): Move
         direction: directions[pieceType][type],
         squares: squares[pieceType][type],
     };
-}
-
-
-const list: readonly Castle[] = Object.freeze([WhiteShort, WhiteLong, BlackShort, BlackLong]);
-
-export function getList(): Castle[] {
-    return [...list];
-}
-
-// {"K": val, "Q": val, "k": val, "q": val}
-export function getRights(val: boolean): Rights {
-    return getList().map(castle => castle.letter).reduce((map, type) => ({...map, [type]: val}), {});
-}
-
-
-// {"K": WhiteShort, "Q": WhiteLong, "k": BlackShort, "q": BlackLong}
-const map: {[letter: string]: Castle} = Object.freeze(
-    list.reduce((map, castle) => ({...map, [castle.letter]: castle}), {})
-);
-
-export function get(letter: string): Castle {
-    return map[letter];
-}
-
-
-export function byColor(color: Color): Filter<Castle> {
-    return castle => castle.color === color;
-}
-
-export function byType(type: Type): Filter<Castle> {
-    return castle => castle.type === type;
 }

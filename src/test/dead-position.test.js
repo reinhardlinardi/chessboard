@@ -1,5 +1,6 @@
 import * as DeadPos from '../../public/module/dead-position.js';
 import * as Piece from '../../public/module/piece.js';
+import { getList as pieceList } from '../../public/module/piece-list.js';
 
 
 const P = Piece.WhitePawn.letter;
@@ -17,7 +18,7 @@ const k = Piece.BlackKing.letter;
 
 
 // {"P": 0, "N": 0, "B": 0, "R": 0, "Q": 0, "K": 0, "p": 0, "n": 0, "b": 0, "r": 0, "q": 0, "k": 0}
-const base = Piece.getList().reduce((map, piece) => ({...map, [piece.letter]: 0}), {});
+const base = pieceList().reduce((map, piece) => ({...map, [piece.letter]: 0}), {});
 
 test("DeadPosition-isDead", () => {
     const tcs = [

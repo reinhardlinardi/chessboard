@@ -43,21 +43,3 @@ export const King: Piece = Object.freeze({
     value: 1000,
     attack: PieceMove.TypeDirect,
 });
-
-
-// [Pawn, Knight, Bishop, Rook, Queen, King]
-const list: readonly Piece[] = Object.freeze([Pawn, Knight, Bishop, Rook, Queen, King]);
-
-export function getList(): Piece[] {
-    return [...list];
-}
-
-
-// {"0": Pawn, "1": Knight, "2": Bishop, "3": Rook, "4": Queen, "5": King}
-const map: {[letter: string]: Piece} = Object.freeze(
-    list.reduce((map, piece) => ({...map, [piece.type]: piece}), {})
-);
-
-export function get(type: number): Piece {
-    return map[type];
-}

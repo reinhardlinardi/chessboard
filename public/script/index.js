@@ -1,13 +1,12 @@
 import * as Common from './common.js';
 import * as Setup from '../module/setup.js';
-import * as Piece from '../module/piece.js';
-import * as Castle from '../module/castle.js';
-import * as Filter from '../module/filter-util.js';
 import * as Position from '../module/position.js';
 import * as FEN from '../module/fen.js';
 import * as Loc from '../module/location.js';
-import * as AbstractPiece from '../module/abstract-piece.js';
 import { White, Black } from '../module/color.js';
+import { getByColor as piecesByColor } from '../module/piece-list.js';
+import { get as getCastle, getByColor as castleByColor } from '../module/castle-list.js';
+import { getList as abstractPieceList } from '../module/abstract-piece-list.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
 import * as Face from './face.js';
@@ -27,14 +26,12 @@ export function black() {
 
 
 /* Tray */
-const abstractPieces = Object.freeze(AbstractPiece.getList());
-
-const whitePieces = Object.freeze(Filter.getPieces(Piece.byColor(White)).map(piece => piece.letter));
-const blackPieces = Object.freeze(Filter.getPieces(Piece.byColor(Black)).map(piece => piece.letter));
+const whitePieces = Object.freeze(piecesByColor(White)).map(piece => piece.letter);
+const blackPieces = Object.freeze(piecesByColor(Black)).map(piece => piece.letter);
 
 
 export function getTrayPieceIdx() {
-    return [...Array(abstractPieces.length).keys()];
+    return [...Array(abstractPieceList().length).keys()];
 }
 
 export function getTopTrayPiece(idx) {
@@ -84,11 +81,11 @@ export function resetBoard() {
 
 /* Form */
 export function getWhiteCastleTypes() {
-    return Filter.getCastleList(Castle.byColor(White));
+    return castleByColor(White);
 }
 
 export function getBlackCastleTypes() {
-    return Filter.getCastleList(Castle.byColor(Black));
+    return castleByColor(Black);
 }
 
 export function selectedMove(color) {
@@ -109,7 +106,7 @@ export function setCastle(ev) {
 }
 
 export function disableCastle(type) {
-    const castle = Castle.get(type);
+    const castle = getCastle(type);
     const king = castle.king;
     const rook = castle.rook;
 

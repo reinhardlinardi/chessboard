@@ -8,6 +8,7 @@ import { Size as size } from './size.js';
 import { Direction } from './direction.js';
 import { TypeRange } from './piece-move.js';
 import { TypeKing, TypeQueen, TypeRook } from './piece-type.js';
+import { get as getPiece } from './piece-list.js';
 import { Color, opponentOf, getList as getColors } from './color.js';
 import { getEnPassantPawns, getKingLoc, outOfBound } from './position-util.js';
 
@@ -45,7 +46,7 @@ export function attacksOn(color: Color, pos: Position): Attacks {
             const suspect = getByLoc(pos, loc);
             if(suspect === Piece.None) continue;
             
-            const piece = Piece.get(suspect);
+            const piece = getPiece(suspect);
             if(piece.color !== opponent) continue;
 
             const attacked = locAttackedFrom(loc, pos);
@@ -73,7 +74,7 @@ export function pinnedPiecesOf(color: Color, pos: Position, attacks: Attacks): P
             const subject = getByLoc(pos, square);
             if(subject === Piece.None) continue;
 
-            const piece = Piece.get(subject);
+            const piece = getPiece(subject);
             if(piece.color !== color) break;
 
             if(isAttacked(square, attacks)) {
@@ -81,7 +82,7 @@ export function pinnedPiecesOf(color: Color, pos: Position, attacks: Attacks): P
                 
                 for(const locKey in attackers) {
                     const loc = parseInt(locKey);
-                    const attacker = Piece.get(getByLoc(pos, loc));
+                    const attacker = getPiece(getByLoc(pos, loc));
 
                     // Only range attackers can pin
                     if(attacker.attack !== TypeRange) continue;
@@ -131,7 +132,7 @@ export function pinnedPiecesOf(color: Color, pos: Position, attacks: Attacks): P
 
 
 function locAttackedFrom(loc: Location, pos: Position): Attacked {
-    const attackType = Piece.get(getByLoc(pos, loc)).attack;
+    const attackType = getPiece(getByLoc(pos, loc)).attack;
 
     const locAttackedFromFn = attackType === TypeRange? locRangeAttackedFrom : locDirectAttackedFrom;
     return locAttackedFromFn(loc, pos);
@@ -139,7 +140,7 @@ function locAttackedFrom(loc: Location, pos: Position): Attacked {
 
 function locDirectAttackedFrom(loc: Location, pos: Position): Attacked {
     let attacked: Attacked = {};
-    const attacker = Piece.get(getByLoc(pos, loc));
+    const attacker = getPiece(getByLoc(pos, loc));
 
     for(const move of attacker.moves) {
         if(!move.capture) continue;
@@ -157,7 +158,7 @@ function locDirectAttackedFrom(loc: Location, pos: Position): Attacked {
 
 function locRangeAttackedFrom(loc: Location, pos: Position): Attacked {
     let attacked: Attacked = {};
-    const attacker = Piece.get(getByLoc(pos, loc));
+    const attacker = getPiece(getByLoc(pos, loc));
 
     for(const move of attacker.moves) {
         if(!move.capture) continue;
