@@ -16,7 +16,7 @@ import { Size as size } from './size.js';
 import { State as state, New as newState } from './state.js';
 import { nthRank } from './rank.js';
 import { TypePawn } from './piece-type.js';
-import { getKingLoc } from './position-util.js';
+import { getKingLoc, getEnPassantPawns } from './position-util.js';
 import { Setup, State, Move, PieceCount, StateCount } from './game-data.js';
 import { Color, White, Black, opponentOf, getList as getColors } from './color.js';
 import * as Err from './analysis-error.js';
@@ -154,28 +154,14 @@ export class Game {
     }
 
     private isValidEnPassantTarget(target: Loc.Location, player: Color, pos: Position): boolean {
-        const rank = Loc.rank(target);
-        const file = Loc.file(target);
-        
-        const targetRank = EnPassant.targetRank(player);
-        if(rank !== targetRank) return false;
-        
-        const opponent = opponentOf(player);
-        const opponentPawnLoc = EnPassant.opponentPawnLoc(file, player);
-        
-        const pawns = Filter.New(Piece.getList(), Piece.byType(TypePawn))();
-        const opponentPawn = Filter.New(pawns, Piece.byColor(opponent))()[0].letter;
-        
-        if(getByLoc(pos, opponentPawnLoc) !== opponentPawn) return false;
-        
-        const playerPawn = Filter.New(pawns, Piece.byColor(player))()[0].letter;
-        const playerPawnsLoc = EnPassant.playerPawnsLoc(file, player);
+        const colors = getColors();
+        const pawns = getEnPassantPawns(Loc.file(target), pos, player);
 
-        for(const loc of playerPawnsLoc) {
-            if(getByLoc(pos, loc) === playerPawn) return true;
+        for(const color of colors) {
+            if(pawns[color].length === 0) return false;
         }
-        
-        return false;
+
+        return true;
     }
 
     private setupPieceCount(pos: Position): PieceCount {
