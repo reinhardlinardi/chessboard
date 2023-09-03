@@ -10,6 +10,7 @@ import * as Result from './game-result.js';
 import * as Draw from './draw.js';
 import * as Pieces from './pieces.js';
 import * as Castles from './castles.js';
+import * as EnPassant from './en-passant.js';
 import { Size as size } from './size.js';
 import { nthRank } from './rank.js';
 import { Position, get, getByLoc } from './position.js';
@@ -153,15 +154,18 @@ export class Game {
     }
 
     private isValidEnPassantTarget(target: Loc.Location, player: Color, pos: Position): boolean {
+        const file = Loc.file(target);
+
+        const opponentFromLoc = EnPassant.opponentPawnFromLoc(file, player);
+        if(getByLoc(pos, opponentFromLoc) !== Piece.None) return false;
         if(getByLoc(pos, target) !== Piece.None) return false;
 
         const colors = getColors();
-        const pawns = getEnPassantPawns(Loc.file(target), pos, player);
+        const pawns = getEnPassantPawns(file, pos, player);
 
         for(const color of colors) {
             if(pawns[color].length === 0) return false;
         }
-
         return true;
     }
 

@@ -7,16 +7,30 @@ import { Size as size } from './size.js';
 type Location = Loc.Location;
 
 
-const TargetRank: number = 6;
-const PawnRank: number = TargetRank - 1;
+const FromRank: number = 7;
+const TargetRank: number = FromRank - 1;
+const PawnsRank: number = FromRank - 2;
 
 
 export function targetRank(player: Color) {
     return nthRank(TargetRank, player);
 }
 
+export function fromRank(player: Color) {
+    return nthRank(FromRank, player);
+}
+
 export function pawnRank(player: Color) {
-    return nthRank(PawnRank, player);
+    return nthRank(PawnsRank, player);
+}
+
+
+export function targetLoc(file: number, player: Color): Location {
+    return Loc.of(file, targetRank(player));
+}
+
+export function opponentPawnFromLoc(file: number, player: Color): Location {
+    return Loc.of(file, fromRank(player));
 }
 
 export function opponentPawnLoc(file: number, player: Color): Location {

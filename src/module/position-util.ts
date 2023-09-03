@@ -33,8 +33,8 @@ export function getKingLoc(pos: Position, color: Color): Location {
 
 export function getEnPassantPawns(file: number, pos: Position, player: Color): EnPassantPawns {
     let pawns: EnPassantPawns = {};
-    
     const colors = getColors();
+
     for(const color of colors) {
         pawns[color] = [];
     }
