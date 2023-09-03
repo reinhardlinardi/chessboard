@@ -48,7 +48,7 @@ test("Filter-New", () => {
     ];
 
     for(const tc of tcs) {
-        const get = Filter.New(tc.list, ...tc.filters)();
+        const get = Filter.filter(tc.list, ...tc.filters);
         expect(get).toEqual(tc.want);
     }
 })

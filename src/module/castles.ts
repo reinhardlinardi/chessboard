@@ -1,6 +1,6 @@
 import * as Castle from './castle.js';
 import { Color } from './color.js';
-import { Filter, New as newFilter } from './filter.js';
+import { Filter, filter } from './filter.js';
 
 
 const K = Castle.WhiteShort;
@@ -37,5 +37,5 @@ export function byColor(color: Color): Filter<Castle.Castle> {
 
 
 export function getByColor(color: Color): Castle.Castle[] {
-    return newFilter(getList(), byColor(color))();
+    return filter(getList(), byColor(color));
 }

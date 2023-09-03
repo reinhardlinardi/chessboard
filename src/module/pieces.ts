@@ -1,7 +1,7 @@
 import * as Piece from './piece.js';
 import { Color } from './color.js';
 import { Type } from './piece-type.js';
-import { Filter, New as newFilter } from './filter.js';
+import { Filter, filter } from './filter.js';
 
 
 const P = Piece.WhitePawn;
@@ -46,13 +46,13 @@ export function byType(type: Type): Filter<Piece.Piece> {
 
 
 export function getBy(color: Color, type: Type): Piece.Piece {
-    return newFilter(getList(), byType(type), byColor(color))()[0];
+    return filter(getList(), byType(type), byColor(color))[0];
 }
 
 export function getByColor(color: Color): Piece.Piece[] {
-    return newFilter(getList(), byColor(color))();
+    return filter(getList(), byColor(color));
 }
 
 export function getByType(type: Type): Piece.Piece[] {
-    return newFilter(getList(), byType(type))();
+    return filter(getList(), byType(type));
 }
