@@ -173,7 +173,7 @@ function locDirectAttackedFrom(loc: Location, pos: Position): Attacked {
             const square = loc + direction;
 
             if(outOfBound(square)) continue;
-            else attacked[square] = -1*direction;
+            else attacked[square] = -direction;
         }
     }
 
@@ -191,7 +191,7 @@ function locRangeAttackedFrom(loc: Location, pos: Position): Attacked {
             let square = loc;
 
             while(!outOfBound(square += direction)) {
-                attacked[square] = -1*direction;
+                attacked[square] = -direction;
                 if(getByLoc(pos, square) !== Piece.None) break;
             }
         }

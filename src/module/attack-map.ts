@@ -29,7 +29,7 @@ function attacksOn(color: Color): Attacks {
     for(const piece of pieces) {
         for(const move of piece.moves) {
             if(!move.capture) continue;
-            for(const direction of move.directions) map.push({[-1*direction]: piece.letter});
+            for(const direction of move.directions) map.push({[-direction]: piece.letter});
         }
     }
 
