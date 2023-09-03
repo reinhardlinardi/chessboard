@@ -28,7 +28,7 @@ export function getLegalMoves(s: State): Moves {
     const pin = Attack.pinnedPiecesOf(s.move, s.pos, attacks);
     const indirectPinned = Attack.isEnPassantIndirectPinned(s.enPassant, s.move, s.pos);
 
-    const inCheck = Attack.isKingAttacked(s.move, s.pos, attacks);
+    // const inCheck = Attack.isKingAttacked(s.move, s.pos, attacks);
     const moves = generateMoves(s);
 
     // Removes king moves that put self in check
@@ -36,16 +36,16 @@ export function getLegalMoves(s: State): Moves {
 
     // Remove illegal moves for pieces pinned to the king
     removePinnedPiecesMoves(moves, s.pos, s.move, pin);
-    console.log(JSON.stringify(moves));
-
+    
     // Remove en passant move if indirectly pinned
-    // removeEnPassantMove(moves, s.pos, s.move, s.enPassant, indirectPinned);
+    removeEnPassantMove(moves, s.pos, s.move, s.enPassant, indirectPinned);
 
     // Remove castle moves if in check or any square in king's path is attacked
     // removeCastleMoves(moves, s.move, attacks);
 
+    console.log(JSON.stringify(moves));
     // If in check, select moves that put king out of check
-    if(inCheck) return moves; // TODO: change
+    // if(inCheck) // TODO: implement
 
     return moves;
 }
@@ -244,12 +244,12 @@ function removePinnedPiecesMoves(moves: Moves, pos: Position, color: Color, pin:
     }
 }
 
-// function removeEnPassantMove(moves: Moves, pos: Position, color: Color, target: Location, indirectPinned: boolean) {
-//     if(!indirectPinned) return;
+function removeEnPassantMove(moves: Moves, pos: Position, color: Color, target: Location, indirectPinned: boolean) {
+    if(!indirectPinned) return;
     
-//     const pawn = getEnPassantPawns(Loc.file(target), pos, color)[color][0];
-//     moves[pawn] = moves[pawn].filter(loc => loc !== target);
-// }
+    const pawn = getEnPassantPawns(Loc.file(target), pos, color)[color][0];
+    moves[pawn] = moves[pawn].filter(loc => loc !== target);
+}
 
 // function removeCastleMoves(moves: Moves, color: Color, attacks: Attacks) {
 //     const list = Castles.getByColor(color);
