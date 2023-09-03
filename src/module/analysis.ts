@@ -153,6 +153,8 @@ export class Game {
     }
 
     private isValidEnPassantTarget(target: Loc.Location, player: Color, pos: Position): boolean {
+        if(getByLoc(pos, target) !== Piece.None) return false;
+
         const colors = getColors();
         const pawns = getEnPassantPawns(Loc.file(target), pos, player);
 
