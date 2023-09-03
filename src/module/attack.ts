@@ -139,8 +139,8 @@ export function isEnPassantIndirectPinned(target: Location, player: Color, pos: 
         }
         break;
     }
-
     if(!found) return false;
+    
     const otherColor = opponentOf(queensideColor);
 
     for(let file = kingsideFile+1; file <= size; file++) {

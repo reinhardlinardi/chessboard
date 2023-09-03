@@ -31,21 +31,22 @@ export function getLegalMoves(s: State): Moves {
     const inCheck = Attack.isKingAttacked(s.move, s.pos, attacks);
     const moves = generateMoves(s);
 
-    // 1. Removes king moves that put self in check
-    removeKingIllegalMoves(moves, s.pos, s.move, attacks);
+    // Removes king moves that put self in check
+    removeKingMoves(moves, s.pos, s.move, attacks);
 
-    // 2. Remove illegal moves for pieces pinned to the king
+    // Remove illegal moves for pieces pinned to the king
     removePinnedPiecesMoves(moves, s.pos, s.move, pin);
+    console.log(JSON.stringify(moves));
 
-    // 3. Remove en passant if indirectly pinned
-    removeEnPassantMoveIfIndirectPinned(moves, s.pos, s.move, s.enPassant, indirectPinned);
+    // Remove en passant move if indirectly pinned
+    // removeEnPassantMove(moves, s.pos, s.move, s.enPassant, indirectPinned);
 
-    // 4. Remove king castle moves if any square in between is attacked
+    // Remove castle moves if in check or any square in king's path is attacked
+    // removeCastleMoves(moves, s.move, attacks);
 
-    // 5. If in check, select moves that put king out of check
+    // If in check, select moves that put king out of check
     if(inCheck) return moves; // TODO: change
 
-    console.log(JSON.stringify(moves));
     return moves;
 }
 
@@ -185,59 +186,57 @@ function getEnPassantMove(pos: Position, target: Location, color: Color): Moves 
     return moves;
 }
 
-function removeKingIllegalMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks) {
-    let legal: Location[] = [];
+function removeKingMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks) {
+    let remove: Location[] = [];
 
     const loc = getKingLoc(pos, color);
     const king = Pieces.get(getByLoc(pos, loc));
+    const opponent = opponentOf(color);
 
     for(const move of king.moves) {
         for(const direction of move.directions) {
             const square = loc + direction;
             if(outOfBound(square)) continue;
-            if(Attack.isAttacked(square, attacks)) continue;
-
-            const subject = getByLoc(pos, square);
-            if(subject === Piece.None) {
-                legal.push(square);
-                continue;
-            }
-
-            const piece = Pieces.get(subject);
-            if(piece.color !== color) legal.push(square);
+            if(canOccupy(square, pos, move, opponent) && Attack.isAttacked(square, attacks)) remove.push(square);
         }
     }
 
-    moves[loc] = legal;
+    moves[loc] = moves[loc].filter(square => !remove.includes(square));
 }
 
 function removePinnedPiecesMoves(moves: Moves, pos: Position, color: Color, pin: Pin) {
-    for(const locStr in pin) {
-        let inLine: Location[] = [];
-        let legal: Location[] = [];
+    const opponent = opponentOf(color);
 
+    for(const locStr in pin) {
         const loc = parseInt(locStr);
-        const attackDirection = pin[loc];
-        const directions = [attackDirection, -1*attackDirection];
+        const piece = Pieces.get(getByLoc(pos, loc));
+        
+        let legal: Location[] = [];
+        let inLine: Location[] = [];
+        const directions = [pin[loc], -1*pin[loc]];
 
         for(const direction of directions) {
-            let square = loc;
+            let move = piece.moves[0];
+            let skip = true;
 
+            for(const mv of piece.moves) {
+                if(mv.directions.includes(direction)) {
+                    skip = false;
+                    move = mv;
+                    break;
+                }
+            }
+
+            if(skip) continue;
+            let square = loc;
+            
             while(true) {
                 square += direction;
-
-                const subject = getByLoc(pos, square);
-                if(subject === Piece.None) {
-                    inLine.push(square);
-                    continue;
-                }
-
-                const piece = Pieces.get(subject);
-                if(piece.color !== color) inLine.push(square);
-                break;
+                if(canOccupy(square, pos, move, opponent)) inLine.push(square);
+                if(getByLoc(pos, square) !== Piece.None) break;
             }
         }
-
+        
         for(const dest of inLine) {
             if(moves[loc].includes(dest)) legal.push(dest);
         }
@@ -245,12 +244,29 @@ function removePinnedPiecesMoves(moves: Moves, pos: Position, color: Color, pin:
     }
 }
 
-function removeEnPassantMoveIfIndirectPinned(moves: Moves, pos: Position, color: Color, target: Location, indirectPinned: boolean) {
-    if(!indirectPinned) return;
+// function removeEnPassantMove(moves: Moves, pos: Position, color: Color, target: Location, indirectPinned: boolean) {
+//     if(!indirectPinned) return;
     
-    const pawn = getEnPassantPawns(Loc.file(target), pos, color)[color][0];
-    moves[pawn] = moves[pawn].filter(loc => loc !== target);
-}
+//     const pawn = getEnPassantPawns(Loc.file(target), pos, color)[color][0];
+//     moves[pawn] = moves[pawn].filter(loc => loc !== target);
+// }
+
+// function removeCastleMoves(moves: Moves, color: Color, attacks: Attacks) {
+//     const list = Castles.getByColor(color);
+
+//     for(const castle of list) {
+//         const from = castle.king.from;
+//         const direction = castle.king.direction;
+//         const to = from + castle.king.squares * direction;
+
+//         for(let loc = from; loc != to; loc += direction) {
+//             if(Attack.isAttacked(loc, attacks)) {
+//                 moves[from] = moves[from].filter(square => square !== to);
+//                 break;
+//             }
+//         }
+//     }
+// }
 
 
 function canOccupy(square: Location, pos: Position, move: PieceMove.Move, opponent: Color): boolean {
