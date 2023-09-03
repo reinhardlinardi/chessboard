@@ -97,12 +97,14 @@ export function pinnedPiecesOf(color: Color, pos: Position, attacks: Attacks): P
     return pin;
 }
 
-export function isEnPassantIndirectPinned(file: number, player: Color, pos: Position): boolean {
+export function isEnPassantIndirectPinned(target: Location, player: Color, pos: Position): boolean {
+    if(target === Loc.None) return false;
+
     const rank = EnPassant.pawnRank(player);
     if(Loc.rank(getKingLoc(pos, player)) !== rank) return false;
 
     let pawnLoc: Location[] = [];
-    const pawns = getEnPassantPawns(file, pos, player);
+    const pawns = getEnPassantPawns(Loc.file(target), pos, player);
     const colors = getColors();
 
     for(const color of colors) {
@@ -139,12 +141,12 @@ export function isEnPassantIndirectPinned(file: number, player: Color, pos: Posi
     }
 
     if(!found) return false;
+    const otherColor = opponentOf(queensideColor);
 
     for(let file = kingsideFile+1; file <= size; file++) {
         const subject = get(pos, rank, file);
         if(subject === Piece.None) continue;
-
-        const otherColor = opponentOf(queensideColor);
+        
         if(search[otherColor].includes(subject)) return true;
         else break;
     }

@@ -118,13 +118,13 @@ export class Game {
 
         let rights = st.castle;
         for(const type in rights) {
-            if(rights[type]) {
-                const c = Castles.get(type);
-                const kingMoved = getByLoc(st.pos, c.king.from) !== c.king.piece;
-                const rookMoved = getByLoc(st.pos, c.rook.from) !== c.rook.piece;
+            if(!rights[type]) continue;
 
-                if(kingMoved || rookMoved) rights[type] = false;
-            }
+            const c = Castles.get(type);
+            const kingMoved = getByLoc(st.pos, c.king.from) !== c.king.piece;
+            const rookMoved = getByLoc(st.pos, c.rook.from) !== c.rook.piece;
+
+            if(kingMoved || rookMoved) rights[type] = false;
         }
 
         const none = Loc.None;
