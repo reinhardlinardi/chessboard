@@ -41,7 +41,7 @@ export function getLegalMoves(s: State): Moves {
     removeEnPassantMove(moves, s.pos, s.move, s.enPassant, indirectPinned);
 
     // Remove castle moves if in check or any square in king's path is attacked
-    // removeCastleMoves(moves, s.move, attacks);
+    removeCastleMoves(moves, s.move, attacks);
 
     console.log(JSON.stringify(moves));
     // If in check, select moves that put king out of check
@@ -159,11 +159,10 @@ function getCastleMoves(pos: Position, rights: Castle.Rights, color: Color): Mov
         if(getByLoc(pos, rook.from) !== rook.piece) continue;
 
         let clear = true;
-
-        for(let loc = rook.from; loc != king.from; loc += rook.direction) {
-            if(loc === rook.from) continue;
+        for(let loc = rook.from + rook.direction; loc !== king.from; loc += rook.direction) {
             if(getByLoc(pos, loc) !== Piece.None) clear = false;
         }
+
         if(clear) {
             if(!(king.from in moves)) moves[king.from] = [];
             moves[king.from].push(king.from + king.squares*king.direction);
@@ -213,7 +212,9 @@ function removePinnedPiecesMoves(moves: Moves, pos: Position, color: Color, pin:
         
         let legal: Location[] = [];
         let inLine: Location[] = [];
-        const directions = [pin[loc], -1*pin[loc]];
+
+        const pinnedFrom = pin[loc];
+        const directions = [pinnedFrom, -pinnedFrom];
 
         for(const direction of directions) {
             let move = piece.moves[0];
@@ -251,22 +252,22 @@ function removeEnPassantMove(moves: Moves, pos: Position, color: Color, target: 
     moves[pawn] = moves[pawn].filter(loc => loc !== target);
 }
 
-// function removeCastleMoves(moves: Moves, color: Color, attacks: Attacks) {
-//     const list = Castles.getByColor(color);
+function removeCastleMoves(moves: Moves, color: Color, attacks: Attacks) {
+    const list = Castles.getByColor(color);
 
-//     for(const castle of list) {
-//         const from = castle.king.from;
-//         const direction = castle.king.direction;
-//         const to = from + castle.king.squares * direction;
+    for(const castle of list) {
+        const from = castle.king.from;
+        const direction = castle.king.direction;
+        const to = from + castle.king.squares * direction;
 
-//         for(let loc = from; loc != to; loc += direction) {
-//             if(Attack.isAttacked(loc, attacks)) {
-//                 moves[from] = moves[from].filter(square => square !== to);
-//                 break;
-//             }
-//         }
-//     }
-// }
+        for(let loc = from; loc !== to + direction; loc += direction) {
+            if(Attack.isAttacked(loc, attacks)) {
+                moves[from] = moves[from].filter(square => square !== to);
+                break;
+            }
+        }
+    }
+}
 
 
 function canOccupy(square: Location, pos: Position, move: PieceMove.Move, opponent: Color): boolean {
