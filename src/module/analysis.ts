@@ -16,7 +16,7 @@ import { nthRank } from './rank.js';
 import { Position, get, getByLoc } from './position.js';
 import { State as state, New as newState } from './state.js';
 import { TypePawn } from './piece-type.js';
-import { getKingLoc, getEnPassantPawns } from './position-util.js';
+import { getEnPassantPawns } from './position-util.js';
 import { Setup, State, Move, PieceCount, StateCount } from './game-data.js';
 import { Color, White, Black, opponentOf, getList as getColors } from './color.js';
 import * as Err from './analysis-error.js';
