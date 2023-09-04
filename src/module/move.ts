@@ -45,6 +45,7 @@ export function getLegalMoves(s: State): Moves {
     const inCheck = Attack.isKingAttacked(s.move, s.pos, attacks);
     if(inCheck) selectOutOfCheckMoves(moves, s.pos, s.move, attacks);
 
+    console.log(JSON.stringify(moves));
     return moves;
 }
 
@@ -278,7 +279,9 @@ function selectOutOfCheckMoves(moves: Moves, pos: Position, color: Color, attack
     const direction = attacks[kingLoc][attackerLoc];
     const attacker = Pieces.get(getByLoc(pos, attackerLoc));
 
-    // Option 1 : Move king
+    const playerPawn = Pieces.getBy(color, TypePawn).letter;
+
+    // Option 1: Move king
     options[kingLoc] = [...moves[kingLoc]];
     
     const numAttackers = Attack.numKingAttackersOf(color, pos, attacks);
@@ -297,11 +300,20 @@ function selectOutOfCheckMoves(moves: Moves, pos: Position, color: Color, attack
 
     // Option 3: Block line of attack
     if(!skip) {
+        let pawns: Location[] = [];
+        for(const locKey in moves) {
+            const loc = parseInt(locKey);
+            if(getByLoc(pos, loc) === playerPawn) pawns.push(loc);
+        }
+
         for(let loc = kingLoc + direction; loc !== attackerLoc; loc += direction) {
             const pieces = opponentAttacks[loc];
             for(const piece in pieces) {
                 if(!(piece in options)) options[piece] = [];
                 options[piece].push(loc);
+            }
+            for(const pawn of pawns) {
+                if(moves[pawn].includes(loc)) options[pawn] = [loc];
             }
         }
     }
