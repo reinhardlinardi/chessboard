@@ -39,7 +39,7 @@ export function getLegalMoves(s: State): Moves {
     removeEnPassantMove(moves, s.pos, s.move, s.enPassant, indirectPinned);
 
     // 4. Remove castle moves if in check or any square in king's path is attacked
-    removeCastleMoves(moves, s.move, attacks);
+    removeCastleMoves(moves, s.move, s.castle, attacks);
 
     // 5. If in check, select moves that put king out of check
     const inCheck = Attack.isKingAttacked(s.move, s.pos, attacks);
@@ -250,10 +250,13 @@ function removeEnPassantMove(moves: Moves, pos: Position, color: Color, target: 
     moves[pawn] = moves[pawn].filter(loc => loc !== target);
 }
 
-function removeCastleMoves(moves: Moves, color: Color, attacks: Attacks) {
-    const list = Castles.getByColor(color);
+function removeCastleMoves(moves: Moves, color: Color, rights: Castle.Rights, attacks: Attacks) {
+    for(const type in rights) {
+        const castle = Castles.get(type);
 
-    for(const castle of list) {
+        if(castle.color !== color) continue;
+        if(!rights[type]) continue;
+
         const from = castle.king.from;
         const direction = castle.king.direction;
         const to = from + castle.king.squares * direction;
