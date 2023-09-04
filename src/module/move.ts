@@ -360,7 +360,9 @@ function mergeMoves(...moves: Moves[]): Moves {
     for(const move of moves) {
         for(const square in move) {
             if(!(square in res)) res[square] = [];
-            res[square].push(...move[square]);
+            for(const loc of move[square]) {
+                if(!res[square].includes(loc)) res[square].push(loc);
+            }
         }
     }
     return res;
