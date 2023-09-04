@@ -1,6 +1,5 @@
 import * as Loc from './location.js';
 import * as Piece from './piece.js';
-import * as PieceMove from './piece-move.js';
 import * as Castle from './castle.js';
 import * as EnPassant from './en-passant.js';
 import * as Attack from './attack.js';
@@ -12,7 +11,7 @@ import { Color, opponentOf } from './color.js';
 import { Position, getByLoc } from './position.js';
 import { nthRank } from './rank.js';
 import { getEnPassantPawns, getKingLoc, outOfBound } from './position-util.js';
-import { TypeRange } from './piece-move.js';
+import { Move, TypeDirect, TypeRange } from './piece-move.js';
 import { TypeKing, TypePawn } from './piece-type.js';
 
 
@@ -30,23 +29,22 @@ export function getLegalMoves(s: State): Moves {
 
     let moves = generateMoves(s);
 
-    // Removes king moves that put self in check
+    // 1. Removes king moves that put self in check
     removeKingMoves(moves, s.pos, s.move, attacks);
 
-    // Remove illegal moves for pieces pinned to the king
+    // 2. Remove illegal moves for pieces pinned to the king
     removePinnedPiecesMoves(moves, s.pos, s.move, pin);
     
-    // Remove en passant move if indirectly pinned
+    // 3. Remove en passant move if indirectly pinned
     removeEnPassantMove(moves, s.pos, s.move, s.enPassant, indirectPinned);
 
-    // Remove castle moves if in check or any square in king's path is attacked
+    // 4. Remove castle moves if in check or any square in king's path is attacked
     removeCastleMoves(moves, s.move, attacks);
 
-    // If in check, select moves that put king out of check
+    // 5. If in check, select moves that put king out of check
     const inCheck = Attack.isKingAttacked(s.move, s.pos, attacks);
-    if(inCheck) moves = getOutOfCheckMoves(moves, s.pos, s.move, attacks, pin);
+    if(inCheck) selectOutOfCheckMoves(moves, s.pos, s.move, attacks);
 
-    console.log(JSON.stringify(moves));
     return moves;
 }
 
@@ -268,22 +266,62 @@ function removeCastleMoves(moves: Moves, color: Color, attacks: Attacks) {
     }
 }
 
-function getOutOfCheckMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks, pin: Pin): Moves {
-    let legal: Moves = {};
+function selectOutOfCheckMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks) {
+    let options: Moves = {};
+    let skip = false;
 
-    // const kingLoc = getKingLoc(pos, color);
-    // const numAttackers = Attack.numAttackersOf(kingLoc, attacks);
+    const kingLoc = getKingLoc(pos, color);
+    const opponent = opponentOf(color);
+    const opponentAttacks = Attack.attacksOn(opponent, pos);
+
+    const attackerLoc = parseInt(Object.keys(attacks[kingLoc])[0]);
+    const direction = attacks[kingLoc][attackerLoc];
+    const attacker = Pieces.get(getByLoc(pos, attackerLoc));
+
+    // Option 1 : Move king
+    options[kingLoc] = [...moves[kingLoc]];
     
-    // // If double check, king has to move
-    // if(numAttackers === 2) {
-    //     moves[kingLoc] = all[kingLoc];
-    //     return;
-    // }
-    return {};
+    const numAttackers = Attack.numKingAttackersOf(color, pos, attacks);
+    if(numAttackers === 2) skip = true;
+
+    // Option 2: Capture attacker
+    if(!skip) {
+        const pieces = opponentAttacks[attackerLoc];
+        for(const piece in pieces) {
+            if(!(piece in options)) options[piece] = [];
+            if(!options[piece].includes(attackerLoc)) options[piece].push(attackerLoc);
+        }
+    }
+
+    if(attacker.attack === TypeDirect) skip = true;
+
+    // Option 3: Block line of attack
+    if(!skip) {
+        for(let loc = kingLoc + direction; loc !== attackerLoc; loc += direction) {
+            const pieces = opponentAttacks[loc];
+            for(const piece in pieces) {
+                if(!(piece in options)) options[piece] = [];
+                options[piece].push(loc);
+            }
+        }
+    }
+
+    let legal: Moves = {};
+    for(const loc in options) {
+        legal[loc] = [];
+        for(const dest of options[loc]) {
+            if(moves[loc].includes(dest)) legal[loc].push(dest);
+        }
+    }
+
+    for(const loc in moves) {
+        if(!(loc in legal)) moves[loc] = [];
+        else moves[loc] = legal[loc];
+    }
 }
 
 
-function canOccupy(square: Location, pos: Position, move: PieceMove.Move, opponent: Color): boolean {
+function canOccupy(square: Location, pos: Position, move: Move, opponent: Color): boolean {
     if(move.move && canMoveTo(square, pos)) return true;
     if(move.capture && canCaptureOn(square, pos, opponent)) return true;
     return false;
