@@ -43,7 +43,7 @@ export function getLegalMoves(s: State): Moves {
 
     // 5. If in check, select moves that put king out of check
     const inCheck = Attack.isKingAttacked(s.move, s.pos, attacks);
-    if(inCheck) moves = getOutOfCheckMoves(moves, s.pos, s.move, attacks);
+    if(inCheck) selectOutOfCheckMoves(moves, s.pos, s.move, attacks);
     
     return moves;
 }
@@ -269,17 +269,20 @@ function removeCastleMoves(moves: Moves, color: Color, rights: Castle.Rights, at
     }
 }
 
-function getOutOfCheckMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks): Moves {
-    let legal: Moves[] = [];
-
+function selectOutOfCheckMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks) {
     const opponent = opponentOf(color);
     const opponentAttacks = Attack.attacksOn(opponent, pos);
  
-    legal.push(getOutOfCheckKingMoves(moves, pos, color, attacks));
-    legal.push(getCaptureCheckingPieceMoves(moves, pos, color, attacks, opponentAttacks));
-    legal.push(getBlockCheckMoves(moves, pos, color, attacks, opponentAttacks));
+    let legal = mergeMoves(
+        getOutOfCheckKingMoves(moves, pos, color, attacks),
+        getCaptureCheckingPieceMoves(moves, pos, color, attacks, opponentAttacks),
+        getBlockCheckMoves(moves, pos, color, attacks, opponentAttacks),
+    ); 
 
-    return mergeMoves(...legal);
+    for(const square in moves) {
+        if(!(square in legal)) moves[square] = [];
+        else moves[square] = legal[square];
+    }
 }
 
 function getOutOfCheckKingMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks): Moves {
