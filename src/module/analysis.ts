@@ -7,7 +7,6 @@ import * as Attack from './attack.js';
 import * as GameMove from './move.js';
 import * as Promotion from './promotion.js';
 import * as Result from './game-result.js';
-import * as Draw from './draw.js';
 import * as Pieces from './pieces.js';
 import * as Castles from './castles.js';
 import * as EnPassant from './en-passant.js';
@@ -145,7 +144,7 @@ export class Game {
 
     private stateDataOf(s: Setup): State {
         const ended = false;
-        const result = {score: Result.Tie, drawReason: Draw.ReasonNone};
+        const result = {score: 0, reason: 0};
         
         const pieces = this.setupPieceCount(s.pos);
         const repeat: StateCount = {[s.id]: 1};
