@@ -28,8 +28,7 @@ export function getLegalMoves(s: State): Moves {
     const pin = Attack.pinnedPiecesOf(s.move, s.pos, attacks);
     const indirectPinned = Attack.isEnPassantIndirectPinned(s.enPassant, s.move, s.pos);
 
-    // const inCheck = Attack.isKingAttacked(s.move, s.pos, attacks);
-    const moves = generateMoves(s);
+    let moves = generateMoves(s);
 
     // Removes king moves that put self in check
     removeKingMoves(moves, s.pos, s.move, attacks);
@@ -43,10 +42,11 @@ export function getLegalMoves(s: State): Moves {
     // Remove castle moves if in check or any square in king's path is attacked
     removeCastleMoves(moves, s.move, attacks);
 
-    console.log(JSON.stringify(moves));
     // If in check, select moves that put king out of check
-    // if(inCheck) // TODO: implement
+    const inCheck = Attack.isKingAttacked(s.move, s.pos, attacks);
+    if(inCheck) moves = getOutOfCheckMoves(moves, s.pos, s.move, attacks, pin);
 
+    console.log(JSON.stringify(moves));
     return moves;
 }
 
@@ -190,13 +190,12 @@ function removeKingMoves(moves: Moves, pos: Position, color: Color, attacks: Att
 
     const loc = getKingLoc(pos, color);
     const king = Pieces.get(getByLoc(pos, loc));
-    const opponent = opponentOf(color);
 
     for(const move of king.moves) {
         for(const direction of move.directions) {
             const square = loc + direction;
             if(outOfBound(square)) continue;
-            if(canOccupy(square, pos, move, opponent) && Attack.isAttacked(square, attacks)) remove.push(square);
+            if(Attack.isAttacked(square, attacks)) remove.push(square);
         }
     }
 
@@ -267,6 +266,20 @@ function removeCastleMoves(moves: Moves, color: Color, attacks: Attacks) {
             }
         }
     }
+}
+
+function getOutOfCheckMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks, pin: Pin): Moves {
+    let legal: Moves = {};
+
+    // const kingLoc = getKingLoc(pos, color);
+    // const numAttackers = Attack.numAttackersOf(kingLoc, attacks);
+    
+    // // If double check, king has to move
+    // if(numAttackers === 2) {
+    //     moves[kingLoc] = all[kingLoc];
+    //     return;
+    // }
+    return {};
 }
 
 
