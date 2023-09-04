@@ -6,16 +6,16 @@ export type Reason = number;
 
 
 export const WhiteWin: Score =  1;
-export const Tie: Score = 0;
+export const Draw: Score = 0;
 export const BlackWin: Score = -1;
 
 
-export const ReasonWhiteCheckmate: Reason = 1;
-export const ReasonBlackCheckmate: Reason = -1;
-export const ReasonInsufficient: Reason = -2;
-export const ReasonStalemate: Reason = 2;
-export const ReasonRepetition: Reason = 3;
-export const ReasonFiftyMove: Reason = 50;
+export const WhiteCheckmate: Reason = 1;
+export const BlackCheckmate: Reason = -1;
+export const Insufficient: Reason = -2;
+export const Stalemate: Reason = 2;
+export const Repetition: Reason = 3;
+export const FiftyMove: Reason = 50;
 
 
 export interface Result {
