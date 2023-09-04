@@ -197,7 +197,7 @@ export class Game {
         }
 
         for(const color in cnt) {
-            if(cnt[color] !== 1) throw Err.New(Err.SetupKingCount, `invalid ${color} king count`);
+            if(cnt[color] !== 1) throw Err.New(Err.SetupKingCount, "invalid king count");
         }
     }
 
@@ -214,7 +214,7 @@ export class Game {
 
                     const piece = Pieces.get(subject);
                     if(piece.color === color && piece.type === TypePawn) {
-                        throw Err.New(Err.SetupPawnRank, `${color} pawn not allowed in rank ${rank}`);
+                        throw Err.New(Err.SetupPawnRank, `no pawns allowed in rank ${rank}`);
                     }
                 }
             }
@@ -223,24 +223,18 @@ export class Game {
 
     private setupValidateCheck(player: Color, pos: Position) {
         const opponent = opponentOf(player);
+        const attacks = Attack.attacksOn(player, pos);
+        const opponentAttacks = Attack.attacksOn(opponent, pos);
+
+        const opponentInCheck = Attack.isKingAttacked(opponent, pos, opponentAttacks);
+        const numKingAttackers = Attack.numKingAttackersOf(player, pos, attacks);
 
         // Validation:
         // 1. Player is not checking opponent king
-        const opponentKing = getKingLoc(pos, opponent);
-        const playerAttacks = Attack.attacksOn(opponent, pos);
-
-        if(opponentKing in playerAttacks) {
-            throw Err.New(Err.SetupPosition, `${opponent} king can't be in check`);
-        }
+        if(opponentInCheck) throw Err.New(Err.SetupPosition, "opponent king can't be in check");
 
         // 2. If player is in check, there should be at most 2 attackers
-        const playerKing = getKingLoc(pos, player);
-        const opponentAttacks = Attack.attacksOn(player, pos);
-        
-        if(playerKing in opponentAttacks) {
-            const numAttacker = Attack.numAttackersOf(playerKing, opponentAttacks);
-            if(numAttacker > 2) throw Err.New(Err.SetupPosition, "too many checking pieces");
-        }
+        if(numKingAttackers > 2) throw Err.New(Err.SetupPosition, "too many checking pieces");
     }
 
     // getStateData(fullmove: number, color: Color): State | null {

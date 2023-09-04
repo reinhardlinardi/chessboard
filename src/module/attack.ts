@@ -29,7 +29,11 @@ export function isKingAttacked(color: Color, pos: Position, attacks: Attacks): b
 }
 
 export function numAttackersOf(loc: Location, attacks: Attacks): number {
-    return Object.keys(attacks[loc]).length;
+    return isAttacked(loc, attacks)? Object.keys(attacks[loc]).length : 0;
+}
+
+export function numKingAttackersOf(color: Color, pos: Position, attacks: Attacks): number {
+    return numAttackersOf(getKingLoc(pos, color), attacks);
 }
 
 
