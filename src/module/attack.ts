@@ -69,8 +69,8 @@ export function pinnedPiecesOf(color: Color, pos: Position, attacks: Attacks): P
     const kingLoc = getKingLoc(pos, color);
     const rangeAttackMap = AttackMap.get(color)[TypeRange];
 
-    for(const mapKey in rangeAttackMap) {
-        const direction = parseInt(mapKey);
+    for(const directionStr in rangeAttackMap) {
+        const direction = parseInt(directionStr);
         let square = kingLoc;
 
         while(!outOfBound(square += direction)) {

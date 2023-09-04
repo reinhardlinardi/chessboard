@@ -11,7 +11,7 @@ import { Color, opponentOf } from './color.js';
 import { Position, getByLoc } from './position.js';
 import { nthRank } from './rank.js';
 import { getEnPassantPawns, getKingLoc, outOfBound } from './position-util.js';
-import { Move, TypeDirect, TypeRange } from './piece-move.js';
+import { Move, TypeRange } from './piece-move.js';
 import { TypeKing, TypePawn } from './piece-type.js';
 
 
@@ -43,9 +43,8 @@ export function getLegalMoves(s: State): Moves {
 
     // 5. If in check, select moves that put king out of check
     const inCheck = Attack.isKingAttacked(s.move, s.pos, attacks);
-    if(inCheck) selectOutOfCheckMoves(moves, s.pos, s.move, attacks);
-
-    console.log(JSON.stringify(moves));
+    if(inCheck) moves = getOutOfCheckMoves(moves, s.pos, s.move, attacks);
+    
     return moves;
 }
 
@@ -270,71 +269,108 @@ function removeCastleMoves(moves: Moves, color: Color, rights: Castle.Rights, at
     }
 }
 
-function selectOutOfCheckMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks) {
-    let options: Moves = {};
-    let skip = false;
+function getOutOfCheckMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks): Moves {
+    let legal: Moves[] = [];
 
-    const kingLoc = getKingLoc(pos, color);
     const opponent = opponentOf(color);
     const opponentAttacks = Attack.attacksOn(opponent, pos);
+ 
+    legal.push(getOutOfCheckKingMoves(moves, pos, color, attacks));
+    legal.push(getCaptureCheckingPieceMoves(moves, pos, color, attacks, opponentAttacks));
+    legal.push(getBlockCheckMoves(moves, pos, color, attacks, opponentAttacks));
 
-    const attackerLoc = parseInt(Object.keys(attacks[kingLoc])[0]);
-    const direction = attacks[kingLoc][attackerLoc];
-    const attacker = Pieces.get(getByLoc(pos, attackerLoc));
-
-    const playerPawn = Pieces.getBy(color, TypePawn).letter;
-
-    // Option 1: Move king
-    options[kingLoc] = [...moves[kingLoc]];
-    
-    const numAttackers = Attack.numKingAttackersOf(color, pos, attacks);
-    if(numAttackers === 2) skip = true;
-
-    // Option 2: Capture attacker
-    if(!skip) {
-        const pieces = opponentAttacks[attackerLoc];
-        for(const piece in pieces) {
-            if(!(piece in options)) options[piece] = [];
-            if(!options[piece].includes(attackerLoc)) options[piece].push(attackerLoc);
-        }
-    }
-
-    if(attacker.attack === TypeDirect) skip = true;
-
-    // Option 3: Block line of attack
-    if(!skip) {
-        let pawns: Location[] = [];
-        for(const locKey in moves) {
-            const loc = parseInt(locKey);
-            if(getByLoc(pos, loc) === playerPawn) pawns.push(loc);
-        }
-
-        for(let loc = kingLoc + direction; loc !== attackerLoc; loc += direction) {
-            const pieces = opponentAttacks[loc];
-            for(const piece in pieces) {
-                if(!(piece in options)) options[piece] = [];
-                options[piece].push(loc);
-            }
-            for(const pawn of pawns) {
-                if(moves[pawn].includes(loc)) options[pawn] = [loc];
-            }
-        }
-    }
-
-    let legal: Moves = {};
-    for(const loc in options) {
-        legal[loc] = [];
-        for(const dest of options[loc]) {
-            if(moves[loc].includes(dest)) legal[loc].push(dest);
-        }
-    }
-
-    for(const loc in moves) {
-        if(!(loc in legal)) moves[loc] = [];
-        else moves[loc] = legal[loc];
-    }
+    return mergeMoves(...legal);
 }
 
+function getOutOfCheckKingMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks): Moves {
+    let legal: Moves = {};
+
+    const kingLoc = getKingLoc(pos, color);
+    legal[kingLoc] = [...moves[kingLoc]];
+    
+    const kingAttacks = attacks[kingLoc];
+    const king = Pieces.getBy(color, TypeKing);
+
+    for(const attackerLocStr in kingAttacks) {
+        const attackerLoc = parseInt(attackerLocStr);
+
+        const attacker = Pieces.get(getByLoc(pos, attackerLoc));
+        if(attacker.attack !== TypeRange) continue;
+
+        const away = -kingAttacks[attackerLoc];
+
+        for(const move of king.moves) {
+            for(const direction of move.directions) {
+                const loc = kingLoc + direction;
+
+                if(direction === away) {
+                    legal[kingLoc] = legal[kingLoc].filter(dest => dest !== loc);
+                    break;
+                }
+            }
+        }
+    }
+
+    return legal;
+}
+
+function getCaptureCheckingPieceMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks, opponentAttacks: Attacks): Moves {
+    const numAttackers = Attack.numKingAttackersOf(color, pos, attacks);
+    if(numAttackers > 1) return {};
+    
+    let legal: Moves = {};
+
+    const kingLoc = getKingLoc(pos, color);
+    const attackerLoc = parseInt(Object.keys(attacks[kingLoc])[0]);
+    const pieces = opponentAttacks[attackerLoc];
+
+    for(const pieceLoc in pieces) {
+        if(!moves[pieceLoc].includes(attackerLoc)) continue;
+
+        if(!(pieceLoc in legal)) legal[pieceLoc] = [];
+        legal[pieceLoc].push(attackerLoc);
+    }
+
+    return legal;
+}
+
+function getBlockCheckMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks, opponentAttacks: Attacks): Moves {
+    const numAttackers = Attack.numKingAttackersOf(color, pos, attacks);
+    if(numAttackers > 1) return {};
+
+    const kingLoc = getKingLoc(pos, color);
+    const attackerLoc = parseInt(Object.keys(attacks[kingLoc])[0]);
+    
+    const attacker = Pieces.get(getByLoc(pos, attackerLoc));
+    if(attacker.attack !== TypeRange) return {};
+    
+    let legal: Moves = {};
+    let pawns: Location[] = [];
+
+    const playerPawn = Pieces.getBy(color, TypePawn).letter;
+    const direction = attacks[kingLoc][attackerLoc];
+
+    for(const pawnLocStr in moves) {
+        const pawnLoc = parseInt(pawnLocStr);
+        if(getByLoc(pos, pawnLoc) === playerPawn) pawns.push(pawnLoc);
+    }
+
+    for(let loc = kingLoc + direction; loc !== attackerLoc; loc += direction) {
+        const pieces = opponentAttacks[loc];
+        
+        for(const pieceLoc in pieces) {
+            if(!moves[pieceLoc].includes(loc)) continue;
+
+            if(!(pieceLoc in legal)) legal[pieceLoc] = [];
+            legal[pieceLoc].push(loc);
+        }
+        for(const pawnLoc of pawns) {
+            if(moves[pawnLoc].includes(loc)) legal[pawnLoc] = [loc];
+        }
+    }
+
+    return legal;
+}
 
 function canOccupy(square: Location, pos: Position, move: Move, opponent: Color): boolean {
     if(move.move && canMoveTo(square, pos)) return true;
