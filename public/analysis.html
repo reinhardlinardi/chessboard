@@ -31,7 +31,7 @@
             </div>
           </div>
 
-          <div class="board">
+          <div :class="['board', promote? 'board-dim':'']">
             <template v-for="(row, y) in state.pos">
               <template v-for="(_, x) in row">
 
@@ -98,7 +98,7 @@
 
         <div class="right-container">
 
-          <div class="promotion-container">
+          <div :class="['promotion-container', promote? '':'promotion-dim']">
             <div class="promoted-label">Promote to</div>
             
             <div class="promoted-tray">
