@@ -2,6 +2,7 @@ import * as Common from './common.js';
 import * as FEN from '../module/fen.js';
 import * as Type from '../module/piece-type.js';
 import * as Loc from '../module/location.js';
+import * as Piece from '../module/piece.js';
 import * as Pieces from '../module/pieces.js';
 import * as AbstractPieces from '../module/abstract-pieces.js';
 import * as Promotion from '../module/promotion.js';
@@ -127,6 +128,12 @@ export function getPiece(rank, file) {
     return Common.getPiece(this.state.pos, Loc.of(file, rank));
 }
 
+export function isClicked(rank, file) {
+    const select = this.select;
+    const loc = Loc.of(file, rank);
+    return select.click && loc === select.loc && loc in this.state.moves;
+}
+
 export function canBeOccupied(rank, file) {
     if(this.state.ended) return false;
 
@@ -170,7 +177,7 @@ export function isPromotionMove(from, to) {
 async function getPromoted(ids) {
     return new Promise(resolve => {
         for(const id of ids) Common.getElement(id).onclick = (ev) => {
-            resolve(Common.getPieceType(ev.target.id))
+            resolve(Common.getPieceType(ev.target.id));
         };
     });
 }

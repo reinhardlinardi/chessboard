@@ -37,6 +37,7 @@ const component = {
         labelOf: page.labelOf,
         isEmpty: page.isEmpty,
         getPiece: page.getPiece,
+        isClicked: page.isClicked,
         canBeOccupied: page.canBeOccupied,
 
         flipBoard: page.flipBoard,
