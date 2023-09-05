@@ -7,6 +7,7 @@ const component = {
         return {
             state: {},
             flip: false,
+            promote: false,
             select: {
                 click: false,
                 loc: 0,
@@ -41,6 +42,8 @@ const component = {
         flipBoard: page.flipBoard,
 
         getPromotedPieces: page.getPromotedPieces,
+        getPromotedIds: page.getPromotedIds,
+        isPromotionMove: page.isPromotionMove,
 
         isDefaultState: page.isDefaultState,
 

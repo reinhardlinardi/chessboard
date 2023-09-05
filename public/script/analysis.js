@@ -151,6 +151,30 @@ export function getPromotedPieces() {
     return this.state.move === White? whitePromoted : blackPromoted;
 }
 
+export function getPromotedIds() {
+    return this.getPromotedPieces().map(letter => `promoted-${letter}`);
+}
+
+export function isPromotionMove(from, to) {
+    const color = this.state.move;
+    
+    const pawn = Pieces.getBy(color, Type.TypePawn).letter;
+    const promoteRank = Promotion.promoteRank(color);
+
+    const piece = Common.getPiece(this.state.pos, from);
+    const rank = Loc.rank(to);
+    
+    return piece === pawn && rank === promoteRank;
+}
+
+async function getPromoted(ids) {
+    return new Promise(resolve => {
+        for(const id of ids) Common.getElement(id).onclick = (ev) => {
+            resolve(Common.getPieceType(ev.target.id))
+        };
+    });
+}
+
 
 /* State */
 export function isDefaultState() {
@@ -174,14 +198,27 @@ export function copyFEN(ev) {
 
 
 /* Move */
-export function move(from, to) {
-    console.log("move from", from, "to", to);
-    game.move(from, to);
+export async function move(from, to) {
+    if(this.isPromotionMove(from, to)) {
+        this.promote = true;
+        const ids = this.getPromotedIds();
+
+        const promoted = await getPromoted(ids);
+        this.promote = false;
+
+        console.log("move from", from, "to", to, "then promote to", promoted);
+        //game.move(from, to, promoted);
+    } else {
+        console.log("move from", from, "to", to);
+        //game.move(from, to);
+    }
 }
 
 
 /* Selection */
 export function onClick(ev) {
+    if(this.promote) return;
+
     const moves = this.state.moves;
     const current = this.select.loc;
 
@@ -198,11 +235,15 @@ export function onClick(ev) {
 }
 
 export function onDragStart(ev) {
+    if(this.promote) return;
+
     const src = Common.getLoc(ev.target.id);
     this.select = {click: false, loc: src};
 }
 
 export function onDrop(ev) {
+    if(this.promote) return;
+
     const src = this.select.loc;
     if(this.select.click || src === Loc.None) Face.disapprove();
     

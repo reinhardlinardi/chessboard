@@ -106,6 +106,8 @@
                   <div class="promoted-container">
                     <img class="piece"
                       :src="`svg/${promoted}.svg`"
+                      :id="`promoted-${promoted}`"
+                      :data-piece-type="`${promoted}`"
                     >
                   </div>
               </template>
