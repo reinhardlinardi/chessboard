@@ -3,6 +3,7 @@
 @use 'board';
 @use 'button';
 @use 'font';
+@use 'text';
 
 
 %adv-bar {
@@ -63,4 +64,30 @@
 .mark-on-dark {
     @extend %marker;
     color: board.$light;
+}
+
+.promotion-container {
+    @extend %subcontainer;
+    margin: 15px 0 0 0;
+    padding: 5px 8px 8px 8px;
+
+    background-color: #505050;
+    text-align: center;
+}
+
+.promoted-label {
+    @extend %label;
+    font-size: min(2.2vw, 2.2vh);
+    margin: 5px 0 8px 0;
+}
+
+.promoted-tray {
+    @extend %grid;
+    gap: 0 0;
+    grid-template-columns: repeat(4, min(6vw, 6vh));
+    grid-template-rows: min(5vw, 5vh);
+}
+
+.promoted-container {
+    @extend %perfect-center;
 }

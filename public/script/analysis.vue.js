@@ -40,6 +40,8 @@ const component = {
 
         flipBoard: page.flipBoard,
 
+        getPromotedPieces: page.getPromotedPieces,
+
         isDefaultState: page.isDefaultState,
 
         copyFEN: page.copyFEN,

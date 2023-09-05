@@ -4,6 +4,7 @@ import * as Type from '../module/piece-type.js';
 import * as Loc from '../module/location.js';
 import * as Pieces from '../module/pieces.js';
 import * as AbstractPieces from '../module/abstract-pieces.js';
+import * as Promotion from '../module/promotion.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
@@ -139,6 +140,15 @@ export function canBeOccupied(rank, file) {
 
 export function flipBoard() {
     this.flip = !this.flip;
+}
+
+
+/* Promotion */
+const whitePromoted = Promotion.getTypes().map(type => Pieces.getBy(White, type).letter);
+const blackPromoted = Promotion.getTypes().map(type => Pieces.getBy(Black, type).letter);
+
+export function getPromotedPieces() {
+    return this.state.move === White? whitePromoted : blackPromoted;
 }
 
 

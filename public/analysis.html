@@ -96,6 +96,25 @@
 
         </div>
 
+        <div class="right-container">
+
+          <div class="promotion-container">
+            <div class="promoted-label">Promote to</div>
+            
+            <div class="promoted-tray">
+              <template v-for="promoted in getPromotedPieces()">
+                  <div class="promoted-container">
+                    <img class="piece"
+                      :src="`svg/${promoted}.svg`"
+                    >
+                  </div>
+              </template>
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
 
     </div>
