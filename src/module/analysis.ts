@@ -4,21 +4,26 @@ import * as FEN from './fen.js';
 import * as StateID from './state-id.js';
 import * as Clock from './clock.js';
 import * as Attack from './attack.js';
-import * as GameMove from './move.js';
+import * as Move from './move.js';
 import * as Promotion from './promotion.js';
 import * as Result from './game-result.js';
 import * as Pieces from './pieces.js';
 import * as Castles from './castles.js';
 import * as EnPassant from './en-passant.js';
+import * as MoveType from './move-type.js';
 import { Size as size } from './size.js';
 import { nthRank } from './rank.js';
 import { Position, get, getByLoc } from './position.js';
 import { State as state, New as newState } from './state.js';
-import { TypePawn } from './piece-type.js';
+import { Type, TypeKing, TypePawn, TypeQueen } from './piece-type.js';
 import { getEnPassantPawns } from './position-util.js';
-import { Setup, State, Move, PieceCount, StateCount } from './game-data.js';
+import { Setup, State, GameMove, PieceCount, StateCount } from './game-data.js';
 import { Color, White, Black, opponentOf, getList as getColors } from './color.js';
 import * as Err from './analysis-error.js';
+
+
+type Location = Loc.Location;
+type MoveType = MoveType.Type;
 
 
 export class Game {
@@ -27,7 +32,7 @@ export class Game {
 
     private setup: Setup;
     private game: State[];
-    private moves: Move[];
+    private moves: GameMove[];
 
     constructor() {
         this.started = false;
@@ -47,17 +52,24 @@ export class Game {
         return {...this.game[0]};
     }
 
-    getCurrentStateData(): State | null {
-        if(this.game.length === 0) return null;
-        return {...this.currentStateData()};
-    }
-
     start() {
         if(!this.setupValid) throw Err.New(Err.InvalidOp, "invalid setup");
 
         this.game.push(this.stateDataOf(this.setup));
-        this.evalPosition();
+        this.evaluateLegalMoves(this.game.length-1);
         this.started = true;
+    }
+
+    move(from: Location, to: Location, promoted: Type = TypeQueen) {
+        if(!this.started) throw Err.New(Err.InvalidOp, "game not started");
+        
+        const idx = this.game.length-1;
+        const st = this.game[idx];
+
+        if(!this.isValidMove(from, to, st)) throw Err.New(Err.InvalidMove, "invalid move");
+        if(!this.isValidPromotedPiece(promoted)) throw Err.New(Err.InvalidPromotion, "invalid piece");
+
+        console.log(this.getMoveType(from, to, st));
     }
 
     resetSetup() {
@@ -83,7 +95,7 @@ export class Game {
         
         // Position:
         // 1. Count king for both sides, each side should have exactly 1 king
-        // 2. No pawn in 1st rank of both sides
+        // 2. No pawn allowed in 1st rank or promotion rank for both sides
         // 3. Validate check
         this.setupValidateKingCount(this.setup.pos);
         this.setupValidatePawnRank(this.setup.pos);
@@ -92,21 +104,61 @@ export class Game {
         this.setupValid = true;
     }
 
-    private currentStateData() {
-        return this.game[this.game.length-1];
+    private isValidMove(from: Location, to: Location, st: State): boolean {
+        const moves = st.moves;
+        return from in moves && moves[from].includes(to);
     }
 
-    private evalPosition() {
-        const current = this.currentStateData();
+    private isValidPromotedPiece(promoted: Type): boolean {
+        return Promotion.canPromoteTo(promoted);
+    }
+
+    private getMoveType(from: Location, to: Location, st: State): MoveType {
+        const piece = Pieces.get(getByLoc(st.pos, from));
+        const color = st.move;
         
-        // TODO: Implement
-        // 1. Check if player in check, then check if checkmated
-        // 2. Check draws: 3-fold repetition, 50-move rule, insufficient material
-        // 3. Generate legal moves, if 0 legal moves, then draw by stalemate
+        if(piece.type === TypeKing) {
+            const castle = Castles.getByColor(color);
+            for(const c of castle) {
+                const dest = c.king.from + c.king.squares * c.king.direction;
+                if(from === c.king.from && to === dest) return MoveType.Castle;
+            }
+        }
+        
+        if(piece.type === TypePawn) {
+            const promoteRank = Promotion.promoteRank(color);
+            if(Loc.rank(to) === promoteRank) return MoveType.Promotion;
+            if(to === st.enPassant) return MoveType.EnPassant;
+        }
+
+        return MoveType.Normal; 
+    }
+
+    private evaluateLegalMoves(idx: number) {
+        const st = this.game[idx];
+        
+
 
         // TODO: Change
-        current.ended = false;
-        current.moves = GameMove.getLegalMoves(current);
+        st.ended = false;
+        st.moves = Move.getLegalMoves(st);
+    }
+
+    // TODO: Implement
+    // 1. Check if player in check, then check if checkmated
+    // 2. Check draws: 3-fold repetition, 50-move rule, insufficient material
+    // 3. Generate legal moves, if 0 legal moves, then draw by stalemate
+
+    private getPieceCount(pos: Position): PieceCount {
+        let count: PieceCount = Pieces.getList().reduce((map, piece) => ({...map, [piece.letter]: 0}), {});
+
+        for(let rank = 1; rank <= size; rank++) {
+            for(let file = 1; file <= size; file++) {
+                const piece = get(pos, rank, file);
+                if(piece !== Piece.None) count[piece]++;
+            }
+        }
+        return count;
     }
 
     private validStateOf(s: state): state {
@@ -146,13 +198,13 @@ export class Game {
         const ended = false;
         const result = {score: 0, reason: 0};
         
-        const pieces = this.setupPieceCount(s.pos);
+        const pieces = this.getPieceCount(s.pos);
         const repeat: StateCount = {[s.id]: 1};
         
         return {...s, ended: ended, result: result, pieces: pieces, repeat: repeat, moves: {}};
     }
 
-    private isValidEnPassantTarget(target: Loc.Location, player: Color, pos: Position): boolean {
+    private isValidEnPassantTarget(target: Location, player: Color, pos: Position): boolean {
         const file = Loc.file(target);
 
         const opponentFromLoc = EnPassant.opponentPawnFromLoc(file, player);
@@ -166,18 +218,6 @@ export class Game {
             if(pawns[color].length === 0) return false;
         }
         return true;
-    }
-
-    private setupPieceCount(pos: Position): PieceCount {
-        let count: PieceCount = Pieces.getList().reduce((map, piece) => ({...map, [piece.letter]: 0}), {});
-
-        for(let rank = 1; rank <= size; rank++) {
-            for(let file = 1; file <= size; file++) {
-                const piece = get(pos, rank, file);
-                if(piece !== Piece.None) count[piece]++;
-            }
-        }
-        return count;
     }
 
     private setupValidateKingCount(pos: Position) {

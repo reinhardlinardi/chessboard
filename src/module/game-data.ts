@@ -1,7 +1,7 @@
 import { State as state } from "./state.js";
 import { Result } from "./game-result.js";
 import { Location } from './location.js';
-import { Moves as GameMove } from "./move.js";
+import { Moves } from "./move.js";
 
 
 export type PieceCount = {[piece: string]: number};
@@ -18,10 +18,10 @@ export interface State extends Setup {
     result: Result,
     pieces: PieceCount,
     repeat: StateCount,
-    moves: GameMove,
+    moves: Moves,
 };
 
-export interface Move {
+export interface GameMove {
     from: Location,
     to: Location,
     pgn: string,

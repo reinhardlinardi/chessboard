@@ -164,8 +164,9 @@ export function copyFEN(ev) {
 
 
 /* Move */
-export function move(src, dest) {
-    console.log("move from", src, "to", dest);
+export function move(from, to) {
+    console.log("move from", from, "to", to);
+    game.move(from, to);
 }
 
 
