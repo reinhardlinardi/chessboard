@@ -2,7 +2,6 @@ import * as Piece from './piece.js';
 import * as Loc from './location.js';
 import * as FEN from './fen.js';
 import * as StateID from './state-id.js';
-import * as Clock from './clock.js';
 import * as Attack from './attack.js';
 import * as Promotion from './promotion.js';
 import * as Castle from './castle.js';
@@ -10,6 +9,7 @@ import * as Result from './game-result.js';
 import * as Pieces from './pieces.js';
 import * as Castles from './castles.js';
 import * as EnPassant from './en-passant.js';
+import { FullmoveStart, MaxHalfmove } from './clock.js';
 import { Size as size } from './size.js';
 import { nthRank } from './rank.js';
 import { Moves, getLegalMoves } from './move.js';
@@ -70,7 +70,7 @@ export class Game {
         const current = this.getCurrentStateData();
         const color = current.move;
 
-        // if(!this.isValidMove(from, to, current.moves)) throw Err.New(Err.InvalidMove, "invalid move");
+        //if(!this.isValidMove(from, to, current.moves)) throw Err.New(Err.InvalidMove, "invalid move");
         
         // const next = {...current};
 
@@ -114,7 +114,7 @@ export class Game {
 
         // Clock: Max halfmove should not be exceeded
         const clock = this.setup.clock;
-        if(clock.halfmove > Clock.MaxHalfmove) throw Err.New(Err.SetupHalfmove, "invalid halfmove");
+        if(clock.halfmove > MaxHalfmove) throw Err.New(Err.SetupHalfmove, "invalid halfmove");
         
         // Position:
         // 1. Count king for both sides, each side should have exactly 1 king
@@ -197,8 +197,8 @@ export class Game {
 
     private validStateOf(s: state): state {
         let v = {...s};
-        
-        if(v.clock.fullmove === 0) v.clock.fullmove = Clock.FullmoveStart;
+
+        v.clock.fullmove = Math.max(v.clock.fullmove, FullmoveStart);
         if(!isValidEnPassantTarget(v.enPassant, v.move, v.pos)) v.enPassant = Loc.None;
 
         for(const type in v.castle) {
