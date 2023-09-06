@@ -2,7 +2,6 @@ import * as Common from './common.js';
 import * as FEN from '../module/fen.js';
 import * as Type from '../module/piece-type.js';
 import * as Loc from '../module/location.js';
-import * as Piece from '../module/piece.js';
 import * as Pieces from '../module/pieces.js';
 import * as AbstractPieces from '../module/abstract-pieces.js';
 import * as Promotion from '../module/promotion.js';
@@ -131,6 +130,7 @@ export function getPiece(rank, file) {
 export function isClicked(rank, file) {
     const select = this.select;
     const loc = Loc.of(file, rank);
+
     return select.click && loc === select.loc && loc in this.state.moves;
 }
 
@@ -232,10 +232,14 @@ export function onClick(ev) {
     const loc = Common.getLoc(ev.target.id);
     const reset = {click: false, loc: Loc.None};
     
-    if(current === Loc.None) this.select = {click: true, loc: loc};
-    else if(current === loc || !(current in moves)) this.select = reset;
-    else if(!moves[current].includes(loc)) this.select.loc = loc;
-    else {
+    if(!this.select.click) {
+        if(loc in moves) this.select = {click: true, loc: loc};
+        return;
+    }
+
+    if(current === loc) this.select = reset;
+    else if(loc in moves) this.select.loc = loc;
+    else if(moves[current].includes(loc)) {
         this.select = reset;
         this.move(current, loc);
     }
@@ -245,14 +249,14 @@ export function onDragStart(ev) {
     if(this.promote) return;
 
     const src = Common.getLoc(ev.target.id);
-    this.select = {click: false, loc: src};
+    if(!this.select.click) this.select = {click: false, loc: src};
 }
 
 export function onDrop(ev) {
-    if(this.promote) return;
-
+    if(this.promote || this.select.click) return;
+    
     const src = this.select.loc;
-    if(this.select.click || src === Loc.None) Face.disapprove();
+    if(src === Loc.None) Face.disapprove();
     
     const moves = this.state.moves;
     const loc =  Common.getLoc(ev.target.id);
