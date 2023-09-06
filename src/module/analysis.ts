@@ -6,24 +6,25 @@ import * as Clock from './clock.js';
 import * as Attack from './attack.js';
 import * as Move from './move.js';
 import * as Promotion from './promotion.js';
+import * as Castle from './castle.js';
 import * as Result from './game-result.js';
 import * as Pieces from './pieces.js';
 import * as Castles from './castles.js';
 import * as EnPassant from './en-passant.js';
-import * as MoveType from './move-type.js';
 import { Size as size } from './size.js';
 import { nthRank } from './rank.js';
-import { Position, get, getByLoc } from './position.js';
-import { State as state, New as newState } from './state.js';
-import { Type, TypeKing, TypePawn, TypeQueen } from './piece-type.js';
 import { getEnPassantPawns } from './position-util.js';
+import { Position, get, getByLoc, setByLoc } from './position.js';
+import { State as state, New as newState } from './state.js';
+import { Type, TypeKing, TypePawn, TypeQueen, TypeRook } from './piece-type.js';
 import { Setup, State, GameMove, PieceCount, StateCount } from './game-data.js';
 import { Color, White, Black, opponentOf, getList as getColors } from './color.js';
 import * as Err from './analysis-error.js';
 
 
+
 type Location = Loc.Location;
-type MoveType = MoveType.Type;
+type Moves = Move.Moves;
 
 
 export class Game {
@@ -47,9 +48,12 @@ export class Game {
         return {...this.setup};
     }
 
-    getInitialStateData(): State | null {
-        if(this.game.length === 0) return null;
+    getInitialStateData(): State {
         return {...this.game[0]};
+    }
+
+    getCurrentStateData(): State {
+        return {...this.game[this.game.length-1]}; 
     }
 
     start() {
@@ -62,14 +66,22 @@ export class Game {
 
     move(from: Location, to: Location, promoted: Type = TypeQueen) {
         if(!this.started) throw Err.New(Err.InvalidOp, "game not started");
+        if(!Promotion.canPromoteTo(promoted)) throw Err.New(Err.InvalidPromotion, "invalid piece");
+
+        const current = this.getCurrentStateData();
+        if(!this.isValidMove(from, to, current.moves)) throw Err.New(Err.InvalidMove, "invalid move");
         
-        const idx = this.game.length-1;
-        const st = this.game[idx];
+        const next = {...current};
+        const pos = next.pos;
+        const color = next.move;
 
-        if(!this.isValidMove(from, to, st)) throw Err.New(Err.InvalidMove, "invalid move");
-        if(!this.isValidPromotedPiece(promoted)) throw Err.New(Err.InvalidPromotion, "invalid piece");
+        // this.movePiece(from, to, pos);
+        // if(this.isPromotion(pos, from, to, color)) this.promotePiece(to, promoted, pos, color);
 
-        console.log(this.getMoveType(from, to, st));
+        // this.updateCastleRights(pos, next.castle);
+
+        // next.move = opponentOf(next.move);
+        // this.game.push(next);
     }
 
     resetSetup() {
@@ -104,40 +116,45 @@ export class Game {
         this.setupValid = true;
     }
 
-    private isValidMove(from: Location, to: Location, st: State): boolean {
-        const moves = st.moves;
+    private isValidMove(from: Location, to: Location, moves: Moves): boolean {
         return from in moves && moves[from].includes(to);
     }
 
-    private isValidPromotedPiece(promoted: Type): boolean {
-        return Promotion.canPromoteTo(promoted);
-    }
+    // private isPromotion(pos: Position, from: Location, to: Location, color: Color) {
+    //     const piece = Pieces.get(getByLoc(pos, from));
+    //     const rank = Loc.rank(to);
+    //     const promoteRank = Promotion.promoteRank(color);
 
-    private getMoveType(from: Location, to: Location, st: State): MoveType {
-        const piece = Pieces.get(getByLoc(st.pos, from));
-        const color = st.move;
-        
-        if(piece.type === TypeKing) {
-            const castle = Castles.getByColor(color);
-            for(const c of castle) {
-                const dest = c.king.from + c.king.squares * c.king.direction;
-                if(from === c.king.from && to === dest) return MoveType.Castle;
-            }
-        }
-        
-        if(piece.type === TypePawn) {
-            const promoteRank = Promotion.promoteRank(color);
-            if(Loc.rank(to) === promoteRank) return MoveType.Promotion;
-            if(to === st.enPassant) return MoveType.EnPassant;
-        }
+    //     return piece.type === TypePawn && rank === promoteRank;
+    // }
 
-        return MoveType.Normal; 
-    }
+    // private movePiece(from: Location, to: Location, pos: Position) {
+    //     setByLoc(Piece.None, pos, from);
+    //     setByLoc(getByLoc(pos, from), pos, to);
+    // }
+
+    // private promotePiece(loc: Location, promoted: Type, pos: Position, color: Color) {
+    //     const piece = Pieces.getBy(color, promoted).letter;
+    //     setByLoc(piece, pos, loc);
+    // }
+    
+    // private updateCastleRights(pos: Position, rights: Castle.Rights) {
+    //     for(const type in rights) {
+    //         const canCastle = this.castleAllowed(type, rights, pos);
+    //         if(!canCastle) rights[type] = false;
+    //     }
+    // }
+
+    // private getEnPassantTarget(pos: Position, color: Color, enPassant: Location): Location {
+    //     if(enPassant !== Loc.None) return Loc.None;
+
+
+    // }
+
+    
 
     private evaluateLegalMoves(idx: number) {
         const st = this.game[idx];
-        
-
 
         // TODO: Change
         st.ended = false;
@@ -161,30 +178,44 @@ export class Game {
         return count;
     }
 
+    private castleAllowed(type: string, rights: Castle.Rights, pos: Position): boolean {
+        if(!rights[type]) return false;
+
+        const c = Castles.get(type);
+        const kingMoved = getByLoc(pos, c.king.from) !== c.king.piece;
+        const rookMoved = getByLoc(pos, c.rook.from) !== c.rook.piece;
+
+        return !kingMoved && !rookMoved;
+    }
+
+    private isValidEnPassantTarget(target: Location, player: Color, pos: Position): boolean {
+        if(target === Loc.None) return false;
+
+        const file = Loc.file(target);
+        const opponentFromLoc = EnPassant.opponentPawnFromLoc(file, player);
+
+        if(getByLoc(pos, opponentFromLoc) !== Piece.None) return false;
+        if(getByLoc(pos, target) !== Piece.None) return false;
+
+        const colors = getColors();
+        const pawns = getEnPassantPawns(file, pos, player);
+
+        for(const color of colors) {
+            if(pawns[color].length === 0) return false;
+        }
+        return true;
+    }
+
     private validStateOf(s: state): state {
-        let st = {...s};
+        let v = {...s};
+        
+        if(v.clock.fullmove === 0) v.clock.fullmove = Clock.FullmoveStart;
+        if(!this.isValidEnPassantTarget(v.enPassant, v.move, v.pos)) v.enPassant = Loc.None;
 
-        let clock = st.clock;
-        if(clock.fullmove === 0) clock.fullmove = Clock.FullmoveStart;
-
-        let rights = st.castle;
-        for(const type in rights) {
-            if(!rights[type]) continue;
-
-            const c = Castles.get(type);
-            const kingMoved = getByLoc(st.pos, c.king.from) !== c.king.piece;
-            const rookMoved = getByLoc(st.pos, c.rook.from) !== c.rook.piece;
-
-            if(kingMoved || rookMoved) rights[type] = false;
+        for(const type in v.castle) {
+            if(!this.castleAllowed(type, v.castle, v.pos)) v.castle[type] = false;
         }
-
-        const none = Loc.None;
-        if(st.enPassant !== none) {
-            const valid = this.isValidEnPassantTarget(st.enPassant, st.move, st.pos);
-            if(!valid) st.enPassant = none;
-        }
-
-        return st;
+        return v;
     }
 
     private setupDataOf(s: state): Setup {
@@ -202,22 +233,6 @@ export class Game {
         const repeat: StateCount = {[s.id]: 1};
         
         return {...s, ended: ended, result: result, pieces: pieces, repeat: repeat, moves: {}};
-    }
-
-    private isValidEnPassantTarget(target: Location, player: Color, pos: Position): boolean {
-        const file = Loc.file(target);
-
-        const opponentFromLoc = EnPassant.opponentPawnFromLoc(file, player);
-        if(getByLoc(pos, opponentFromLoc) !== Piece.None) return false;
-        if(getByLoc(pos, target) !== Piece.None) return false;
-
-        const colors = getColors();
-        const pawns = getEnPassantPawns(file, pos, player);
-
-        for(const color of colors) {
-            if(pawns[color].length === 0) return false;
-        }
-        return true;
     }
 
     private setupValidateKingCount(pos: Position) {
