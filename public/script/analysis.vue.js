@@ -44,7 +44,6 @@ const component = {
 
         getPromotedPieces: page.getPromotedPieces,
         getPromotedIds: page.getPromotedIds,
-        isPromotionMove: page.isPromotionMove,
 
         isDefaultState: page.isDefaultState,
 

@@ -3,7 +3,7 @@
 import * as p from './piece-type.js';
 import * as Pieces from './pieces.js';
 import * as AbstractPieces from './abstract-pieces.js';
-import { PieceCount } from './game-data.js';
+import { PieceCount } from './position-util.js';
 import { Color, White, Black, getList as getColors } from './color.js';
 
 

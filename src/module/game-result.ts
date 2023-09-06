@@ -19,6 +19,7 @@ export const FiftyMove: Reason = 50;
 
 
 export interface Result {
+    ended: boolean,
     score: Score,
     reason: Reason,
 }

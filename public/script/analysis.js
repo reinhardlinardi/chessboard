@@ -5,6 +5,7 @@ import * as Loc from '../module/location.js';
 import * as Pieces from '../module/pieces.js';
 import * as AbstractPieces from '../module/abstract-pieces.js';
 import * as Promotion from '../module/promotion.js';
+import { isPromotion } from '../module/game-util.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
@@ -135,7 +136,8 @@ export function isClicked(rank, file) {
 }
 
 export function canBeOccupied(rank, file) {
-    if(this.state.ended) return false;
+    const result = this.state.result;
+    if(result.ended) return false;
 
     const moves = this.state.moves;
     const src = this.select.loc;
@@ -160,18 +162,6 @@ export function getPromotedPieces() {
 
 export function getPromotedIds() {
     return this.getPromotedPieces().map(letter => `promoted-${letter}`);
-}
-
-export function isPromotionMove(from, to) {
-    const color = this.state.move;
-    
-    const pawn = Pieces.getBy(color, Type.TypePawn).letter;
-    const promoteRank = Promotion.promoteRank(color);
-
-    const piece = Common.getPiece(this.state.pos, from);
-    const rank = Loc.rank(to);
-    
-    return piece === pawn && rank === promoteRank;
 }
 
 async function getPromoted(ids) {
@@ -206,19 +196,22 @@ export function copyFEN(ev) {
 
 /* Move */
 export async function move(from, to) {
-    if(this.isPromotionMove(from, to)) {
+    const pos = this.state.pos;
+    const color = this.state.move;
+    const promotion = isPromotion(pos, color, from, to);
+
+    if(!promotion) game.move(from, to);
+    else {
         this.promote = true;
         const ids = this.getPromotedIds();
-
         const promoted = await getPromoted(ids);
         this.promote = false;
-
-        console.log("move from", from, "to", to, "then promote to", promoted);
-        //game.move(from, to, promoted);
-    } else {
-        console.log("move from", from, "to", to);
-        //game.move(from, to);
+        
+        game.move(from, to, promoted);
     }
+
+    this.state = game.getCurrentStateData();
+    console.log(this.state.fen, JSON.stringify(this.state.pieces));
 }
 
 
@@ -297,6 +290,7 @@ export function created() {
     this.select.loc = Loc.None;
 
     if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);
+    console.log(this.state.fen, JSON.stringify(this.state.pieces));
 }
 
 function importGameState(format) {

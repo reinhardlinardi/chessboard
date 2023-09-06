@@ -2,9 +2,9 @@ import { State as state } from "./state.js";
 import { Result } from "./game-result.js";
 import { Location } from './location.js';
 import { Moves } from "./move.js";
+import { PieceCount } from "./position-util.js";
 
 
-export type PieceCount = {[piece: string]: number};
 export type StateCount = {[id: string]: number};
 
 
@@ -14,7 +14,6 @@ export interface Setup extends state {
 };
 
 export interface State extends Setup {
-    ended: boolean,
     result: Result,
     pieces: PieceCount,
     repeat: StateCount,

@@ -1,6 +1,7 @@
 import * as Castle from './castle.js';
 import { Color } from './color.js';
 import { Filter, filter } from './filter.js';
+import { Location } from './location.js';
 
 
 const K = Castle.WhiteShort;
@@ -35,7 +36,15 @@ export function byColor(color: Color): Filter<Castle.Castle> {
     return castle => castle.color === color;
 }
 
+export function byKingLoc(loc: Location): Filter<Castle.Castle> {
+    return c => c.king.from + c.king.squares * c.king.direction === loc;
+}
+
 
 export function getByColor(color: Color): Castle.Castle[] {
     return filter(getList(), byColor(color));
+}
+
+export function getByKingLoc(loc: Location): Castle.Castle {
+    return filter(getList(), byKingLoc(loc))[0];
 }
