@@ -4,7 +4,6 @@ import * as FEN from './fen.js';
 import * as StateID from './state-id.js';
 import * as Clock from './clock.js';
 import * as Attack from './attack.js';
-import * as Move from './move.js';
 import * as Promotion from './promotion.js';
 import * as Castle from './castle.js';
 import * as Result from './game-result.js';
@@ -13,18 +12,18 @@ import * as Castles from './castles.js';
 import * as EnPassant from './en-passant.js';
 import { Size as size } from './size.js';
 import { nthRank } from './rank.js';
-import { getEnPassantPawns } from './position-util.js';
-import { Position, get, getByLoc, setByLoc } from './position.js';
+import { Moves, getLegalMoves } from './move.js';
 import { State as state, New as newState } from './state.js';
+import { Position, get, getByLoc, setByLoc } from './position.js';
 import { Type, TypeKing, TypePawn, TypeQueen, TypeRook } from './piece-type.js';
-import { Setup, State, GameMove, PieceCount, StateCount } from './game-data.js';
+import { Setup, State, Move, PieceCount, StateCount } from './game-data.js';
 import { Color, White, Black, opponentOf, getList as getColors } from './color.js';
+import { isCastleAllowed, isValidEnPassantTarget } from './game-util.js';
 import * as Err from './analysis-error.js';
 
 
 
 type Location = Loc.Location;
-type Moves = Move.Moves;
 
 
 export class Game {
@@ -33,7 +32,7 @@ export class Game {
 
     private setup: Setup;
     private game: State[];
-    private moves: GameMove[];
+    private moves: Move[];
 
     constructor() {
         this.started = false;
@@ -69,18 +68,30 @@ export class Game {
         if(!Promotion.canPromoteTo(promoted)) throw Err.New(Err.InvalidPromotion, "invalid piece");
 
         const current = this.getCurrentStateData();
-        if(!this.isValidMove(from, to, current.moves)) throw Err.New(Err.InvalidMove, "invalid move");
+        const color = current.move;
+
+        // if(!this.isValidMove(from, to, current.moves)) throw Err.New(Err.InvalidMove, "invalid move");
         
-        const next = {...current};
-        const pos = next.pos;
-        const color = next.move;
+        // const next = {...current};
+
+        // if(color === Black) next.clock.fullmove++;
+
+        // const pos = next.pos;
+
+        
 
         // this.movePiece(from, to, pos);
         // if(this.isPromotion(pos, from, to, color)) this.promotePiece(to, promoted, pos, color);
 
         // this.updateCastleRights(pos, next.castle);
+        // // update halfmove
+        // // update fullmove
+        
 
-        // next.move = opponentOf(next.move);
+        // const opponent = opponentOf(color);
+        // next.move = opponent;
+        // next.enPassant = this.getEnPassantTarget(pos, color, current.enPassant);
+
         // this.game.push(next);
     }
 
@@ -116,9 +127,9 @@ export class Game {
         this.setupValid = true;
     }
 
-    private isValidMove(from: Location, to: Location, moves: Moves): boolean {
-        return from in moves && moves[from].includes(to);
-    }
+    // private isValidMove(from: Location, to: Location, moves: Moves): boolean {
+    //     return from in moves && moves[from].includes(to);
+    // }
 
     // private isPromotion(pos: Position, from: Location, to: Location, color: Color) {
     //     const piece = Pieces.get(getByLoc(pos, from));
@@ -146,9 +157,15 @@ export class Game {
     // }
 
     // private getEnPassantTarget(pos: Position, color: Color, enPassant: Location): Location {
-    //     if(enPassant !== Loc.None) return Loc.None;
+    //     if(enPassant === Loc.None) {
+    //         const rank = EnPassant.targetRank(color);
+    //         for(let file = 1; file <= size; file++) {
+    //             const target = Loc.of(file, rank);
+    //             if(this.isValidEnPassantTarget(target, color, pos)) return target;
+    //         }
+    //     }
 
-
+    //     return Loc.None;
     // }
 
     
@@ -158,7 +175,7 @@ export class Game {
 
         // TODO: Change
         st.ended = false;
-        st.moves = Move.getLegalMoves(st);
+        st.moves = getLegalMoves(st);
     }
 
     // TODO: Implement
@@ -178,42 +195,14 @@ export class Game {
         return count;
     }
 
-    private castleAllowed(type: string, rights: Castle.Rights, pos: Position): boolean {
-        if(!rights[type]) return false;
-
-        const c = Castles.get(type);
-        const kingMoved = getByLoc(pos, c.king.from) !== c.king.piece;
-        const rookMoved = getByLoc(pos, c.rook.from) !== c.rook.piece;
-
-        return !kingMoved && !rookMoved;
-    }
-
-    private isValidEnPassantTarget(target: Location, player: Color, pos: Position): boolean {
-        if(target === Loc.None) return false;
-
-        const file = Loc.file(target);
-        const opponentFromLoc = EnPassant.opponentPawnFromLoc(file, player);
-
-        if(getByLoc(pos, opponentFromLoc) !== Piece.None) return false;
-        if(getByLoc(pos, target) !== Piece.None) return false;
-
-        const colors = getColors();
-        const pawns = getEnPassantPawns(file, pos, player);
-
-        for(const color of colors) {
-            if(pawns[color].length === 0) return false;
-        }
-        return true;
-    }
-
     private validStateOf(s: state): state {
         let v = {...s};
         
         if(v.clock.fullmove === 0) v.clock.fullmove = Clock.FullmoveStart;
-        if(!this.isValidEnPassantTarget(v.enPassant, v.move, v.pos)) v.enPassant = Loc.None;
+        if(!isValidEnPassantTarget(v.enPassant, v.move, v.pos)) v.enPassant = Loc.None;
 
         for(const type in v.castle) {
-            if(!this.castleAllowed(type, v.castle, v.pos)) v.castle[type] = false;
+            if(!isCastleAllowed(type, v.castle, v.pos)) v.castle[type] = false;
         }
         return v;
     }

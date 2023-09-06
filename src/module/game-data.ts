@@ -21,7 +21,7 @@ export interface State extends Setup {
     moves: Moves,
 };
 
-export interface GameMove {
+export interface Move {
     from: Location,
     to: Location,
     pgn: string,
