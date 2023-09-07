@@ -211,7 +211,7 @@ export async function move(from, to) {
     }
 
     this.state = game.getCurrentStateData();
-    console.log(this.state.fen, JSON.stringify(this.state.pieces));
+    console.log(this.state.fen);
 }
 
 
@@ -290,7 +290,9 @@ export function created() {
     this.select.loc = Loc.None;
 
     if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);
-    console.log(this.state.fen, JSON.stringify(this.state.pieces));
+    else Common.setQuery(paramFEN, this.state.fen);
+
+    console.log(this.state.fen);
 }
 
 function importGameState(format) {
