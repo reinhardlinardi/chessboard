@@ -226,7 +226,7 @@ export async function movePiece(from, to) {
     this.move = game.getLastMove();
     
     console.log(this.state.fen);
-    if(this.state.result.ended) console.log(this.state.result);
+    if(this.state.result.ended) console.log(JSON.stringify(this.state.result));
 }
 
 
