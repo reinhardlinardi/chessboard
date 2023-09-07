@@ -93,7 +93,7 @@ export class Game {
         next.enPassant = game.getEnPassantTargetFor(next.pos, opponent, from, to);
 
         for(const type in next.castle) {
-            const allowed = game.isCastleAllowed(type, next.castle, pos);
+            const allowed = game.isCastleAllowed(type, next.castle, next.pos);
             if(next.castle[type] && !allowed) next.castle[type] = false;
         }
 
