@@ -49,7 +49,7 @@ export function isEnPassantMove(pos: Position, from: Location, to: Location, pla
     if(!isPawnMove(pos, from)) return false;
     if(to !== enPassant) return false;
 
-    const file = Loc.file(from);
+    const file = Loc.file(to);
     const pawnLoc = EnPassant.playerPawnsLoc(file, player);
 
     for(const loc of pawnLoc) {
