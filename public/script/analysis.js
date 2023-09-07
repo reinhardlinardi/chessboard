@@ -179,7 +179,8 @@ export function getPromotedIds() {
 async function getPromoted(ids) {
     return new Promise(resolve => {
         for(const id of ids) Common.getElement(id).onclick = (ev) => {
-            resolve(Common.getPieceType(ev.target.id));
+            const piece = Common.getPieceType(ev.target.id);
+            resolve(Pieces.get(piece).type);
         };
     });
 }
@@ -215,10 +216,11 @@ export async function movePiece(from, to) {
     if(!promotion) game.move(from, to);
     else {
         this.promote = true;
+        
         const ids = this.getPromotedIds();
         const promoted = await getPromoted(ids);
-        this.promote = false;
         
+        this.promote = false;
         game.move(from, to, promoted);
     }
 
