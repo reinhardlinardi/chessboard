@@ -90,7 +90,7 @@ export class Game {
         next.clock.fullmove += player === Black? 1 : 0;
 
         next.pos = this.movePiece(pos, player, from, to, current.enPassant, promoted);
-        next.enPassant = game.getEnPassantTargetFor(next.pos, opponent, from, to);
+        next.enPassant = game.getEnPassantTargetFor(opponent, next.pos, from, to);
 
         for(const type in next.castle) {
             const allowed = game.isCastleAllowed(type, next.castle, next.pos);

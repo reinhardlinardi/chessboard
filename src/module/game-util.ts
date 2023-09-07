@@ -93,7 +93,7 @@ export function isValidEnPassantTarget(target: Location, player: Color, pos: Pos
     return true;
 }
 
-export function getEnPassantTargetFor(pos: Position, color: Color, from: Location, to: Location): Location {
+export function getEnPassantTargetFor(color: Color, pos: Position, from: Location, to: Location): Location {
     if(!isPawnMove(pos, to)) return Loc.None;
 
     const fromRank = EnPassant.fromRank(color);
