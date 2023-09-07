@@ -311,6 +311,7 @@ export function created() {
     else Common.setQuery(paramFEN, this.state.fen);
 
     console.log(this.state.fen);
+    if(this.state.result.ended) console.log(JSON.stringify(this.state.result));
 }
 
 function importGameState(format) {
