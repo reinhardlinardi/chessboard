@@ -48,6 +48,13 @@ export function getLegalMoves(s: State): Moves {
     return moves;
 }
 
+export function hasLegalMoves(moves: Moves): boolean {
+    for(const loc in moves) {
+        if(moves[loc].length !== 0) return true;
+    }
+    return false;
+}
+
 
 function generateMoves(s: State): Moves {
     const ordinary = generatePieceMoves(s.pos, s.move);

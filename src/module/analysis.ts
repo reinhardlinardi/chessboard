@@ -4,23 +4,21 @@ import * as FEN from './fen.js';
 import * as StateID from './state-id.js';
 import * as Attack from './attack.js';
 import * as Promotion from './promotion.js';
-import * as Result from './game-result.js';
+import { Result }  from './game-result.js';
 import * as Pieces from './pieces.js';
 import * as Castles from './castles.js';
-import * as EnPassant from './en-passant.js';
 import * as game from './game-util.js';
 import { Size as size } from './size.js';
 import { nthRank } from './rank.js';
 import { getEnPassantPawns, getPieceCount } from './position-util.js';
-import { Moves, getLegalMoves } from './move.js';
+import { Moves, getLegalMoves, hasLegalMoves } from './move.js';
 import { State as state, New as newState } from './state.js';
 import { HalfmoveStart, FullmoveStart, MaxHalfmove } from './clock.js';
 import { Position, get, getByLoc, setByLoc, copy } from './position.js';
-import { Type, TypeKing, TypePawn, TypeQueen, TypeRook } from './piece-type.js';
+import { Type, TypeKing, TypePawn, TypeQueen } from './piece-type.js';
 import { Setup, State, Move, StateCount } from './game-data.js';
 import { Color, White, Black, opponentOf, getList as getColors } from './color.js';
 import * as Err from './analysis-error.js';
-
 
 
 type Location = Loc.Location;
@@ -55,10 +53,16 @@ export class Game {
         return {...this.game[this.game.length-1]}; 
     }
 
+    getLastMove(): Move {
+        return {...this.moves[this.moves.length-1]};
+    }
+
     start() {
         if(!this.setupValid) throw Err.New(Err.InvalidOp, "invalid setup");
+        if(this.started) throw Err.New(Err.InvalidOp, "game has started");
 
-        this.game.push(this.stateDataOf(this.setup));
+        const initial = this.stateDataOf(this.setup);
+        this.game.push(initial);
         this.started = true;
     }
 
@@ -99,9 +103,11 @@ export class Game {
         next.pieces = getPieceCount(next.pos);
         next.moves = getLegalMoves(next);
 
-        //next.result = this.getResult(next);
-        
+        next.result = this.getResult(next.pos, next.move, next.moves);
         this.game.push(next);
+
+        // TODO: Add PGN
+        this.moves.push({from: from, to: to, pgn: ""});
     }
 
     resetSetup() {
@@ -166,16 +172,18 @@ export class Game {
         return updated;
     }
 
-    // private getResult(pos: Position, color: Color, moves: Moves): Result {
-    //     const attacks = Attack.attacksOn(color, pos);
-    //     const inCheck = Attack.isKingAttacked(color, pos, attacks);
+    private getResult(pos: Position, color: Color, moves: Moves): Result {
+        // const attacks = Attack.attacksOn(color, pos);
+        // const inCheck = Attack.isKingAttacked(color, pos, attacks);
+        // const hasMoves = hasLegalMoves(moves);   
         
-        
-    //     // TODO: Implement get result
-    //     // 1. Check if player in check, if no legal moves checkmated
-    //     // 2. Check draws: 3-fold repetition, 50-move rule, insufficient material
-    //     // 3. If no legal moves, then draw by stalemate
-    // }
+        // TODO: Implement get result
+        // 1. Check if player in check, if no legal moves checkmated
+        // 2. Check draws: 3-fold repetition, 50-move rule, insufficient material
+        // 3. If no legal moves, then draw by stalemate
+
+        return {ended: false, score: 0, reason: 0};
+    }
 
     private copyStateData(src: State): State {
         const copy = {...src};
@@ -192,13 +200,19 @@ export class Game {
 
     private validStateOf(s: state): state {
         let v = {...s};
-        v.clock.fullmove = Math.max(v.clock.fullmove, FullmoveStart);
+
+        // Overwrite :
+        // 1. Fullmove clock if value = 0
+        if(v.clock.fullmove === 0) v.clock.fullmove = FullmoveStart;
+
+        // 2. Invalid en passant target
+        const isValidEnPassant = game.isValidEnPassantTarget(v.enPassant, v.move, v.pos);
+        if(!isValidEnPassant) v.enPassant = Loc.None;
         
-        if(!game.isValidEnPassantTarget(v.enPassant, v.move, v.pos)) {
-            v.enPassant = Loc.None;
-        }
+        // 3. Invalid castle rights
         for(const type in v.castle) {
-            if(!game.isCastleAllowed(type, v.castle, v.pos)) v.castle[type] = false;
+            const castleAllowed = game.isCastleAllowed(type, v.castle, v.pos);
+            if(!castleAllowed) v.castle[type] = false;
         }
 
         return v;
@@ -212,11 +226,11 @@ export class Game {
     }
 
     private stateDataOf(s: Setup): State {
-        const result = {ended: false, score: 0, reason: 0};
-        
         const pieces = getPieceCount(s.pos);
         const repeat: StateCount = {[s.id]: 1};
         const moves = getLegalMoves(s);
+
+        const result = this.getResult(s.pos, s.move, moves);
         
         return {...s, result: result, pieces: pieces, repeat: repeat, moves: moves};
     }
