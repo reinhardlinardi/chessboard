@@ -1,30 +1,26 @@
-import { Color, White } from "./color.js";
-
-
-export type Score = number;
-export type Reason = number;
-
-
-export const WhiteWin: Score =  1;
-export const Draw: Score = 0;
-export const BlackWin: Score = -1;
-
-
-export const WhiteCheckmate: Reason = 1;
-export const BlackCheckmate: Reason = -1;
-export const Insufficient: Reason = -2;
-export const Stalemate: Reason = 2;
-export const Repetition: Reason = 3;
-export const FiftyMove: Reason = 50;
+import * as Score from './game-score.js';
+import * as Conclusion from './game-conclusion.js';
+import { Color, White } from './color.js';
 
 
 export interface Result {
     ended: boolean,
-    score: Score,
-    reason: Reason,
+    score: Score.Score,
+    conclusion: Conclusion.Conclusion,
 }
 
 
-export function getScore(player: Color, win: boolean): Score {
-    return (player === White? WhiteWin : BlackWin) * (win? 1 : -1);
+export function playInProgress(): Result {
+    return {ended: false, score: Score.None, conclusion: Conclusion.None};
+}
+
+export function checkmated(player: Color) {
+    const score = Score.get(player, false);
+    const conclusion = player === White? Conclusion.BlackCheckmate : Conclusion.WhiteCheckmate;
+
+    return {ended: true, score: score, conclusion: conclusion};
+}
+
+export function draw(conclusion: Conclusion.Conclusion) {
+    return {ended: true, score: Score.Draw, conclusion: conclusion};
 }

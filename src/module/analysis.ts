@@ -4,13 +4,16 @@ import * as FEN from './fen.js';
 import * as StateID from './state-id.js';
 import * as Attack from './attack.js';
 import * as Promotion from './promotion.js';
-import { Result }  from './game-result.js';
 import * as Pieces from './pieces.js';
 import * as Castles from './castles.js';
 import * as game from './game-util.js';
+import * as Result from './game-result.js';
+import * as Conclusion from './game-conclusion.js';
 import { Size as size } from './size.js';
 import { nthRank } from './rank.js';
-import { getEnPassantPawns, getPieceCount } from './position-util.js';
+import { isThreefold } from './repetition.js';
+import { isDead } from './dead-position.js';
+import { PieceCount, getEnPassantPawns, getPieceCount } from './position-util.js';
 import { Moves, getLegalMoves, hasLegalMoves } from './move.js';
 import { State as state, New as newState } from './state.js';
 import { HalfmoveStart, FullmoveStart, MaxHalfmove } from './clock.js';
@@ -103,7 +106,7 @@ export class Game {
         next.pieces = getPieceCount(next.pos);
         next.moves = getLegalMoves(next);
 
-        next.result = this.getResult(next.pos, next.move, next.moves);
+        next.result = this.getResult(next.pos, next.move, next.clock.halfmove, next.pieces, next.repeat, next.moves);
         this.game.push(next);
 
         // TODO: Add PGN
@@ -172,17 +175,21 @@ export class Game {
         return updated;
     }
 
-    private getResult(pos: Position, color: Color, moves: Moves): Result {
-        // const attacks = Attack.attacksOn(color, pos);
-        // const inCheck = Attack.isKingAttacked(color, pos, attacks);
-        // const hasMoves = hasLegalMoves(moves);   
-        
-        // TODO: Implement get result
-        // 1. Check if player in check, if no legal moves checkmated
-        // 2. Check draws: 3-fold repetition, 50-move rule, insufficient material
-        // 3. If no legal moves, then draw by stalemate
+    private getResult(pos: Position, player: Color, halfmove: number, pieces: PieceCount, repeat: StateCount, moves: Moves): Result.Result {
+        const attacks = Attack.attacksOn(player, pos);
+        const inCheck = Attack.isKingAttacked(player, pos, attacks);
+        const hasMoves = hasLegalMoves(moves);
 
-        return {ended: false, score: 0, reason: 0};
+        // 1. Check if player has no legal moves, if yes check if player in check
+        //    If player in check, then checkmated, else stalemate
+        if(!hasMoves) return inCheck? Result.checkmated(player) : Result.draw(Conclusion.Stalemate);
+
+        // 2. Check draws: 3-fold repetition, 50-move rule, insufficient material
+        if(isThreefold(repeat)) return Result.draw(Conclusion.Repetition);
+        if(halfmove >= MaxHalfmove) return Result.draw(Conclusion.FiftyMove);
+        if(isDead(pieces)) return Result.draw(Conclusion.Insufficient);
+
+        return Result.playInProgress();
     }
 
     private copyStateData(src: State): State {
@@ -230,7 +237,7 @@ export class Game {
         const repeat: StateCount = {[s.id]: 1};
         const moves = getLegalMoves(s);
 
-        const result = this.getResult(s.pos, s.move, moves);
+        const result = this.getResult(s.pos, s.move, s.clock.halfmove, pieces, repeat, moves);
         
         return {...s, result: result, pieces: pieces, repeat: repeat, moves: moves};
     }
