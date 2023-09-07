@@ -36,7 +36,7 @@
               <template v-for="(_, x) in row">
 
                 <div :class="[(y+x) % 2 === 0? 'light-square':'dark-square',
-                      isClicked(rankOf(y), fileOf(x))? 'clicked':'']"
+                      isClicked(rankOf(y), fileOf(x))? 'clicked' : isMoveSquare(rankOf(y), fileOf(x))? 'move-square':'']"
                   :id="`board-y${y}-x${x}`"
                   :data-square="`${labelOf(x)}${rankOf(y)}`"
                   @drop.prevent="onDrop"

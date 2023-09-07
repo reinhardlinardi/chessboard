@@ -135,6 +135,11 @@ export function isClicked(rank, file) {
     return select.click && loc === select.loc && loc in this.state.moves;
 }
 
+export function isMoveSquare(rank, file) {
+    const loc = Loc.of(file, rank);
+    return loc === this.move.from || loc === this.move.to;
+}
+
 export function canBeOccupied(rank, file) {
     const result = this.state.result;
     if(result.ended) return false;
@@ -195,7 +200,7 @@ export function copyFEN(ev) {
 
 
 /* Move */
-export async function move(from, to) {
+export async function movePiece(from, to) {
     const pos = this.state.pos;
     const color = this.state.move;
     const promotion = isPromotion(pos, color, from, to);
@@ -211,6 +216,7 @@ export async function move(from, to) {
     }
 
     this.state = game.getCurrentStateData();
+    this.move = game.getLastMove();
     console.log(this.state.fen);
 }
 
@@ -234,7 +240,7 @@ export function onClick(ev) {
     else if(loc in moves) this.select.loc = loc;
     else if(moves[current].includes(loc)) {
         this.select = reset;
-        this.move(current, loc);
+        this.movePiece(current, loc);
     }
 }
 
@@ -256,7 +262,7 @@ export function onDrop(ev) {
 
     this.select.loc = Loc.None;
     if(!(src in moves)) return;
-    if(moves[src].includes(loc)) this.move(src, loc);
+    if(moves[src].includes(loc)) this.movePiece(src, loc);
 }
 
 
@@ -287,6 +293,7 @@ export function created() {
     game.start();
 
     this.state = game.getInitialStateData();
+    this.move = {from: Loc.None, to: Loc.None};
     this.select.loc = Loc.None;
 
     if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);

@@ -6,6 +6,7 @@ const component = {
     data() {
         return {
             state: {},
+            move: {},
             flip: false,
             promote: false,
             select: {
@@ -38,6 +39,7 @@ const component = {
         isEmpty: page.isEmpty,
         getPiece: page.getPiece,
         isClicked: page.isClicked,
+        isMoveSquare: page.isMoveSquare,
         canBeOccupied: page.canBeOccupied,
 
         flipBoard: page.flipBoard,
@@ -49,7 +51,7 @@ const component = {
 
         copyFEN: page.copyFEN,
 
-        move: page.move,
+        movePiece: page.movePiece,
 
         onClick: page.onClick,
         onDragStart: page.onDragStart,
