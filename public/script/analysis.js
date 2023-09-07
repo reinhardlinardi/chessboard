@@ -120,33 +120,40 @@ export function labelOf(x) {
     return Common.labelOf(x, this.flip);
 }
 
-export function isEmpty(rank, file) {
-    return Common.isEmpty(this.state.pos, Loc.of(file, rank));
+export function locOf(y, x) {
+    return Common.locOf(y, x, this.flip);
 }
 
-export function getPiece(rank, file) {
-    return Common.getPiece(this.state.pos, Loc.of(file, rank));
+export function isEmpty(loc) {
+    return Common.isEmpty(this.state.pos, loc);
 }
 
-export function isClicked(rank, file) {
+export function getPiece(loc) {
+    return Common.getPiece(this.state.pos, loc);
+}
+
+export function isClicked(loc) {
+    const result = this.state.result;
+    if(result.ended) return false;
+
     const select = this.select;
-    const loc = Loc.of(file, rank);
-
     return select.click && loc === select.loc && loc in this.state.moves;
 }
 
-export function isMoveSquare(rank, file) {
-    const loc = Loc.of(file, rank);
-    return loc === this.move.from || loc === this.move.to;
+export function moveFrom(loc) {
+    return loc === this.move.from;
 }
 
-export function canBeOccupied(rank, file) {
+export function moveTo(loc) {
+    return loc === this.move.to;
+}
+
+export function canBeOccupied(loc) {
     const result = this.state.result;
     if(result.ended) return false;
 
     const moves = this.state.moves;
     const src = this.select.loc;
-    const loc = Loc.of(file, rank);
 
     if(!(src in moves)) return false;
     return moves[src].includes(loc);
@@ -217,7 +224,9 @@ export async function movePiece(from, to) {
 
     this.state = game.getCurrentStateData();
     this.move = game.getLastMove();
+    
     console.log(this.state.fen);
+    if(this.state.result.ended) console.log(this.state.result);
 }
 
 

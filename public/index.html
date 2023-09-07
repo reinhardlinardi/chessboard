@@ -56,8 +56,8 @@
                   :data-file="fileOf(x)"
                 >
                   <img class="piece" 
-                    v-if="!isEmpty(rankOf(y), fileOf(x))"
-                    :src="`svg/${getPiece(rankOf(y), fileOf(x))}.svg`"
+                    v-if="!isEmpty(locOf(y, x))"
+                    :src="`svg/${getPiece(locOf(y, x))}.svg`"
                     :id="`piece-y${y}-x${x}`"
                     draggable="true"
                     @dragstart="onDragStart"

@@ -36,7 +36,7 @@
               <template v-for="(_, x) in row">
 
                 <div :class="[(y+x) % 2 === 0? 'light-square':'dark-square',
-                      isClicked(rankOf(y), fileOf(x))? 'clicked' : isMoveSquare(rankOf(y), fileOf(x))? 'move-square':'']"
+                      isClicked(locOf(y, x))? 'clicked': moveFrom(locOf(y, x))? 'move-from': moveTo(locOf(y,x))? 'move-to':'']"
                   :id="`board-y${y}-x${x}`"
                   :data-square="`${labelOf(x)}${rankOf(y)}`"
                   @drop.prevent="onDrop"
@@ -45,8 +45,8 @@
                 >
 
                   <img class="piece" 
-                    v-if="!isEmpty(rankOf(y), fileOf(x))"
-                    :src="`svg/${getPiece(rankOf(y), fileOf(x))}.svg`"
+                    v-if="!isEmpty(locOf(y, x))"
+                    :src="`svg/${getPiece(locOf(y, x))}.svg`"
                     :id="`piece-y${y}-x${x}`"
                     @click="onClick"
                     draggable="true"
@@ -55,7 +55,7 @@
                     :data-file="fileOf(x)"
                   >
                   <div class="marker-container"
-                    v-else-if="canBeOccupied(rankOf(y), fileOf(x))"
+                    v-else-if="canBeOccupied(locOf(y, x))"
                     :id="`marker-container-y${y}-x${x}`"
                     @click="onClick"
                     :data-rank="rankOf(y)"

@@ -36,10 +36,12 @@ const component = {
         rankOf: page.rankOf,
         fileOf: page.fileOf,
         labelOf: page.labelOf,
+        locOf: page.locOf,
         isEmpty: page.isEmpty,
         getPiece: page.getPiece,
         isClicked: page.isClicked,
-        isMoveSquare: page.isMoveSquare,
+        moveFrom: page.moveFrom,
+        moveTo: page.moveTo,
         canBeOccupied: page.canBeOccupied,
 
         flipBoard: page.flipBoard,

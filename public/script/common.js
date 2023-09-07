@@ -88,6 +88,10 @@ export function fileOf(x, flip) {
     return flip? size-x : x+1;
 }
 
+export function locOf(y, x, flip) {
+    return Loc.of(fileOf(x, flip), rankOf(y, flip));
+}
+
 export function labelOf(x, flip) {
     return File.labelOf(fileOf(x, flip));
 }

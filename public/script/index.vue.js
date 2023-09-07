@@ -27,6 +27,7 @@ const component = {
         rankOf: page.rankOf,
         fileOf: page.fileOf,
         labelOf: page.labelOf,
+        locOf: page.locOf,
         isEmpty: page.isEmpty,
         getPiece: page.getPiece,
 

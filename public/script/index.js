@@ -2,7 +2,6 @@ import * as Common from './common.js';
 import * as Setup from '../module/setup.js';
 import * as Position from '../module/position.js';
 import * as FEN from '../module/fen.js';
-import * as Loc from '../module/location.js';
 import * as Pieces from '../module/pieces.js';
 import * as Castles from '../module/castles.js';
 import * as AbstractPieces from '../module/abstract-pieces.js';
@@ -56,12 +55,16 @@ export function labelOf(x) {
     return Common.labelOf(x, this.flip);
 }
 
-export function isEmpty(rank, file) {
-    return Common.isEmpty(this.state.pos, Loc.of(file, rank));
+export function locOf(y, x) {
+    return Common.locOf(y, x, this.flip);
 }
 
-export function getPiece(rank, file) {
-    return Common.getPiece(this.state.pos, Loc.of(file, rank));
+export function isEmpty(loc) {
+    return Common.isEmpty(this.state.pos, loc);
+}
+
+export function getPiece(loc) {
+    return Common.getPiece(this.state.pos, loc);
 }
 
 export function flipBoard() {
