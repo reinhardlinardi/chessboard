@@ -43,7 +43,7 @@ export function getLegalMoves(s: State): Moves {
 
     // 5. If in check, select moves that put king out of check
     const inCheck = Attack.isKingAttacked(s.move, s.pos, attacks);
-    if(inCheck) selectOutOfCheckMoves(moves, s.pos, s.move, attacks);
+    if(inCheck) selectOutOfCheckMoves(moves, s.pos, s.move, s.enPassant, attacks);
     
     return moves;
 }
@@ -276,13 +276,13 @@ function removeCastleMoves(moves: Moves, color: Color, rights: Castle.Rights, at
     }
 }
 
-function selectOutOfCheckMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks) {
+function selectOutOfCheckMoves(moves: Moves, pos: Position, color: Color, enPassant: Location, attacks: Attacks) {
     const opponent = opponentOf(color);
     const opponentAttacks = Attack.attacksOn(opponent, pos);
  
     let legal = mergeMoves(
         getOutOfCheckKingMoves(moves, pos, color, attacks),
-        getCaptureCheckingPieceMoves(moves, pos, color, attacks, opponentAttacks),
+        getCaptureCheckingPieceMoves(moves, pos, color, enPassant, attacks, opponentAttacks),
         getBlockCheckMoves(moves, pos, color, attacks, opponentAttacks),
     ); 
 
@@ -324,7 +324,7 @@ function getOutOfCheckKingMoves(moves: Moves, pos: Position, color: Color, attac
     return legal;
 }
 
-function getCaptureCheckingPieceMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks, opponentAttacks: Attacks): Moves {
+function getCaptureCheckingPieceMoves(moves: Moves, pos: Position, color: Color, enPassant: Location, attacks: Attacks, opponentAttacks: Attacks): Moves {
     const numAttackers = Attack.numKingAttackersOf(color, pos, attacks);
     if(numAttackers > 1) return {};
     
@@ -339,6 +339,15 @@ function getCaptureCheckingPieceMoves(moves: Moves, pos: Position, color: Color,
 
         if(!(pieceLoc in legal)) legal[pieceLoc] = [];
         legal[pieceLoc].push(attackerLoc);
+    }
+
+    if(enPassant !== Loc.None) {
+        const opponent = opponentOf(color);
+        const pawns = getEnPassantPawns(Loc.file(attackerLoc), pos, color);
+
+        if(attackerLoc === pawns[opponent][0]) {
+            for(const pawnLoc of pawns[color]) legal[pawnLoc] = [enPassant];
+        }
     }
 
     return legal;
