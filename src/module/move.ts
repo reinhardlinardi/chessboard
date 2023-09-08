@@ -307,13 +307,12 @@ function getOutOfCheckKingMoves(moves: Moves, pos: Position, color: Color, attac
         const attacker = Pieces.get(getByLoc(pos, attackerLoc));
         if(attacker.attack !== TypeRange) continue;
 
-        const away = -kingAttacks[attackerLoc];
+        const shadowed = kingLoc + -kingAttacks[attackerLoc];
 
         for(const move of king.moves) {
             for(const direction of move.directions) {
                 const loc = kingLoc + direction;
-
-                if(direction === away) {
+                if(loc === shadowed) {
                     legal[kingLoc] = legal[kingLoc].filter(dest => dest !== loc);
                     break;
                 }
@@ -346,7 +345,9 @@ function getCaptureCheckingPieceMoves(moves: Moves, pos: Position, color: Color,
         const pawns = getEnPassantPawns(Loc.file(attackerLoc), pos, color);
 
         if(attackerLoc === pawns[opponent][0]) {
-            for(const pawnLoc of pawns[color]) legal[pawnLoc] = [enPassant];
+            for(const pawnLoc of pawns[color]) {
+                if(moves[pawnLoc].includes(enPassant)) legal[pawnLoc] = [enPassant];
+            }
         }
     }
 
@@ -367,12 +368,12 @@ function getBlockCheckMoves(moves: Moves, pos: Position, color: Color, attacks: 
     let pawns: Location[] = [];
 
     const playerPawn = Pieces.getBy(color, TypePawn).letter;
-    const direction = attacks[kingLoc][attackerLoc];
-
     for(const pawnLocStr in moves) {
         const pawnLoc = parseInt(pawnLocStr);
         if(getByLoc(pos, pawnLoc) === playerPawn) pawns.push(pawnLoc);
     }
+
+    const direction = attacks[kingLoc][attackerLoc];
 
     for(let loc = kingLoc + direction; loc !== attackerLoc; loc += direction) {
         const pieces = opponentAttacks[loc];
