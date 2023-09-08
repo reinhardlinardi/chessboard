@@ -5,12 +5,12 @@ import * as Castle from './castle.js';
 import * as Castles from './castles.js';
 import * as EnPassant from './en-passant.js';
 import * as Promotion from './promotion.js';
-import { Position, getByLoc } from './position.js';
+import * as Attack from './attack.js';
+import { Position, getByLoc, copy, setByLoc } from './position.js';
 import { getEnPassantPawns } from './position-util.js';
 import { TypePawn, TypeKing } from './piece-type.js';
 import { Color, getList as getColors, opponentOf } from './color.js';
 import { Moves } from './move.js';
-import { nthRank } from './rank.js';
 
 
 type Location = Loc.Location;
@@ -76,14 +76,18 @@ export function isCastleAllowed(type: string, rights: Castle.Rights, pos: Positi
 }
 
 export function isValidEnPassantTarget(target: Location, player: Color, pos: Position): boolean {
+    // Validation:
+    // 1. Target is present
     if(target === Loc.None) return false;
-
+    
     const file = Loc.file(target);
     const opponentFromLoc = EnPassant.opponentPawnFromLoc(file, player);
 
+    // 2. No pieces in opponent pawn's move path
     if(getByLoc(pos, opponentFromLoc) !== Piece.None) return false;
     if(getByLoc(pos, target) !== Piece.None) return false;
 
+    // 3. Pawn positions are correct
     const colors = getColors();
     const pawns = getEnPassantPawns(file, pos, player);
 
@@ -110,4 +114,18 @@ export function getEnPassantTargetFor(color: Color, pos: Position, from: Locatio
         if(getByLoc(pos, loc) === opponentPawn) return target;
     }
     return Loc.None;
+}
+
+export function isEnPassantResultInCheck(pos: Position, player: Color, target: Location, playerPawn: Location): boolean {
+    const opponent = opponentOf(player);
+    const captured = getEnPassantPawns(Loc.file(target), pos, player)[opponent][0];
+    
+    const after = copy(pos);
+
+    setByLoc(getByLoc(pos, playerPawn), after, target);
+    setByLoc(Piece.None, after, playerPawn);
+    setByLoc(Piece.None, after, captured);
+
+    const attacks = Attack.attacksOn(player, after);
+    return Attack.isKingAttacked(player, after, attacks);
 }

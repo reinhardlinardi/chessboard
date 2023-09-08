@@ -1,7 +1,6 @@
 import * as Loc from './location.js';
 import * as Piece from './piece.js';
 import * as Castle from './castle.js';
-import * as EnPassant from './en-passant.js';
 import * as Attack from './attack.js';
 import * as Pieces from './pieces.js';
 import * as Castles from './castles.js';
@@ -10,9 +9,10 @@ import { Size as size } from './size.js';
 import { Color, opponentOf } from './color.js';
 import { Position, getByLoc } from './position.js';
 import { nthRank } from './rank.js';
-import { getEnPassantPawns, getKingLoc, outOfBound } from './position-util.js';
 import { Move, TypeRange } from './piece-move.js';
 import { TypeKing, TypePawn } from './piece-type.js';
+import { isEnPassantResultInCheck } from './game-util.js';
+import { getEnPassantPawns, getKingLoc, outOfBound } from './position-util.js';
 
 
 type Location = Loc.Location;
@@ -25,7 +25,6 @@ export type Moves = {[loc: Location]: Location[]};
 export function getLegalMoves(s: State): Moves {
     const attacks = Attack.attacksOn(s.move, s.pos);
     const pin = Attack.pinnedPiecesOf(s.move, s.pos, attacks);
-    const indirectPinned = Attack.isEnPassantIndirectPinned(s.enPassant, s.move, s.pos);
 
     let moves = generateMoves(s);
 
@@ -33,10 +32,10 @@ export function getLegalMoves(s: State): Moves {
     removeKingMoves(moves, s.pos, s.move, attacks);
 
     // 2. Remove illegal moves for pieces pinned to the king
-    removePinnedPiecesMoves(moves, s.pos, s.move, pin);
+    removePinnedPiecesMoves(moves, s.pos, s.move, attacks, pin);
     
-    // 3. Remove en passant move if indirectly pinned
-    removeEnPassantMove(moves, s.pos, s.move, s.enPassant, indirectPinned);
+    // 3. Remove en passant move if en passant put self in check
+    removeEnPassantMove(moves, s.pos, s.move, s.enPassant);
 
     // 4. Remove castle moves if in check or any square in king's path is attacked
     removeCastleMoves(moves, s.move, s.castle, attacks);
@@ -181,12 +180,9 @@ function getEnPassantMove(pos: Position, target: Location, color: Color): Moves 
     if(target === Loc.None) return {};
     
     let moves: Moves = {};
-    const file = Loc.file(target);
-    const playerPawnsLoc = EnPassant.playerPawnsLoc(file, color);
+    const playerPawns = getEnPassantPawns(Loc.file(target), pos, color)[color];
 
-    for(const loc of playerPawnsLoc) {
-        if(getByLoc(pos, loc) !== Piece.None) moves[loc] = [target];
-    }
+    for(const loc of playerPawns) moves[loc] = [target];
     return moves;
 }
 
@@ -207,53 +203,38 @@ function removeKingMoves(moves: Moves, pos: Position, color: Color, attacks: Att
     moves[loc] = moves[loc].filter(square => !remove.includes(square));
 }
 
-function removePinnedPiecesMoves(moves: Moves, pos: Position, color: Color, pin: Pin) {
-    const opponent = opponentOf(color);
+function removePinnedPiecesMoves(moves: Moves, pos: Position, color: Color, attacks: Attacks, pin: Pin) {
+    const kingLoc = getKingLoc(pos, color);
 
-    for(const locStr in pin) {
-        const loc = parseInt(locStr);
-        const piece = Pieces.get(getByLoc(pos, loc));
-        
-        let legal: Location[] = [];
+    for(const pinnedStr in pin) {
+        const pinnedLoc = parseInt(pinnedStr);
+        const pinnedFrom = pin[pinnedLoc];
+
+        const attackers = attacks[pinnedLoc];
+        const attackerLoc = parseInt(Object.keys(attackers).filter(loc => attackers[parseInt(loc)] === pinnedFrom)[0]);
+
         let inLine: Location[] = [];
-
-        const pinnedFrom = pin[loc];
         const directions = [pinnedFrom, -pinnedFrom];
 
         for(const direction of directions) {
-            let move = piece.moves[0];
-            let skip = true;
+            const start = pinnedLoc + direction;
+            const end = (direction === pinnedFrom? attackerLoc : kingLoc) + direction;
 
-            for(const mv of piece.moves) {
-                if(mv.directions.includes(direction)) {
-                    skip = false;
-                    move = mv;
-                    break;
-                }
-            }
-
-            if(skip) continue;
-            let square = loc;
-            
-            while(true) {
-                square += direction;
-                if(canOccupy(square, pos, move, opponent)) inLine.push(square);
-                if(getByLoc(pos, square) !== Piece.None) break;
-            }
+            for(let square = start; square !== end; square += direction) inLine.push(square);
         }
         
-        for(const dest of inLine) {
-            if(moves[loc].includes(dest)) legal.push(dest);
-        }
-        moves[loc] = legal;
+        moves[pinnedLoc] = moves[pinnedLoc].filter(loc => inLine.includes(loc));
     }
 }
 
-function removeEnPassantMove(moves: Moves, pos: Position, color: Color, target: Location, indirectPinned: boolean) {
-    if(!indirectPinned) return;
-    
-    const pawn = getEnPassantPawns(Loc.file(target), pos, color)[color][0];
-    moves[pawn] = moves[pawn].filter(loc => loc !== target);
+function removeEnPassantMove(moves: Moves, pos: Position, color: Color, target: Location) {
+    if(target === Loc.None) return;
+
+    const pawns = getEnPassantPawns(Loc.file(target), pos, color)[color];
+    for(const pawn of pawns) {
+        const resultInCheck = isEnPassantResultInCheck(pos, color, target, pawn);
+        if(resultInCheck) moves[pawn] = moves[pawn].filter(loc => loc !== target);
+    }
 }
 
 function removeCastleMoves(moves: Moves, color: Color, rights: Castle.Rights, attacks: Attacks) {

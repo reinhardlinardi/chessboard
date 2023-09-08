@@ -1,15 +1,13 @@
 import * as Loc from './location.js';
 import * as Piece from './piece.js';
 import * as AttackMap from './attack-map.js';
-import * as EnPassant from './en-passant.js';
 import * as Pieces from './pieces.js';
-import { Position, get, getByLoc } from './position.js';
+import { Position, getByLoc } from './position.js';
 import { Size as size } from './size.js';
 import { Direction } from './direction.js';
 import { TypeRange } from './piece-move.js';
-import { TypeKing, TypeQueen, TypeRook } from './piece-type.js';
-import { Color, opponentOf, getList as getColors } from './color.js';
-import { getEnPassantPawns, getKingLoc, outOfBound } from './position-util.js';
+import { Color, opponentOf } from './color.js';
+import { getKingLoc, outOfBound } from './position-util.js';
 
 
 type Location = Loc.Location;
@@ -99,63 +97,6 @@ export function pinnedPiecesOf(color: Color, pos: Position, attacks: Attacks): P
     }
 
     return pin;
-}
-
-export function isEnPassantIndirectPinned(target: Location, player: Color, pos: Position): boolean {
-    if(target === Loc.None) return false;
-
-    const rank = EnPassant.pawnRank(player);
-    if(Loc.rank(getKingLoc(pos, player)) !== rank) return false;
-
-    let pawnLoc: Location[] = [];
-    const pawns = getEnPassantPawns(Loc.file(target), pos, player);
-    const colors = getColors();
-
-    for(const color of colors) {
-        if(pawns[color].length !== 1) return false;
-        pawnLoc.push(pawns[color][0]);
-    }
-
-    const opponent = opponentOf(player);
-
-    const king = Pieces.getBy(player, TypeKing).letter;
-    const opponentQueen = Pieces.getBy(opponent, TypeQueen).letter;
-    const opponentRook = Pieces.getBy(opponent, TypeRook).letter;
-
-    const search: {[c: Color]: string[]} = {[player]: [king], [opponent]: [opponentQueen, opponentRook]};
-
-    const queensideFile = Loc.file(Math.min(...pawnLoc));
-    const kingsideFile = Loc.file(Math.max(...pawnLoc));
-
-    let queensideColor = player;
-    let found = false;
-
-    for(let file = queensideFile-1; file >= 1; file--) {
-        const subject = get(pos, rank, file);
-        if(subject === Piece.None) continue;
-
-        for(const color of colors) {
-            if(search[color].includes(subject)) {
-                queensideColor = color;
-                found = true;
-                break;
-            }
-        }
-        break;
-    }
-    if(!found) return false;
-    
-    const otherColor = opponentOf(queensideColor);
-
-    for(let file = kingsideFile+1; file <= size; file++) {
-        const subject = get(pos, rank, file);
-        if(subject === Piece.None) continue;
-        
-        if(search[otherColor].includes(subject)) return true;
-        else break;
-    }
-    
-    return false;
 }
 
 
