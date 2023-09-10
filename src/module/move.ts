@@ -211,7 +211,7 @@ function removePinnedPiecesMoves(moves: Moves, pos: Position, color: Color, atta
         const pinnedFrom = pin[pinnedLoc];
 
         const attackers = attacks[pinnedLoc];
-        const attackerLoc = parseInt(Object.keys(attackers).filter(loc => attackers[parseInt(loc)] === pinnedFrom)[0]);
+        const attackerLoc = Object.keys(attackers).map(loc => parseInt(loc)).filter(loc => attackers[loc] === pinnedFrom)[0];
 
         let inLine: Location[] = [];
         const directions = [pinnedFrom, -pinnedFrom];
