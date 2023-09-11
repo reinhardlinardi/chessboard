@@ -225,9 +225,8 @@ export async function movePiece(from, to) {
     }
 
     this.state = game.getCurrentStateData();
-    this.move = game.getLastMove();
     
-    console.log(this.state.fen);
+    console.log(this.state.notation, this.state.fen);
     if(this.state.result.ended) console.log(JSON.stringify(this.state.result));
 }
 

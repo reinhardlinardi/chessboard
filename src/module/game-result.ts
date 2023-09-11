@@ -24,3 +24,8 @@ export function checkmated(player: Color) {
 export function draw(conclusion: Conclusion.Conclusion) {
     return {ended: true, score: Score.Draw, conclusion: conclusion};
 }
+
+export function isResultCheckmate(result: Result): boolean {
+    const c = result.conclusion;
+    return result.ended && Conclusion.isConclusionCheckmate(c);
+}

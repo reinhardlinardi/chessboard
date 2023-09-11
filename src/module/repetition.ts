@@ -1,4 +1,4 @@
-import { StateCount } from "./game-data.js";
+import { StateCount } from "./game-state.js";
 
 
 const Threefold = 3;

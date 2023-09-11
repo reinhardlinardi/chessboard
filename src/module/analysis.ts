@@ -9,17 +9,18 @@ import * as Castles from './castles.js';
 import * as game from './game-util.js';
 import * as Result from './game-result.js';
 import * as Conclusion from './game-conclusion.js';
+import * as Notation from './move-notation.js';
 import { Size as size } from './size.js';
 import { nthRank } from './rank.js';
 import { isThreefold } from './repetition.js';
 import { isDead } from './dead-position.js';
+import { State as state, New as newState } from './state.js';
+import { Setup, State, StateCount } from './game-state.js';
 import { PieceCount, getEnPassantPawns, getPieceCount } from './position-util.js';
 import { Moves, getLegalMoves, hasLegalMoves } from './move.js';
-import { State as state, New as newState } from './state.js';
 import { HalfmoveStart, FullmoveStart, MaxHalfmove } from './clock.js';
 import { Position, get, getByLoc, setByLoc, copy } from './position.js';
 import { Type, TypeKing, TypePawn, TypeQueen } from './piece-type.js';
-import { Setup, State, Move, StateCount } from './game-data.js';
 import { Color, White, Black, opponentOf, getList as getColors } from './color.js';
 import * as Err from './analysis-error.js';
 
@@ -33,7 +34,6 @@ export class Game {
 
     private setup: Setup;
     private game: State[];
-    private moves: Move[];
 
     constructor() {
         this.started = false;
@@ -41,7 +41,6 @@ export class Game {
         
         this.setup = this.setupDataOf(newState());
         this.game = [];
-        this.moves = [];
     }
 
     getSetupData(): Setup {
@@ -54,10 +53,6 @@ export class Game {
 
     getCurrentStateData(): State {
         return {...this.game[this.game.length-1]}; 
-    }
-
-    getLastMove(): Move {
-        return {...this.moves[this.moves.length-1]};
     }
 
     start() {
@@ -78,7 +73,7 @@ export class Game {
         const player = current.move;
 
         if(!game.isValidMove(from, to, current.moves)) throw Err.New(Err.InvalidMove, "invalid move");
-        
+
         const next = this.copyStateData(current);
         const opponent = opponentOf(player);
         next.move = opponent;
@@ -107,10 +102,12 @@ export class Game {
         next.moves = getLegalMoves(next);
 
         next.result = this.getResult(next.pos, next.move, next.clock.halfmove, next.pieces, next.repeat, next.moves);
-        this.game.push(next);
 
-        // TODO: Add PGN
-        this.moves.push({from: from, to: to, pgn: ""});
+        next.from = from;
+        next.to = to;
+        next.notation = Notation.of(from, to, promoted, player, pos, next.pos, next.result);
+
+        this.game.push(next);
     }
 
     resetSetup() {
@@ -167,8 +164,7 @@ export class Game {
 
         if(isEnPassant) {
             const opponent = opponentOf(player);
-            const opponentLoc = getEnPassantPawns(Loc.file(to), pos, player)[opponent][0];
-            
+            const opponentLoc = getEnPassantPawns(Loc.file(to), pos, player)[opponent][0];            
             setByLoc(Piece.None, updated, opponentLoc);
         }
 
@@ -238,8 +234,12 @@ export class Game {
         const moves = getLegalMoves(s);
 
         const result = this.getResult(s.pos, s.move, s.clock.halfmove, pieces, repeat, moves);
+
+        const from = Loc.None;
+        const to = Loc.None;
+        const notation = Notation.None;
         
-        return {...s, result: result, pieces: pieces, repeat: repeat, moves: moves};
+        return {...s, result: result, pieces: pieces, repeat: repeat, moves: moves, from: from, to: to, notation: notation};
     }
 
     private setupValidateKingCount(pos: Position) {
