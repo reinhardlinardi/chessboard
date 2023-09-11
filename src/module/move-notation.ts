@@ -24,27 +24,28 @@ const figurine = Object.freeze({
 });
 
 
-export function of(from: Location, to: Location, promoted: Type.Type, player: Color, pos: Position, updated: Position, result: Result): string {
+export function of(from: Location, to: Location, enPassant: Location, promoted: Type.Type, player: Color, pos: Position, updated: Position, result: Result): string {
     let parts: string[] = [];
     const isCastle = game.isCastleMove(pos, from, to, player);
 
     if(isCastle) parts.push(Castles.getByKingLoc(to).type);
     else {
         const isPawnMove = game.isPawnMove(pos, from);
-        const isCaptureMove = game.isCaptureMove(pos, to);
+        const isCapture = game.isCaptureMove(pos, to);
         const isPromotion = game.isPromotion(pos, player, from, to);
+        const isEnPassant = game.isEnPassantMove(pos, from, to, player, enPassant);
 
         const type = Pieces.get(getByLoc(pos, from)).type;
         
         const figure = isPawnMove? "" : figurine[type];
         const fromSquare = getSquareId(from, to, pos, player);
-        const capture = isCaptureMove? "x" : "";
+        const capture = isCapture || isEnPassant? "x" : "";
 
         const dest = File.labelOf(Loc.file(to)) + Loc.rank(to).toString();
-        const idx = isPawnMove && !isCaptureMove? 1 : 0;
+        const idx = isPawnMove && !isCapture && !isEnPassant? 1 : 0;
         
         const toSquare = dest.substring(idx);
-        const promoteTo = isPromotion? `=${Pieces.getBy(player, promoted).letter}` : "";
+        const promoteTo = isPromotion? `=${figurine[promoted]}` : "";
 
         parts.push(figure, fromSquare, capture, toSquare, promoteTo);
     }

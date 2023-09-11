@@ -79,9 +79,9 @@ export class Game {
         next.move = opponent;
         
         const isPawnMove = game.isPawnMove(pos, from);
-        const isCaptureMove = game.isCaptureMove(pos, to);
+        const isCapture = game.isCaptureMove(pos, to);
         
-        next.clock.halfmove = isPawnMove || isCaptureMove? HalfmoveStart : next.clock.halfmove+1;
+        next.clock.halfmove = isPawnMove || isCapture? HalfmoveStart : next.clock.halfmove+1;
         next.clock.fullmove += player === Black? 1 : 0;
 
         next.pos = this.movePiece(pos, player, from, to, current.enPassant, promoted);
@@ -105,7 +105,7 @@ export class Game {
 
         next.from = from;
         next.to = to;
-        next.notation = Notation.of(from, to, promoted, player, pos, next.pos, next.result);
+        next.notation = Notation.of(from, to, current.enPassant, promoted, player, pos, next.pos, next.result);
 
         this.game.push(next);
     }
