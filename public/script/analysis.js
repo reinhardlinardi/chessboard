@@ -172,7 +172,8 @@ const whitePromoted = Promotion.getTypes().map(type => Pieces.getBy(White, type)
 const blackPromoted = Promotion.getTypes().map(type => Pieces.getBy(Black, type).letter);
 
 export function getPromotedPieces() {
-    return this.state.move === White? whitePromoted : blackPromoted;
+    const state = this.current;
+    return state.move === White? whitePromoted : blackPromoted;
 }
 
 export function getPromotedIds() {
@@ -221,7 +222,6 @@ export function copyFEN(ev) {
 /* Move */
 export async function movePiece(from, to) {
     const state = this.current;
-
     const pos = state.pos;
     const color = state.move;
     const promotion = isPromotion(pos, color, from, to);
