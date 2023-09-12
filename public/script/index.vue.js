@@ -5,12 +5,9 @@ import * as page from './index.js';
 const component = {
     data() {
         return {
-            state: {},
+            setup: {},
             flip: false,
-            stateDefault: {
-                clock: {},
-                id: "",
-            },
+            defaultSetup: {clock: {}, id: ""},
         }
     },
     computed: {
@@ -43,8 +40,8 @@ const component = {
         setCastle: page.setCastle,
         disableCastle: page.disableCastle,
 
-        isDefaultState: page.isDefaultState,
-        updateState: page.updateState,
+        isDefaultSetup: page.isDefaultSetup,
+        updateSetup: page.updateSetup,
         validSetup: page.validSetup,
 
         loadFEN: page.loadFEN,

@@ -60,11 +60,11 @@ export function locOf(y, x) {
 }
 
 export function isEmpty(loc) {
-    return Common.isEmpty(this.state.pos, loc);
+    return Common.isEmpty(this.setup.pos, loc);
 }
 
 export function getPiece(loc) {
-    return Common.getPiece(this.state.pos, loc);
+    return Common.getPiece(this.setup.pos, loc);
 }
 
 export function flipBoard() {
@@ -72,12 +72,12 @@ export function flipBoard() {
 }
 
 export function clearBoard() {
-    this.updateState({pos: Setup.emptySetup()});
+    this.updateSetup({pos: Setup.emptySetup()});
 }
 
 export function resetBoard() {
     game.resetSetup();
-    this.state = game.getSetupData();
+    this.setup = game.getSetupData();
     this.flip = false;
 }
 
@@ -92,20 +92,20 @@ export function getBlackCastleTypes() {
 }
 
 export function selectedMove(color) {
-    return this.state.move === color;
+    return this.setup.move === color;
 }
 
 export function setMove(ev) {
-    this.updateState({move: ev.target.value});
+    this.updateSetup({move: ev.target.value});
 }
 
 export function setCastle(ev) {
     const type = ev.target.value;
     const value = ev.target.checked;
 
-    let rights = {...this.state.castle};
+    let rights = {...this.setup.castle};
     rights[type] = value;
-    this.updateState({castle: rights});
+    this.updateSetup({castle: rights});
 }
 
 export function disableCastle(type) {
@@ -113,26 +113,26 @@ export function disableCastle(type) {
     const king = castle.king;
     const rook = castle.rook;
 
-    return Common.getPiece(this.state.pos, king.from) !== king.piece ||
-        Common.getPiece(this.state.pos, rook.from) !== rook.piece;
+    return Common.getPiece(this.setup.pos, king.from) !== king.piece ||
+        Common.getPiece(this.setup.pos, rook.from) !== rook.piece;
 }
 
 
 /* State */
-export function isDefaultState() {
-    const ref = this.stateDefault;
-    const state = this.state;
+export function isDefaultSetup() {
+    const ref = this.defaultSetup;
+    const setup = this.setup;
 
-    return state.id === ref.id && state.clock.halfmove === ref.clock.halfmove &&
-        state.clock.fullmove === ref.clock.fullmove;
+    return setup.id === ref.id && setup.clock.halfmove === ref.clock.halfmove &&
+        setup.clock.fullmove === ref.clock.fullmove;
 }
 
-export function updateState(keys) {
-    let state = {...this.state};
-    for(const key in keys) state[key] = keys[key];
+export function updateSetup(keys) {
+    let setup = {...this.setup};
+    for(const key in keys) setup[key] = keys[key];
 
-    game.loadSetup(state);
-    this.state = game.getSetupData();
+    game.loadSetup(setup);
+    this.setup = game.getSetupData();
 }
 
 export function validSetup() {
@@ -152,22 +152,22 @@ export function validSetup() {
 const paramFEN = "fen";
 
 export function getFEN() {
-    if(this.isDefaultState()) Common.deleteQuery(paramFEN);
-    else Common.setQuery(paramFEN, this.state.fen);
+    if(this.isDefaultSetup()) Common.deleteQuery(paramFEN);
+    else Common.setQuery(paramFEN, this.setup.fen);
 
-    return this.state.fen;
+    return this.setup.fen;
 }
 
 export function loadFEN(fen) {
-    let state;
+    let setup;
     
     try {
-        state = FEN.load(fen);
-        this.updateState(state);
+        setup = FEN.load(fen);
+        this.updateSetup(setup);
     }
     catch(err) {
         console.log(Err.str(err));
-        this.updateState();
+        this.updateSetup();
     }
 }
 
@@ -187,7 +187,7 @@ export function onChangeFEN(ev) {
 export function onSubmit(ev) {
     let query = {};
 
-    if(!this.isDefaultState()) {
+    if(!this.isDefaultSetup()) {
         query = {import: paramFEN, [paramFEN]: Common.getQuery(paramFEN)};
     }
     Common.openURL("/analysis", query);
@@ -202,7 +202,7 @@ export function fromTray(id) {
 export function getDraggedPiece(id) {
     try {
         if(fromTray(id)) return Common.getPieceType(id);
-        else return Common.getPiece(this.state.pos, Common.getLoc(id));
+        else return Common.getPiece(this.setup.pos, Common.getLoc(id));
     }
     catch(err) {
         Face.disapprove();
@@ -223,12 +223,12 @@ export function onDropReplaceOrCopy(ev) {
     // Replace piece in dest
     const piece = this.getDraggedPiece(srcId);
 
-    let pos = Position.copy(this.state.pos);
+    let pos = Position.copy(this.setup.pos);
     Common.replacePieceById(destId, piece, pos);
 
     // Remove piece in src if not tray
     if(!fromTray(srcId)) Common.removePieceById(srcId, pos);
-    this.updateState({pos: pos});
+    this.updateSetup({pos: pos});
 }
 
 export function onDropRemove(ev) {
@@ -237,10 +237,10 @@ export function onDropRemove(ev) {
 
     // Remove piece if src is not tray
     if(!fromTray(srcId)) {
-        let pos = Position.copy(this.state.pos);
+        let pos = Position.copy(this.setup.pos);
         
         Common.removePieceById(srcId, pos);
-        this.updateState({pos: pos});
+        this.updateSetup({pos: pos});
     }
 }
 
@@ -248,7 +248,7 @@ export function onDropRemove(ev) {
 /* Lifecycle */
 export function created() {
     const setup = game.getSetupData();
-    this.stateDefault = {
+    this.defaultSetup = {
         clock: {...setup.clock},
         id: setup.id,
     };
@@ -264,5 +264,5 @@ export function created() {
         }
     }
 
-    this.state = game.getSetupData();
+    this.setup = game.getSetupData();
 }

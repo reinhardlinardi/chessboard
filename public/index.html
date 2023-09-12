@@ -45,7 +45,7 @@
           </div>
 
           <div class="board">
-            <template v-for="(row, y) in state.pos">
+            <template v-for="(row, y) in setup.pos">
               <template v-for="(_, x) in row">
 
                 <div :class="(y+x) % 2 === 0? 'light-square':'dark-square'"
@@ -134,7 +134,7 @@
                       :id="`checkbox-${opt.letter}`"
                       @click="setCastle"
                       :value="opt.letter"
-                      :checked="state.castle[opt.letter]"
+                      :checked="setup.castle[opt.letter]"
                       :disabled="disableCastle(opt.letter)"
                     />
                     <label class="checkbox-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
@@ -151,7 +151,7 @@
                       :id="`checkbox-${opt.letter}`"
                       @click="setCastle"
                       :value="opt.letter"
-                      :checked="state.castle[opt.letter]"
+                      :checked="setup.castle[opt.letter]"
                       :disabled="disableCastle(opt.letter)"
                     >
                     <label class="checkbox-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
