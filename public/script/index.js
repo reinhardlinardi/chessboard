@@ -248,10 +248,7 @@ export function onDropRemove(ev) {
 /* Lifecycle */
 export function created() {
     const setup = game.getSetupData();
-    this.defaultSetup = {
-        clock: {...setup.clock},
-        id: setup.id,
-    };
+    this.defaultSetup = {clock: {...setup.clock}, id: setup.id};
 
     const fen = Common.getQuery(paramFEN);
     if(fen) {
