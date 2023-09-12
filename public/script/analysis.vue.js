@@ -6,7 +6,6 @@ const component = {
     data() {
         return {
             state: {},
-            move: {},
             flip: false,
             promote: false,
             select: {

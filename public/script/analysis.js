@@ -141,11 +141,11 @@ export function isClicked(loc) {
 }
 
 export function moveFrom(loc) {
-    return loc === this.move.from;
+    return loc === this.state.from;
 }
 
 export function moveTo(loc) {
-    return loc === this.move.to;
+    return loc === this.state.to;
 }
 
 export function canBeOccupied(loc) {
@@ -225,9 +225,6 @@ export async function movePiece(from, to) {
     }
 
     this.state = game.getCurrentStateData();
-    
-    console.log(this.state.notation, this.state.fen);
-    if(this.state.result.ended) console.log(JSON.stringify(this.state.result));
 }
 
 
@@ -308,9 +305,6 @@ export function created() {
 
     if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);
     else Common.setQuery(paramFEN, this.state.fen);
-
-    console.log(this.state.fen);
-    if(this.state.result.ended) console.log(JSON.stringify(this.state.result));
 }
 
 function importGameState(format) {
