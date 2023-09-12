@@ -45,10 +45,11 @@ const multiplierDiff = Object.freeze({[White]: 1, [Black]: -1});
 
 export function pieceDifference() {
     let diff = {};
+    const state = this.current;
 
     for(const type of pieceTypes) {
-        const whiteCount = this.state.pieces[whitePieces[type]];
-        const blackCount = this.state.pieces[blackPieces[type]];
+        const whiteCount = state.pieces[whitePieces[type]];
+        const blackCount = state.pieces[blackPieces[type]];
         diff[type] = whiteCount-blackCount;
     }
     return diff;
@@ -125,34 +126,36 @@ export function locOf(y, x) {
 }
 
 export function isEmpty(loc) {
-    return Common.isEmpty(this.state.pos, loc);
+    return Common.isEmpty(this.current.pos, loc);
 }
 
 export function getPiece(loc) {
-    return Common.getPiece(this.state.pos, loc);
+    return Common.getPiece(this.current.pos, loc);
 }
 
 export function isClicked(loc) {
-    const result = this.state.result;
+    const state = this.current;
+    const result = state.result;
     if(result.ended) return false;
 
     const select = this.select;
-    return select.click && loc === select.loc && loc in this.state.moves;
+    return select.click && loc === select.loc && loc in state.moves;
 }
 
 export function moveFrom(loc) {
-    return loc === this.state.from;
+    return loc === this.current.from;
 }
 
 export function moveTo(loc) {
-    return loc === this.state.to;
+    return loc === this.current.to;
 }
 
 export function canBeOccupied(loc) {
-    const result = this.state.result;
+    const state = this.current;
+    const result = state.result;
     if(result.ended) return false;
 
-    const moves = this.state.moves;
+    const moves = state.moves;
     const src = this.select.loc;
 
     if(!(src in moves)) return false;
@@ -187,12 +190,20 @@ async function getPromoted(ids) {
 
 
 /* State */
-export function isDefaultState() {
-    const ref = this.stateDefault;
-    const state = this.state;
+export function isDefaultSetup() {
+    const ref = this.defaultSetup;
+    const state = this.initial;
 
     return state.id === ref.id && state.clock.halfmove === ref.clock.halfmove &&
         state.clock.fullmove === ref.clock.fullmove;
+}
+
+export function initialState() {
+    return this.state[0];
+}
+
+export function currentState() {
+    return this.state[this.stateIdx];
 }
 
 
@@ -209,8 +220,10 @@ export function copyFEN(ev) {
 
 /* Move */
 export async function movePiece(from, to) {
-    const pos = this.state.pos;
-    const color = this.state.move;
+    const state = this.current;
+
+    const pos = state.pos;
+    const color = state.move;
     const promotion = isPromotion(pos, color, from, to);
 
     if(!promotion) game.move(from, to);
@@ -224,7 +237,9 @@ export async function movePiece(from, to) {
         game.move(from, to, promoted);
     }
 
-    this.state = game.getCurrentStateData();
+    this.state.push(game.getCurrentStateData());
+    this.stateIdx++;
+    console.log(this.state, this.stateIdx);
 }
 
 
@@ -232,7 +247,8 @@ export async function movePiece(from, to) {
 export function onClick(ev) {
     if(this.promote) return;
 
-    const moves = this.state.moves;
+    const state = this.current;
+    const moves = state.moves;
     const current = this.select.loc;
 
     const loc = Common.getLoc(ev.target.id);
@@ -264,7 +280,8 @@ export function onDrop(ev) {
     const src = this.select.loc;
     if(src === Loc.None) Face.disapprove();
     
-    const moves = this.state.moves;
+    const state = this.current;
+    const moves = state.moves;
     const loc =  Common.getLoc(ev.target.id);
 
     this.select.loc = Loc.None;
@@ -279,10 +296,7 @@ const formats = [paramFEN];
 
 export function created() {
     const setup = game.getSetupData();
-    this.stateDefault = {
-        clock: {...setup.clock},
-        id: setup.id,
-    };
+    this.defaultSetup = {clock: {...setup.clock}, id: setup.id};
 
     const format = Common.getQuery(paramImport);
 
@@ -299,12 +313,13 @@ export function created() {
 
     game.start();
 
-    this.state = game.getInitialStateData();
-    this.move = {from: Loc.None, to: Loc.None};
+    const initial = game.getInitialStateData();
+    this.state.push(initial);
+
     this.select.loc = Loc.None;
 
-    if(this.isDefaultState()) Common.deleteQueries(paramImport, paramFEN);
-    else Common.setQuery(paramFEN, this.state.fen);
+    if(this.isDefaultSetup()) Common.deleteQueries(paramImport, paramFEN);
+    else Common.setQuery(paramFEN, initial.fen);
 }
 
 function importGameState(format) {

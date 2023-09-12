@@ -32,7 +32,7 @@
           </div>
 
           <div :class="['board', promote? 'dim':'']">
-            <template v-for="(row, y) in state.pos">
+            <template v-for="(row, y) in current.pos">
               <template v-for="(_, x) in row">
 
                 <div :class="[(y+x) % 2 === 0? 'light-square':'dark-square',
@@ -88,7 +88,7 @@
             <input type="text"
               id="fen"
               class="fen-input"
-              :value="state.fen"
+              :value="current.fen"
               spellcheck="false"
               readonly
             >

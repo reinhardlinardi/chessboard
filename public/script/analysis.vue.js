@@ -5,20 +5,17 @@ import * as page from './analysis.js';
 const component = {
     data() {
         return {
-            state: {},
+            state: [],
+            stateIdx: 0,
             flip: false,
             promote: false,
-            select: {
-                click: false,
-                loc: 0,
-            },
-            stateDefault: {
-                clock: {},
-                id: "",
-            },
+            select: {click: false, loc: 0},
+            defaultSetup: {clock: {}, id: ""},
         }
     },
     computed: {
+        initial: page.initialState,
+        current: page.currentState,
         pieceDifference: page.pieceDifference,
     },
     methods: {
@@ -48,7 +45,7 @@ const component = {
         getPromotedPieces: page.getPromotedPieces,
         getPromotedIds: page.getPromotedIds,
 
-        isDefaultState: page.isDefaultState,
+        isDefaultSetup: page.isDefaultSetup,
 
         copyFEN: page.copyFEN,
 
