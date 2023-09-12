@@ -31,7 +31,7 @@
             </div>
           </div>
 
-          <div :class="['board', promote? 'board-dim':'']">
+          <div :class="['board', promote? 'dim':'']">
             <template v-for="(row, y) in state.pos">
               <template v-for="(_, x) in row">
 
@@ -99,7 +99,29 @@
 
         <div class="right-container">
 
-          <div :class="['promotion-container', promote? '':'promotion-dim']">
+          <div class="move-grid" v-show="!promote">
+            <div class="move-container">
+              <div class="move-number">999</div>
+            </div>
+            <div class="move-container">
+              <div class="move-notation">gxh8=♕#</div>
+            </div>
+            <div class="move-container">
+              <div class="move-notation">gxh8=♕#</div>
+            </div>
+
+            <div class="move-container">
+              <div class="move-number">1</div>
+            </div>
+            <div class="move-container">
+              <div class="move-notation">gxh8</div>
+            </div>
+            <div class="move-container">
+              <div class="move-notation">O-O-O</div>
+            </div>
+          </div>
+
+          <div :class="['promotion-container', promote? '':'invisible']">
             <div class="promoted-label">Promote to</div>
             
             <div class="promoted-tray">
