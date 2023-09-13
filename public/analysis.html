@@ -121,6 +121,14 @@
             </div>
           </div>
 
+          <div class="button-grid">
+            <button class="button-control" @click="flipBoard">⇅</button>
+            <button class="button-control" @click="toInitial" :disabled="!hasPrev">▲</button>
+            <button class="button-control" @click="toPrev" :disabled="!hasPrev">◄</button>
+            <button class="button-control" @click="toNext" :disabled="!hasNext">►</button>
+            <button class="button-control" @click="toLatest" :disabled="!hasNext">▼</button>
+          </div>
+
           <div :class="['promotion-container', promote? '':'invisible']">
             <div class="promoted-label">Promote to</div>
             

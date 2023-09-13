@@ -14,6 +14,10 @@ const component = {
         }
     },
     computed: {
+        isInitial: page.isInitial,
+        isLatest: page.isLatest,
+        hasPrev: page.hasPrev,
+        hasNext: page.hasNext,
         initial: page.initialState,
         current: page.currentState,
         pieceDifference: page.pieceDifference,
@@ -41,6 +45,11 @@ const component = {
         canBeOccupied: page.canBeOccupied,
 
         flipBoard: page.flipBoard,
+        
+        toInitial: page.toInitial,
+        toPrev: page.toPrev,
+        toNext: page.toNext,
+        toLatest: page.toLatest,
 
         getPromotedPieces: page.getPromotedPieces,
         getPromotedIds: page.getPromotedIds,

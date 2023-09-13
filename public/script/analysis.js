@@ -167,6 +167,40 @@ export function flipBoard() {
 }
 
 
+/* Navigation */
+export function isInitial() {
+    return this.stateIdx === 0;
+}
+
+export function isLatest() {
+    return this.stateIdx === this.state.length-1;
+}
+
+export function hasPrev() {
+    return !this.isInitial;
+}
+
+export function hasNext() {
+    return !this.isLatest;
+}
+
+export function toInitial(ev) {
+    this.stateIdx = 0;
+}
+
+export function toPrev(ev) {
+    this.stateIdx--;
+}
+
+export function toNext(ev) {
+    this.stateIdx++;
+}
+
+export function toLatest(ev) {
+    this.stateIdx = this.state.length-1;
+}
+
+
 /* Promotion */
 const whitePromoted = Promotion.getTypes().map(type => Pieces.getBy(White, type).letter);
 const blackPromoted = Promotion.getTypes().map(type => Pieces.getBy(Black, type).letter);
@@ -239,7 +273,8 @@ export async function movePiece(from, to) {
 
     this.state.push(game.getCurrentStateData());
     this.stateIdx++;
-    console.log(this.state, this.stateIdx);
+
+    console.log(this.current.notation, this.current.fen);
 }
 
 
@@ -320,6 +355,8 @@ export function created() {
 
     if(this.isDefaultSetup()) Common.deleteQueries(paramImport, paramFEN);
     else Common.setQuery(paramFEN, initial.fen);
+
+    console.log(initial.notation, initial.fen);
 }
 
 function importGameState(format) {

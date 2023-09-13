@@ -115,6 +115,29 @@
     color: #d0d0d0;
 }
 
+.button-grid {
+    @extend %grid;
+    gap: 0 0;
+    grid-template-columns: repeat(5, auto);
+    grid-template-rows: min(4vw, 4vh);
+
+    background-color: #303030;
+}
+
+.button-control {
+    @extend %text;
+
+    border: none;
+    padding: 0;
+    
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.button-control:disabled {
+    color: grey;
+}
+
 .promotion-container {
     @extend %subcontainer;
     margin: 15px 0 0 0;
