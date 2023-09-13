@@ -5,6 +5,8 @@ import * as Loc from '../module/location.js';
 import * as Pieces from '../module/pieces.js';
 import * as AbstractPieces from '../module/abstract-pieces.js';
 import * as Promotion from '../module/promotion.js';
+import * as Score from '../module/game-score.js';
+import * as Conclusion from '../module/game-conclusion.js';
 import { isPromotion } from '../module/game-util.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
@@ -198,6 +200,36 @@ export function toNext(ev) {
 
 export function toLatest(ev) {
     this.stateIdx = this.state.length-1;
+}
+
+
+/* Result */
+const conclusionText = Object.freeze({
+    [Conclusion.WhiteCheckmate]: "White wins",
+    [Conclusion.BlackCheckmate]: "Black wins",
+    [Conclusion.Stalemate]: "Stalemate",
+    [Conclusion.Insufficient]: "Insufficient material",
+    [Conclusion.Repetition]: "Threefold repetition",
+    [Conclusion.FiftyMove]: "Draw",
+});
+
+export function getScore() {
+    const result = this.current.result;
+    if(!result.ended) return "-";
+
+    const score = result.score;
+    if(Score.wonBy(White, score)) return "1 - 0";
+    if(Score.wonBy(Black, score)) return "0 - 1";
+
+    return "½ - ½";
+}
+
+export function getConclusion() {
+    const result = this.current.result;
+    if(!result.ended) return "-";
+
+    const conclusion = result.conclusion;
+    return conclusionText[conclusion];
 }
 
 

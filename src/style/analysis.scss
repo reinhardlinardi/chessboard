@@ -86,20 +86,20 @@
     @extend %grid;
     gap: 0 0;
     grid-template-columns: 30px repeat(2, auto);
-    grid-template-rows: repeat(10, min(4.2vw, 4.2vh));
+    grid-template-rows: repeat(9, min(4.2vw, 4.2vh));
 
     background-color: #242424;
 }
 
 .move-container {
-    display: table;
+    @extend %table;
 }
 
 %move-text {
+    @extend %table-cell;
     font-family: 'Open Sans', sans-serif;
     font-size: text.$text-size;
 
-    display: table-cell;
     text-align: center;
     vertical-align: bottom;
 }
@@ -113,6 +113,38 @@
 .move-notation {
     @extend %move-text;
     color: #d0d0d0;
+}
+
+.result-grid {
+    @extend %grid;
+    gap: 0 0;
+    grid-template-rows: repeat(2, min(4.5vw, 4.5vh));
+
+    background-color: #202020;
+}
+
+.result-container {
+    @extend %table;
+}
+
+%result-text {
+    @extend %table-cell;
+    font-family: 'Open Sans', sans-serif;
+    font-size: min(2.2vw, 2.2vh);
+    color: #d0d0d0;
+
+    text-align: center;
+    vertical-align: middle
+}
+
+.score-text {
+    @extend %result-text;
+    padding: 5px 0 0 0;
+}
+
+.conclusion-text {
+    @extend %result-text;
+    padding: 0 0 5px 0;
 }
 
 .button-grid {

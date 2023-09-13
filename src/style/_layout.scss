@@ -22,6 +22,14 @@
     @extend %align-center;
 }
 
+%table {
+    display: table;
+}
+
+%table-cell {
+    display: table-cell;
+}
+
 .justify-center {
     @extend %justify-center;
 }

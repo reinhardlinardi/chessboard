@@ -12,3 +12,8 @@ export const BlackWin: Score = -1;
 export function get(player: Color, win: boolean): Score {
     return (player === White? WhiteWin : BlackWin) * (win? 1 : -1);
 }
+
+export function wonBy(color: Color, score: Score): boolean {
+    const win = color === White? WhiteWin : BlackWin;
+    return score === win;
+}

@@ -51,6 +51,9 @@ const component = {
         toNext: page.toNext,
         toLatest: page.toLatest,
 
+        getScore: page.getScore,
+        getConclusion: page.getConclusion,
+
         getPromotedPieces: page.getPromotedPieces,
         getPromotedIds: page.getPromotedIds,
 

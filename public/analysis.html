@@ -101,16 +101,6 @@
 
           <div class="move-grid" v-show="!promote">
             <div class="move-container">
-              <div class="move-number">999</div>
-            </div>
-            <div class="move-container">
-              <div class="move-notation">gxh8=♕#</div>
-            </div>
-            <div class="move-container">
-              <div class="move-notation">gxh8=♕#</div>
-            </div>
-
-            <div class="move-container">
               <div class="move-number">1</div>
             </div>
             <div class="move-container">
@@ -118,6 +108,15 @@
             </div>
             <div class="move-container">
               <div class="move-notation">O-O-O</div>
+            </div>
+          </div>
+
+          <div class="result-grid" v-show="!promote">
+            <div class="result-container">
+              <div class="score-text" v-text="getScore()"></div>
+            </div>
+            <div class="result-container">
+              <div class="conclusion-text" v-text="getConclusion()"></div>
             </div>
           </div>
 
