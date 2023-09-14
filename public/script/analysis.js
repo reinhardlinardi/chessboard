@@ -171,23 +171,23 @@ export function flipBoard() {
 
 /* Navigation */
 export function isInitial() {
-    return this.stateIdx === 0;
+    return this.stateIdx === this.initialIdx;
 }
 
 export function isLatest() {
-    return this.stateIdx === this.state.length-1;
+    return this.stateIdx === this.latestIdx;
 }
 
 export function hasPrev() {
-    return !this.isInitial;
+    return !this.isInitial();
 }
 
 export function hasNext() {
-    return !this.isLatest;
+    return !this.isLatest();
 }
 
 export function toInitial(ev) {
-    this.stateIdx = 0;
+    this.stateIdx = this.initialIdx;
 }
 
 export function toPrev(ev) {
@@ -199,7 +199,7 @@ export function toNext(ev) {
 }
 
 export function toLatest(ev) {
-    this.stateIdx = this.state.length-1;
+    this.stateIdx = this.latestIdx;
 }
 
 
@@ -266,11 +266,15 @@ export function isDefaultSetup() {
 }
 
 export function initialState() {
-    return this.state[0];
+    return this.state[this.initialIdx];
 }
 
 export function currentState() {
     return this.state[this.stateIdx];
+}
+
+export function latestIdx() {
+    return this.state.length-1;
 }
 
 
@@ -305,8 +309,6 @@ export async function movePiece(from, to) {
 
     this.state.push(game.getCurrentStateData());
     this.stateIdx++;
-
-    console.log(this.current.notation, this.current.fen);
 }
 
 
@@ -379,16 +381,13 @@ export function created() {
     }
 
     game.start();
-
-    const initial = game.getInitialStateData();
-    this.state.push(initial);
-
-    this.select.loc = Loc.None;
+    this.state.push(game.getInitialStateData());
 
     if(this.isDefaultSetup()) Common.deleteQueries(paramImport, paramFEN);
-    else Common.setQuery(paramFEN, initial.fen);
+    else Common.setQuery(paramFEN, this.initial.fen);
 
-    console.log(initial.notation, initial.fen);
+    this.select.loc = Loc.None;
+    console.log(this.stateIdx);
 }
 
 function importGameState(format) {

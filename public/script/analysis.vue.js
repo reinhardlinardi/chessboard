@@ -6,6 +6,7 @@ const component = {
     data() {
         return {
             state: [],
+            initialIdx: 0,
             stateIdx: 0,
             flip: false,
             promote: false,
@@ -14,12 +15,9 @@ const component = {
         }
     },
     computed: {
-        isInitial: page.isInitial,
-        isLatest: page.isLatest,
-        hasPrev: page.hasPrev,
-        hasNext: page.hasNext,
         initial: page.initialState,
         current: page.currentState,
+        latestIdx: page.latestIdx,
         pieceDifference: page.pieceDifference,
     },
     methods: {
@@ -45,7 +43,11 @@ const component = {
         canBeOccupied: page.canBeOccupied,
 
         flipBoard: page.flipBoard,
-        
+
+        isInitial: page.isInitial,
+        isLatest: page.isLatest,
+        hasPrev: page.hasPrev,
+        hasNext: page.hasNext,
         toInitial: page.toInitial,
         toPrev: page.toPrev,
         toNext: page.toNext,
