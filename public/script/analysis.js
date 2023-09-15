@@ -299,7 +299,8 @@ export async function movePiece(from, to) {
         game.move(from, to, promoted);
     }
 
-    this.state.data.push(game.getCurrentStateData());
+    const latest = game.getCurrentStateData();
+    this.state.data.push(latest);
     this.state.idx++;
 }
 
@@ -373,14 +374,13 @@ export function created() {
     }
 
     game.start();
-
     const initial = game.getInitialStateData();
+    
     this.state.data.push(initial);
+    this.select = {click: false, loc: Loc.None};
 
     if(this.isDefaultSetup()) Common.deleteQueries(paramImport, paramFEN);
     else Common.setQuery(paramFEN, initial.fen);
-
-    this.select = {click: false, loc: Loc.None};
 }
 
 function importGameState(format) {
