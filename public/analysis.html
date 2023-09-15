@@ -49,7 +49,7 @@
                     :src="`svg/${getPiece(locOf(y, x))}.svg`"
                     :id="`piece-y${y}-x${x}`"
                     @click="onClick"
-                    draggable="true"
+                    :draggable="!promote"
                     @dragstart="onDragStart"
                     :data-rank="rankOf(y)"
                     :data-file="fileOf(x)"
@@ -100,15 +100,23 @@
         <div class="right-container">
 
           <div class="move-grid" v-show="!promote">
-            <div class="move-container">
-              <div class="move-number">1</div>
-            </div>
-            <div class="move-container">
-              <div class="move-notation">gxh8</div>
-            </div>
-            <div class="move-container">
-              <div class="move-notation">O-O-O</div>
-            </div>
+
+            <template v-for="(row, _) in getTableRows()">
+              <div class="move-container"><div class="move-number" v-text="row.num"></div></div>
+              <div class="move-container">
+                <div :class="['move-notation', row.white.idx === state.idx? 'current-move':'']"
+                  v-text="row.white.move"
+                >
+                </div>
+              </div>
+              <div class="move-container">
+                <div :class="['move-notation', row.black.idx === state.idx? 'current-move':'']"
+                  v-text="row.black.move"
+                >
+                </div>
+              </div>
+            </template>
+
           </div>
 
           <div class="result-grid" v-show="!promote">

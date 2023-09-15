@@ -11,7 +11,14 @@ const component = {
             },
             flip: false,
             promote: false,
-            select: {},
+            select: {
+                click: false,
+                loc: 0,
+            },
+            table: {
+                idx: 0,
+                minIdx: 0,
+            },
             ref: {},
         }
     },
@@ -42,6 +49,8 @@ const component = {
         canBeOccupied: page.canBeOccupied,
 
         flipBoard: page.flipBoard,
+
+        getTableRows: page.getTableRows,
 
         isInitial: page.isInitial,
         isLatest: page.isLatest,

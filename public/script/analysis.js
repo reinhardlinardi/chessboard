@@ -169,6 +169,37 @@ export function flipBoard() {
 }
 
 
+/* Table */
+const numRows = 2;
+
+export function getTableRows() {
+    if(!inView(this.state.idx, this.table.idx)) {
+        const offset = this.current.move === White? -1 : 0;
+        this.table.idx = Math.max(this.table.minIdx, this.state.idx-2*(numRows-1)+offset);
+    }
+    
+    let rows = [];
+
+    const start = this.table.idx;
+    const end = start + 2*numRows;
+    const maxIdx = this.state.data.length-1;
+
+    for(let idx = start; idx < end; idx += 2) {
+        const fullmove = idx > maxIdx? "" : this.state.data[idx].clock.fullmove;
+        const white = idx > maxIdx? "" : this.state.data[idx].notation;
+        const black = idx+1 > maxIdx? "" : this.state.data[idx+1].notation;
+
+        rows.push({num: fullmove, white: {move: white, idx: idx}, black: {move: black, idx: idx+1}});
+    }
+
+    return rows;
+}
+
+function inView(idx, start) {
+    return idx >= start && idx < start + 2*numRows;
+}
+
+
 /* Navigation */
 export function isInitial() {
     return this.state.idx === 0;
@@ -374,10 +405,15 @@ export function created() {
     }
 
     game.start();
+
     const initial = game.getInitialStateData();
-    
     this.state.data.push(initial);
-    this.select = {click: false, loc: Loc.None};
+
+    const tableIdx = initial.move === White? 1 : 0; 
+    this.table.idx = tableIdx;
+    this.table.minIdx = tableIdx;
+
+    this.select.loc = Loc.None;
 
     if(this.isDefaultSetup()) Common.deleteQueries(paramImport, paramFEN);
     else Common.setQuery(paramFEN, initial.fen);
