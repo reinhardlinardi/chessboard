@@ -286,25 +286,4 @@ export class Game {
         // 2. If player is in check, there should be at most 2 attackers
         if(numKingAttackers > 2) throw Err.New(Err.SetupPosition, "too many checking pieces");
     }
-
-    // getStateData(fullmove: number, color: Color): State | null {
-    //     const idx = this.gameStateIdx(fullmove, color);
-    //     return idx < 0? null : {...this.game[idx]};
-    // }
-
-    // private stateIdx(fullmove: number, color: Color): number {
-    //     const setupFullmove = this.setup.clock.fullmove;
-    //     if(fullmove < setupFullmove) return 0;
-
-    //     let offset = 1;
-    //     offset += color === Black? 1 : 0;
-    //     offset += this.setup.move === Black? -1 : 0;
-
-    //     return 2*(fullmove - setupFullmove) + offset;
-    // }
-
-    // private moveIdx(fullmove: number, color: Color): number {
-    //     const idx = this.gameStateIdx(fullmove, color)-1;
-    //     return idx < 0? -1 : idx;
-    // }
 };
