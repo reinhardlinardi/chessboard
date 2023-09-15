@@ -18,8 +18,13 @@
     <div id="app">
 
       <div class="global-container"
+        tabindex="-1"
         @dragenter.prevent
         @dragover.prevent
+        @keyup.up="toInitial"
+        @keyup.left="toPrev"
+        @keyup.right="toNext"
+        @keyup.down="toLatest"
       >
 
         <div>

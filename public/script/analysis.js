@@ -222,11 +222,11 @@ export function toInitial(ev) {
 }
 
 export function toPrev(ev) {
-    this.state.idx--;
+    if(this.hasPrev()) this.state.idx--;
 }
 
 export function toNext(ev) {
-    this.state.idx++;
+    if(this.hasNext()) this.state.idx++;
 }
 
 export function toLatest(ev) {
