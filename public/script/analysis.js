@@ -173,30 +173,44 @@ export function flipBoard() {
 const numRows = 8;
 
 export function getTableRows() {
-    if(!inView(this.state.idx, this.table.idx)) {
-        const offset = this.current.move === White? -1 : 0;
-        this.table.idx = Math.max(this.table.minIdx, this.state.idx-2*(numRows-1)+offset);
-    }
-    
+    this.updateTableView();
+
     let rows = [];
 
-    const start = this.table.idx;
-    const end = start + 2*numRows;
+    const table = this.table;
     const maxIdx = this.state.data.length-1;
 
-    for(let idx = start; idx < end; idx += 2) {
+    for(let idx = table.start; idx < table.end; idx += 2) {
         const fullmove = idx > maxIdx? "" : this.state.data[idx].clock.fullmove;
         const white = idx > maxIdx? "" : this.state.data[idx].notation;
         const black = idx+1 > maxIdx? "" : this.state.data[idx+1].notation;
 
-        rows.push({num: fullmove, white: {move: white, idx: idx}, black: {move: black, idx: idx+1}});
+        rows.push({
+            num: fullmove,
+            white: {move: white, idx: idx},
+            black: {move: black, idx: idx+1}
+        });
     }
 
     return rows;
 }
 
-function inView(idx, start) {
-    return idx >= start && idx < start + 2*numRows;
+export function updateTableView() {
+    const idx = this.state.idx;
+    const move = this.state.data[idx].move;
+
+    const table = this.table;
+    const start = table.start;
+    const end = table.end;
+
+    if(idx < start) {
+        table.start = Math.max(table.min, move === White? idx-1 : idx);
+        table.end = table.start + 2*numRows;
+    }
+    if(idx >= end) {
+        table.end = move === White? idx+1 : idx+2;
+        table.start = table.end - 2*numRows;
+    }
 }
 
 
@@ -236,6 +250,7 @@ export function toLatest(ev) {
 export function toMove(ev) {
     const data = Common.getElementData(ev.target.id);
     const idx = parseInt(data.stateIdx);
+    
     this.state.idx = idx;
 }
 
@@ -422,14 +437,14 @@ export function created() {
     const initial = game.getInitialStateData();
     this.state.data.push(initial);
 
-    const tableIdx = initial.move === White? 1 : 0; 
-    this.table.idx = tableIdx;
-    this.table.minIdx = tableIdx;
-
-    this.select.loc = Loc.None;
-
     if(this.isDefaultSetup()) Common.deleteQueries(paramImport, paramFEN);
     else Common.setQuery(paramFEN, initial.fen);
+
+    /* Init data */
+    this.select.loc = Loc.None;
+
+    const tableIdx = initial.move === White? 1 : 0; 
+    this.table = {start: tableIdx, end: tableIdx + 2*numRows, min: tableIdx};
 }
 
 function importGameState(format) {

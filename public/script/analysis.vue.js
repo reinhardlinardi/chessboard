@@ -16,8 +16,9 @@ const component = {
                 loc: 0,
             },
             table: {
-                idx: 0,
-                minIdx: 0,
+                start: 0,
+                end: 0,
+                min: 0,
             },
             ref: {},
         }
@@ -51,6 +52,7 @@ const component = {
         flipBoard: page.flipBoard,
 
         getTableRows: page.getTableRows,
+        updateTableView: page.updateTableView,
 
         isInitial: page.isInitial,
         isLatest: page.isLatest,
