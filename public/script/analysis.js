@@ -170,7 +170,7 @@ export function flipBoard() {
 
 
 /* Table */
-const numRows = 2;
+const numRows = 8;
 
 export function getTableRows() {
     if(!inView(this.state.idx, this.table.idx)) {
