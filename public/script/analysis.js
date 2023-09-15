@@ -171,11 +171,11 @@ export function flipBoard() {
 
 /* Navigation */
 export function isInitial() {
-    return this.stateIdx === this.initialIdx;
+    return this.state.idx === 0;
 }
 
 export function isLatest() {
-    return this.stateIdx === this.latestIdx;
+    return this.state.idx === this.state.data.length-1;
 }
 
 export function hasPrev() {
@@ -187,19 +187,19 @@ export function hasNext() {
 }
 
 export function toInitial(ev) {
-    this.stateIdx = this.initialIdx;
+    this.state.idx = 0;
 }
 
 export function toPrev(ev) {
-    this.stateIdx--;
+    this.state.idx--;
 }
 
 export function toNext(ev) {
-    this.stateIdx++;
+    this.state.idx++;
 }
 
 export function toLatest(ev) {
-    this.stateIdx = this.latestIdx;
+    this.state.idx = this.state.data.length-1;
 }
 
 
@@ -259,22 +259,14 @@ async function getPromoted(ids) {
 /* State */
 export function isDefaultSetup() {
     const ref = this.ref;
-    const state = this.initial;
+    const initial = this.state.data[0];
 
-    return state.id === ref.id && state.clock.halfmove === ref.clock.halfmove &&
-        state.clock.fullmove === ref.clock.fullmove;
+    return initial.id === ref.id && initial.clock.halfmove === ref.clock.halfmove &&
+        initial.clock.fullmove === ref.clock.fullmove;
 }
 
-export function initialState() {
-    return this.state[this.initialIdx];
-}
-
-export function currentState() {
-    return this.state[this.stateIdx];
-}
-
-export function latestIdx() {
-    return this.state.length-1;
+export function current() {
+    return this.state.data[this.state.idx];
 }
 
 
@@ -307,8 +299,8 @@ export async function movePiece(from, to) {
         game.move(from, to, promoted);
     }
 
-    this.state.push(game.getCurrentStateData());
-    this.stateIdx++;
+    this.state.data.push(game.getCurrentStateData());
+    this.state.idx++;
 }
 
 
@@ -381,10 +373,12 @@ export function created() {
     }
 
     game.start();
-    this.state.push(game.getInitialStateData());
+
+    const initial = game.getInitialStateData();
+    this.state.data.push(initial);
 
     if(this.isDefaultSetup()) Common.deleteQueries(paramImport, paramFEN);
-    else Common.setQuery(paramFEN, this.initial.fen);
+    else Common.setQuery(paramFEN, initial.fen);
 
     this.select = {click: false, loc: Loc.None};
 }

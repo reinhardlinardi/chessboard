@@ -5,9 +5,10 @@ import * as page from './analysis.js';
 const component = {
     data() {
         return {
-            state: [],
-            initialIdx: 0,
-            stateIdx: 0,
+            state: {
+                data: [],
+                idx: 0,
+            },
             flip: false,
             promote: false,
             select: {},
@@ -15,9 +16,7 @@ const component = {
         }
     },
     computed: {
-        initial: page.initialState,
-        current: page.currentState,
-        latestIdx: page.latestIdx,
+        current: page.current,
         pieceDifference: page.pieceDifference,
     },
     methods: {
