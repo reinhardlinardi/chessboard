@@ -7,7 +7,7 @@ const component = {
         return {
             setup: {},
             flip: false,
-            defaultSetup: {clock: {}, id: ""},
+            ref: {},
         }
     },
     computed: {

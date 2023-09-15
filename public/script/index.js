@@ -120,7 +120,7 @@ export function disableCastle(type) {
 
 /* State */
 export function isDefaultSetup() {
-    const ref = this.defaultSetup;
+    const ref = this.ref;
     const setup = this.setup;
 
     return setup.id === ref.id && setup.clock.halfmove === ref.clock.halfmove &&
@@ -248,7 +248,7 @@ export function onDropRemove(ev) {
 /* Lifecycle */
 export function created() {
     const setup = game.getSetupData();
-    this.defaultSetup = {clock: {...setup.clock}, id: setup.id};
+    this.ref = {clock: {...setup.clock}, id: setup.id};
 
     const fen = Common.getQuery(paramFEN);
     if(fen) {
