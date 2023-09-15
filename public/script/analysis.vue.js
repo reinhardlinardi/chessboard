@@ -10,8 +10,8 @@ const component = {
             stateIdx: 0,
             flip: false,
             promote: false,
-            select: {click: false, loc: 0},
-            defaultSetup: {clock: {}, id: ""},
+            select: {},
+            ref: {},
         }
     },
     computed: {

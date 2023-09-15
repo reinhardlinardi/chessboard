@@ -258,7 +258,7 @@ async function getPromoted(ids) {
 
 /* State */
 export function isDefaultSetup() {
-    const ref = this.defaultSetup;
+    const ref = this.ref;
     const state = this.initial;
 
     return state.id === ref.id && state.clock.halfmove === ref.clock.halfmove &&
@@ -365,7 +365,7 @@ const formats = [paramFEN];
 
 export function created() {
     const setup = game.getSetupData();
-    this.defaultSetup = {clock: {...setup.clock}, id: setup.id};
+    this.ref = {clock: {...setup.clock}, id: setup.id};
 
     const format = Common.getQuery(paramImport);
 
@@ -386,8 +386,7 @@ export function created() {
     if(this.isDefaultSetup()) Common.deleteQueries(paramImport, paramFEN);
     else Common.setQuery(paramFEN, this.initial.fen);
 
-    this.select.loc = Loc.None;
-    console.log(this.stateIdx);
+    this.select = {click: false, loc: Loc.None};
 }
 
 function importGameState(format) {
