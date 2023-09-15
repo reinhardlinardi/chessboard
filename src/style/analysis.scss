@@ -85,8 +85,8 @@
 .move-grid {
     @extend %grid;
     gap: 0 0;
-    grid-template-columns: 30px repeat(2, auto);
-    grid-template-rows: repeat(9, min(4.2vw, 4.2vh));
+    grid-template-columns: 30px repeat(2, 1fr);
+    grid-template-rows: repeat(8, min(4.5vw, 4.5vh));
 
     background-color: #242424;
 }
@@ -171,8 +171,8 @@
 }
 
 .promotion-container {
-    @extend %subcontainer;
-    margin: 15px 0 0 0;
+    border: 1px solid transparent;
+    border-radius: 2px;
     padding: 5px 8px 8px 8px;
 
     background-color: #505050;
