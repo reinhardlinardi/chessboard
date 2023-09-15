@@ -315,6 +315,13 @@ export function copyFEN(ev) {
 /* Move */
 export async function movePiece(from, to) {
     const state = this.current;
+    const idx = this.state.idx;
+
+    if(idx < this.state.data.length-1) {
+        game.undo(state.clock.fullmove, state.move);
+        this.state.data = this.state.data.slice(0, idx+1);
+    }
+    
     const pos = state.pos;
     const color = state.move;
     const promotion = isPromotion(pos, color, from, to);

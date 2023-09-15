@@ -110,6 +110,16 @@ export class Game {
         this.game.push(next);
     }
 
+    undo(fullmove: number, color: Color) {
+        if(!this.started) throw Err.New(Err.InvalidOp, "game not started");
+
+        const initial = this.getInitialStateData();
+        const offset = (initial.move === White? 0 : -1) + (color === White? 0 : 1);
+        const idx = 2*(fullmove - initial.clock.fullmove) + offset;
+        
+        this.game = this.game.slice(0, idx+1);
+    }
+
     resetSetup() {
         if(this.started) throw Err.New(Err.InvalidOp, "game has started");
 
