@@ -60,6 +60,7 @@ const component = {
         toPrev: page.toPrev,
         toNext: page.toNext,
         toLatest: page.toLatest,
+        toMove: page.toMove,
 
         getScore: page.getScore,
         getConclusion: page.getConclusion,

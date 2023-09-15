@@ -103,18 +103,27 @@
 
             <template v-for="(row, _) in getTableRows()">
               <div class="move-container"><div class="move-number" v-text="row.num"></div></div>
+              
               <div class="move-container">
                 <div :class="['move-notation', row.white.idx === state.idx? 'current-move':'']"
                   v-text="row.white.move"
+                  :id="`notation-${row.white.idx}`"
+                  @click="toMove"
+                  :data-state-idx="row.white.idx"
                 >
                 </div>
               </div>
+              
               <div class="move-container">
                 <div :class="['move-notation', row.black.idx === state.idx? 'current-move':'']"
                   v-text="row.black.move"
+                  :id="`notation-${row.black.idx}`"
+                  @click="toMove"
+                  :data-state-idx="row.black.idx"
                 >
                 </div>
               </div>
+            
             </template>
 
           </div>

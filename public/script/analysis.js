@@ -233,6 +233,12 @@ export function toLatest(ev) {
     this.state.idx = this.state.data.length-1;
 }
 
+export function toMove(ev) {
+    const data = Common.getElementData(ev.target.id);
+    const idx = parseInt(data.stateIdx);
+    this.state.idx = idx;
+}
+
 
 /* Result */
 const conclusionText = Object.freeze({

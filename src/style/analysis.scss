@@ -85,7 +85,7 @@
 .move-grid {
     @extend %grid;
     gap: 0 0;
-    grid-template-columns: 36px repeat(2, 1fr);
+    grid-template-columns: 32px repeat(2, 1fr);
     grid-template-rows: repeat(8, min(4.5vw, 4.5vh));
 
     background-color: #242424;
@@ -113,6 +113,8 @@
 .move-notation {
     @extend %move-text;
     color: #d0d0d0;
+
+    cursor: pointer;
 }
 
 .current-move {
