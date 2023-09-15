@@ -16,11 +16,11 @@ export const None = "...";
 type Location = Loc.Location;
 
 const figurine = Object.freeze({
-    [Type.TypeKnight]: "♘",
-    [Type.TypeBishop]: "♗",
-    [Type.TypeRook]: "♖",
-    [Type.TypeQueen]: "♕",
-    [Type.TypeKing]: "♔",
+    [Type.TypeKnight]: "♞",
+    [Type.TypeBishop]: "♝",
+    [Type.TypeRook]: "♜",
+    [Type.TypeQueen]: "♛",
+    [Type.TypeKing]: "♚",
 });
 
 
