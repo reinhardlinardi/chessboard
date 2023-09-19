@@ -1,6 +1,8 @@
 @use 'layout';
 @use 'font';
 @use 'text';
+@use 'cursor';
+@use 'input';
 
 
 body {
@@ -8,14 +10,14 @@ body {
 }
 
 select:focus {
-    outline: none;
+    @extend %no-outline;
 }
 
 input[type="text"]:focus {
-    outline: none;
+    @extend %no-outline;
     border-color: #a8a8a8;
 }
 
 img {
-    cursor: pointer;
+    @extend %pointer;
 }

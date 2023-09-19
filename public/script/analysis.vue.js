@@ -24,6 +24,7 @@ const component = {
         }
     },
     computed: {
+        len: page.len,
         current: page.current,
         pieceDifference: page.pieceDifference,
     },
@@ -54,6 +55,7 @@ const component = {
         getTableRows: page.getTableRows,
         updateTableView: page.updateTableView,
 
+        isValidIdx: page.isValidIdx,
         isInitial: page.isInitial,
         isLatest: page.isLatest,
         hasPrev: page.hasPrev,

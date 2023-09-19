@@ -4,6 +4,7 @@
 @use 'button';
 @use 'font';
 @use 'text';
+@use 'cursor';
 
 
 %adv-bar {
@@ -62,9 +63,9 @@
 
 .marker-container {
     @extend %perfect-center;
+    @extend %pointer;
     width: 100%;
     height: 100%;
-    cursor: pointer;
 }
 
 %marker {
@@ -112,9 +113,8 @@
 
 .move-notation {
     @extend %move-text;
+    @extend %pointer;
     color: #d0d0d0;
-
-    cursor: pointer;
 }
 
 .current-move {
@@ -165,16 +165,17 @@
 
 .button-control {
     @extend %text;
+    @extend %pointer;
 
     border: none;
     padding: 0;
     
     background-color: transparent;
-    cursor: pointer;
 }
 
 .button-control:disabled {
     color: grey;
+    cursor: default;
 }
 
 .promotion-container {

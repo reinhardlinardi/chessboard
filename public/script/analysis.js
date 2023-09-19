@@ -176,19 +176,17 @@ export function getTableRows() {
     this.updateTableView();
 
     let rows = [];
-
     const table = this.table;
-    const maxIdx = this.state.data.length-1;
 
     for(let idx = table.start; idx < table.end; idx += 2) {
-        const fullmove = idx > maxIdx? "" : this.state.data[idx].clock.fullmove;
-        const white = idx > maxIdx? "" : this.state.data[idx].notation;
-        const black = idx+1 > maxIdx? "" : this.state.data[idx+1].notation;
+        const fullmove = idx < this.len? this.state.data[idx].clock.fullmove : "";
+        const white = idx < this.len? this.state.data[idx].notation : "";
+        const black = idx+1 < this.len? this.state.data[idx+1].notation : "";
 
         rows.push({
             num: fullmove,
             white: {move: white, idx: idx},
-            black: {move: black, idx: idx+1}
+            black: {move: black, idx: idx+1},
         });
     }
 
@@ -215,12 +213,16 @@ export function updateTableView() {
 
 
 /* Navigation */
+export function isValidIdx(idx) {
+    return idx < this.len;
+}
+
 export function isInitial() {
     return this.state.idx === 0;
 }
 
 export function isLatest() {
-    return this.state.idx === this.state.data.length-1;
+    return this.state.idx === this.len-1;
 }
 
 export function hasPrev() {
@@ -244,14 +246,14 @@ export function toNext(ev) {
 }
 
 export function toLatest(ev) {
-    this.state.idx = this.state.data.length-1;
+    this.state.idx = this.len-1;
 }
 
 export function toMove(ev) {
     const data = Common.getElementData(ev.target.id);
     const idx = parseInt(data.stateIdx);
     
-    if(idx < this.state.data.length) this.state.idx = idx;
+    this.state.idx = idx;
 }
 
 
@@ -317,6 +319,10 @@ export function isDefaultSetup() {
         initial.clock.fullmove === ref.clock.fullmove;
 }
 
+export function len() {
+    return this.state.data.length;
+}
+
 export function current() {
     return this.state.data[this.state.idx];
 }
@@ -338,7 +344,7 @@ export async function movePiece(from, to) {
     const state = this.current;
     const idx = this.state.idx;
 
-    if(idx < this.state.data.length-1) {
+    if(idx < this.len-1) {
         game.undo(state.clock.fullmove, state.move);
         this.state.data = this.state.data.slice(0, idx+1);
     }
