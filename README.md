@@ -5,12 +5,13 @@ A responsive client-side chess board editor and self-analysis application with m
 - [Node.js](https://nodejs.org/en)
 - [Yarn 2+](https://yarnpkg.com/)
 
-## Installation
+## Setup
 ```
 yarn install
+make
 ```
 
-## Run app
+## Run
 ```
 yarn node server.js
 ```
