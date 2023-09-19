@@ -251,7 +251,7 @@ export function toMove(ev) {
     const data = Common.getElementData(ev.target.id);
     const idx = parseInt(data.stateIdx);
     
-    this.state.idx = idx;
+    if(idx < this.state.data.length) this.state.idx = idx;
 }
 
 
