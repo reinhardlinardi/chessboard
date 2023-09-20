@@ -111,7 +111,7 @@
               
               <div class="move-container">
                 <div :class="['move-notation', row.white.idx === state.idx? 'current-move':'']"
-                  v-show="isValidIdx(row.white.idx)"
+                  v-if="isValidIdx(row.white.idx)"
                   v-text="row.white.move"
                   :id="`notation-${row.white.idx}`"
                   @click="toMove"
@@ -122,7 +122,7 @@
               
               <div class="move-container">
                 <div :class="['move-notation', row.black.idx === state.idx? 'current-move':'']"
-                  v-show="isValidIdx(row.black.idx)"
+                  v-if="isValidIdx(row.black.idx)"
                   v-text="row.black.move"
                   :id="`notation-${row.black.idx}`"
                   @click="toMove"
