@@ -342,30 +342,40 @@ export function copyFEN(ev) {
 /* Move */
 export async function movePiece(from, to) {
     const state = this.current;
+    
     const idx = this.state.idx;
-
+    let skip = false;
+    
     if(idx < this.len-1) {
-        game.undo(state.clock.fullmove, state.move);
-        this.state.data = this.state.data.slice(0, idx+1);
+        const next = this.state.data[idx+1];
+        
+        if(from === next.from && to === next.to) skip = true;
+        else {
+            game.undo(state.clock.fullmove, state.move);
+            this.state.data = this.state.data.slice(0, idx+1);
+        }
     }
     
-    const pos = state.pos;
-    const color = state.move;
-    const promotion = isPromotion(pos, color, from, to);
+    if(!skip) {
+        const pos = state.pos;
+        const color = state.move;
+        const promotion = isPromotion(pos, color, from, to);
 
-    if(!promotion) game.move(from, to);
-    else {
-        this.promote = true;
-        
-        const ids = this.getPromotedIds();
-        const promoted = await getPromoted(ids);
-        
-        this.promote = false;
-        game.move(from, to, promoted);
+        if(!promotion) game.move(from, to);
+        else {
+            this.promote = true;
+            
+            const ids = this.getPromotedIds();
+            const promoted = await getPromoted(ids);
+            
+            this.promote = false;
+            game.move(from, to, promoted);
+        }
+
+        const latest = game.getCurrentStateData();
+        this.state.data.push(latest);
     }
 
-    const latest = game.getCurrentStateData();
-    this.state.data.push(latest);
     this.state.idx++;
 }
 
@@ -450,19 +460,18 @@ export function created() {
     game.start();
 
     const initial = game.getInitialStateData();
+    const tableIdx = initial.move === White? 1 : 0;
+
     this.state.data.push(initial);
-
-    if(this.isDefaultSetup()) Common.deleteQueries(paramImport, paramFEN);
-    else Common.setQuery(paramFEN, initial.fen);
-
-    /* Init data */
     this.select.loc = Loc.None;
-
-    const tableIdx = initial.move === White? 1 : 0; 
     this.table = {start: tableIdx, end: tableIdx + 2*numRows, min: tableIdx};
 
-    /* Register keyboard handlers */
+    /* Keyboard handlers */
     document.onkeyup = this.onKeyUp;
+
+    /* Query URL */
+    if(this.isDefaultSetup()) Common.deleteQueries(paramImport, paramFEN);
+    else Common.setQuery(paramFEN, initial.fen);
 }
 
 function importGameState(format) {
