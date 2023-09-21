@@ -342,41 +342,40 @@ export function copyFEN(ev) {
 /* Move */
 export async function movePiece(from, to) {
     const state = this.current;
-    
     const idx = this.state.idx;
-    let skip = false;
-    
-    if(idx < this.len-1) {
-        const next = this.state.data[idx+1];
-        
-        if(from === next.from && to === next.to) skip = true;
-        else {
+
+    const promotion = isPromotion(state.pos, state.move, from, to);
+    let promoted = Type.TypeNone;
+
+    if(promotion) {
+        this.promote = true;
+        promoted = await getPromoted(this.getPromotedIds());
+        this.promote = false;
+    }
+
+    const skip = this.skipMove(from, to, promotion, promoted);
+    if(!skip) {
+        if(idx < this.len-1) {
             game.undo(state.clock.fullmove, state.move);
             this.state.data = this.state.data.slice(0, idx+1);
         }
-    }
-    
-    if(!skip) {
-        const pos = state.pos;
-        const color = state.move;
-        const promotion = isPromotion(pos, color, from, to);
-
-        if(!promotion) game.move(from, to);
-        else {
-            this.promote = true;
-            
-            const ids = this.getPromotedIds();
-            const promoted = await getPromoted(ids);
-            
-            this.promote = false;
-            game.move(from, to, promoted);
-        }
+        
+        if(promotion) game.move(from, to, promoted);
+        else game.move(from, to);
 
         const latest = game.getCurrentStateData();
         this.state.data.push(latest);
     }
 
     this.state.idx++;
+}
+
+export function skipMove(from, to, promotion, promoted = Type.TypeNone) {
+    const idx = this.state.idx;
+    if(idx === this.len-1) return false;
+
+    const next = this.state.data[idx+1];
+    return from === next.from && to === next.to && (promotion? promoted === next.promoted : true);
 }
 
 

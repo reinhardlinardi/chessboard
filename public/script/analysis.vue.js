@@ -77,6 +77,7 @@ const component = {
         copyFEN: page.copyFEN,
 
         movePiece: page.movePiece,
+        skipMove: page.skipMove,
 
         onClick: page.onClick,
         onDragStart: page.onDragStart,

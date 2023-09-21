@@ -3,6 +3,7 @@ import { State as state } from "./state.js";
 import { Result } from "./game-result.js";
 import { Moves } from "./move.js";
 import { PieceCount } from "./position-util.js";
+import { Type } from './piece-type.js';
 
 
 export type StateCount = {[id: string]: number};
@@ -19,5 +20,6 @@ export interface State extends Setup {
     moves: Moves,
     from: Loc.Location,
     to: Loc.Location,
+    promoted: Type,
     notation: string,
 };

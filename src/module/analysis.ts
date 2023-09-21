@@ -20,7 +20,7 @@ import { PieceCount, getEnPassantPawns, getPieceCount } from './position-util.js
 import { Moves, getLegalMoves, hasLegalMoves } from './move.js';
 import { HalfmoveStart, FullmoveStart, MaxHalfmove } from './clock.js';
 import { Position, get, getByLoc, setByLoc, copy } from './position.js';
-import { Type, TypeKing, TypePawn, TypeQueen } from './piece-type.js';
+import { Type, TypeKing, TypePawn, TypeQueen, TypeNone } from './piece-type.js';
 import { Color, White, Black, opponentOf, getList as getColors } from './color.js';
 import * as Err from './analysis-error.js';
 
@@ -74,6 +74,9 @@ export class Game {
 
         if(!game.isValidMove(from, to, current.moves)) throw Err.New(Err.InvalidMove, "invalid move");
 
+        const isPromotion = game.isPromotion(pos, player, from, to);
+        if(!isPromotion) promoted = TypeNone;
+
         const next = this.copyStateData(current);
         const opponent = opponentOf(player);
         next.move = opponent;
@@ -105,6 +108,7 @@ export class Game {
 
         next.from = from;
         next.to = to;
+        next.promoted = promoted;
         next.notation = Notation.of(from, to, current.enPassant, promoted, player, pos, next.pos, next.result);
 
         this.game.push(next);
@@ -247,9 +251,10 @@ export class Game {
 
         const from = Loc.None;
         const to = Loc.None;
+        const promoted = TypeNone;
         const notation = Notation.None;
         
-        return {...s, result: result, pieces: pieces, repeat: repeat, moves: moves, from: from, to: to, notation: notation};
+        return {...s, result: result, pieces: pieces, repeat: repeat, moves: moves, from: from, to: to, promoted: promoted, notation: notation};
     }
 
     private setupValidateKingCount(pos: Position) {
