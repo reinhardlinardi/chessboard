@@ -16,7 +16,7 @@
     border: 1px solid transparent;
     border-radius: 2px;
 
-    background-color: #505050;
+    background-color: #787868;
 }
 
 .top-tray {
@@ -29,18 +29,21 @@
     margin: 8px 0 0 0;
 }
 
-.control-container {
-    @extend %subcontainer;
-    margin: 0 0 15px 0;
-}
-
-.option-container {
-    @extend %subcontainer;
-    margin: 15px 0 0 0;
+.form-container {
+    padding: 2px 0 10px 10px;
+    background-color: #222222;
 }
 
 .subsection {
-    padding: 10px 0 10px 0;
+    padding: 8px 0 8px 0;
+}
+
+.section-label {
+    @extend %label;
+}
+
+.section-text {
+    @extend %text;
 }
 
 .form-select {
@@ -66,4 +69,29 @@
 .fen-container {
     @extend %perfect-center;
     margin: 30px 0 0 0;
+}
+
+.button-grid {
+    @extend %grid;
+    gap: 0 0;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: min(4vw, 4vh);
+
+    background-color: #303030;
+}
+
+.button-nav {
+    @extend %button;
+    @extend %text;
+
+    margin: 0 10px 0 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 4px 6px 4px 6px;
+
+    background-color: #019443;
+}
+
+.button-nav:disabled {
+    background-color: grey;
 }

@@ -105,22 +105,14 @@
         </div>
 
         <div class="right-container">
-
-          <div class="control-container">
-            <p class="section-label">Board</p>
-            <button class="button" @click="flipBoard">Flip</button>
-            <button class="button-warning" @click="clearBoard">Clear</button>
-            <button class="button-danger" @click="resetBoard">Reset</button>
-          </div>
           
-          <div class="option-container">
-            <p class="section-label">Options</p>
+          <div class="form-container">
 
             <div class="subsection">
-              <label class="section-text">Move</label>
+              <label class="section-text">Next to move</label>
               <select class="form-select" @change="setMove">
-                <option :value="white()" :selected="selectedMove(white())">White to move</option>
-                <option :value="black()" :selected="selectedMove(black())">Black to move</option>
+                <option :value="white()" :selected="selectedMove(white())">White</option>
+                <option :value="black()" :selected="selectedMove(black())">Black</option>
               </select>
             </div>
 
@@ -170,6 +162,12 @@
               </button>
             </div>
             
+          </div>
+
+          <div class="button-grid">
+            <div class="button-container"><button class="button-control" @click="flipBoard">⇅</button></div>
+            <div class="button-container"><button class="button-control" @click="clearBoard">✕</button></div>
+            <div class="button-container"><button class="button-control" @click="resetBoard">↺</button></div>
           </div>
         
         </div>
