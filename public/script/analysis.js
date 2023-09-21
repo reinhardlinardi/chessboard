@@ -416,6 +416,15 @@ export function onDrop(ev) {
     if(moves[src].includes(loc)) this.movePiece(src, loc);
 }
 
+export function onKeyUp(ev) {
+    switch(ev.code) {
+        case "ArrowUp": this.toInitial(); break;
+        case "ArrowLeft": this.toPrev(); break;
+        case "ArrowRight": this.toNext(); break;
+        case "ArrowDown": this.toLatest(); break;
+    }
+}
+
 
 /* Lifecycle */
 const paramImport = "import";
@@ -451,6 +460,9 @@ export function created() {
 
     const tableIdx = initial.move === White? 1 : 0; 
     this.table = {start: tableIdx, end: tableIdx + 2*numRows, min: tableIdx};
+
+    /* Register keyboard handlers */
+    document.onkeyup = this.onKeyUp;
 }
 
 function importGameState(format) {

@@ -81,6 +81,7 @@ const component = {
         onClick: page.onClick,
         onDragStart: page.onDragStart,
         onDrop: page.onDrop,
+        onKeyUp: page.onKeyUp,
     },
     created: page.created,
 };
