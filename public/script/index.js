@@ -2,6 +2,7 @@ import * as Common from './common.js';
 import * as Setup from '../module/setup.js';
 import * as Position from '../module/position.js';
 import * as FEN from '../module/fen.js';
+import * as Piece from '../module/piece.js';
 import * as Pieces from '../module/pieces.js';
 import * as Castles from '../module/castles.js';
 import * as AbstractPieces from '../module/abstract-pieces.js';
@@ -79,6 +80,14 @@ export function resetBoard() {
     game.resetSetup();
     this.setup = game.getSetupData();
     this.flip = false;
+}
+
+function replacePiece(loc, piece, board) {
+    Common.setPiece(piece, board, loc);
+}
+
+function removePiece(loc, board) {
+    Common.setPiece(Piece.None, board, loc);
 }
 
 
@@ -194,54 +203,69 @@ export function onSubmit(ev) {
 }
 
 
-/* Drag and drop */
-export function fromTray(id) {
-    return id.includes("tray");
-}
-
-export function getDraggedPiece(id) {
+/* Selection */
+export function getSelectedPiece(id, fromTray) {
     try {
-        if(fromTray(id)) return Common.getPieceType(id);
-        else return Common.getPiece(this.setup.pos, Common.getLoc(id));
+        const pos = this.setup.pos;
+        return fromTray? Common.getPieceType(id) : Common.getPiece(pos, Common.getLoc(id));
     }
     catch(err) {
         Face.disapprove();
     }
 }
 
-export function onDragStart(ev) {
-    Common.dragSetId(ev, ev.target.id);
-}
-
 export function onDropReplaceOrCopy(ev) {
-    const srcId = Common.dropGetId(ev);
-    const destId = ev.target.id;
+    if(this.select.click) return;
 
-    // Return if dnd to self
-    if(srcId === destId) return;
+    const src = this.select.id;
+    const dest = ev.target.id;
+    const fromTray = this.select.tray;
+
+    this.select = {click: false, tray: false, id: ""};
     
-    // Replace piece in dest
-    const piece = this.getDraggedPiece(srcId);
-
-    let pos = Position.copy(this.setup.pos);
-    Common.replacePieceById(destId, piece, pos);
-
-    // Remove piece in src if not tray
-    if(!fromTray(srcId)) Common.removePieceById(srcId, pos);
-    this.updateSetup({pos: pos});
+    if(src === dest) return;
+    
+    const piece = this.getSelectedPiece(src, fromTray);
+    const updated = Position.copy(this.setup.pos);
+    
+    replacePiece(Common.getLoc(dest), piece, updated);
+    if(!fromTray) removePiece(Common.getLoc(src), updated);
+    
+    this.updateSetup({pos: updated});
 }
 
 export function onDropRemove(ev) {
-    // Get dragged piece id
-    const srcId = Common.dropGetId(ev);
+    if(this.select.click) return;
 
-    // Remove piece if src is not tray
-    if(!fromTray(srcId)) {
-        let pos = Position.copy(this.setup.pos);
-        
-        Common.removePieceById(srcId, pos);
-        this.updateSetup({pos: pos});
-    }
+    const src = this.select.id;
+    const fromTray = this.select.tray;
+
+    this.select = {click: false, tray: false, id: ""};
+    
+    if(fromTray) return;
+
+    const _ = this.getSelectedPiece(src, fromTray);
+
+    const updated = Position.copy(this.setup.pos);        
+    removePiece(Common.getLoc(src), updated);
+
+    this.updateSetup({pos: updated});
+}
+
+export function trayOnDragStart(ev) {
+    if(this.select.click) return;
+    this.select = {click: false, tray: true, id: ev.target.id};
+}
+
+export function boardOnDragStart(ev) {
+    if(this.select.click) return;
+    this.select = {click: false, tray: false, id: ev.target.id};
+}
+
+export function trayOnClick(ev) {
+}
+
+export function boardOnClick(ev) {
 }
 
 

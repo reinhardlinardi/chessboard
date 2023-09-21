@@ -99,33 +99,3 @@ export function labelOf(x, flip) {
 export function isEmpty(board, loc) {
     return _ === getPiece(board, loc);
 }
-
-
-/* Drag and drop */
-const mime = "text/plain";
-
-export function dragSetId(ev, id) {
-    let dnd = ev.dataTransfer;
-    dnd.setData(mime, id);
-}
-
-export function dropGetId(ev) {
-    const dnd = ev.dataTransfer;
-    return dnd.getData(mime);
-}
-
-export function replacePiece(loc, piece, board) {
-    setPiece(piece, board, loc);
-}
-
-export function replacePieceById(id, piece, board) {
-    replacePiece(getLoc(id), piece, board);
-}
-
-export function removePiece(loc, board) {
-    setPiece(_, board, loc);
-}
-
-export function removePieceById(id, board) {
-    removePiece(getLoc(id), board);
-}

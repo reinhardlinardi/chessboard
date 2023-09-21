@@ -7,6 +7,11 @@ const component = {
         return {
             setup: {},
             flip: false,
+            select: {
+                click: false,
+                tray: false,
+                id: "",
+            },
             ref: {},
         }
     },
@@ -50,10 +55,13 @@ const component = {
 
         onSubmit: page.onSubmit,
 
-        getDraggedPiece: page.getDraggedPiece,
-        onDragStart: page.onDragStart,
+        getSelectedPiece: page.getSelectedPiece,
         onDropReplaceOrCopy: page.onDropReplaceOrCopy,
         onDropRemove: page.onDropRemove,
+        trayOnDragStart: page.trayOnDragStart,
+        boardOnDragStart: page.boardOnDragStart,
+        trayOnClick: page.trayOnClick,
+        boardOnClick: page.boardOnClick,
     },
     created: page.created,
 };

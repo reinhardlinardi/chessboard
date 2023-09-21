@@ -34,8 +34,9 @@
                   <img class="piece"
                     :src="`svg/${getTopTrayPiece(idx)}.svg`"
                     :id="`piece-top-tray-${idx}`"
+                    @click="trayOnClick"
                     draggable="true"
-                    @dragstart="onDragStart"
+                    @dragstart="trayOnDragStart"
                     :data-piece-type="getTopTrayPiece(idx)"
                   >
               </div>
@@ -50,6 +51,7 @@
 
                 <div :class="(y+x) % 2 === 0? 'light-square':'dark-square'"
                   :id="`board-y${y}-x${x}`"
+                  @click="boardOnClick"
                   @drop.prevent="onDropReplaceOrCopy"
                   :data-square="`${labelOf(x)}${rankOf(y)}`"
                   :data-rank="rankOf(y)"
@@ -60,7 +62,7 @@
                     :src="`svg/${getPiece(locOf(y, x))}.svg`"
                     :id="`piece-y${y}-x${x}`"
                     draggable="true"
-                    @dragstart="onDragStart"
+                    @dragstart="boardOnDragStart"
                     :data-rank="rankOf(y)"
                     :data-file="fileOf(x)"
                   >
@@ -80,8 +82,9 @@
                   <img class="piece"
                     :src="`svg/${getBottomTrayPiece(idx)}.svg`"
                     :id="`piece-bottom-tray-${idx}`"
+                    @click="trayOnClick"
                     draggable="true"
-                    @dragstart="onDragStart"
+                    @dragstart="trayOnDragStart"
                     :data-piece-type="getBottomTrayPiece(idx)"
                   >
               </div>
