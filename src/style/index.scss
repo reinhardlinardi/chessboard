@@ -71,6 +71,21 @@
     margin: 30px 0 0 0;
 }
 
+.button-nav {
+    @extend %button;
+    @extend %text;
+
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 3px 6px 3px 6px;
+
+    background-color: #019443;
+}
+
+.button-nav:disabled {
+    background-color: grey;
+}
+
 .button-grid {
     @extend %grid;
     gap: 0 0;
@@ -80,18 +95,18 @@
     background-color: #303030;
 }
 
-.button-nav {
-    @extend %button;
-    @extend %text;
-
-    margin: 0 10px 0 0;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    padding: 4px 6px 4px 6px;
-
-    background-color: #019443;
+.button-container {
+    @extend %table;
+    text-align: center;
 }
 
-.button-nav:disabled {
-    background-color: grey;
+.button-control {
+    @extend %button;
+    @extend %text;
+    @extend %table-cell;
+
+    border: none;
+    padding: 0;
+    
+    background-color: transparent;
 }

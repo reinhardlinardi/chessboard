@@ -17,24 +17,6 @@
     margin: 0 0 0 15px;
 }
 
-.button-container {
-    text-align: center;
-}
-
-.button-control {
-    @extend %button;
-    @extend %text;
-
-    border: none;
-    padding: 0;
-    
-    background-color: transparent;
-}
-
-.button-control:disabled {
-    color: grey;
-}
-
 .button-background {
     @extend %button;
     
