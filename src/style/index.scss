@@ -90,20 +90,20 @@
     @extend %grid;
     gap: 0 0;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: min(4vw, 4vh);
+    grid-template-rows: min(3.6vw, 3.6vh);
 
     background-color: #303030;
 }
 
 .button-container {
-    @extend %table;
+    // @extend %table;
     text-align: center;
 }
 
 .button-control {
     @extend %button;
     @extend %text;
-    @extend %table-cell;
+    // @extend %table-cell;
 
     border: none;
     padding: 0;
