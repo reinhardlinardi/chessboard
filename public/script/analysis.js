@@ -425,6 +425,8 @@ export function onDrop(ev) {
     if(moves[src].includes(loc)) this.movePiece(src, loc);
 }
 
+
+/* Keyboard */
 export function onKeyUp(ev) {
     switch(ev.code) {
         case "ArrowUp": this.toInitial(); break;
