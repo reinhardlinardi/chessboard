@@ -102,24 +102,28 @@
     font-family: 'Open Sans', sans-serif;
     font-size: text.$text-size;
 
-    padding: 0 0 0 8px;
     vertical-align: bottom;
 }
 
 .move-number {
     @extend %move-text;
+    padding: 0;
+
     background-color: #363636;
+    text-align: center;
     color: grey;
 }
 
 .move-notation {
     @extend %move-text;
     @extend %pointer;
+
+    padding: 0 0 0 8px;
     color: #d0d0d0;
 }
 
 .current-move {
-    background-color: #41adf0;
+    background-color: #2d9ce0;
     color: text.$text-color;
 }
 
