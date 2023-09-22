@@ -1,18 +1,46 @@
 # Chessboard
-A responsive client-side chess board editor and self-analysis application with minimal dependencies.
+A responsive client-side chess editor and self-analysis web page with minimal dependencies. Inspired by [Lichess](https://lichess.org/).
 
-## Requirements
+## Getting Started
+
+### Prerequisites
 - [Node.js](https://nodejs.org/en)
 - [Yarn 2+](https://yarnpkg.com/)
 
-## Setup
+### Installation
+1. Clone or download the repository.
+2. Install dependencies
 ```
 yarn install
+```
+3. Build static files
+```
 make
 ```
 
-## Run
+### Run
+1. Run static file server
 ```
 yarn node server.js
 ```
-App will run at localhost:8080
+2. Open localhost:8080
+
+## Stack
+- HTML 5 + CSS 3 + JS
+- [SCSS](https://sass-lang.com/)
+- [TS](https://www.typescriptlang.org/)
+- [Vue.js](https://vuejs.org/)
+
+## Features
+### Editor
+- Drag and drop or click to edit
+- Position validation
+- Import FEN by text or URL
+
+### Self-analysis
+- Fully playable chess game
+- Automatic draw detection
+- Drag and drop or click to move
+- Legal move hints
+- Moves history 
+- Import FEN by URL
