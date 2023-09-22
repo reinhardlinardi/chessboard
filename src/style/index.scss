@@ -29,21 +29,18 @@
     margin: 8px 0 0 0;
 }
 
+.clicked {
+    // background-color: #07a5e8;
+    background-color: #079ede;
+}
+
 .form-container {
     padding: 2px 0 10px 10px;
-    background-color: #222222;
+    background-color: #202020;
 }
 
 .subsection {
     padding: 8px 0 8px 0;
-}
-
-.section-label {
-    @extend %label;
-}
-
-.section-text {
-    @extend %text;
 }
 
 .form-select {
@@ -59,11 +56,6 @@
 
 .checkbox-container {
     @extend %align-center;
-}
-
-.checkbox-text {
-    @extend %text;
-    color: #d0d0d0;
 }
 
 .fen-container {

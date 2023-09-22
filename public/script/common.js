@@ -71,9 +71,9 @@ export function getLoc(id) {
     return Loc.of(parseInt(data.file), parseInt(data.rank));
 }
 
-export function getPieceType(id) {
+export function getTrayPiece(id) {
     const data = getElementData(id);
-    return data.pieceType;
+    return data.trayPiece;
 }
 
 

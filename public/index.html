@@ -27,22 +27,22 @@
           <div class="top-tray"
             @drop.prevent="onDropRemove"
           >
-          
-            <div></div>
+            <div @click="resetClick"></div>
+
             <template v-for="(piece, idx) in topTrayPieces()">
-              <div class="perfect-center">
+              <div :class="['perfect-center', isClicked(piece)? 'clicked':'']">
                   <img class="board-piece"
                     :src="`svg/${piece}.svg`"
                     :id="`top-tray-${idx}`"
                     @click="onClickTray"
                     draggable="true"
                     @dragstart="onDragStartTray"
-                    :data-piece-type="piece"
+                    :data-tray-piece="piece"
                   >
               </div>
             </template>
-            <div></div>
-        
+            
+            <div @click="resetClick"></div>
           </div>
 
           <div class="board">
@@ -75,22 +75,22 @@
           <div class="bottom-tray"
             @drop.prevent="onDropRemove"
           >
-
-            <div></div>
+            <div @click="resetClick"></div>
+            
             <template v-for="(piece, idx) in bottomTrayPieces()">
-              <div class="perfect-center">
+              <div :class="['perfect-center', isClicked(piece)? 'clicked':'']">
                   <img class="board-piece"
                     :src="`svg/${piece}.svg`"
                     :id="`bottom-tray-${idx}`"
                     @click="onClickTray"
                     draggable="true"
                     @dragstart="onDragStartTray"
-                    :data-piece-type="piece"
+                    :data-tray-piece="piece"
                   >
               </div>
             </template>
-            <div></div>
-
+            
+            <div @click="resetClick"></div>
           </div>
 
           <div class="fen-container">
@@ -112,7 +112,7 @@
           <div class="form-container">
 
             <div class="subsection">
-              <label class="section-text">Next to move</label>
+              <label class="text">Next to move</label>
               <select class="form-select" @change="setNextToMove">
                 <option :value="white()" :selected="isNextToMove(white())">White</option>
                 <option :value="black()" :selected="isNextToMove(black())">Black</option>
@@ -122,7 +122,7 @@
             <div class="subsection">
 
               <div class="castle-container">
-                <label class="section-text">White</label>
+                <label class="text">White</label>
 
                 <template v-for="opt in getCastleTypes(white())">
                   <div class="checkbox-container">
@@ -133,13 +133,13 @@
                       :checked="setup.castle[opt.letter]"
                       :disabled="disableCastle(opt.letter)"
                     />
-                    <label class="checkbox-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
+                    <label class="text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
                   </div>
                 </template>
               </div>
 
               <div class="castle-container">
-                <label class="section-text">Black</label>
+                <label class="text">Black</label>
                 
                 <template v-for="opt in getCastleTypes(black())">
                   <div class="checkbox-container">
@@ -150,7 +150,7 @@
                       :checked="setup.castle[opt.letter]"
                       :disabled="disableCastle(opt.letter)"
                     >
-                    <label class="checkbox-text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
+                    <label class="text" :for="`checkbox-${opt.letter}`">{{ opt.type }}</label>
                   </div>
                 </template>
               </div>

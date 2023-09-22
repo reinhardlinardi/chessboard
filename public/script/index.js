@@ -36,6 +36,11 @@ export function bottomTrayPieces() {
     return this.flip? [...blackPieces] : [...whitePieces];
 }
 
+export function isClicked(piece) {
+    if(!this.select.click) return false;
+    return Common.getTrayPiece(this.select.id) === piece;
+}
+
 
 /* Board */
 export function rankOf(y) {
@@ -197,7 +202,7 @@ export function onSubmit(ev) {
 export function getSelectedPiece(id, fromTray) {
     try {
         const pos = this.setup.pos;
-        return fromTray? Common.getPieceType(id) : Common.getPiece(pos, Common.getLoc(id));
+        return fromTray? Common.getTrayPiece(id) : Common.getPiece(pos, Common.getLoc(id));
     }
     catch(err) {
         Face.disapprove();
@@ -214,13 +219,15 @@ export function onDropReplaceOrCopy(ev) {
     this.select = {click: false, tray: false, id: ""};
     
     if(src === dest) return;
-    
     const piece = this.getSelectedPiece(src, fromTray);
+    
     const updated = Position.copy(this.setup.pos);
-    
-    replacePiece(Common.getLoc(dest), piece, updated);
-    if(!fromTray) removePiece(Common.getLoc(src), updated);
-    
+    const from = Common.getLoc(src);
+    const to = Common.getLoc(dest);
+
+    if(!fromTray) removePiece(from, updated);
+    replacePiece(to, piece, updated);
+
     this.updateSetup({pos: updated});
 }
 
@@ -233,29 +240,45 @@ export function onDropRemove(ev) {
     this.select = {click: false, tray: false, id: ""};
     
     if(fromTray) return;
-
     const _ = this.getSelectedPiece(src, fromTray);
 
-    const updated = Position.copy(this.setup.pos);        
-    removePiece(Common.getLoc(src), updated);
+    const updated = Position.copy(this.setup.pos); 
+    const from = Common.getLoc(src);
+
+    removePiece(from, updated);
 
     this.updateSetup({pos: updated});
 }
 
 export function onDragStartTray(ev) {
-    if(this.select.click) return;
-    this.select = {click: false, tray: true, id: ev.target.id};
+    if(!this.select.click) this.select = {click: false, tray: true, id: ev.target.id};
 }
 
 export function onDragStartBoard(ev) {
-    if(this.select.click) return;
-    this.select = {click: false, tray: false, id: ev.target.id};
+    if(!this.select.click) this.select = {click: false, tray: false, id: ev.target.id};
 }
 
 export function onClickTray(ev) {
+    if(this.select.id === ev.target.id) this.select = {click: false, tray: false, id: ""};
+    else this.select = {click: true, tray: true, id: ev.target.id};
 }
 
 export function onClickBoard(ev) {
+    if(!this.select.click) return;
+
+    const piece = Common.getTrayPiece(this.select.id);
+    const loc = Common.getLoc(ev.target.id);
+
+    const updated = Position.copy(this.setup.pos);
+
+    if(Common.getPiece(this.setup.pos, loc) === piece) removePiece(loc, updated);
+    else replacePiece(loc, piece, updated);
+    
+    this.updateSetup({pos: updated});
+}
+
+export function resetClick(ev) {
+    this.select = {click: false, tray: false, id: ""};
 }
 
 

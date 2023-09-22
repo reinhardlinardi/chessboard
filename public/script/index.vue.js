@@ -24,6 +24,7 @@ const component = {
 
         topTrayPieces: page.topTrayPieces,
         bottomTrayPieces: page.bottomTrayPieces,
+        isClicked: page.isClicked,
         
         rankOf: page.rankOf,
         fileOf: page.fileOf,
@@ -59,6 +60,7 @@ const component = {
         onDragStartBoard: page.onDragStartBoard,
         onClickTray: page.onClickTray,
         onClickBoard: page.onClickBoard,
+        resetClick: page.resetClick,
     },
     created: page.created,
 };
