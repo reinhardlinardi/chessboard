@@ -44,7 +44,7 @@
                   :data-file="fileOf(x)"
                 >
 
-                  <img class="piece" 
+                  <img class="board-piece" 
                     v-if="!isEmpty(locOf(y, x))"
                     :src="`svg/${getPiece(locOf(y, x))}.svg`"
                     :id="`piece-y${y}-x${x}`"
@@ -150,7 +150,7 @@
             <div class="promoted-tray">
               <template v-for="promoted in getPromotedPieces()">
                   <div class="promoted-container">
-                    <img class="piece"
+                    <img class="board-piece"
                       :src="`svg/${promoted}.svg`"
                       :id="`promoted-${promoted}`"
                       :data-piece-type="`${promoted}`"

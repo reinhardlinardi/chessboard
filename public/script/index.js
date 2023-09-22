@@ -5,7 +5,6 @@ import * as FEN from '../module/fen.js';
 import * as Piece from '../module/piece.js';
 import * as Pieces from '../module/pieces.js';
 import * as Castles from '../module/castles.js';
-import * as AbstractPieces from '../module/abstract-pieces.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
@@ -29,17 +28,12 @@ export function black() {
 const whitePieces = Object.freeze(Pieces.getByColor(White)).map(piece => piece.letter);
 const blackPieces = Object.freeze(Pieces.getByColor(Black)).map(piece => piece.letter);
 
-
-export function getTrayPieceIdx() {
-    return [...Array(AbstractPieces.getList().length).keys()];
+export function topTrayPieces() {
+    return this.flip? [...whitePieces] : [...blackPieces];
 }
 
-export function getTopTrayPiece(idx) {
-    return this.flip? whitePieces[idx] : blackPieces[idx];  
-}
-
-export function getBottomTrayPiece(idx) {
-    return this.flip? blackPieces[idx] : whitePieces[idx];
+export function bottomTrayPieces() {
+    return this.flip? [...blackPieces] : [...whitePieces];
 }
 
 
@@ -92,19 +86,15 @@ function removePiece(loc, board) {
 
 
 /* Form */
-export function getWhiteCastleTypes() {
-    return Castles.getByColor(White);
+export function getCastleTypes(color) {
+    return Castles.getByColor(color);
 }
 
-export function getBlackCastleTypes() {
-    return Castles.getByColor(Black);
-}
-
-export function selectedMove(color) {
+export function isNextToMove(color) {
     return this.setup.move === color;
 }
 
-export function setMove(ev) {
+export function setNextToMove(ev) {
     this.updateSetup({move: ev.target.value});
 }
 

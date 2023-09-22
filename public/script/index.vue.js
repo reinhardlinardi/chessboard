@@ -22,9 +22,8 @@ const component = {
         white: page.white,
         black: page.black,
 
-        getTrayPieceIdx: page.getTrayPieceIdx,
-        getTopTrayPiece: page.getTopTrayPiece,
-        getBottomTrayPiece: page.getBottomTrayPiece,
+        topTrayPieces: page.topTrayPieces,
+        bottomTrayPieces: page.bottomTrayPieces,
         
         rankOf: page.rankOf,
         fileOf: page.fileOf,
@@ -37,11 +36,9 @@ const component = {
         clearBoard: page.clearBoard,
         resetBoard: page.resetBoard,
         
-        getWhiteCastleTypes: page.getWhiteCastleTypes,
-        getBlackCastleTypes: page.getBlackCastleTypes,
-        
-        selectedMove: page.selectedMove,
-        setMove: page.setMove,
+        getCastleTypes: page.getCastleTypes,
+        isNextToMove: page.isNextToMove,
+        setNextToMove: page.setNextToMove,
         setCastle: page.setCastle,
         disableCastle: page.disableCastle,
 

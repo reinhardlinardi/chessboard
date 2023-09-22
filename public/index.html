@@ -29,15 +29,15 @@
           >
           
             <div></div>
-            <template v-for="idx in getTrayPieceIdx()">
+            <template v-for="(piece, idx) in topTrayPieces()">
               <div class="perfect-center">
-                  <img class="piece"
-                    :src="`svg/${getTopTrayPiece(idx)}.svg`"
-                    :id="`piece-top-tray-${idx}`"
+                  <img class="board-piece"
+                    :src="`svg/${piece}.svg`"
+                    :id="`top-tray-${idx}`"
                     @click="onClickTray"
                     draggable="true"
                     @dragstart="onDragStartTray"
-                    :data-piece-type="getTopTrayPiece(idx)"
+                    :data-piece-type="piece"
                   >
               </div>
             </template>
@@ -57,7 +57,7 @@
                   :data-rank="rankOf(y)"
                   :data-file="fileOf(x)"
                 >
-                  <img class="piece" 
+                  <img class="board-piece" 
                     v-if="!isEmpty(locOf(y, x))"
                     :src="`svg/${getPiece(locOf(y, x))}.svg`"
                     :id="`piece-y${y}-x${x}`"
@@ -77,15 +77,15 @@
           >
 
             <div></div>
-            <template v-for="idx in getTrayPieceIdx()">
+            <template v-for="(piece, idx) in bottomTrayPieces()">
               <div class="perfect-center">
-                  <img class="piece"
-                    :src="`svg/${getBottomTrayPiece(idx)}.svg`"
-                    :id="`piece-bottom-tray-${idx}`"
+                  <img class="board-piece"
+                    :src="`svg/${piece}.svg`"
+                    :id="`bottom-tray-${idx}`"
                     @click="onClickTray"
                     draggable="true"
                     @dragstart="onDragStartTray"
-                    :data-piece-type="getBottomTrayPiece(idx)"
+                    :data-piece-type="piece"
                   >
               </div>
             </template>
@@ -113,17 +113,18 @@
 
             <div class="subsection">
               <label class="section-text">Next to move</label>
-              <select class="form-select" @change="setMove">
-                <option :value="white()" :selected="selectedMove(white())">White</option>
-                <option :value="black()" :selected="selectedMove(black())">Black</option>
+              <select class="form-select" @change="setNextToMove">
+                <option :value="white()" :selected="isNextToMove(white())">White</option>
+                <option :value="black()" :selected="isNextToMove(black())">Black</option>
               </select>
             </div>
 
             <div class="subsection">
+
               <div class="castle-container">
                 <label class="section-text">White</label>
 
-                <template v-for="opt in getWhiteCastleTypes()">
+                <template v-for="opt in getCastleTypes(white())">
                   <div class="checkbox-container">
                     <input type="checkbox"
                       :id="`checkbox-${opt.letter}`"
@@ -140,7 +141,7 @@
               <div class="castle-container">
                 <label class="section-text">Black</label>
                 
-                <template v-for="opt in getBlackCastleTypes()">
+                <template v-for="opt in getCastleTypes(black())">
                   <div class="checkbox-container">
                     <input type="checkbox"
                       :id="`checkbox-${opt.letter}`"
