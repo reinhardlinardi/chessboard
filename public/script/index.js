@@ -252,20 +252,20 @@ export function onDropRemove(ev) {
     this.updateSetup({pos: updated});
 }
 
-export function trayOnDragStart(ev) {
+export function onDragStartTray(ev) {
     if(this.select.click) return;
     this.select = {click: false, tray: true, id: ev.target.id};
 }
 
-export function boardOnDragStart(ev) {
+export function onDragStartBoard(ev) {
     if(this.select.click) return;
     this.select = {click: false, tray: false, id: ev.target.id};
 }
 
-export function trayOnClick(ev) {
+export function onClickTray(ev) {
 }
 
-export function boardOnClick(ev) {
+export function onClickBoard(ev) {
 }
 
 
