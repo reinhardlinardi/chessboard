@@ -8,7 +8,7 @@ A responsive client-side chess editor and self-analysis web page with minimal de
 - [Yarn 2+](https://yarnpkg.com/)
 
 ### Installation
-1. Clone or download the repository.
+1. Clone or download the repository
 2. Install dependencies
 ```
 yarn install
