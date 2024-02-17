@@ -30,7 +30,6 @@
 }
 
 .clicked {
-    // background-color: #07a5e8;
     background-color: #079ede;
 }
 
@@ -88,14 +87,12 @@
 }
 
 .button-container {
-    // @extend %table;
     text-align: center;
 }
 
 .button-control {
     @extend %button;
     @extend %text;
-    // @extend %table-cell;
 
     border: none;
     padding: 0;
