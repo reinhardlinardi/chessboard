@@ -76,6 +76,11 @@ export function getTrayPiece(id) {
     return data.trayPiece;
 }
 
+export function getPieceType(id) {
+    const data = getElementData(id);
+    return data.pieceType;
+}
+
 
 /* Rendering */
 const _ = Piece.None;
