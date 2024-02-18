@@ -11,7 +11,6 @@ import { isPromotion } from '../module/game-util.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
-import * as Face from './face.js';
 
 
 const game = new Game();
@@ -414,7 +413,7 @@ export function onDrop(ev) {
     if(this.promote || this.select.click) return;
     
     const src = this.select.loc;
-    if(src === Loc.None) Face.disapprove();
+    if(src === Loc.None) return;
     
     const state = this.current;
     const moves = state.moves;

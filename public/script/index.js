@@ -8,7 +8,6 @@ import * as Castles from '../module/castles.js';
 import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
 import * as Err from '../module/error.js';
-import * as Face from './face.js';
 
 
 const game = new Game();
@@ -205,7 +204,7 @@ export function getSelectedPiece(id, fromTray) {
         return fromTray? Common.getTrayPiece(id) : Common.getPiece(pos, Common.getLoc(id));
     }
     catch(err) {
-        Face.disapprove();
+        return null;
     }
 }
 
@@ -219,7 +218,9 @@ export function onDropReplaceOrCopy(ev) {
     this.select = {click: false, tray: false, id: ""};
     
     if(src === dest) return;
+
     const piece = this.getSelectedPiece(src, fromTray);
+    if(piece === null) return;
     
     const updated = Position.copy(this.setup.pos);
     const from = Common.getLoc(src);
