@@ -3,8 +3,16 @@
 @use 'button';
 
 
-.invisible {
+%invisible {
     visibility: hidden;
+}
+
+[v-cloak] {
+    @extend %invisible;
+}
+
+.invisible {
+    @extend %invisible;
 }
 
 .global-container {
