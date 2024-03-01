@@ -141,19 +141,19 @@ export function isMoveLoc(loc) {
 export function isClicked(loc) {
     const state = this.current;
     const result = state.result;
-    if(result.ended) return false;
 
-    const select = this.select;
-    return select.click && loc === select.loc && loc in state.moves;
+    if(result.ended) return false;
+    return loc === this.select && loc in state.moves;
 }
 
 export function canOccupy(loc) {
     const state = this.current;
     const result = state.result;
+
     if(result.ended) return false;
 
     const moves = state.moves;
-    const src = this.select.loc;
+    const src = this.select;
 
     if(!(src in moves)) return false;
     return moves[src].includes(loc);
@@ -388,20 +388,19 @@ export function onClick(ev) {
 
     const state = this.current;
     const moves = state.moves;
-    const current = this.select.loc;
 
+    const current = this.select;
     const loc = Common.getLoc(ev.target.id);
-    const reset = {click: false, loc: Loc.None};
     
-    if(!this.select.click) {
-        if(loc in moves) this.select = {click: true, loc: loc};
+    if(this.select === Loc.None) {
+        if(loc in moves) this.select = loc;
         return;
     }
 
-    if(current === loc) this.select = reset;
-    else if(loc in moves) this.select.loc = loc;
+    if(current === loc) this.select = Loc.None;
+    else if(loc in moves) this.select = loc;
     else if(moves[current].includes(loc)) {
-        this.select = reset;
+        this.select = Loc.None;
         this.movePiece(current, loc);
     }
 }
@@ -410,20 +409,21 @@ export function onDragStart(ev) {
     if(this.promote) return;
 
     const src = Common.getLoc(ev.target.id);
-    if(!this.select.click) this.select = {click: false, loc: src};
+    this.select = src;
 }
 
 export function onDrop(ev) {
-    if(this.promote || this.select.click) return;
+    if(this.promote) return;
     
-    const src = this.select.loc;
+    const src = this.select;
     if(src === Loc.None) return;
     
     const state = this.current;
     const moves = state.moves;
+    
     const loc =  Common.getLoc(ev.target.id);
+    this.select = Loc.None;
 
-    this.select.loc = Loc.None;
     if(!(src in moves)) return;
     if(moves[src].includes(loc)) this.movePiece(src, loc);
 }
@@ -467,7 +467,7 @@ export function created() {
     const tableIdx = initial.move === White? 1 : 0;
 
     this.state.data.push(initial);
-    this.select.loc = Loc.None;
+    this.select = Loc.None;
     this.table = {start: tableIdx, end: tableIdx + 2*numRows, min: tableIdx};
 
     /* Keyboard handlers */

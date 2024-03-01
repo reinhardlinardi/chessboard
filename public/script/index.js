@@ -275,7 +275,7 @@ export function onClickBoard(ev) {
 }
 
 export function resetClick(ev) {
-    this.select = {click: false, tray: false, id: ""};
+    this.select = {click: false, id: ""};
 }
 
 

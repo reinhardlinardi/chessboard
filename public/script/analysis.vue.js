@@ -11,10 +11,7 @@ const component = {
             },
             flip: false,
             promote: false,
-            select: {
-                click: false,
-                loc: 0,
-            },
+            select: 0,
             table: {
                 start: 0,
                 end: 0,
