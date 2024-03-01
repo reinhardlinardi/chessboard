@@ -209,15 +209,13 @@ export function getSelectedPiece(id, fromTray) {
 }
 
 export function onDropReplaceOrCopy(ev) {
-    if(this.select.click) return;
-
     const src = this.select.id;
     const dest = ev.target.id;
-    const fromTray = this.select.tray;
-
-    this.select = {click: false, tray: false, id: ""};
     
     if(src === dest) return;
+    
+    const fromTray = this.select.click;
+    if(!fromTray) this.select.id = "";
 
     const piece = this.getSelectedPiece(src, fromTray);
     if(piece === null) return;
@@ -236,12 +234,10 @@ export function onDropRemove(ev) {
     if(this.select.click) return;
 
     const src = this.select.id;
-    const fromTray = this.select.tray;
-
-    this.select = {click: false, tray: false, id: ""};
+    this.select.id = "";
     
-    if(fromTray) return;
-    const _ = this.getSelectedPiece(src, fromTray);
+    const piece = this.getSelectedPiece(src, false);
+    if(piece === null) return;
 
     const updated = Position.copy(this.setup.pos); 
     const from = Common.getLoc(src);
@@ -252,16 +248,16 @@ export function onDropRemove(ev) {
 }
 
 export function onDragStartTray(ev) {
-    if(!this.select.click) this.select = {click: false, tray: true, id: ev.target.id};
+    this.select = {click: true, id: ev.target.id};
 }
 
 export function onDragStartBoard(ev) {
-    if(!this.select.click) this.select = {click: false, tray: false, id: ev.target.id};
+    this.select = {click: false, id: ev.target.id};
 }
 
 export function onClickTray(ev) {
-    if(this.select.id === ev.target.id) this.select = {click: false, tray: false, id: ""};
-    else this.select = {click: true, tray: true, id: ev.target.id};
+    if(this.select.id === ev.target.id) this.select = {click: false, id: ""};
+    else this.select = {click: true, id: ev.target.id};
 }
 
 export function onClickBoard(ev) {

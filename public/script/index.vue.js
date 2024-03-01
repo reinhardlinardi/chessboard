@@ -9,7 +9,6 @@ const component = {
             flip: false,
             select: {
                 click: false,
-                tray: false,
                 id: "",
             },
             ref: {},
