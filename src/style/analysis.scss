@@ -44,16 +44,20 @@
     opacity: 0.1;
 }
 
-.clicked {
-    background-color: #7dd179;
+.move-light {
+    background-color: #f5ce20;
 }
 
-.move-from {
+.move-dark {
     background-color: #edc132;
 }
 
-.move-to {
-    background-color: #f5ce20;
+.clicked {
+    background-color: #ebda49;
+}
+
+.target {
+    opacity: 0.85;
 }
 
 .fen-container {

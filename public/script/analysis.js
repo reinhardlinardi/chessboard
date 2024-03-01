@@ -134,6 +134,10 @@ export function getPiece(loc) {
     return Common.getPiece(this.current.pos, loc);
 }
 
+export function isMoveLoc(loc) {
+    return loc === this.current.from || loc === this.current.to;
+}
+
 export function isClicked(loc) {
     const state = this.current;
     const result = state.result;
@@ -143,15 +147,7 @@ export function isClicked(loc) {
     return select.click && loc === select.loc && loc in state.moves;
 }
 
-export function moveFrom(loc) {
-    return loc === this.current.from;
-}
-
-export function moveTo(loc) {
-    return loc === this.current.to;
-}
-
-export function canBeOccupied(loc) {
+export function canOccupy(loc) {
     const state = this.current;
     const result = state.result;
     if(result.ended) return false;
@@ -161,6 +157,14 @@ export function canBeOccupied(loc) {
 
     if(!(src in moves)) return false;
     return moves[src].includes(loc);
+}
+
+export function canMoveTo(loc) {
+    return this.canOccupy(loc) && this.isEmpty(loc);
+}
+
+export function canCaptureOn(loc) {
+    return this.canOccupy(loc) && !this.isEmpty(loc);
 }
 
 export function flipBoard() {

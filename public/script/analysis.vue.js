@@ -45,10 +45,11 @@ const component = {
         locOf: page.locOf,
         isEmpty: page.isEmpty,
         getPiece: page.getPiece,
+        isMoveLoc: page.isMoveLoc,
         isClicked: page.isClicked,
-        moveFrom: page.moveFrom,
-        moveTo: page.moveTo,
-        canBeOccupied: page.canBeOccupied,
+        canOccupy: page.canOccupy,
+        canMoveTo: page.canMoveTo,
+        canCaptureOn: page.canCaptureOn,
 
         flipBoard: page.flipBoard,
 
