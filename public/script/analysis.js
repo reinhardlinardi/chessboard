@@ -8,8 +8,8 @@ import * as Promotion from '../module/promotion.js';
 import * as Score from '../module/game-score.js';
 import * as Conclusion from '../module/game-conclusion.js';
 import { isPromotion } from '../module/game-util.js';
-import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
+import { White, Black, getList as getColors } from '../module/color.js';
 import * as Err from '../module/error.js';
 
 
@@ -57,23 +57,23 @@ export function pieceDifference() {
 }
 
 export function topPieceAdv() {
-    const color = this.flip? White : Black;
-    return pieceAdvantage(this.pieceDifference, color);
+    const adv = c => pieceAdvantage(this.pieceDifference, c);
+    return this.color === White? adv(Black): adv(White);
 }
 
 export function topPointAdv() {
-    const color = this.flip? White : Black;
-    return Math.max(0, pointDifference(this.pieceDifference, color));
+    const points = c => Math.max(0, pointDifference(this.pieceDifference, c));
+    return this.color === White? points(Black) : points(White);
 }
 
 export function bottomPieceAdv() {
-    const color = this.flip? Black : White;
-    return pieceAdvantage(this.pieceDifference, color);
+    const adv = c => pieceAdvantage(this.pieceDifference, c);
+    return this.color === White? adv(White) : adv(Black);
 }
 
 export function bottomPointAdv() {
-    const color = this.flip? Black : White;
-    return Math.max(0, pointDifference(this.pieceDifference, color));
+    const points = c => Math.max(0, pointDifference(this.pieceDifference, c));
+    return this.color === White? points(White) : points(Black);
 }
 
 export function formatPieceAdv(adv) {
@@ -86,7 +86,6 @@ export function formatPieceAdv(adv) {
 export function formatPointAdv(points) {
     return `+${points}`;
 }
-
 
 function pieceAdvantage(diff, color) {
     let adv = {};
@@ -110,20 +109,22 @@ function pointDifference(diff, color) {
 
 
 /* Board */
+const paramColor = "color";
+
 export function rankOf(y) {
-    return Common.rankOf(y, this.flip);
+    return Common.rankOf(y, this.color);
 }
 
 export function fileOf(x) {
-    return Common.fileOf(x, this.flip);
+    return Common.fileOf(x, this.color);
 }
 
 export function labelOf(x) {
-    return Common.labelOf(x, this.flip);
+    return Common.labelOf(x, this.color);
 }
 
 export function locOf(y, x) {
-    return Common.locOf(y, x, this.flip);
+    return Common.locOf(y, x, this.color);
 }
 
 export function isEmpty(loc) {
@@ -168,7 +169,8 @@ export function canCaptureOn(loc) {
 }
 
 export function flipBoard() {
-    this.flip = !this.flip;
+    this.color = this.color === White? Black : White;
+    Common.setQuery(paramColor, this.color);
 }
 
 
@@ -474,6 +476,10 @@ export function created() {
     document.onkeyup = this.onKeyUp;
 
     /* Query URL */
+    const color = Common.getQuery(paramColor);
+    this.color = color && getColors().includes(color)? color : White;
+    Common.setQuery(paramColor, this.color);
+
     if(this.isDefaultSetup()) Common.deleteQueries(paramImport, paramFEN);
     else Common.setQuery(paramFEN, initial.fen);
 }

@@ -288,10 +288,6 @@ export function created() {
     const setup = game.getSetupData();
     this.ref = {clock: {...setup.clock}, id: setup.id};
 
-    const color = Common.getQuery(paramColor);
-    this.color = color && getColors().includes(color)? color : White;
-    Common.setQuery(paramColor, this.color);
-
     const fen = Common.getQuery(paramFEN);
     if(fen) {
         try {
@@ -304,4 +300,9 @@ export function created() {
     }
 
     this.setup = game.getSetupData();
+
+    /* Query URL */
+    const color = Common.getQuery(paramColor);
+    this.color = color && getColors().includes(color)? color : White;
+    Common.setQuery(paramColor, this.color);
 }

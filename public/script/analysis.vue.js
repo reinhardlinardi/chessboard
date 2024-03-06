@@ -9,7 +9,7 @@ const component = {
                 data: [],
                 idx: 0,
             },
-            flip: false,
+            color: "",
             promote: false,
             select: 0,
             table: {
