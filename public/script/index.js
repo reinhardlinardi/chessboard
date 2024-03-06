@@ -79,6 +79,7 @@ export function clearBoard() {
 export function resetBoard() {
     game.resetSetup();
     this.setup = game.getSetupData();
+    Common.deleteQuery(paramFEN);
 }
 
 function replacePiece(loc, piece, board) {
@@ -302,7 +303,11 @@ export function created() {
     this.setup = game.getSetupData();
 
     /* Query URL */
+    Common.deleteQuery(paramFEN);
+
     const color = Common.getQuery(paramColor);
     this.color = color && getColors().includes(color)? color : White;
     Common.setQuery(paramColor, this.color);
+
+    if(!this.isDefaultSetup()) Common.setQuery(paramFEN, this.fen);
 }
