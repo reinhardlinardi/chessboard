@@ -6,7 +6,7 @@ const component = {
     data() {
         return {
             setup: {},
-            flip: false,
+            color: "",
             select: {
                 click: false,
                 id: "",

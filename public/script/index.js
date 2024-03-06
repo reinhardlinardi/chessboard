@@ -5,8 +5,8 @@ import * as FEN from '../module/fen.js';
 import * as Piece from '../module/piece.js';
 import * as Pieces from '../module/pieces.js';
 import * as Castles from '../module/castles.js';
-import { White, Black } from '../module/color.js';
 import { Game } from '../module/analysis.js';
+import { White, Black, getList as getColors } from '../module/color.js';
 import * as Err from '../module/error.js';
 
 
@@ -28,34 +28,35 @@ const whitePieces = Object.freeze(Pieces.getByColor(White)).map(piece => piece.l
 const blackPieces = Object.freeze(Pieces.getByColor(Black)).map(piece => piece.letter);
 
 export function topTrayPieces() {
-    return this.flip? [...whitePieces] : [...blackPieces];
+    return this.color === White? [...blackPieces] : [...whitePieces];
 }
 
 export function bottomTrayPieces() {
-    return this.flip? [...blackPieces] : [...whitePieces];
+    return this.color === White? [...whitePieces] : [...blackPieces];
 }
 
 export function isClicked(piece) {
-    if(!this.select.click) return false;
-    return Common.getTrayPiece(this.select.id) === piece;
+    return this.select.click? Common.getTrayPiece(this.select.id) === piece : false;
 }
 
 
 /* Board */
+const paramColor = "color";
+
 export function rankOf(y) {
-    return Common.rankOf(y, this.flip);
+    return Common.rankOf(y, this.color);
 }
 
 export function fileOf(x) {
-    return Common.fileOf(x, this.flip);
+    return Common.fileOf(x, this.color);
 }
 
 export function labelOf(x) {
-    return Common.labelOf(x, this.flip);
+    return Common.labelOf(x, this.color);
 }
 
 export function locOf(y, x) {
-    return Common.locOf(y, x, this.flip);
+    return Common.locOf(y, x, this.color);
 }
 
 export function isEmpty(loc) {
@@ -67,7 +68,8 @@ export function getPiece(loc) {
 }
 
 export function flipBoard() {
-    this.flip = !this.flip;
+    this.color = this.color === White? Black : White;
+    Common.setQuery(paramColor, this.color);
 }
 
 export function clearBoard() {
@@ -77,7 +79,6 @@ export function clearBoard() {
 export function resetBoard() {
     game.resetSetup();
     this.setup = game.getSetupData();
-    this.flip = false;
 }
 
 function replacePiece(loc, piece, board) {
@@ -283,6 +284,10 @@ export function resetClick(ev) {
 export function created() {
     const setup = game.getSetupData();
     this.ref = {clock: {...setup.clock}, id: setup.id};
+
+    const color = Common.getQuery(paramColor);
+    this.color = color && getColors().includes(color)? color : White;
+    Common.setQuery(paramColor, this.color);
 
     const fen = Common.getQuery(paramFEN);
     if(fen) {

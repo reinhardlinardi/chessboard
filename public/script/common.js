@@ -2,6 +2,7 @@ import * as Piece from '../module/piece.js';
 import * as File from '../module/file.js';
 import * as Position from '../module/position.js';
 import * as Loc from '../module/location.js';
+import { White } from '../module/color.js';
 import { Size as size } from '../module/size.js';
 
 
@@ -85,20 +86,20 @@ export function getPieceType(id) {
 /* Rendering */
 const _ = Piece.None;
 
-export function rankOf(y, flip) {
-    return flip? y+1 : size-y;
+export function rankOf(y, color) {
+    return color === White? size-y : y+1;
 }
 
-export function fileOf(x, flip) {
-    return flip? size-x : x+1;
+export function fileOf(x, color) {
+    return color === White? x+1 : size-x;
 }
 
-export function locOf(y, x, flip) {
-    return Loc.of(fileOf(x, flip), rankOf(y, flip));
+export function locOf(y, x, color) {
+    return Loc.of(fileOf(x, color), rankOf(y, color));
 }
 
-export function labelOf(x, flip) {
-    return File.labelOf(fileOf(x, flip));
+export function labelOf(x, color) {
+    return File.labelOf(fileOf(x, color));
 }
 
 export function isEmpty(board, loc) {
