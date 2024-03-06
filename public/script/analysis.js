@@ -432,7 +432,7 @@ export function onDrop(ev) {
 
 
 /* Keyboard */
-export function onKeyUp(ev) {
+export function onKeyDown(ev) {
     switch(ev.code) {
         case "ArrowUp": this.toInitial(); break;
         case "ArrowLeft": this.toPrev(); break;
@@ -473,7 +473,7 @@ export function created() {
     this.table = {start: tableIdx, end: tableIdx + 2*numRows, min: tableIdx};
 
     /* Keyboard handlers */
-    document.onkeyup = this.onKeyUp;
+    document.onkeydown = this.onKeyDown;
 
     /* Query URL */
     const color = Common.getQuery(paramColor);
