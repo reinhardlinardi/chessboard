@@ -137,6 +137,9 @@ export function updateSetup(keys) {
 
     game.loadSetup(setup);
     this.setup = game.getSetupData();
+
+    if(this.isDefaultSetup()) Common.deleteQuery(paramFEN);
+    else Common.setQuery(paramFEN, this.fen);
 }
 
 export function validSetup() {
@@ -156,9 +159,6 @@ export function validSetup() {
 const paramFEN = "fen";
 
 export function getFEN() {
-    if(this.isDefaultSetup()) Common.deleteQuery(paramFEN);
-    else Common.setQuery(paramFEN, this.setup.fen);
-
     return this.setup.fen;
 }
 
@@ -188,11 +188,14 @@ export function onChangeFEN(ev) {
 
 
 /* Submit */
+const paramImport = "import";
+
 export function onSubmit(ev) {
-    let query = {};
+    let query = {color: this.color};
 
     if(!this.isDefaultSetup()) {
-        query = {import: paramFEN, [paramFEN]: Common.getQuery(paramFEN)};
+        query[paramImport] = paramFEN;
+        query[paramFEN] = this.fen;
     }
     Common.openURL("/analysis", query);
 }
