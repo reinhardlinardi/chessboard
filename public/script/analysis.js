@@ -240,18 +240,26 @@ export function hasNext() {
 
 export function toInitial(ev) {
     this.state.idx = 0;
+    this.select = Loc.None;
 }
 
 export function toPrev(ev) {
-    if(this.hasPrev()) this.state.idx--;
+    if(!this.hasPrev()) return;
+
+    this.state.idx--;
+    this.select = Loc.None;
 }
 
 export function toNext(ev) {
-    if(this.hasNext()) this.state.idx++;
+    if(!this.hasNext()) return;
+    
+    this.state.idx++;
+    this.select = Loc.None;
 }
 
 export function toLatest(ev) {
     this.state.idx = this.len-1;
+    this.select = Loc.None;
 }
 
 export function toMove(ev) {
@@ -259,6 +267,7 @@ export function toMove(ev) {
     const idx = parseInt(data.stateIdx);
     
     this.state.idx = idx;
+    this.select = Loc.None;
 }
 
 
