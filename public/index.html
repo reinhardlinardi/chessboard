@@ -27,13 +27,13 @@
           <div class="top-tray"
             @drop.prevent="onDropRemove"
           >
-            <div @click="resetClick"></div>
+            <div></div>
 
-            <template v-for="(piece, idx) in topTrayPieces()">
-              <div :class="['perfect-center', isTraySelected(piece)? 'tray-selected':'']">
+            <template v-for="piece in topTrayPieces()">
+              <div :class="[isTraySelected(piece)? 'tray-selected':'', 'perfect-center']">
                   <img class="board-piece"
                     :src="`svg/${piece}.svg`"
-                    :id="`top-tray-${idx}`"
+                    :id="`tray-${piece}`"
                     @click="onClickTray"
                     draggable="true"
                     @dragstart="onDragStartTray"
@@ -42,7 +42,7 @@
               </div>
             </template>
             
-            <div @click="resetClick"></div>
+            <div></div>
           </div>
 
           <div class="board">
@@ -75,13 +75,13 @@
           <div class="bottom-tray"
             @drop.prevent="onDropRemove"
           >
-            <div @click="resetClick"></div>
+            <div></div>
             
-            <template v-for="(piece, idx) in bottomTrayPieces()">
-              <div :class="['perfect-center', isTraySelected(piece)? 'tray-selected':'']">
+            <template v-for="piece in bottomTrayPieces()">
+              <div :class="[isTraySelected(piece)? 'tray-selected':'', 'perfect-center']">
                   <img class="board-piece"
                     :src="`svg/${piece}.svg`"
-                    :id="`bottom-tray-${idx}`"
+                    :id="`tray-${piece}`"
                     @click="onClickTray"
                     draggable="true"
                     @dragstart="onDragStartTray"
@@ -90,7 +90,7 @@
               </div>
             </template>
             
-            <div @click="resetClick"></div>
+            <div></div>
           </div>
 
           <div class="fen-container">

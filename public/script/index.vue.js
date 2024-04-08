@@ -8,7 +8,7 @@ const component = {
             setup: {},
             color: "",
             select: {
-                click: false,
+                tray: false,
                 id: "",
             },
             ref: {},
@@ -59,7 +59,6 @@ const component = {
         onDragStartBoard: page.onDragStartBoard,
         onClickTray: page.onClickTray,
         onClickBoard: page.onClickBoard,
-        resetClick: page.resetClick,
     },
     created: page.created,
 };
