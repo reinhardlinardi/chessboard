@@ -30,7 +30,7 @@
             <div @click="resetClick"></div>
 
             <template v-for="(piece, idx) in topTrayPieces()">
-              <div :class="['perfect-center', isClicked(piece)? 'clicked':'']">
+              <div :class="['perfect-center', isTraySelected(piece)? 'tray-selected':'']">
                   <img class="board-piece"
                     :src="`svg/${piece}.svg`"
                     :id="`top-tray-${idx}`"
@@ -78,7 +78,7 @@
             <div @click="resetClick"></div>
             
             <template v-for="(piece, idx) in bottomTrayPieces()">
-              <div :class="['perfect-center', isClicked(piece)? 'clicked':'']">
+              <div :class="['perfect-center', isTraySelected(piece)? 'tray-selected':'']">
                   <img class="board-piece"
                     :src="`svg/${piece}.svg`"
                     :id="`bottom-tray-${idx}`"

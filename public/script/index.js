@@ -35,7 +35,7 @@ export function bottomTrayPieces() {
     return this.color === White? [...whitePieces] : [...blackPieces];
 }
 
-export function isClicked(piece) {
+export function isTraySelected(piece) {
     return this.select.click? Common.getTrayPiece(this.select.id) === piece : false;
 }
 

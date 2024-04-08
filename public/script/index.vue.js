@@ -23,7 +23,7 @@ const component = {
 
         topTrayPieces: page.topTrayPieces,
         bottomTrayPieces: page.bottomTrayPieces,
-        isClicked: page.isClicked,
+        isTraySelected: page.isTraySelected,
         
         rankOf: page.rankOf,
         fileOf: page.fileOf,
