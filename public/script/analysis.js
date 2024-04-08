@@ -139,7 +139,7 @@ export function isMoveLoc(loc) {
     return loc === this.current.from || loc === this.current.to;
 }
 
-export function isClicked(loc) {
+export function isSelected(loc) {
     const state = this.current;
     const result = state.result;
 

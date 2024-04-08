@@ -43,7 +43,7 @@ const component = {
         isEmpty: page.isEmpty,
         getPiece: page.getPiece,
         isMoveLoc: page.isMoveLoc,
-        isClicked: page.isClicked,
+        isSelected: page.isSelected,
         canOccupy: page.canOccupy,
         canMoveTo: page.canMoveTo,
         canCaptureOn: page.canCaptureOn,

@@ -36,8 +36,8 @@
               <template v-for="(_, x) in row">
 
                 <div :class="(y+x) % 2 === 0? 
-                      isClicked(locOf(y, x))? 'clicked': [canCaptureOn(locOf(y, x))? 'target':'', isMoveLoc(locOf(y, x))? 'move-light':'light-square'] :
-                      isClicked(locOf(y, x))? 'clicked': [canCaptureOn(locOf(y, x))? 'target':'', isMoveLoc(locOf(y, x))? 'move-dark':'dark-square'] "
+                      isSelected(locOf(y, x))? 'selected': [canCaptureOn(locOf(y, x))? 'target':'', isMoveLoc(locOf(y, x))? 'move-light':'light-square'] :
+                      isSelected(locOf(y, x))? 'selected': [canCaptureOn(locOf(y, x))? 'target':'', isMoveLoc(locOf(y, x))? 'move-dark':'dark-square'] "
                   :id="`board-y${y}-x${x}`"
                   :data-square="`${labelOf(x)}${rankOf(y)}`"
                   @drop.prevent="onDrop"
