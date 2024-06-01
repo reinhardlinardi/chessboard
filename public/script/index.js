@@ -198,7 +198,7 @@ export function onSubmit(ev) {
         query[paramImport] = paramFEN;
         query[paramFEN] = this.fen;
     }
-    Common.openURL("../analysis", query);
+    Common.openURL("./analysis", query);
 }
 
 
