@@ -356,7 +356,10 @@ export function copyFEN(ev) {
 /* Move */
 export async function movePiece(from, to) {
     const state = this.current;
+    const result = state.result;
     const idx = this.state.idx;
+
+    if(result.ended) return;
 
     const promotion = isPromotion(state.pos, state.move, from, to);
     let promoted = Type.TypeNone;
