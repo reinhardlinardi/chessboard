@@ -1,6 +1,5 @@
 # Chessboard
 A responsive client-side chess editor and self-analysis web page with minimal dependencies. Inspired by [Lichess](https://lichess.org/).  
-[Try it here](https://reinhardlinardi.github.io/chessboard)
 
 ## Getting Started
 
